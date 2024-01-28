@@ -205,104 +205,104 @@ LANG_RUSSIAN "Убил игрока из последнего оружия в списке!"
 // maps/mp/gametypes/gr.gsc
 //******************************************************************************
 REFERENCE GREED
-LANG_ENGLISH "Greed"
+LANG_RUSSIAN "Жадина"
 
 REFERENCE OBJECTIVES_GR
-LANG_ENGLISH "Collect dogtags and deliver them to the drop zone."
+LANG_RUSSIAN "Собирайте жетоны и доставьте их в точку сбора."
 
 REFERENCE OBJECTIVES_GR_SCORE
-LANG_ENGLISH "Collect dogtags and deliver them to the drop zone. First player with &&1 points wins."
+LANG_RUSSIAN "Собирайте жетоны и доставьте их в точку сбора. Первый игрок со счетом &&1 побеждает."
 
 REFERENCE OBJECTIVES_GR_HINT
-LANG_ENGLISH "Collect dogtags and deliver them to the drop zone."
+LANG_RUSSIAN "Собирайте жетоны и доставьте их в точку сбора."
 
 REFERENCE DOGTAGS_CAPTURED_BY
-LANG_ENGLISH "^3&&1^7 has captured ^3&&2^7 dogtag(s)."
+LANG_RUSSIAN "^3&&1^7 нашел жетонов: ^3&&2^7"
 
 REFERENCE GR_DROPZONES_RELOCATING_IN
-LANG_ENGLISH "Drop zones re-locating in &&1"
+LANG_RUSSIAN "Точки сбора изменятся через &&1"
 
 REFERENCE GR_DROPZONE_RELOCATING_IN
-LANG_ENGLISH "Drop zone re-locating in &&1"
+LANG_RUSSIAN "Точка сбора изменится через &&1"
 
 
 //******************************************************************************
 // maps/mp/gametypes/hns.gsc
 //******************************************************************************
 REFERENCE HIDEANDSEEK
-LANG_ENGLISH "Hide And Seek"
+LANG_RUSSIAN "Прятки"
 
 REFERENCE PROPS_SHORT
-LANG_ENGLISH "Props"
+LANG_RUSSIAN "Предметы"
 
 REFERENCE CHOOSE_CLASS_PROP
-LANG_ENGLISH "Choose Prop Class"
+LANG_RUSSIAN "Выбрать предмет"
 
 REFERENCE OBJECTIVES_HNS_ATTACKER
-LANG_ENGLISH "Hunt down and kill the props."
+LANG_RUSSIAN "Найди их всех!"
 
 REFERENCE OBJECTIVES_HNS_ATTACKER_SCORE
-LANG_ENGLISH "Hunt down and kill the props.  First team to &&1 wins."
+LANG_RUSSIAN "Найди их всех! Команда, набравшая &&1 побеждает."
 
 REFERENCE OBJECTIVES_HNS_ATTACKER_HINT
-LANG_ENGLISH "Hunt down and kill the props."
+LANG_RUSSIAN "Найди их всех!"
 
 REFERENCE OBJECTIVES_HNS_DEFENDER
-LANG_ENGLISH "Survive by hiding from the hunters."
+LANG_RUSSIAN "Не дай себя найти!"
 
 REFERENCE OBJECTIVES_HNS_DEFENDER_SCORE
-LANG_ENGLISH "Survive by hiding from the hunters. First team to &&1 wins."
+LANG_RUSSIAN "Не дай себя найти! Команда, набравшая &&1 побеждает."
 
 REFERENCE OBJECTIVES_HNS_DEFENDER_HINT
-LANG_ENGLISH "Survive by hiding from the hunters."
+LANG_RUSSIAN "Не дай себя найти!"
 
 REFERENCE PROPS_WIN
-LANG_ENGLISH "Props win!"
+LANG_RUSSIAN "Охотники проиграли!"
 
 REFERENCE PROPS_WIN_MATCH
-LANG_ENGLISH "Props have won the match!"
+LANG_RUSSIAN "Охотники проиграли этот матч!"
 
 REFERENCE PROPS_WIN_ROUND
-LANG_ENGLISH "Props have won the round!"
+LANG_RUSSIAN "Охотники проиграли этот раунд!"
 
 REFERENCE  PROPS_MISSION_ACCOMPLISHED
-LANG_ENGLISH  "Props mission accomplished"
+LANG_RUSSIAN "Миссия выполнена"
 
 REFERENCE PROPS_ELIMINATED
-LANG_ENGLISH  "Props eliminated"
+LANG_RUSSIAN "Охотники выиграли"
 
 REFERENCE PROPS_FORFEITED
-LANG_ENGLISH "Props forfeited"
+LANG_RUSSIAN "Охота не удалась"
 
 REFERENCE PROPS_HIDING_TIME
-LANG_ENGLISH "Hunting starts in &&1"
+LANG_RUSSIAN "Охота начнется через &&1"
 
 REFERENCE MAXIMUM_MORPHS_REACHED
-LANG_ENGLISH "You are allowed to morph only ^3&&1^7 times within the same round."
+LANG_RUSSIAN "Вы можете менять предмет только ^3&&1^7 раза за один раунд."
 
 REFERENCE PROPS_HINT_LINE1
-LANG_ENGLISH "Press ^3[{openscriptmenu modkeybind zoomin}]^7 and ^3[{openscriptmenu modkeybind zoomout}]^7 to rotate the prop model."
+LANG_RUSSIAN "Нажмите ^3[{openscriptmenu modkeybind zoomin}]^7 и ^3[{openscriptmenu modkeybind zoomout}]^7 чтобы вращаться."
 
 REFERENCE PROPS_HINT_LINE2
-LANG_ENGLISH "Press ^3[{+attack}]^7 to align the prop model with your view."
+LANG_RUSSIAN "Нажмите ^3[{+attack}]^7 чтобы выровнять предмет по камере."
 
 REFERENCE PROPS_HINT_LINE3
-LANG_ENGLISH "Press ^3[{+melee}]^7 to quickly select a new prop model."
+LANG_RUSSIAN "Нажмите ^3[{+melee}]^7 для быстрого выбора предмета."
 
 REFERENCE PROPS_HINT_LINE4
-LANG_ENGLISH "Remember to go ^3Prone^7 and ^3Crouch^7 to reduce your hit area."
+LANG_ENGLISH "Вы можете ^3лечь^7 или ^3присесть^7 чтобы вас случайно не задели."
 
 REFERENCE PROPS_HINT_LINE5
-LANG_ENGLISH "Remember that you can throw back enemy grenades!"
+LANG_RUSSIAN "Вы можете отбрасывать гранаты охотников!"
 
 REFERENCE HUMANS_HINT_LINE1
-LANG_ENGLISH "It's best if you use the ^3Bandolier^7 perk to have enough ammo."
+LANG_RUSSIAN "Вы можете взять перк ^3Патронташ^7 чтобы иметь больше попыток на выстрел."
 
 REFERENCE HUMANS_HINT_LINE2
-LANG_ENGLISH "Remember that Props come in all sizes and shapes and they are very sneaky!"
+LANG_RUSSIAN "Предметы могут быть разных размеров и в неожиданных местах!"
 
 REFERENCE HUMANS_HINT_LINE3
-LANG_ENGLISH "Be careful! Props can throw back your grenades so stay alert."
+LANG_RUSSIAN "Предметы могут отбрасывать гранаты, будьте осторожны."
 
 
 //******************************************************************************
@@ -441,7 +441,7 @@ LANG_RUSSIAN "РЕДАКТОР"
 // maps/mp/gametypes/_globallogic.gsc
 //******************************************************************************
 REFERENCE JOINED_TEAM
-LANG_RUSSIAN "Игрок ^3&&1^7 присоединился к команде ^3&&2^7"
+LANG_RUSSIAN "Игрок &&1 присоединился к команде &&2"
 
 REFERENCE LAST_ROUND
 LANG_RUSSIAN "Это последний раунд!"
@@ -818,10 +818,10 @@ LANG_RUSSIAN "У вас нет осколочных гранат для перка Мученик."
 // openwarfare/_numlives.gsc
 //******************************************************************************
 REFERENCE LIVES_LEFT
-LANG_ENGLISH "You have ^3&&1^7 lives remaining..."
+LANG_RUSSIAN "У вас осталось ^3&&1^7 жизней..."
 
 REFERENCE LAST_LIFE
-LANG_ENGLISH "This is your last life!"
+LANG_RUSSIAN "У вас последня жизнь!"
 
 
 //******************************************************************************
@@ -1173,10 +1173,10 @@ LANG_RUSSIAN "Нажмите ^1[[{+activate}]] ^7для перемещения между командами.\nНажм
 // ui_mp/connect.menu
 //******************************************************************************
 REFERENCE BROUGHT2UBY
-LANG_RUSSIAN "Представлен вам..."
+LANG_RUSSIAN ""
 
 REFERENCE SERVERPOWEREDBY
-LANG_RUSSIAN "Сервер работает на..."
+LANG_RUSSIAN ""
 
 
 //******************************************************************************
