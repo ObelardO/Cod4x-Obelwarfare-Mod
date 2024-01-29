@@ -165,7 +165,7 @@ CreateFKMenu( victim , attacker)
     self.top_fk_shader.vertAlign = "fullscreen";
     self.top_fk_shader.sort = 0;
     self.top_fk_shader.foreground = true;
-    self.top_fk_shader.color	= (.15, .15, .15);
+    self.top_fk_shader.color	= (.15, .0, .0);
     self.top_fk_shader setShader("white",640,112);
     
     self.bottom_fk_shader = newClientHudElem(self);
@@ -176,7 +176,7 @@ CreateFKMenu( victim , attacker)
     self.bottom_fk_shader.vertAlign = "fullscreen";
     self.bottom_fk_shader.sort = 0; 
     self.bottom_fk_shader.foreground = true;
-    self.bottom_fk_shader.color	= (.15, .15, .15);
+    self.bottom_fk_shader.color	= (.15, .0, .0);
     self.bottom_fk_shader setShader("white",640,112);
     
     self.fk_title = newClientHudElem(self);
@@ -225,7 +225,7 @@ CreateFKMenu( victim , attacker)
     self.credits.alpha = 0;
     
     self.credits setText("^1Created by: ^2FzBr.^3d4rk");
-    self.fk_title_low setText(attacker.name + " kill " + victim.name);
+    self.fk_title_low setText(attacker.name + " kills " + victim.name);
     
     if( !level.killcam_style )
         self.fk_title setText("GAME WINNER KILL");
