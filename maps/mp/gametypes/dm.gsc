@@ -76,6 +76,7 @@ main()
 
 	level.onStartGameType = ::onStartGameType;
 	level.onSpawnPlayer = ::onSpawnPlayer;
+	level.onPlayerKilled = ::onPlayerKilled;
 
 	game["dialog"]["gametype"] = gameTypeDialog( "freeforall" );
 }
@@ -137,4 +138,9 @@ onEndGame( winningPlayer )
 {
 	if ( isDefined( winningPlayer ) )
 		[[level._setPlayerScore]]( winningPlayer, winningPlayer [[level._getPlayerScore]]() + 1 );	
+}
+
+onPlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration)
+{
+   thread maps\mp\gametypes\_finalkillcam::onPlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration);
 }

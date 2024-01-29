@@ -17,6 +17,11 @@ init()
     OnPlayerConnect();
 }
 
+SetKillcamStyle( style )
+{
+    level.killcam_style = style;
+}
+
 OnPlayerConnect()
 {
     for(;;)
@@ -77,7 +82,7 @@ finalkillcam( attacker, attackerNum, deathtime, victim)
 	self.psoffsettime = 0;
     
     if(!isDefined(level.slowmostart))
-        level.slowmostart = killcamlength - 1.5;
+        level.slowmostart = killcamlength - 3;
     
     self.killcam = true;
     
@@ -93,7 +98,7 @@ finalkillcam( attacker, attackerNum, deathtime, victim)
         self.fk_title_low.alpha = 1;
         self.top_fk_shader.alpha = 0.5;
         self.bottom_fk_shader.alpha = 0.5;
-        self.credits.alpha = 0.2;
+        self.credits.alpha = 0;
     }
     
     self thread WaitEnd(killcamlength);
@@ -217,15 +222,15 @@ CreateFKMenu( victim , attacker)
     self.fk_title_low.alpha = 1;
     self.top_fk_shader.alpha = 0.5;
     self.bottom_fk_shader.alpha = 0.5;
-    self.credits.alpha = 0.0;
-
+    self.credits.alpha = 0;
+    
     self.credits setText("^1Created by: ^2FzBr.^3d4rk");
-    self.fk_title_low setText(attacker.name + " ?? " + victim.name);
+    self.fk_title_low setText(attacker.name + " kill " + victim.name);
     
     if( !level.killcam_style )
-        self.fk_title setText("????????");
+        self.fk_title setText("GAME WINNER KILL");
     else
-        self.fk_title setText("?????????");
+        self.fk_title setText("ROUND WINNER KILL");
 }
 
 onPlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration)
@@ -255,381 +260,6 @@ onPlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHit
     }
 }
 
-endGame( winner, endReasonText )
-{
-	// return if already ending via host quit or victory
-	if ( game["state"] == "postgame" || level.gameEnded )
-		return;
-
-	if ( isDefined( level.onEndGame ) )
-		[[level.onEndGame]]( winner );
-
-	visionSetNaked( "mpOutro", 2.0 );
-	
-	game["state"] = "postgame";
-	level.gameEndTime = getTime();
-	level.gameEnded = true;
-	level.inGracePeriod = false;
-	level notify ( "game_ended" );
-    
-    if ( isdefined( winner ) && level.gametype == "sd" )
-		[[level._setTeamScore]]( winner, [[level._getTeamScore]]( winner ) + 1 );
-	
-	setGameEndTime( 0 ); // stop/hide the timers
-	
-	if ( level.rankedMatch )
-	{
-		maps\mp\gametypes\_globallogic::setXenonRanks();
-		
-		if ( maps\mp\gametypes\_globallogic::hostIdledOut() )
-		{
-			level.hostForcedEnd = true;
-			logString( "host idled out" );
-			endLobby();
-		}
-	}
-	
-	maps\mp\gametypes\_globallogic::updatePlacement();
-	maps\mp\gametypes\_globallogic::updateMatchBonusScores( winner );
-	maps\mp\gametypes\_globallogic::updateWinLossStats( winner );
-	
-	setdvar( "g_deadChat", 1 );
-	
-	// freeze players
-	players = level.players;
-	for ( index = 0; index < players.size; index++ )
-	{
-		player = players[index];
-		
-		player maps\mp\gametypes\_globallogic::freezePlayerForRoundEnd();
-		player thread maps\mp\gametypes\_globallogic::roundEndDoF( 4.0 );
-		
-		player maps\mp\gametypes\_globallogic::freeGameplayHudElems();
-		
-		player setClientDvars( "cg_everyoneHearsEveryone", 1 );
-
-		if( level.rankedMatch )
-		{
-			if ( isDefined( player.setPromotion ) )
-				player setClientDvar( "ui_lobbypopup", "promotion" );
-			else
-				player setClientDvar( "ui_lobbypopup", "summary" );
-		}
-	}
-
-    // end round
-    if ( (level.roundLimit > 1 || (!level.roundLimit && level.scoreLimit != 1)) && !level.forcedEnd )
-    {
-		if ( level.displayRoundEndText )
-		{
-			players = level.players;
-			for ( index = 0; index < players.size; index++ )
-			{
-				player = players[index];
-				
-				if ( level.teamBased )
-					player thread maps\mp\gametypes\_hud_message::teamOutcomeNotify( winner, true, endReasonText );
-				else
-					player thread maps\mp\gametypes\_hud_message::outcomeNotify( winner, endReasonText );
-		
-				player setClientDvars( "ui_hud_hardcore", 1,
-									   "cg_drawSpectatorMessages", 0,
-									   "g_compassShowEnemies", 0 );
-			}
-
-			if ( level.teamBased && !(maps\mp\gametypes\_globallogic::hitRoundLimit() || maps\mp\gametypes\_globallogic::hitScoreLimit()) )
-				thread maps\mp\gametypes\_globallogic::announceRoundWinner( winner, level.roundEndDelay / 4 );
-			
-			if ( maps\mp\gametypes\_globallogic::hitRoundLimit() || maps\mp\gametypes\_globallogic::hitScoreLimit() )
-				maps\mp\gametypes\_globallogic::roundEndWait( level.roundEndDelay / 2, false );
-			else
-				maps\mp\gametypes\_globallogic::roundEndWait( level.roundEndDelay, true );
-		}
-        
-		game["roundsplayed"]++;
-		roundSwitching = false;
-		if ( !maps\mp\gametypes\_globallogic::hitRoundLimit() && !maps\mp\gametypes\_globallogic::hitScoreLimit() )
-			roundSwitching = maps\mp\gametypes\_globallogic::checkRoundSwitch();
-
-		if ( roundSwitching && level.teamBased )
-		{
-			players = level.players;
-			for ( index = 0; index < players.size; index++ )
-			{
-				player = players[index];
-				
-				if ( !isDefined( player.pers["team"] ) || player.pers["team"] == "spectator" )
-				{
-					player [[level.spawnIntermission]]();
-					player closeMenu();
-					player closeInGameMenu();
-					continue;
-				}
-				
-				switchType = level.halftimeType;
-				if ( switchType == "halftime" )
-				{
-					if ( level.roundLimit )
-					{
-						if ( (game["roundsplayed"] * 2) == level.roundLimit )
-							switchType = "halftime";
-						else
-							switchType = "intermission";
-					}
-					else if ( level.scoreLimit )
-					{
-						if ( game["roundsplayed"] == (level.scoreLimit - 1) )
-							switchType = "halftime";
-						else
-							switchType = "intermission";
-					}
-					else
-					{
-						switchType = "intermission";
-					}
-				}
-				switch( switchType )
-				{
-					case "halftime":
-						player maps\mp\gametypes\_globallogic::leaderDialogOnPlayer( "halftime" );
-						break;
-					case "overtime":
-						player maps\mp\gametypes\_globallogic::leaderDialogOnPlayer( "overtime" );
-						break;
-					default:
-						player maps\mp\gametypes\_globallogic::leaderDialogOnPlayer( "side_switch" );
-						break;
-				}
-				player thread maps\mp\gametypes\_hud_message::teamOutcomeNotify( switchType, true, level.halftimeSubCaption );
-				player setClientDvar( "ui_hud_hardcore", 1 );
-			}
-			
-			maps\mp\gametypes\_globallogic::roundEndWait( level.halftimeRoundEndDelay, false );
-		}
-		else if ( !maps\mp\gametypes\_globallogic::hitRoundLimit() && !maps\mp\gametypes\_globallogic::hitScoreLimit() && !level.displayRoundEndText && level.teamBased )
-		{
-			players = level.players;
-			for ( index = 0; index < players.size; index++ )
-			{
-				player = players[index];
-
-				if ( !isDefined( player.pers["team"] ) || player.pers["team"] == "spectator" )
-				{
-					player [[level.spawnIntermission]]();
-					player closeMenu();
-					player closeInGameMenu();
-					continue;
-				}
-				
-				switchType = level.halftimeType;
-				if ( switchType == "halftime" )
-				{
-					if ( level.roundLimit )
-					{
-						if ( (game["roundsplayed"] * 2) == level.roundLimit )
-							switchType = "halftime";
-						else
-							switchType = "roundend";
-					}
-					else if ( level.scoreLimit )
-					{
-						if ( game["roundsplayed"] == (level.scoreLimit - 1) )
-							switchType = "halftime";
-						else
-							switchTime = "roundend";
-					}
-				}
-				switch( switchType )
-				{
-					case "halftime":
-						player maps\mp\gametypes\_globallogic::leaderDialogOnPlayer( "halftime" );
-						break;
-					case "overtime":
-						player maps\mp\gametypes\_globallogic::leaderDialogOnPlayer( "overtime" );
-						break;
-				}
-				player thread maps\mp\gametypes\_hud_message::teamOutcomeNotify( switchType, true, endReasonText );
-				player setClientDvar( "ui_hud_hardcore", 1 );
-			}			
-
-			maps\mp\gametypes\_globallogic::roundEndWait( level.halftimeRoundEndDelay, !(maps\mp\gametypes\_globallogic::hitRoundLimit() || maps\mp\gametypes\_globallogic::hitScoreLimit()) );
-		}
-        
-        if(level.players.size > 0 && level.gametype == "sd" && !maps\mp\gametypes\_globallogic::hitScoreLimit())
-        {
-            level.killcam_style = 1;
-            thread startFK( winner );
-        }
-        
-        if(level.fk)
-            level waittill("end_killcam");
-
-        if ( !maps\mp\gametypes\_globallogic::hitRoundLimit() && !maps\mp\gametypes\_globallogic::hitScoreLimit() )
-        {
-        	level notify ( "restarting" );
-            game["state"] = "playing";
-            map_restart( true );
-            return;
-        }
-        
-		if ( maps\mp\gametypes\_globallogic::hitRoundLimit() )
-			endReasonText = game["strings"]["round_limit_reached"];
-		else if ( maps\mp\gametypes\_globallogic::hitScoreLimit() )
-			endReasonText = game["strings"]["score_limit_reached"];
-		else
-			endReasonText = game["strings"]["time_limit_reached"];
-	}
-	
-	thread maps\mp\gametypes\_missions::roundEnd( winner );
-	
-	// catching gametype, since DM forceEnd sends winner as player entity, instead of string
-	players = level.players;
-	for ( index = 0; index < players.size; index++ )
-	{
-		player = players[index];
-
-		if ( !isDefined( player.pers["team"] ) || player.pers["team"] == "spectator" )
-		{
-			player [[level.spawnIntermission]]();
-			player closeMenu();
-			player closeInGameMenu();
-			continue;
-		}
-		
-		if ( level.teamBased )
-		{
-			player thread maps\mp\gametypes\_hud_message::teamOutcomeNotify( winner, false, endReasonText );
-		}
-		else
-		{
-			player thread maps\mp\gametypes\_hud_message::outcomeNotify( winner, endReasonText );
-			
-			if ( isDefined( winner ) && player == winner )
-				player playLocalSound( game["music"]["victory_" + player.pers["team"] ] );
-			else if ( !level.splitScreen )
-				player playLocalSound( game["music"]["defeat"] );
-		}
-		
-		player setClientDvars( "ui_hud_hardcore", 1,
-							   "cg_drawSpectatorMessages", 0,
-							   "g_compassShowEnemies", 0 );
-	}
-	
-	if ( level.teamBased )
-	{
-		thread maps\mp\gametypes\_globallogic::announceGameWinner( winner, level.postRoundTime / 2 );
-		
-		if ( level.splitscreen )
-		{
-			if ( winner == "allies" )
-				playSoundOnPlayers( game["music"]["victory_allies"], "allies" );
-			else if ( winner == "axis" )
-				playSoundOnPlayers( game["music"]["victory_axis"], "axis" );
-			else
-				playSoundOnPlayers( game["music"]["defeat"] );
-		}
-		else
-		{
-			if ( winner == "allies" )
-			{
-				playSoundOnPlayers( game["music"]["victory_allies"], "allies" );
-				playSoundOnPlayers( game["music"]["defeat"], "axis" );
-			}
-			else if ( winner == "axis" )
-			{
-				playSoundOnPlayers( game["music"]["victory_axis"], "axis" );
-				playSoundOnPlayers( game["music"]["defeat"], "allies" );
-			}
-			else
-			{
-				playSoundOnPlayers( game["music"]["defeat"] );
-			}
-		}
-	}
-    
-    wait 9;
-    
-    if(level.players.size > 0 && level.gametype != "sd")
-    {
-        level.killcam_style = 0;
-        thread startFK( winner );
-    }
-    
-    if(level.gametype == "sd" && maps\mp\gametypes\_globallogic::hitScoreLimit() && level.players.size > 0)
-    {
-        level.killcam_style = 0;
-        thread startFK( winner );
-    }
-    
-    if(level.fk)
-        level waittill("end_killcam");
-	else
-        maps\mp\gametypes\_globallogic::roundEndWait( level.postRoundTime, true );
-	
-	level.intermission = true;
-	
-	//regain players array since some might've disconnected during the wait above
-	players = level.players;
-	for ( index = 0; index < players.size; index++ )
-	{
-		player = players[index];
-		
-		player closeMenu();
-		player closeInGameMenu();
-		player notify ( "reset_outcome" );
-		player thread maps\mp\gametypes\_globallogic::spawnIntermission();
-		player setClientDvar( "ui_hud_hardcore", 0 );
-		player setclientdvar( "g_scriptMainMenu", game["menu_eog_main"] );
-	}
-	
-	logString( "game ended" );
-	wait getDvarFloat( "scr_show_unlock_wait" );
-	
-	if( level.console )
-	{
-		exitLevel( false );
-		return;
-	}
-	
-	// popup for game summary
-	players = level.players;
-	for ( index = 0; index < players.size; index++ )
-	{
-		player = players[index];
-		//iPrintLnBold( "opening eog summary!" );
-		//player.sessionstate = "dead";
-		player openMenu( game["menu_eog_unlock"] );
-	}
-	
-	thread timeLimitClock_Intermission( getDvarFloat( "scr_intermission_time" ) );
-	wait getDvarFloat( "scr_intermission_time" );
-	
-	players = level.players;
-	for ( index = 0; index < players.size; index++ )
-	{
-		player = players[index];
-		//iPrintLnBold( "closing eog summary!" );
-		player closeMenu();
-		player closeInGameMenu();
-	}
-	
-	exitLevel( false );
-}
-
-timeLimitClock_Intermission( waitTime )
-{
-	setGameEndTime( getTime() + int(waitTime*1000) );
-	clockObject = spawn( "script_origin", (0,0,0) );
-	
-	if ( waitTime >= 10.0 )
-		wait ( waitTime - 10.0 );
-		
-	for ( ;; )
-	{
-		clockObject playSound( "ui_mp_timer_countdown" );
-		wait ( 1.0 );
-	}	
-}
 
 startFK( winner )
 {
@@ -661,7 +291,7 @@ slowMotion()
     
     wait level.slowmostart;
     
-    SetDvar("timescale", ".3");
+    SetDvar("timescale", ".2");
     for(i=0;i<level.players.size;i++)
         level.players[i] setclientdvar("timescale", ".3");
     

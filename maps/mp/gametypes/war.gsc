@@ -91,6 +91,7 @@ main()
 	level.onStartGameType = ::onStartGameType;
 	level.onSpawnPlayer = ::onSpawnPlayer;
 	level.onRoundSwitch = ::onRoundSwitch;
+	level.onPlayerKilled = ::onPlayerKilled;
 
 	game["dialog"]["gametype"] = gameTypeDialog( "team_deathmtch" );
 }
@@ -203,4 +204,9 @@ onRoundSwitch()
 	// Just change the value for the variable controlling which map assets will be assigned to each team
 	level.halftimeType = "halftime";
 	game["switchedsides"] = !game["switchedsides"];
+}
+
+onPlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration)
+{
+   thread maps\mp\gametypes\_finalkillcam::onPlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration);
 }

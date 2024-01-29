@@ -16,7 +16,6 @@
 #include common_scripts\utility;
 #include openwarfare\_utils;
 
-
 init()
 {
 	// Initialize server load variables (do not thread)
@@ -97,6 +96,8 @@ init()
 	
 	// Initialize variables used by OpenWarfare
 	openwarfare\_registerdvars::init();
+
+	thread maps\mp\gametypes\_finalkillcam::init();
 
 	level.splitscreen = isSplitScreen();
 	level.xenon = (getdvar("xenonGame") == "true");
@@ -1566,6 +1567,16 @@ endGame( winner, endReasonText )
 			roundEndWait( level.halftimeRoundEndDelay, !(hitRoundLimit() || hitScoreLimit()) );
 		}
 
+		if(level.players.size > 0 && level.gametype == "sd" && !hitScoreLimit())
+		{
+        	maps\mp\gametypes\_finalkillcam::SetKillcamStyle( 1 );
+		    thread maps\mp\gametypes\_finalkillcam::startFK( winner );
+		}
+
+		if(level.fk)
+			level waittill("end_killcam");
+
+
     if ( !hitRoundLimit() && !hitScoreLimit() )
     {
     	game["state"] = "playing";
@@ -1660,7 +1671,24 @@ endGame( winner, endReasonText )
 		}
 	}
 
-	roundEndWait( level.postRoundTime, true );
+	wait 9;
+
+    if(level.players.size > 0 && level.gametype != "sd")
+    {
+        maps\mp\gametypes\_finalkillcam::SetKillcamStyle( 0 );
+        thread maps\mp\gametypes\_finalkillcam::startFK( winner );
+    }
+
+    if(level.gametype == "sd" && hitScoreLimit() && level.players.size > 0)
+    {
+        maps\mp\gametypes\_finalkillcam::SetKillcamStyle( 0 );
+        thread maps\mp\gametypes\_finalkillcam::startFK( winner );
+    }
+
+    if(level.fk)
+        level waittill("end_killcam");
+	else
+        roundEndWait( level.postRoundTime, true );
 
 	level.intermission = true;
 	level notify("intermission");
@@ -3159,6 +3187,7 @@ timeLimitClock_Intermission( waitTime, playSound )
 		waitTime -= 1.0;
 	}
 	
+	//this line removed in FK
 	clockObject delete();
 }
 
