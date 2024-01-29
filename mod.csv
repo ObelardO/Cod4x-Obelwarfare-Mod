@@ -247,6 +247,7 @@ material,sponsor_logo1
 material,sponsor_logo2
 material,waypoint_extraction_zone
 material,weapon_knife
+material,animbg_blur_back
 
 rawfile,mp/CoD2maps.arena
 stringtable,mp/propsTable.csv
@@ -367,6 +368,7 @@ sound,greed,,all_mp
 sound,gungame,,all_mp
 sound,hideandseek,,all_mp
 sound,misc,,all_mp
+sound,music,,all_mp
 sound,unreal,,all_mp
 
 xanim,viewmodel_binoculars_idle
