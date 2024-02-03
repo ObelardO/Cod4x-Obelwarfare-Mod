@@ -337,6 +337,7 @@ rawfile,openwarfare/_welcomerulesinfo.gsc
 
 menufile,ui_mp/connect.menu
 menufile,ui_mp/controls_multi.menu
+menufile,ui_mp/options_graphics_pc.menu
 menufile,ui_mp/hud.menu
 menufile,ui_mp/main.menu
 menufile,ui_mp/scriptmenus/advancedacp.menu
