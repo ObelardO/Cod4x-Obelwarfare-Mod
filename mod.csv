@@ -79,6 +79,8 @@ rawfile,maps/mp/mp_strike_fx.gsc
 rawfile,maps/mp/mp_vacant.gsc
 rawfile,maps/mp/mp_vacant_fx.gsc
 
+rawfile,maps/_nightvision.gsc
+
 rawfile,openwarfare/maps/mp_backlot_fx.gsc
 rawfile,openwarfare/maps/mp_bloc_fx.gsc
 rawfile,openwarfare/maps/mp_bog_fx.gsc
@@ -113,6 +115,7 @@ rawfile,vision/ow_sunset1.vision
 rawfile,vision/ow_sunset2.vision
 rawfile,vision/ow_sunset3.vision
 rawfile,vision/ow_sunset4.vision
+rawfile,vision/default_night.vision
 
 rawfile,maps/mp/_createfx.gsc
 rawfile,maps/mp/_explosive_barrels.gsc
@@ -248,6 +251,7 @@ material,sponsor_logo2
 material,waypoint_extraction_zone
 material,weapon_knife
 material,animbg_blur_back
+material,nightvision_overlay_goggles
 
 rawfile,mp/CoD2maps.arena
 stringtable,mp/propsTable.csv
