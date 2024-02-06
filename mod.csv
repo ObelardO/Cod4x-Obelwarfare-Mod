@@ -79,7 +79,6 @@ rawfile,maps/mp/mp_strike_fx.gsc
 rawfile,maps/mp/mp_vacant.gsc
 rawfile,maps/mp/mp_vacant_fx.gsc
 
-rawfile,maps/_nightvision.gsc
 
 rawfile,openwarfare/maps/mp_backlot_fx.gsc
 rawfile,openwarfare/maps/mp_bloc_fx.gsc
@@ -375,6 +374,7 @@ sound,hideandseek,,all_mp
 sound,misc,,all_mp
 sound,music,,all_mp
 sound,unreal,,all_mp
+sound,items,,all_mp
 
 xanim,viewmodel_binoculars_idle
 
