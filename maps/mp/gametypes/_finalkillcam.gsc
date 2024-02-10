@@ -235,7 +235,7 @@ CreateFKMenu( victim , attacker)
 
 onPlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration)
 {
-    if(attacker != self)
+    if(attacker != self && isDefined(attacker) && isDefined(attacker.team))
     {
         level.showFinalKillcam = true;
         
