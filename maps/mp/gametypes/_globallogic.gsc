@@ -74,8 +74,8 @@ init()
 	setDvar( "g_antilag", getdvarx( "scr_antilag", "int", 0, 0, 1 ) );
 	
 	// Set mod name and version
-	setDvar( "_Mod", "OpenWarfare", true );
-	setDvar( "_ModVer", "v4.180.2482", true );
+	setDvar( "_Mod", "ObelWarfare", true );
+	setDvar( "_ModVer", "v4.19", true );
 
 	// Make a health check of the server
 	level thread openwarfare\_servercheck::init();
@@ -184,6 +184,8 @@ init()
 
 	if ( !isDefined( game["tiebreaker"] ) )
 		game["tiebreaker"] = false;
+
+	maps\mp\_nightvision_distcheck::init();
 }
 
 registerDvars()
@@ -939,6 +941,9 @@ spawnPlayer()
 		// We're in the victory screen, but before intermission
 		self freezePlayerForRoundEnd();
 	}
+
+	// ### rangediplay in nightvision ###
+	self thread maps\mp\_nightvision_distcheck::check_nightvision();
 }
 
 hidePerksAfterTime( delay )

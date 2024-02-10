@@ -79,7 +79,6 @@ rawfile,maps/mp/mp_strike_fx.gsc
 rawfile,maps/mp/mp_vacant.gsc
 rawfile,maps/mp/mp_vacant_fx.gsc
 
-rawfile,maps/_nightvision.gsc
 
 rawfile,openwarfare/maps/mp_backlot_fx.gsc
 rawfile,openwarfare/maps/mp_bloc_fx.gsc
@@ -121,6 +120,7 @@ rawfile,maps/mp/_createfx.gsc
 rawfile,maps/mp/_explosive_barrels.gsc
 rawfile,maps/mp/_flashgrenades.gsc
 rawfile,maps/mp/_helicopter.gsc
+rawfile,maps/mp/_nightvision_distcheck.gsc
 rawfile,maps/mp/_utility.gsc
 rawfile,maps/mp/gametypes/_battlechatter_mp.gsc
 rawfile,maps/mp/gametypes/_class.gsc
@@ -193,7 +193,9 @@ fx,greed/ui_pickup_green
 fx,greed/ui_pickup_yellow
 fx,greed/ui_pickup_purple
 fx,greed/ui_pickup_red
+fx,nv/light_white_big
 #fx,props/american_smoke_grenade_mp
+
 
 material,allies_custom_logo
 material,axis_custom_logo
@@ -375,6 +377,7 @@ sound,hideandseek,,all_mp
 sound,misc,,all_mp
 sound,music,,all_mp
 sound,unreal,,all_mp
+sound,items,,all_mp
 
 xanim,viewmodel_binoculars_idle
 
