@@ -184,8 +184,6 @@ init()
 
 	if ( !isDefined( game["tiebreaker"] ) )
 		game["tiebreaker"] = false;
-
-	maps\mp\_nightvision_distcheck::init();
 }
 
 registerDvars()
@@ -941,9 +939,6 @@ spawnPlayer()
 		// We're in the victory screen, but before intermission
 		self freezePlayerForRoundEnd();
 	}
-
-	// ### rangediplay in nightvision ###
-	self thread maps\mp\_nightvision_distcheck::check_nightvision();
 }
 
 hidePerksAfterTime( delay )

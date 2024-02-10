@@ -120,7 +120,6 @@ rawfile,maps/mp/_createfx.gsc
 rawfile,maps/mp/_explosive_barrels.gsc
 rawfile,maps/mp/_flashgrenades.gsc
 rawfile,maps/mp/_helicopter.gsc
-rawfile,maps/mp/_nightvision_distcheck.gsc
 rawfile,maps/mp/_utility.gsc
 rawfile,maps/mp/gametypes/_battlechatter_mp.gsc
 rawfile,maps/mp/gametypes/_class.gsc
@@ -193,7 +192,6 @@ fx,greed/ui_pickup_green
 fx,greed/ui_pickup_yellow
 fx,greed/ui_pickup_purple
 fx,greed/ui_pickup_red
-fx,nv/light_white_big
 #fx,props/american_smoke_grenade_mp
 
 
