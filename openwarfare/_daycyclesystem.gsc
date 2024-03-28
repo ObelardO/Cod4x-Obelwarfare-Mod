@@ -194,7 +194,7 @@ setFog(index, count, isFogOnStart, isFogOnEnd, fogTime)
 	FOG_MIN_DIST_ON = 30;
 	FOG_MIN_DIST_OFF = 1000;
 
-	FOG_MAX_DIST_ON = 150;
+	FOG_MAX_DIST_ON = 200;
 	FOG_MAX_DIST_OFF = 50000;
 
 	if (isFogOnStart) {
