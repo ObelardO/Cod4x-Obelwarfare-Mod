@@ -28,7 +28,7 @@ init()
 	precacheMenu( game["menu_serverinfo"] );
 
 	// Initialize the mod information and the title for the screen
-	level.scr_welcome_modinfo = "^7Running " + getDvar( "_Mod" ) + " " + getDvar( "_ModVer" ) + ", please visit us at ^2http://openwarfaremod.com/^7.";
+	level.scr_welcome_modinfo = "^7Powered by " + getDvar( "_Mod" ) + " " + getDvar( "_ModVer" );
 	level.scr_welcome_title = getdvarx( "scr_welcome_title", "string", getDvar( "sv_hostname" ) );
 
 	// Load the messages to display

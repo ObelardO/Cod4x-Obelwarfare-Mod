@@ -209,7 +209,7 @@ resetClientVariables()
 		"ui_amvs_firstplace", level.mapVoteFirstPlace,
 		"ui_amvs_secondplace", level.mapVoteSecondPlace,
 		"ui_amvs_thirdplace", level.mapVoteThirdPlace,
-		"ui_welcome_modinfo", "^7Running " + getDvar( "_Mod" ) + " " + getDvar( "_ModVer" ) + ", please visit us at ^2http://openwarfaremod.com/^7."
+		"ui_welcome_modinfo", "^Powered by " + getDvar( "_Mod" ) + " " + getDvar( "_ModVer" )
 	);
 }
 
