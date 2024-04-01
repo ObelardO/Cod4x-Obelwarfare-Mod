@@ -19,7 +19,7 @@ FILENOTES        ""
 // maps/mp/gametypes/ass.gsc
 //******************************************************************************
 REFERENCE ASSASSINATION
-LANG_RUSSIAN "Уничтожение"
+LANG_RUSSIAN "Эвакуация"
 
 REFERENCE ASSASSINATION_ATTACKER
 LANG_RUSSIAN "Защитите Важную Персону"
@@ -161,7 +161,7 @@ LANG_RUSSIAN "Вражеский флаг вернется через: &&1"
 // maps/mp/gametypes/ftag.gsc
 //******************************************************************************
 REFERENCE FREEZETAG
-LANG_RUSSIAN "Freeze Tag"
+LANG_RUSSIAN "Заморозка"
 
 REFERENCE FTAG_ALLIES_FROZEN
 LANG_RUSSIAN "Силы союзников заморожены"
@@ -412,7 +412,7 @@ LANG_RUSSIAN "Все Секретные документы похищены."
 // maps/mp/gametypes/ss.gsc
 //******************************************************************************
 REFERENCE SHARPSHOOTER
-LANG_RUSSIAN "Меткий стрелок"
+LANG_RUSSIAN "Рулетка"
 
 REFERENCE OBJECTIVES_SHARPSHOOTER
 LANG_RUSSIAN "Зарабатывайте очки уничтожая других игроков."
@@ -828,22 +828,22 @@ LANG_RUSSIAN "У вас последня жизнь!"
 // openwarfare/_objpoints.gsc
 //******************************************************************************
 REFERENCE QUICK_DEFUSE_1
-LANG_RUSSIAN "^1Быстрое разминирование: ^7Выбирайте между проводами, нажимая ^2[{+toggleads_throw}]^7"
+LANG_RUSSIAN "Нажмите ^3[{+toggleads_throw}]^7 чтобы выбрать провод."
 
 REFERENCE QUICK_DEFUSE_2
-LANG_RUSSIAN "Нажмите ^2[{+attack}]^7 для выбора нужного провода"
+LANG_RUSSIAN "Нажмите ^3[{+attack}]^7 чтобы разрезать провод!"
 
 REFERENCE RED_WIRE
-LANG_RUSSIAN "^1Красный провод"
+LANG_RUSSIAN "^1Красный ^7провод"
 
 REFERENCE GREEN_WIRE
-LANG_RUSSIAN "^2Зеленый провод"
+LANG_RUSSIAN "^2Зеленый ^7провод"
 
 REFERENCE YELLOW_WIRE
-LANG_RUSSIAN "^3Желтый провод"
+LANG_RUSSIAN "^3Желтый ^7провод"
 
 REFERENCE BLUE_WIRE
-LANG_RUSSIAN "^4Синий провод"
+LANG_RUSSIAN "^4Синий ^7провод"
 
 REFERENCE EXPLOSIVES_DESTROYED
 LANG_RUSSIAN "Бомба уничтожена!"
@@ -852,7 +852,7 @@ REFERENCE DESTROYING_EXPLOSIVES
 LANG_RUSSIAN "Уничтожение бомбы"
 
 REFERENCE DESTROY_EXPLOSIVES
-LANG_RUSSIAN "Вы можете уничтожить бомбу, удерживая ^2[{+melee}]^7"
+LANG_RUSSIAN "Вы можете уничтожить бомбу, удерживая ^3[{+melee}]^7"
 
 
 //******************************************************************************
@@ -1006,7 +1006,7 @@ REFERENCE STRATEGY_PERIOD_STARTED
 LANG_RUSSIAN "Стратегическая пауза."
 
 REFERENCE PRESS_TO_BYPASS
-LANG_RUSSIAN "Нажмите^3 [{+activate}] ^7чтобы пропустить"
+LANG_RUSSIAN "Нажмите^3 [{+activate}] ^7для готовности"
 
 
 //******************************************************************************
@@ -1166,14 +1166,14 @@ REFERENCE MOVER_ALL_WRITE
 LANG_RUSSIAN "Все объекты записаны в ^1games_mp.log^7"
 
 REFERENCE MOVER_HELP
-LANG_RUSSIAN "Нажмите ^1[[{+activate}]] ^7для перемещения между командами.\nНажмите ^1[[{+melee}]] ^7для запуска команды.\nНажмите ^1[[{+attack}]] ^7для активации выбранного объекта"
+LANG_RUSSIAN "Нажмите ^3[[{+activate}]] ^7для перемещения между командами.\nНажмите ^3[[{+melee}]] ^7для запуска команды.\nНажмите ^3[[{+attack}]] ^7для активации выбранного объекта"
 
 
 //******************************************************************************
 // ui_mp/connect.menu
 //******************************************************************************
 REFERENCE BROUGHT2UBY
-LANG_RUSSIAN "Поддержать сервер:"
+LANG_RUSSIAN "Важная информация:"
 
 REFERENCE SERVERPOWEREDBY
 LANG_RUSSIAN ""
@@ -1294,10 +1294,10 @@ LANG_RUSSIAN "Угол обзора"
 // ui_mp/scriptmenus/class.menu
 //******************************************************************************
 REFERENCE FAVORITE_ADD
-LANG_RUSSIAN "Добавить в Избранное"
+LANG_RUSSIAN "В избранное"
 
 REFERENCE SERVER_INFORMATION
-LANG_RUSSIAN "Информация о Сервере"
+LANG_RUSSIAN "О сервере"
 
 
 //******************************************************************************
