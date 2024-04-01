@@ -1,126 +1,438 @@
 {
 	map		"mp_convoy"
 	longname	"MPUI_CONVOY"
-	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr hns vg"
 	
 }
 
 {
 	map		"mp_backlot"
 	longname	"MPUI_BACKLOT"
-	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr hns vg"
 }
 
 {
 	map		"mp_bloc"
 	longname	"MPUI_BLOC"
-	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr hns vg"
 }
 
 {
 	map		"mp_bog"
 	longname	"MPUI_BOG"
-	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr hns vg"
 }
 
 {
 	map			"mp_broadcast"
 	longname	"MPUI_BROADCAST"
-	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr hns vg"
 }
 
 {
 	map			"mp_carentan"
 	longname	"MPUI_CARENTAN"
-	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr hns vg"
 }
 
 {
 	map		"mp_countdown"
 	longname	"MPUI_COUNTDOWN"
-	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr hns vg"
 }
 
 {
 	map		"mp_crash"
 	longname	"MPUI_CRASH"
-	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr hns vg"
 }
 
 {
 	map			"mp_creek"
 	longname	"MPUI_CREEK"
-	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr hns vg"
 }
 
 {
 	map		"mp_crossfire"
 	longname	"MPUI_CROSSFIRE"
-	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr hns vg"
 }
 
 {
 	map		"mp_citystreets"
 	longname	"MPUI_CITYSTREETS"
-	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr hns vg"
 }
 
 {
 	map		"mp_farm"
 	longname	"MPUI_FARM"
-	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr hns vg"
 }
 
 {
 	map			"mp_killhouse"
 	longname	"MPUI_KILLHOUSE"
-	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr hns vg"
 }
 
 {
 	map			"mp_overgrown"
 	longname	"MPUI_OVERGROWN"
-	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr hns vg"
 }
 
 {
 	map			"mp_pipeline"
 	longname	"MPUI_PIPELINE"
-	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr hns vg"
 }
 
 {
 	map			"mp_shipment"
 	longname	"MPUI_SHIPMENT"
-	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr hns vg"
 }
 
 {
 	map			"mp_showdown"
 	longname	"MPUI_SHOWDOWN"
-	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr hns vg"
 }
 
 {
 	map			"mp_strike"
 	longname	"MPUI_STRIKE"
-	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr hns vg"
 }
 
 {
 	map			"mp_vacant"
 	longname	"MPUI_VACANT"
-	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr hns vg"
 }
 
 {
 	map			"mp_cargoship"
 	longname	"MPUI_CARGOSHIP"
-	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr hns vg"
 }
 
 {
 	map		"mp_crash_snow"
 	longname	"MPUI_CRASH_SNOW"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr hns vg"
+}
+
+{
+	map			"mp_atp"
+	longname	"MPUI_CM_MP_ATP"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_backlot_2"
+	longname	"MPUI_CM_MP_BACKLOT_2"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_brdo"
+	longname	"MPUI_CM_MP_BRDO"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_burg_b1"
+	longname	"MPUI_CM_MP_BURG_B1"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_cargo_shipment"
+	longname	"MPUI_CM_MP_CARGO_SHIPMENT"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_chernobyl"
+	longname	"MPUI_CM_MP_CHERNOBYL"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_crash3"
+	longname	"MPUI_CM_MP_CRASH3"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_crossfire2"
+	longname	"MPUI_CM_MP_CROSSFIRE2"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_efa_the_tomb"
+	longname	"MPUI_CM_MP_EFA_THE_TOMB"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_fatal_morgana"
+	longname	"MPUI_CM_MP_FATAL_MORGANA"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_killhouse_2"
+	longname	"MPUI_CM_MP_KILLHOUSE_2"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_kob_breakout"
+	longname	"MPUI_CM_MP_KOB_BREAKOUT"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_mission"
+	longname	"MPUI_CM_MP_MISSION"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_mtl_the_rock"
+	longname	"MPUI_CM_MP_MTL_THE_ROCK"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_mw2_underpass_night"
+	longname	"MPUI_CM_MP_MW2_UNDERPASS_NIGHT"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_oukhta"
+	longname	"MPUI_CM_MP_OUKHTA"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_pripyat"
+	longname	"MPUI_CM_MP_PRIPYAT"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_rasalem"
+	longname	"MPUI_CM_MP_RASALEM"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_rusmata"
+	longname	"MPUI_CM_MP_RUSMATA"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_sc_hangar"
+	longname	"MPUI_CM_MP_SC_HANGAR"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_selo"
+	longname	"MPUI_CM_MP_SELO"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_smalltownx"
+	longname	"MPUI_CM_MP_SMALLTOWNX"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_steamlab"
+	longname	"MPUI_CM_MP_STEAMLAB"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_stream"
+	longname	"MPUI_CM_MP_STREAM"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_strike_2"
+	longname	"MPUI_CM_MP_STRIKE_2"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_82ab_boulogne4"
+	longname	"MPUI_CM_MP_82AB_BOULOGNE4"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_vacant_2"
+	longname	"MPUI_CM_MP_VACANT_2"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_winter_rasalem"
+	longname	"MPUI_CM_MP_WINTER_RASALEM"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_aerodrome"
+	longname	"MPUI_CM_MP_AERODROME"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_struggle"
+	longname	"MPUI_CM_MP_STRUGGLE"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_bjwifi_port"
+	longname	"MPUI_CM_MP_BJWIFI_PORT"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_woodrr"
+	longname	"MPUI_CM_MP_WOODRR"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_viadvillage"
+	longname	"MPUI_CM_MP_VIADVILLAGE"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_destroyed_village"
+	longname	"MPUI_CM_MP_DESTROYED_VILLAGE"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_hisar"
+	longname	"MPUI_CM_MP_HISAR"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_montargis4"
+	longname	"MPUI_CM_MP_MONTARGIS4"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_inv"
+	longname	"MPUI_CM_MP_INV"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_houses"
+	longname	"MPUI_CM_MP_HOUSES"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_fallen"
+	longname	"MPUI_CM_MP_FALLEN"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_doowood"
+	longname	"MPUI_CM_MP_DOOWOOD"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_bo2nuketown"
+	longname	"MPUI_CM_MP_BO2NUKETOWN"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_ngbc"
+	longname	"MPUI_CM_MP_NGBC"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_ngbc_day"
+	longname	"MPUI_CM_MP_NGBC_DAY"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_ngbc_shipment"
+	longname	"MPUI_CM_MP_NGBC_SHIPMENT"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_roundup"
+	longname	"MPUI_CM_MP_ROUNDUP"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_shipment44"
+	longname	"MPUI_CM_MP_SHIPMENT44"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_zaseda"
+	longname	"MPUI_CM_MP_ZASEDA"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_rescue2014"
+	longname	"MPUI_CM_MP_RESCUE2014"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_bo2paintball"
+	longname	"MPUI_CM_MP_BO2PAINTBALL"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_hollow"
+	longname	"MPUI_CM_MP_HOLLOW"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_fr_hv2"
+	longname	"MPUI_CM_MP_FR_HV2"
+	gametype	"dm war"
+}
+
+{
+	map			"mp_farmhouse"
+	longname	"MPUI_CM_MP_FARMHOUSE"
 	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
 }

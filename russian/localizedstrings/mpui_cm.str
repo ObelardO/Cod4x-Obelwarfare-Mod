@@ -1,0 +1,180 @@
+//******************************************************************************
+//  _____                  _    _             __
+// |  _  |                | |  | |           / _|
+// | | | |_ __   ___ _ __ | |  | | __ _ _ __| |_ __ _ _ __ ___
+// | | | | '_ \ / _ \ '_ \| |/\| |/ _` | '__|  _/ _` | '__/ _ \
+// \ \_/ / |_) |  __/ | | \  /\  / (_| | |  | || (_| | | |  __/
+//  \___/| .__/ \___|_| |_|\/  \/ \__,_|_|  |_| \__,_|_|  \___|
+//       | |               We don't make the game you play.
+//       |_|                 We make the game you play BETTER.
+//
+//            Website: http://openwarfaremod.com/
+//******************************************************************************
+
+VERSION          "1"
+CONFIG           "C:\trees\cod3\cod3\bin\StringEd.cfg"
+FILENOTES        ""
+
+//******************************************************************************
+// maps/mp/gametypes/ass.gsc
+//******************************************************************************
+REFERENCE MP_ATP
+LANG_RUSSIAN "АТП"
+
+REFERENCE MP_BACKLOT_2
+LANG_RUSSIAN "Площадка 2"
+
+REFERENCE MP_BRDO
+LANG_RUSSIAN "Брдо"
+
+REFERENCE MP_BURG_B1
+LANG_RUSSIAN "Бёрг"
+
+REFERENCE MP_CARGO_SHIPMENT
+LANG_RUSSIAN "Мокрое отправление"
+
+REFERENCE MP_CHERNOBYL
+LANG_RUSSIAN "Чернобль"
+
+REFERENCE MP_CRASH3
+LANG_RUSSIAN "Крушение 3"
+
+REFERENCE MP_CROSSFIRE2
+LANG_RUSSIAN "Перестрелка 2"
+
+REFERENCE MP_EFA_THE_TOMB
+LANG_RUSSIAN "Пирамида"
+
+REFERENCE MP_FATAL_MORGANA
+LANG_RUSSIAN "Моргана"
+
+REFERENCE MP_KILLHOUSE_2
+LANG_RUSSIAN "Мясорубка 2"
+
+REFERENCE MP_KOB_BREAKOUT
+LANG_RUSSIAN "Прорыв"
+
+REFERENCE MP_MISSION
+LANG_RUSSIAN "Миссия в Рио"
+
+REFERENCE MP_MTL_THE_ROCK
+LANG_RUSSIAN "Скала"
+
+REFERENCE MP_MW2_UNDERPASS_NIGHT
+LANG_RUSSIAN "Туннель"
+
+REFERENCE MP_OUKHTA
+LANG_RUSSIAN "Охта"
+
+REFERENCE MP_PRIPYAT
+LANG_RUSSIAN "Припять"
+
+REFERENCE MP_RASALEM
+LANG_RUSSIAN "Расалем"
+
+REFERENCE MP_RUSMATA
+LANG_RUSSIAN "Русмата"
+
+REFERENCE MP_SC_HANGAR
+LANG_RUSSIAN "Ангар"
+
+REFERENCE MP_SELO
+LANG_RUSSIAN "Село"
+
+REFERENCE MP_SMALLTOWNX
+LANG_RUSSIAN "Городок"
+
+REFERENCE MP_STEAMLAB
+LANG_RUSSIAN "Лаборатория"
+
+REFERENCE MP_STREAM
+LANG_RUSSIAN "Сток"
+
+REFERENCE MP_STRIKE_2
+LANG_RUSSIAN "Удар 2"
+
+REFERENCE MP_82AB_BOULOGNE4
+LANG_RUSSIAN "Булонь"
+
+REFERENCE MP_VACANT_2
+LANG_RUSSIAN "Офис 2"
+
+REFERENCE MP_WINTER_RASALEM
+LANG_RUSSIAN "Снежный Русалем"
+
+REFERENCE MP_AERODROME
+LANG_RUSSIAN "Аэропорт"
+
+REFERENCE MP_STRUGGLE
+LANG_RUSSIAN "Стычка"
+
+REFERENCE MP_FAV
+LANG_RUSSIAN "Фавела"
+
+REFERENCE MP_BJWIFI_PORT
+LANG_RUSSIAN "Восточный порт"
+
+REFERENCE MP_WOODRR
+LANG_RUSSIAN "Низина"
+
+REFERENCE MP_VIADVILLAGE
+LANG_RUSSIAN "Виадук"
+
+REFERENCE MP_DESTROYED_VILLAGE
+LANG_RUSSIAN "Руины"
+
+REFERENCE MP_HISAR
+LANG_RUSSIAN "Хисар"
+
+REFERENCE MP_MONTARGIS4
+LANG_RUSSIAN "Немецкий замок"
+
+REFERENCE MP_INV
+LANG_RUSSIAN "Вторжение"
+
+REFERENCE MP_HOUSES
+LANG_RUSSIAN "Дома"
+
+REFERENCE MP_FALLEN
+LANG_RUSSIAN "Промзона"
+
+REFERENCE MP_DOOWOOD
+LANG_RUSSIAN "Топи"
+
+REFERENCE MP_BO2NUKETOWN
+LANG_RUSSIAN "Дум таун"
+
+REFERENCE MP_NGBC
+LANG_RUSSIAN "Ночная кирха"
+
+REFERENCE MP_NGBC_DAY
+LANG_RUSSIAN "Кирха"
+
+REFERENCE MP_NGBC_SHIPMENT
+LANG_RUSSIAN "Порт 1944"
+
+REFERENCE MP_ROUNDUP
+LANG_RUSSIAN "Круговая"
+
+REFERENCE MP_SHIPMENT44
+LANG_RUSSIAN "Отправление 1944"
+
+REFERENCE MP_ZASEDA
+LANG_RUSSIAN "Осень"
+
+REFERENCE MP_RESCUE2014
+LANG_RUSSIAN "Эвакуация"
+
+REFERENCE MP_BO2PAINTBALL
+LANG_RUSSIAN "Пейнтбол"
+
+REFERENCE MP_HOLLOW
+LANG_RUSSIAN "Окружение"
+
+REFERENCE MP_FR_HV2
+LANG_RUSSIAN "Авиагородок"
+
+REFERENCE MP_FARMHOUSE
+LANG_RUSSIAN "Ферма 1944"
+
+ENDMARKER
