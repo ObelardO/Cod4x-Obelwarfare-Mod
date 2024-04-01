@@ -1173,7 +1173,7 @@ LANG_RUSSIAN "Нажмите ^1[[{+activate}]] ^7для перемещения между командами.\nНажм
 // ui_mp/connect.menu
 //******************************************************************************
 REFERENCE BROUGHT2UBY
-LANG_RUSSIAN ""
+LANG_RUSSIAN "Поддержать сервер:"
 
 REFERENCE SERVERPOWEREDBY
 LANG_RUSSIAN ""
