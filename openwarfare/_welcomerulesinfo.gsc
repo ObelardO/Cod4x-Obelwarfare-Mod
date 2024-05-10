@@ -37,6 +37,8 @@ init()
 		level.scr_welcome_lines[ iLine - 1 ] = getdvarx( "scr_welcome_line_" + iLine, "string", "" );
 	}
 
+	level.scr_welcome_footer = getdvarx( "scr_welcome_line_footer", "string", "");
+
 	level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
 }
 
@@ -60,6 +62,7 @@ setServerInformation()
 		"ui_welcome_line_4", level.scr_welcome_lines[ 4 ],
 		"ui_welcome_line_5", level.scr_welcome_lines[ 5 ],
 		"ui_welcome_line_6", level.scr_welcome_lines[ 6 ],
-		"ui_welcome_line_7", level.scr_welcome_lines[ 7 ]
+		"ui_welcome_line_7", level.scr_welcome_lines[ 7 ],
+		"ui_welcome_line_footer", level.scr_welcome_footer
 	);
 }

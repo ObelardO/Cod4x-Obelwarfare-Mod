@@ -116,7 +116,7 @@
 		itemDef
 		{
 			type			ITEM_TYPE_TEXT
-			rect			50 125 590 0 HORIZONTAL_ALIGN_DEFAULT VERTICAL_ALIGN_DEFAULT
+			rect			50 95 590 0 HORIZONTAL_ALIGN_DEFAULT VERTICAL_ALIGN_DEFAULT
 			exp				text( dvarstring(ui_welcome_line_0) );
 			textfont		UI_FONT_NORMAL
 			textscale		TEXTSIZE_SMALL
@@ -129,7 +129,7 @@
 		itemDef
 		{
 			type			ITEM_TYPE_TEXT
-			rect			50 155 590 0 HORIZONTAL_ALIGN_DEFAULT VERTICAL_ALIGN_DEFAULT
+			rect			50 125 590 0 HORIZONTAL_ALIGN_DEFAULT VERTICAL_ALIGN_DEFAULT
 			exp				text( dvarstring(ui_welcome_line_1) );
 			textfont		UI_FONT_NORMAL
 			textscale		TEXTSIZE_SMALL
@@ -142,7 +142,7 @@
 		itemDef
 		{
 			type			ITEM_TYPE_TEXT
-			rect			50 185 590 0 HORIZONTAL_ALIGN_DEFAULT VERTICAL_ALIGN_DEFAULT
+			rect			50 155 590 0 HORIZONTAL_ALIGN_DEFAULT VERTICAL_ALIGN_DEFAULT
 			exp				text( dvarstring(ui_welcome_line_2) );
 			textfont		UI_FONT_NORMAL
 			textscale		TEXTSIZE_SMALL
@@ -155,7 +155,7 @@
 		itemDef
 		{
 			type			ITEM_TYPE_TEXT
-			rect			50 215 590 0 HORIZONTAL_ALIGN_DEFAULT VERTICAL_ALIGN_DEFAULT
+			rect			50 185 590 0 HORIZONTAL_ALIGN_DEFAULT VERTICAL_ALIGN_DEFAULT
 			exp				text( dvarstring(ui_welcome_line_3) );
 			textfont		UI_FONT_NORMAL
 			textscale		TEXTSIZE_SMALL
@@ -168,7 +168,7 @@
 		itemDef
 		{
 			type			ITEM_TYPE_TEXT
-			rect			50 245 590 0 HORIZONTAL_ALIGN_DEFAULT VERTICAL_ALIGN_DEFAULT
+			rect			50 215 590 0 HORIZONTAL_ALIGN_DEFAULT VERTICAL_ALIGN_DEFAULT
 			exp				text( dvarstring(ui_welcome_line_4) );
 			textfont		UI_FONT_NORMAL
 			textscale		TEXTSIZE_SMALL
@@ -181,7 +181,7 @@
 		itemDef
 		{
 			type			ITEM_TYPE_TEXT
-			rect			50 275 590 0 HORIZONTAL_ALIGN_DEFAULT VERTICAL_ALIGN_DEFAULT
+			rect			50 245 590 0 HORIZONTAL_ALIGN_DEFAULT VERTICAL_ALIGN_DEFAULT
 			exp				text( dvarstring(ui_welcome_line_5) );
 			textfont		UI_FONT_NORMAL
 			textscale		TEXTSIZE_SMALL
@@ -194,7 +194,7 @@
 		itemDef
 		{
 			type			ITEM_TYPE_TEXT
-			rect			50 305 590 0 HORIZONTAL_ALIGN_DEFAULT VERTICAL_ALIGN_DEFAULT
+			rect			50 275 590 0 HORIZONTAL_ALIGN_DEFAULT VERTICAL_ALIGN_DEFAULT
 			exp				text( dvarstring(ui_welcome_line_6) );
 			textfont		UI_FONT_NORMAL
 			textscale		TEXTSIZE_SMALL
@@ -207,7 +207,7 @@
 		itemDef
 		{
 			type			ITEM_TYPE_TEXT
-			rect			50 335 590 0 HORIZONTAL_ALIGN_DEFAULT VERTICAL_ALIGN_DEFAULT
+			rect			50 305 590 0 HORIZONTAL_ALIGN_DEFAULT VERTICAL_ALIGN_DEFAULT
 			exp				text( dvarstring(ui_welcome_line_7) );
 			textfont		UI_FONT_NORMAL
 			textscale		TEXTSIZE_SMALL
@@ -220,7 +220,20 @@
 		itemDef
 		{
 			type			ITEM_TYPE_TEXT
-			rect			0 425 640 0 HORIZONTAL_ALIGN_DEFAULT VERTICAL_ALIGN_DEFAULT
+			rect			0 335 640 0 HORIZONTAL_ALIGN_DEFAULT VERTICAL_ALIGN_DEFAULT
+			exp				text( dvarstring(ui_welcome_line_footer) );
+			textfont		UI_FONT_NORMAL
+			textscale		TEXTSIZE_SMALL
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textAlign		ITEM_ALIGN_CENTER
+			forecolor		COLOR_FOCUSED
+			visible			1
+			decoration		
+		}
+		itemDef
+		{
+			type			ITEM_TYPE_TEXT
+			rect			0 472 640 0 HORIZONTAL_ALIGN_DEFAULT VERTICAL_ALIGN_DEFAULT
 			exp				text( dvarstring(ui_welcome_modinfo) );
 			textfont		UI_FONT_NORMAL
 			textscale		TEXTSIZE_SMALL
@@ -229,6 +242,17 @@
 			forecolor		COLOR_FOCUSED
 			visible			1
 			decoration		
+		}
+
+
+		itemDef
+		{
+			rect			-35 120 70 70 VERTICAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			forecolor		1 1 1 1
+			style			WINDOW_STYLE_SHADER
+			background		"clanlogo"
+			visible 		1
+			decoration
 		}
 
 		#include "ui/safearea.menu"
