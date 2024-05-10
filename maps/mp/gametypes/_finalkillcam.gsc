@@ -15,6 +15,8 @@ init()
     level.slowmotstart = undefined;
     
     OnPlayerConnect();
+
+    self SetClientDvar( "ui_ShowMenuOnly", "" );
 }
 
 SetKillcamStyle( style )
@@ -83,10 +85,24 @@ finalkillcam( attacker, attackerNum, deathtime, victim)
     
     if(!isDefined(level.slowmostart))
         level.slowmostart = killcamlength - 3;
+
+
+    wait 0.05;
+
+    if ( self.archivetime <= predelay ) // if we're not looking back in time far enough to even see the death, cancel
+	{
+		self.sessionstate = "dead";
+		self.spectatorclient = -1;
+		self.killcamentity = -1;
+		self.archivetime = 0;
+		self.psoffsettime = 0;
+		self SetClientDvar( "ui_ShowMenuOnly", "" );
+		
+		return;
+	}
     
     self.killcam = true;
-    
-    wait 0.05;
+
     
     if(!isDefined(self.top_fk_shader))
     {
