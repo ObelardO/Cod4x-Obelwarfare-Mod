@@ -96,8 +96,9 @@ finalkillcam( attacker, attackerNum, deathtime, victim)
 		self.killcamentity = -1;
 		self.archivetime = 0;
 		self.psoffsettime = 0;
-		self SetClientDvar( "ui_ShowMenuOnly", "" );
-		
+
+    	self thread EndFK();
+
 		return;
 	}
     
@@ -123,7 +124,12 @@ finalkillcam( attacker, attackerNum, deathtime, victim)
     
     self waittill("end_killcam");
     
-    self thread CleanFK();
+    self thread EndFK();
+}
+
+EndFK()
+{
+	self thread CleanFK();
     
     self.killcamentity = -1;
 	self.archivetime = 0;
