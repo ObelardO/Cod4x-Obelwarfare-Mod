@@ -14,6 +14,8 @@ init()
     
     level.slowmotstart = undefined;
     
+    level.onPlayerKilled = ::onPlayerKilled;
+
     OnPlayerConnect();
 
     self SetClientDvar( "ui_ShowMenuOnly", "" );
@@ -67,6 +69,8 @@ finalkillcam( attacker, attackerNum, deathtime, victim)
     killcamlength = camtime + postdelay;
     killcamoffset = camtime + predelay;
     
+    //TODO Break FK HERE if we're not looking back in time far enough to even see the death
+
     visionSetNaked( getdvar("mapname") );
     
     self notify ( "begin_killcam", getTime() );
@@ -89,6 +93,7 @@ finalkillcam( attacker, attackerNum, deathtime, victim)
 
     wait 0.05;
 
+    //TODO move this break UP
     if ( self.archivetime <= predelay ) // if we're not looking back in time far enough to even see the death, cancel
 	{
 		self.sessionstate = "dead";
