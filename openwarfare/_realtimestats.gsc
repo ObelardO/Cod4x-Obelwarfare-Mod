@@ -53,86 +53,105 @@ onGameEnded()
 	level.eogBest = [];
 	level.eogBest["accuracy"]["name"] = "";
 	level.eogBest["accuracy"]["value"] = 0;
+	level.eogBest["accuracy"]["guid"] = 0;
 
 	level.eogBest["kills"]["name"] = "";
 	level.eogBest["kills"]["value"] = 0;
+	level.eogBest["kills"]["guid"] = 0;
 	
 	level.eogBest["teamkills"]["name"] = "";
-	level.eogBest["teamkills"]["value"] = 0;	
+	level.eogBest["teamkills"]["value"] = 0;
+	level.eogBest["teamkills"]["guid"] = 0;	
 	
 	level.eogBest["killstreak"]["name"] = "";
 	level.eogBest["killstreak"]["value"] = 0;	
+	level.eogBest["killstreak"]["guid"] = 0;	
 	
 	level.eogBest["longest"]["name"] = "";
 	level.eogBest["longest"]["value"] = 0;	
+	level.eogBest["longest"]["guid"] = 0;	
 
 	level.eogBest["melee"]["name"] = "";
 	level.eogBest["melee"]["value"] = 0;
+	level.eogBest["melee"]["guid"] = 0;
 
 	level.eogBest["headshots"]["name"] = "";
 	level.eogBest["headshots"]["value"] = 0;
+	level.eogBest["headshots"]["guid"] = 0;
 
 	level.eogBest["longesths"]["name"] = "";
 	level.eogBest["longesths"]["value"] = 0;
+	level.eogBest["longesths"]["guid"] = 0;
 
 	level.eogBest["deaths"]["name"] = "";
 	level.eogBest["deaths"]["value"] = 0;
+	level.eogBest["deaths"]["guid"] = 0;
 
 	level.eogBest["suicides"]["name"] = "";
 	level.eogBest["suicides"]["value"] = 0;
+	level.eogBest["suicides"]["guid"] = 0;
 
 	level.eogBest["deathstreak"]["name"] = "";
 	level.eogBest["deathstreak"]["value"] = 0;	
+	level.eogBest["deathstreak"]["guid"] = 0;
 
 	level.eogBest["uav"]["name"] = "";
 	level.eogBest["uav"]["value"] = 0;
+	level.eogBest["uav"]["guid"] = 0;
 
 	level.eogBest["airstrikes"]["name"] = "";
 	level.eogBest["airstrikes"]["value"] = 0;
+	level.eogBest["airstrikes"]["guid"] = 0;
 
 	level.eogBest["airstrike_kills"]["name"] = "";
 	level.eogBest["airstrike_kills"]["value"] = 0;
+	level.eogBest["airstrike_kills"]["guid"] = 0;
 
 	level.eogBest["helicopters"]["name"] = "";
 	level.eogBest["helicopters"]["value"] = 0;
+	level.eogBest["helicopters"]["guid"] = 0;
 	
 	level.eogBest["helicopter_kills"]["name"] = "";
 	level.eogBest["helicopter_kills"]["value"] = 0;
+	level.eogBest["helicopter_kills"]["guid"] = 0;
 	
 	level.eogBest["distance"]["name"] = "";
 	level.eogBest["distance"]["value"] = 0;	
+	level.eogBest["distance"]["guid"] = 0;	
 				
 	// Get all the best/worst players for each stat item we monitor and display at the end of the game
 	for ( index = 0; index < level.players.size; index++ )
 	{
 		player = level.players[index];	
 		
+		guid = player getGUID();
+
 		if ( isDefined( player ) && isDefined( player.pers["stats"] ) ) {	
 			if ( player.pers["stats"]["accuracy"]["total_shots"] != 0 ) {
-				player checkStatItem( int( player.pers["stats"]["accuracy"]["hits"] / player.pers["stats"]["accuracy"]["total_shots"] * 100 ), "accuracy" );
+				player checkStatItem( int( player.pers["stats"]["accuracy"]["hits"] / player.pers["stats"]["accuracy"]["total_shots"] * 100 ), "accuracy", guid);
 			} else {
-				player checkStatItem( 0, "accuracy" );
+				player checkStatItem( 0, "accuracy", guid);
 			}
 			
-			player checkStatItem( player.pers["stats"]["kills"]["total"], "kills" );
-			player checkStatItem( player.pers["stats"]["kills"]["teamkills"], "teamkills" );
-			player checkStatItem( player.pers["stats"]["kills"]["killstreak"], "killstreak" );
-			player checkStatItem( player.pers["stats"]["kills"]["longest"], "longest" );
-			player checkStatItem( player.pers["stats"]["kills"]["knife"], "melee" );
-			player checkStatItem( player.pers["stats"]["kills"]["headshots"], "headshots" );
-			player checkStatItem( player.pers["stats"]["kills"]["longesths"], "longesths" );
+			player checkStatItem( player.pers["stats"]["kills"]["total"], "kills", guid);
+			player checkStatItem( player.pers["stats"]["kills"]["teamkills"], "teamkills", guid);
+			player checkStatItem( player.pers["stats"]["kills"]["killstreak"], "killstreak", guid);
+			player checkStatItem( player.pers["stats"]["kills"]["longest"], "longest", guid);
+			player checkStatItem( player.pers["stats"]["kills"]["knife"], "melee", guid);
+			player checkStatItem( player.pers["stats"]["kills"]["headshots"], "headshots", guid);
+			player checkStatItem( player.pers["stats"]["kills"]["longesths"], "longesths", guid);
 			
-			player checkStatItem( player.pers["stats"]["deaths"]["total"], "deaths" );
-			player checkStatItem( player.pers["stats"]["deaths"]["suicides"], "suicides" );
-			player checkStatItem( player.pers["stats"]["deaths"]["deathstreak"], "deathstreak" );
+			player checkStatItem( player.pers["stats"]["deaths"]["total"], "deaths", guid);
+			player checkStatItem( player.pers["stats"]["deaths"]["suicides"], "suicides", guid);
+			player checkStatItem( player.pers["stats"]["deaths"]["deathstreak"], "deathstreak", guid);
 			
-			player checkStatItem( player.pers["stats"]["hardpoints"]["uav"], "uav" );
-			player checkStatItem( player.pers["stats"]["hardpoints"]["airstrikes"], "airstrikes" );
-			player checkStatItem( player.pers["stats"]["hardpoints"]["airstrike_kills"], "airstrike_kills" );
-			player checkStatItem( player.pers["stats"]["hardpoints"]["helicopters"], "helicopters" );
-			player checkStatItem( player.pers["stats"]["hardpoints"]["helicopter_kills"], "helicopter_kills" );
+			player checkStatItem( player.pers["stats"]["hardpoints"]["uav"], "uav", guid);
+			player checkStatItem( player.pers["stats"]["hardpoints"]["airstrikes"], "airstrikes", guid);
+			player checkStatItem( player.pers["stats"]["hardpoints"]["airstrike_kills"], "airstrike_kills", guid);
+			player checkStatItem( player.pers["stats"]["hardpoints"]["helicopters"], "helicopters", guid);
+			player checkStatItem( player.pers["stats"]["hardpoints"]["helicopter_kills"], "helicopter_kills", guid);
 			
-			player checkStatItem( player.pers["stats"]["misc"]["distance"], "distance" );
+			player checkStatItem( player.pers["stats"]["misc"]["distance"], "distance", guid);
 		}
 	}
 	
@@ -148,7 +167,7 @@ onGameEnded()
 	for ( index = 0; index < level.players.size; index++ )
 	{
 		player = level.players[index];	
-		
+
 		if ( isDefined( player ) ) {
 			player setClientDvars(
 				"ps_n", player.name,
@@ -194,15 +213,131 @@ onGameEnded()
 			);			
 		}
 	}	
+
+	logResults();
+}
+
+logResults()
+{
+	s = ";";
+	timeStamp = getTimeStampStr();
+
+	eogStatFS = FS_FOpen( "stats_mp.log", "append" );
+
+	if (eogStatFS == 0) return;
+
+	FS_WriteLine( eogStatFS, timeStamp + "------------------------------------------------------------" );
+	FS_WriteLine( eogStatFS, timeStamp + "EG_S" +s+ getDvar( "mapname" ) +s+ level.gametype +s+ getWinnerString(s) );
+
+	for ( index = 0; index < level.players.size; index++ )
+	{
+		player = level.players[index];	
+		
+		if ( isDefined( player ) && isDefined( player.pers["stats"] ) ) {	
+
+			playerId = player getGUID() +s+ player.name; 
+
+			FS_WriteLine( eogStatFS, timeStamp + "EG_P" +s+
+				"guid:"  + player getGUID() +s+
+				"name:"  + player.name +s+
+				"team:"  + player.pers["team"] +s+
+				"score:" + player.score +s+
+
+				"hits:"        + player.pers["stats"]["accuracy"]["hits"] +s+
+				"total_shots:" + player.pers["stats"]["accuracy"]["total_shots"] +s+
+
+				"kills:"       + player.pers["stats"]["kills"]["total"] +s+
+				"teamkills:"   + player.pers["stats"]["kills"]["teamkills"] +s+
+				"killstreak:"  + player.pers["stats"]["kills"]["killstreak"] +s+
+				"longest:"     + player.pers["stats"]["kills"]["longest"] +s+
+				"melee:"       + player.pers["stats"]["kills"]["knife"] +s+
+				"headshots:"   + player.pers["stats"]["kills"]["headshots"] +s+
+				"longesths:"   + player.pers["stats"]["kills"]["longesths"] +s+
+
+				"deaths:"      + player.pers["stats"]["deaths"]["total"] +s+
+				"suicides:"    + player.pers["stats"]["deaths"]["suicides"] +s+
+				"deathstreak:" + player.pers["stats"]["deaths"]["deathstreak"] +s+
+
+				"uav:"              + player.pers["stats"]["hardpoints"]["uav"] +s+
+				"airstrikes:"       + player.pers["stats"]["hardpoints"]["airstrikes"] +s+
+				"airstrike_kills:"  + player.pers["stats"]["hardpoints"]["airstrike_kills"] +s+
+				"helicopters:"      + player.pers["stats"]["hardpoints"]["helicopters"] +s+
+				"helicopter_kills:" + player.pers["stats"]["hardpoints"]["helicopter_kills"] +s+
+
+				"distance:"         + player.pers["stats"]["misc"]["distance"]
+			);
+		}		
+	}
+
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "accuracy", s ) );
+
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "kills", s ) );
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "teamkills", s ) );
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "killstreak", s ) );
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "longest", s ) );
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "melee", s ) );
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "headshots", s ) );
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "longesths", s ) );
+
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "deaths", s ) );
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "suicides", s ) );
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "deathstreak", s ) );
+
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "uav", s ) );
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "airstrikes", s ) );
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "airstrike_kills", s ) );
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "helicopters", s ) );
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "helicopter_kills", s ) );
+
+	FS_FClose(eogStatFS);
 }
 
 
-checkStatItem( value, statItem )
+getTimeStampStr()
+{
+	return TimeToString( gettime() / 1000, 1, " %M:%S " );
+}
+
+
+getWinnerString( sepChar )
+{
+	winner = "none";
+	if ( level.teamBased && level.gametype != "bel" )
+ 	{
+ 		if ( game["teamScores"]["allies"] == game["teamScores"]["axis"] )
+			winner = "tie";
+		else if ( game["teamScores"]["axis"] > game["teamScores"]["allies"] )
+			winner = "axis";
+		else
+			winner = "allies";
+
+		winner = winner +sepChar+ "0" +sepChar+ "0";
+	}
+	else
+	{
+		winPlayer = maps\mp\gametypes\_globallogic::getHighestScoringPlayer();
+
+		if ( isDefined( winPlayer ) )
+			winner = "player" +sepChar+ ( winPlayer getGUID() ) +sepChar+ winPlayer.name;
+	}
+
+	return winner;
+}
+
+
+getStatItem( statItem, sepChar )
+{
+	return statItem +sepChar+ level.eogBest[statItem]["value"] +sepChar+ level.eogBest[statItem]["guid"] +sepChar+ level.eogBest[statItem]["name"];
+}
+
+
+checkStatItem( value, statItem, guid )
 {
 	// Check if this stat item is blank or if the value is higher than the current one
 	if ( level.eogBest[statItem]["name"] == "" || value > level.eogBest[statItem]["value"] ) {
 		level.eogBest[statItem]["name"] = self.name;
 		level.eogBest[statItem]["value"] = value;		
+		level.eogBest[statItem]["guid"] = guid;		
 	}	
 }
 
