@@ -23,7 +23,7 @@ init()
 	level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
 
 	level.scr_realtime_stats_skipbots = getdvarx( "scr_realtime_stats_skipbots", "int", 0, 0, 1 );
-	level.scr_endofgame_stats_log = getdvarx( "scr_realtime_stats_skipbots", "int", 0, 0, 1 );
+	level.scr_endofgame_stats_log = getdvarx( "scr_endofgame_stats_log", "int", 0, 0, 1 );
 
 	// If real time stats are not enabled then there's nothing else to do here
 	if ( level.scr_realtime_stats_enable == 0 && level.scr_endofgame_stats_enable == 0 )
@@ -685,10 +685,13 @@ getTimeStampStr()
 
 getPlayerDistance( player )
 {
+	if ( !isDefined( player ) )
+		return 0;
+
 	if ( level.scr_realtime_stats_unit == "meters" ) {
-		return int( self.pers["stats"]["misc"]["distance"] * 0.0254 * 10 ) / 10;
+		return int( player.pers["stats"]["misc"]["distance"] * 0.0254 * 10 ) / 10;
 	} else {
-		return int( self.pers["stats"]["misc"]["distance"] * 0.0278 * 10 ) / 10;
+		return int( player.pers["stats"]["misc"]["distance"] * 0.0278 * 10 ) / 10;
 	}
 }
 
