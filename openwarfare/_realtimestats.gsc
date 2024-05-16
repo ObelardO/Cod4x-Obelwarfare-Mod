@@ -22,6 +22,9 @@ init()
 
 	level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
 
+	level.scr_realtime_stats_skipbots = getdvarx( "scr_realtime_stats_skipbots", "int", 0, 0, 1 );
+	level.scr_endofgame_stats_log = getdvarx( "scr_realtime_stats_skipbots", "int", 0, 0, 1 );
+
 	// If real time stats are not enabled then there's nothing else to do here
 	if ( level.scr_realtime_stats_enable == 0 && level.scr_endofgame_stats_enable == 0 )
 		return;
@@ -40,7 +43,6 @@ init()
 		level thread onGameEnded();
 	}
 }
-
 
 onGameEnded()
 {
@@ -124,6 +126,9 @@ onGameEnded()
 	{
 		player = level.players[index];	
 		
+		if (isDefined( player ) && isPlayer ( player ) && isBot( player ))
+			continue;
+
 		guid = player getGUID();
 
 		if ( isDefined( player ) && isDefined( player.pers["stats"] ) ) {	
@@ -167,6 +172,9 @@ onGameEnded()
 	for ( index = 0; index < level.players.size; index++ )
 	{
 		player = level.players[index];	
+
+		if (isDefined( player ) && isPlayer ( player ) && isBot( player ))
+			continue;
 
 		if ( isDefined( player ) ) {
 			player setClientDvars(
@@ -214,114 +222,10 @@ onGameEnded()
 		}
 	}	
 
-	logResults();
-}
-
-logResults()
-{
-	s = ";";
-	timeStamp = getTimeStampStr();
-
-	eogStatFS = FS_FOpen( "stats_mp.log", "append" );
-
-	if (eogStatFS == 0) return;
-
-	FS_WriteLine( eogStatFS, timeStamp + "------------------------------------------------------------" );
-	FS_WriteLine( eogStatFS, timeStamp + "EG_S" +s+ getDvar( "mapname" ) +s+ level.gametype +s+ getWinnerString(s) );
-
-	for ( index = 0; index < level.players.size; index++ )
+	if (level.scr_endofgame_stats_log == 1)
 	{
-		player = level.players[index];	
-		
-		if ( isDefined( player ) && isDefined( player.pers["stats"] ) ) {	
-
-			playerId = player getGUID() +s+ player.name; 
-
-			FS_WriteLine( eogStatFS, timeStamp + "EG_P" +s+
-				"guid:"  + player getGUID() +s+
-				"name:"  + player.name +s+
-				"team:"  + player.pers["team"] +s+
-				"score:" + player.score +s+
-
-				"hits:"        + player.pers["stats"]["accuracy"]["hits"] +s+
-				"total_shots:" + player.pers["stats"]["accuracy"]["total_shots"] +s+
-
-				"kills:"       + player.pers["stats"]["kills"]["total"] +s+
-				"teamkills:"   + player.pers["stats"]["kills"]["teamkills"] +s+
-				"killstreak:"  + player.pers["stats"]["kills"]["killstreak"] +s+
-				"longest:"     + player.pers["stats"]["kills"]["longest"] +s+
-				"melee:"       + player.pers["stats"]["kills"]["knife"] +s+
-				"headshots:"   + player.pers["stats"]["kills"]["headshots"] +s+
-				"longesths:"   + player.pers["stats"]["kills"]["longesths"] +s+
-
-				"deaths:"      + player.pers["stats"]["deaths"]["total"] +s+
-				"suicides:"    + player.pers["stats"]["deaths"]["suicides"] +s+
-				"deathstreak:" + player.pers["stats"]["deaths"]["deathstreak"] +s+
-
-				"uav:"              + player.pers["stats"]["hardpoints"]["uav"] +s+
-				"airstrikes:"       + player.pers["stats"]["hardpoints"]["airstrikes"] +s+
-				"airstrike_kills:"  + player.pers["stats"]["hardpoints"]["airstrike_kills"] +s+
-				"helicopters:"      + player.pers["stats"]["hardpoints"]["helicopters"] +s+
-				"helicopter_kills:" + player.pers["stats"]["hardpoints"]["helicopter_kills"] +s+
-
-				"distance:"         + player.pers["stats"]["misc"]["distance"]
-			);
-		}		
+		logResults();
 	}
-
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "accuracy", s ) );
-
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "kills", s ) );
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "teamkills", s ) );
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "killstreak", s ) );
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "longest", s ) );
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "melee", s ) );
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "headshots", s ) );
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "longesths", s ) );
-
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "deaths", s ) );
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "suicides", s ) );
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "deathstreak", s ) );
-
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "uav", s ) );
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "airstrikes", s ) );
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "airstrike_kills", s ) );
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "helicopters", s ) );
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "helicopter_kills", s ) );
-
-	FS_FClose(eogStatFS);
-}
-
-
-getTimeStampStr()
-{
-	return TimeToString( gettime() / 1000, 1, " %M:%S " );
-}
-
-
-getWinnerString( sepChar )
-{
-	winner = "none";
-	if ( level.teamBased && level.gametype != "bel" )
- 	{
- 		if ( game["teamScores"]["allies"] == game["teamScores"]["axis"] )
-			winner = "tie";
-		else if ( game["teamScores"]["axis"] > game["teamScores"]["allies"] )
-			winner = "axis";
-		else
-			winner = "allies";
-
-		winner = winner +sepChar+ "0" +sepChar+ "0";
-	}
-	else
-	{
-		winPlayer = maps\mp\gametypes\_globallogic::getHighestScoringPlayer();
-
-		if ( isDefined( winPlayer ) )
-			winner = "player" +sepChar+ ( winPlayer getGUID() ) +sepChar+ winPlayer.name;
-	}
-
-	return winner;
 }
 
 
@@ -472,11 +376,7 @@ onPlayerSpawned()
 			updateLoop = 0;
 			if ( oldValue != self.pers["stats"]["misc"]["distance"] ) {
 				oldValue = self.pers["stats"]["misc"]["distance"];
-				if ( level.scr_realtime_stats_unit == "meters" ) {
-					travelledDistance = int( oldValue * 0.0254 * 10 ) / 10;
-				} else {
-					travelledDistance = int( oldValue * 0.0278 * 10 ) / 10;
-				}
+				travelledDistance = getPlayerDistance( self );
 				self setClientDvar( "ps_dt", travelledDistance + mUnit );
 			}
 		}		
@@ -485,11 +385,7 @@ onPlayerSpawned()
 	// Update one more time once the player dies
 	if ( oldValue != self.pers["stats"]["misc"]["distance"] ) {
 		oldValue = self.pers["stats"]["misc"]["distance"];
-		if ( level.scr_realtime_stats_unit == "meters" ) {
-			travelledDistance = int( oldValue * 0.0254 * 10 ) / 10;
-		} else {
-			travelledDistance = int( oldValue * 0.0278 * 10 ) / 10;
-		}
+		travelledDistance = getPlayerDistance( self );
 		self setClientDvar( "ps_dt", travelledDistance + mUnit );
 	}	
 }
@@ -520,6 +416,9 @@ onPlayerKilled()
 	for (;;) {
 		self waittill( "player_killed", eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, fDistance );
 
+		if (isPlayer( self ) && isBot( self ))
+			continue;
+
 		// Make sure the player is not switching teams or being team balanced (our suicides count only when the player kills himself)
 		if ( sMeansOfDeath == "MOD_SUICIDE" )
 			continue;
@@ -528,6 +427,9 @@ onPlayerKilled()
 		if ( sMeansOfDeath == "MOD_FALLING" || ( isPlayer( attacker ) && attacker == self ) ) {
 			self.pers["stats"]["deaths"]["suicides"] += 1;
 		}
+
+		if ( isPlayer( attacker ) && isBot( attacker ) )
+			continue;
 
 		// Handle the stats for the victim 
 		self.pers["stats"]["kills"]["consecutive"] = 0;
@@ -686,4 +588,166 @@ onHardpointCalled()
 			self setClientDvar( clientVariable, newValue );
 		}		
 	}	
+}
+
+
+isBot( player )
+{
+	return level.scr_realtime_stats_skipbots == 1 && isPlayer ( player ) && ( player getGUID() ) == "0";
+}
+
+
+logResults()
+{
+	s = ";";
+	timeStamp = getTimeStampStr();
+
+	eogStatFS = FS_FOpen( "stats_mp.log", "append" );
+
+	if (eogStatFS == 0) return;
+
+	FS_WriteLine( eogStatFS, timeStamp + "------------------------------------------------------------" );
+	FS_WriteLine( eogStatFS, timeStamp + "EG_S" +s+ getDvar( "mapname" ) +s+ level.gametype +s+ getWinnerString(s) );
+
+	for ( index = 0; index < level.players.size; index++ )
+	{
+		player = level.players[index];	
+		
+		if (isDefined( player ) && isPlayer ( player ) && isBot( player ))
+			continue;
+
+		if ( isDefined( player ) && isDefined( player.pers["stats"] ) ) {	
+
+			playerId = player getGUID() +s+ player.name; 
+
+			FS_WriteLine( eogStatFS, timeStamp + "EG_P" +s+
+				"guid:"  + player getGUID() +s+
+				"name:"  + player.name +s+
+				"team:"  + player.pers["team"] +s+
+				"score:" + player.score +s+
+
+				"hits:"        + player.pers["stats"]["accuracy"]["hits"] +s+
+				"total_shots:" + player.pers["stats"]["accuracy"]["total_shots"] +s+
+
+				"kills:"       + player.pers["stats"]["kills"]["total"] +s+
+				"teamkills:"   + player.pers["stats"]["kills"]["teamkills"] +s+
+				"killstreak:"  + player.pers["stats"]["kills"]["killstreak"] +s+
+				"longest:"     + player.pers["stats"]["kills"]["longest"] +s+
+				"melee:"       + player.pers["stats"]["kills"]["knife"] +s+
+				"headshots:"   + player.pers["stats"]["kills"]["headshots"] +s+
+				"longesths:"   + player.pers["stats"]["kills"]["longesths"] +s+
+
+				"deaths:"      + player.pers["stats"]["deaths"]["total"] +s+
+				"suicides:"    + player.pers["stats"]["deaths"]["suicides"] +s+
+				"deathstreak:" + player.pers["stats"]["deaths"]["deathstreak"] +s+
+
+				"uav:"              + player.pers["stats"]["hardpoints"]["uav"] +s+
+				"airstrikes:"       + player.pers["stats"]["hardpoints"]["airstrikes"] +s+
+				"airstrike_kills:"  + player.pers["stats"]["hardpoints"]["airstrike_kills"] +s+
+				"helicopters:"      + player.pers["stats"]["hardpoints"]["helicopters"] +s+
+				"helicopter_kills:" + player.pers["stats"]["hardpoints"]["helicopter_kills"] +s+
+
+				"distance:"         + getPlayerDistance( player )
+			);
+		}		
+	}
+
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "accuracy", s ) );
+
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "kills", s ) );
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "teamkills", s ) );
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "killstreak", s ) );
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "longest", s ) );
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "melee", s ) );
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "headshots", s ) );
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "longesths", s ) );
+
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "deaths", s ) );
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "suicides", s ) );
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "deathstreak", s ) );
+
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "uav", s ) );
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "airstrikes", s ) );
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "airstrike_kills", s ) );
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "helicopters", s ) );
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "helicopter_kills", s ) );
+
+	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "distance", s ) );
+
+	FS_FClose(eogStatFS);
+}
+
+
+getTimeStampStr()
+{
+	return TimeToString( int( gettime() / 1000 ), 1, " %M:%S " );
+}
+
+getPlayerDistance( player )
+{
+	if ( level.scr_realtime_stats_unit == "meters" ) {
+		return int( self.pers["stats"]["misc"]["distance"] * 0.0254 * 10 ) / 10;
+	} else {
+		return int( self.pers["stats"]["misc"]["distance"] * 0.0278 * 10 ) / 10;
+	}
+}
+
+getWinnerString( sepChar )
+{
+	winner = "tie";
+	if ( level.teamBased && level.gametype != "bel" )
+ 	{
+ 		if ( game["teamScores"]["allies"] == game["teamScores"]["axis"] )
+			winner = "tie";
+		else if ( game["teamScores"]["axis"] > game["teamScores"]["allies"] )
+			winner = "axis";
+		else
+			winner = "allies";
+
+		winner = winner +sepChar+ "0" +sepChar+ "0";
+	}
+	else
+	{
+		winPlayer = getHighestScoringPlayer();
+
+		if ( isDefined( winPlayer ) )
+			winner = "player" +sepChar+ ( winPlayer getGUID() ) +sepChar+ winPlayer.name;
+	}
+
+	return winner;
+}
+
+
+getHighestScoringPlayer()
+{
+	players = level.players;
+	winner = undefined;
+	tie = false;
+
+	for( i = 0; i < players.size; i++ )
+	{
+		if ( isBot( players[i] ) )
+			continue;
+
+		if ( !isDefined( players[i].score ) )
+			continue;
+
+		if ( players[i].score < 1 )
+			continue;
+
+		if ( !isDefined( winner ) || players[i].score > winner.score )
+		{
+			winner = players[i];
+			tie = false;
+		}
+		else if ( players[i].score == winner.score )
+		{
+			tie = true;
+		}
+	}
+
+	if ( tie || !isDefined( winner ) )
+		return undefined;
+	else
+		return winner;
 }
