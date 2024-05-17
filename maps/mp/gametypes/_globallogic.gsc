@@ -75,7 +75,7 @@ init()
 	
 	// Set mod name and version
 	setDvar( "_Mod", "ObelWarfare", true );
-	setDvar( "_ModVer", "v4.21", true );
+	setDvar( "_ModVer", "v4.517", true );
 
 	// Make a health check of the server
 	level thread openwarfare\_servercheck::init();
@@ -96,8 +96,6 @@ init()
 	
 	// Initialize variables used by OpenWarfare
 	openwarfare\_registerdvars::init();
-
-	thread maps\mp\gametypes\_finalkillcam::init();
 
 	level.splitscreen = isSplitScreen();
 	level.xenon = (getdvar("xenonGame") == "true");
@@ -4140,6 +4138,7 @@ Callback_StartGameType()
 	thread maps\mp\gametypes\_teams::init();
 	thread maps\mp\gametypes\_weapons::init();
 	thread maps\mp\gametypes\_killcam::init();
+	thread maps\mp\gametypes\_finalkillcam::init();
 	thread maps\mp\gametypes\_shellshock::init();
 	thread maps\mp\gametypes\_deathicons::init();
 	thread maps\mp\gametypes\_damagefeedback::init();
@@ -5749,7 +5748,8 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 	self.joining_team = undefined;
 	self.leaving_team = undefined;
 
-	self thread [[level.onPlayerKilled]](eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration);
+	maps\mp\gametypes\_finalkillcam::onPlayerKilled( eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration );
+	self thread [[level.onPlayerKilled]]( eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration );
 
 	if ( sWeapon == "artillery_mp" || sWeapon == "claymore_mp" || sWeapon == "frag_grenade_short_mp" || sWeapon == "none" || isSubStr( sWeapon, "cobra" ) )
 		doKillcam = false;
