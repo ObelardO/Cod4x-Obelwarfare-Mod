@@ -24,6 +24,7 @@ init()
 
 	level.scr_realtime_stats_skipbots = getdvarx( "scr_realtime_stats_skipbots", "int", 0, 0, 1 );
 	level.scr_endofgame_stats_log = getdvarx( "scr_endofgame_stats_log", "int", 0, 0, 1 );
+	level.scr_endofgame_stats_log_external = getdvarx( "scr_endofgame_stats_log_external", "int", 0, 0, 1 );
 
 	// If real time stats are not enabled then there's nothing else to do here
 	if ( level.scr_realtime_stats_enable == 0 && level.scr_endofgame_stats_enable == 0 )
@@ -601,13 +602,17 @@ logResults()
 {
 	s = ";";
 	timeStamp = getTimeStampStr();
+	eogStatFS = 0;
 
-	eogStatFS = FS_FOpen( "stats_mp.log", "append" );
+	if (level.scr_endofgame_stats_log_external)
+	{
+		eogStatFS = FS_FOpen( "stats_mp.log", "append" );
 
-	if (eogStatFS == 0) return;
+		if (eogStatFS == 0) return;
+	}
 
-	FS_WriteLine( eogStatFS, timeStamp + "------------------------------------------------------------" );
-	FS_WriteLine( eogStatFS, timeStamp + "EG_S" +s+ getDvar( "mapname" ) +s+ level.gametype +s+ getWinnerString(s) );
+	logResultLine( eogStatFS, timeStamp, "------------------------------------------------------------" );
+	logResultLine( eogStatFS, timeStamp, "EG_S" +s+ getDvar( "mapname" ) +s+ level.gametype +s+ getWinnerString(s) );
 
 	for ( index = 0; index < level.players.size; index++ )
 	{
@@ -620,7 +625,7 @@ logResults()
 
 			playerId = player getGUID() +s+ player.name; 
 
-			FS_WriteLine( eogStatFS, timeStamp + "EG_P" +s+
+			logResultLine( eogStatFS, timeStamp, "EG_P" +s+
 				"guid:"  + player getGUID() +s+
 				"name:"  + player.name +s+
 				"team:"  + player.pers["team"] +s+
@@ -652,31 +657,44 @@ logResults()
 		}		
 	}
 
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "accuracy", s ) );
+	logResultLine( eogStatFS, timeStamp, "EG_B" +s+ getStatItem( "accuracy", s ) );
 
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "kills", s ) );
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "teamkills", s ) );
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "killstreak", s ) );
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "longest", s ) );
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "melee", s ) );
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "headshots", s ) );
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "longesths", s ) );
+	logResultLine( eogStatFS, timeStamp, "EG_B" +s+ getStatItem( "kills", s ) );
+	logResultLine( eogStatFS, timeStamp, "EG_B" +s+ getStatItem( "teamkills", s ) );
+	logResultLine( eogStatFS, timeStamp, "EG_B" +s+ getStatItem( "killstreak", s ) );
+	logResultLine( eogStatFS, timeStamp, "EG_B" +s+ getStatItem( "longest", s ) );
+	logResultLine( eogStatFS, timeStamp, "EG_B" +s+ getStatItem( "melee", s ) );
+	logResultLine( eogStatFS, timeStamp, "EG_B" +s+ getStatItem( "headshots", s ) );
+	logResultLine( eogStatFS, timeStamp, "EG_B" +s+ getStatItem( "longesths", s ) );
 
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "deaths", s ) );
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "suicides", s ) );
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "deathstreak", s ) );
+	logResultLine( eogStatFS, timeStamp, "EG_B" +s+ getStatItem( "deaths", s ) );
+	logResultLine( eogStatFS, timeStamp, "EG_B" +s+ getStatItem( "suicides", s ) );
+	logResultLine( eogStatFS, timeStamp, "EG_B" +s+ getStatItem( "deathstreak", s ) );
 
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "uav", s ) );
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "airstrikes", s ) );
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "airstrike_kills", s ) );
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "helicopters", s ) );
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "helicopter_kills", s ) );
+	logResultLine( eogStatFS, timeStamp, "EG_B" +s+ getStatItem( "uav", s ) );
+	logResultLine( eogStatFS, timeStamp, "EG_B" +s+ getStatItem( "airstrikes", s ) );
+	logResultLine( eogStatFS, timeStamp, "EG_B" +s+ getStatItem( "airstrike_kills", s ) );
+	logResultLine( eogStatFS, timeStamp, "EG_B" +s+ getStatItem( "helicopters", s ) );
+	logResultLine( eogStatFS, timeStamp, "EG_B" +s+ getStatItem( "helicopter_kills", s ) );
 
-	FS_WriteLine( eogStatFS, timeStamp + "EG_B" +s+ getStatItem( "distance", s ) );
+	logResultLine( eogStatFS, timeStamp, "EG_B" +s+ getStatItem( "distance", s ) );
 
-	FS_FClose(eogStatFS);
+	if (level.scr_endofgame_stats_log_external && eogStatFS != 0)
+		FS_FClose(eogStatFS);
 }
 
+
+logResultLine( statsFileStream, timeStamp, logLine )
+{
+	if (level.scr_endofgame_stats_log_external)
+	{
+		FS_WriteLine ( statsFileStream, timeStamp + logLine );
+	}
+	else
+	{
+		logPrint ( logLine + "\n" );
+	}
+}
 
 getTimeStampStr()
 {
