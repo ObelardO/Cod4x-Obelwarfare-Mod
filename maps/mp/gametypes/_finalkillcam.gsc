@@ -13,27 +13,23 @@ init()
     level.doFK["allies"] = false;
     
     level.slowmotstart = undefined;
-    
-    level.onPlayerKilled = ::onPlayerKilled;
 
-    OnPlayerConnect();
+    for(;;)
+    {
+        level waittill("connected", player);
 
-    self SetClientDvar( "ui_ShowMenuOnly", "" );
+        //player thread waitForKill();
+
+        player thread beginFK();
+    }
+
+    self SetClientDvar( "ui_ShowMenuOnly", "" );    
 }
 
 SetKillcamStyle( style )
 {
     level.killcam_style = style;
 }
-
-OnPlayerConnect()
-{
-    for(;;)
-    {
-        level waittill("connected", player);
-        player thread beginFK();
-    }
-}    
         
 beginFK()
 {
@@ -252,23 +248,18 @@ CreateFKMenu( victim , attacker)
     self.credits.alpha = 0;
     
     self.credits setText("^1Created by: ^2FzBr.^3d4rk");
-    self.fk_title_low setText(attacker.name + " kills " + victim.name);
+    self.fk_title_low setText(attacker.name + " VS. " + victim.name);
     
     if( !level.killcam_style )
-        self.fk_title setText("GAME WINNER KILL");
+        self.fk_title setText("MATCH WINNER KILL");
     else
         self.fk_title setText("ROUND WINNER KILL");
 }
 
-onPlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration)
+onPlayerKilled( eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration )
 {
-    thread onPlayerKilledThread(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration);
-}
-
-onPlayerKilledThread(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration)
-{
-    if(attacker != self && isDefined(attacker) && isDefined(attacker.team))
-    {
+    if( attacker != self && isDefined( attacker ) && isDefined( attacker.team ) )
+    {    
         level.showFinalKillcam = true;
         
         team = attacker.team;
