@@ -47,7 +47,7 @@ init()
 
 onGameEnded()
 {
-	level waittill("game_ended");	
+	level waittill("intermission");	
 
 	// Wait some time to let all the events be processed
 	wait (1.5);
