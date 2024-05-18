@@ -715,27 +715,33 @@ getPlayerDistance( player )
 
 getWinnerString( sepChar )
 {
-	winner = "tie";
+	winPlayer = getHighestScoringPlayer();
+	winPlayerGuid = 0;
+	winPlayerName = "";
+	winTeam = "tie";
+
+	if ( isDefined( winPlayer ) )
+	{
+		winPlayerGuid = winPlayer getGUID();
+		winPlayerName = winPlayer.name;
+	}
+
 	if ( level.teamBased && level.gametype != "bel" )
  	{
  		if ( game["teamScores"]["allies"] == game["teamScores"]["axis"] )
-			winner = "tie";
+			winTeam = "tie";
 		else if ( game["teamScores"]["axis"] > game["teamScores"]["allies"] )
-			winner = "axis";
+			winTeam = "axis";
 		else
-			winner = "allies";
-
-		winner = winner +sepChar+ "0" +sepChar+ "0";
+			winTeam = "allies";
 	}
 	else
 	{
-		winPlayer = getHighestScoringPlayer();
+		winTeam = "player";
 
-		if ( isDefined( winPlayer ) )
-			winner = "player" +sepChar+ ( winPlayer getGUID() ) +sepChar+ winPlayer.name;
 	}
 
-	return winner;
+	return winTeam +sepChar+ winPlayerGuid +sepChar+ winPlayerName;
 }
 
 
