@@ -54,6 +54,10 @@ onGameEnded()
 
 	// Initialize array for best/worst values
 	level.eogBest = [];
+	level.eogBest["score"]["name"] = "";
+	level.eogBest["score"]["value"] = 0;
+	level.eogBest["score"]["guid"] = 0;
+
 	level.eogBest["accuracy"]["name"] = "";
 	level.eogBest["accuracy"]["value"] = 0;
 	level.eogBest["accuracy"]["guid"] = 0;
@@ -77,6 +81,10 @@ onGameEnded()
 	level.eogBest["melee"]["name"] = "";
 	level.eogBest["melee"]["value"] = 0;
 	level.eogBest["melee"]["guid"] = 0;
+
+	level.eogBest["claymore"]["name"] = "";
+	level.eogBest["claymore"]["value"] = 0;
+	level.eogBest["claymore"]["guid"] = 0;
 
 	level.eogBest["headshots"]["name"] = "";
 	level.eogBest["headshots"]["value"] = 0;
@@ -121,7 +129,12 @@ onGameEnded()
 	level.eogBest["distance"]["name"] = "";
 	level.eogBest["distance"]["value"] = 0;	
 	level.eogBest["distance"]["guid"] = 0;	
-				
+	
+	for ( index = 0; index < level.players.size; index++ )
+	{
+		player.pers["stats"]["score"] = player.score;
+	}
+
 	// Get all the best/worst players for each stat item we monitor and display at the end of the game
 	for ( index = 0; index < level.players.size; index++ )
 	{
@@ -133,6 +146,9 @@ onGameEnded()
 		guid = player getGUID();
 
 		if ( isDefined( player ) && isDefined( player.pers["stats"] ) ) {	
+
+			player checkStatItem( player.pers["stats"]["score"], "score", guid);
+
 			if ( player.pers["stats"]["accuracy"]["total_shots"] != 0 ) {
 				player checkStatItem( int( player.pers["stats"]["accuracy"]["hits"] / player.pers["stats"]["accuracy"]["total_shots"] * 100 ), "accuracy", guid);
 			} else {
@@ -144,6 +160,7 @@ onGameEnded()
 			player checkStatItem( player.pers["stats"]["kills"]["killstreak"], "killstreak", guid);
 			player checkStatItem( player.pers["stats"]["kills"]["longest"], "longest", guid);
 			player checkStatItem( player.pers["stats"]["kills"]["knife"], "melee", guid);
+			player checkStatItem( player.pers["stats"]["kills"]["claymore"], "claymore", guid);
 			player checkStatItem( player.pers["stats"]["kills"]["headshots"], "headshots", guid);
 			player checkStatItem( player.pers["stats"]["kills"]["longesths"], "longesths", guid);
 			
@@ -302,7 +319,8 @@ onPlayerConnected()
 		// Initialize variables to keep stats
 		self.pers["stats"] = [];
 		self.pers["stats"]["show"] = level.scr_realtime_stats_default_on;
-		
+		self.pers["stats"]["score"] = 0;
+
 		// Accuracy
 		self.pers["stats"]["accuracy"] = [];
 		self.pers["stats"]["accuracy"]["total_shots"] = 0;
@@ -316,6 +334,7 @@ onPlayerConnected()
 		self.pers["stats"]["kills"]["killstreak"] = 0;
 		self.pers["stats"]["kills"]["longest"] = 0;
 		self.pers["stats"]["kills"]["knife"] = 0;
+		self.pers["stats"]["kills"]["claymore"] = 0;
 		self.pers["stats"]["kills"]["headshots"] = 0;
 		self.pers["stats"]["kills"]["longesths"] = 0;
 		
@@ -477,12 +496,17 @@ onPlayerKilled()
 					attacker.pers["stats"]["kills"]["knife"] += 1;
 				}				
 
+				// Check if this was a claymore
+				} else if ( sMeansOfDeath == "MOD_GRENADE_SPLASH" && sWeapon == "claymore_mp" ) {
+					attacker.pers["stats"]["kills"]["claymore"] += 1;
+				}				
+
 				// Check if a hardpoint was used
 				switch( sWeapon ) {
 					case "artillery_mp":
 						attacker.pers["stats"]["hardpoints"]["airstrike_kills"]++;
 						break;
-						
+
 					case "cobra_20mm_mp":
 					case "cobra_FFAR_mp":
 					case "hind_FFAR_mp":
@@ -639,6 +663,7 @@ logResults()
 				"killstreak:"  + player.pers["stats"]["kills"]["killstreak"] +s+
 				"longest:"     + player.pers["stats"]["kills"]["longest"] +s+
 				"melee:"       + player.pers["stats"]["kills"]["knife"] +s+
+				"claymore:"    + player.pers["stats"]["kills"]["claymore"] +s+
 				"headshots:"   + player.pers["stats"]["kills"]["headshots"] +s+
 				"longesths:"   + player.pers["stats"]["kills"]["longesths"] +s+
 
@@ -657,6 +682,7 @@ logResults()
 		}		
 	}
 
+	logResultLine( eogStatFS, timeStamp, "EG_B" +s+ getStatItem( "score", s ) );
 	logResultLine( eogStatFS, timeStamp, "EG_B" +s+ getStatItem( "accuracy", s ) );
 
 	logResultLine( eogStatFS, timeStamp, "EG_B" +s+ getStatItem( "kills", s ) );
@@ -664,6 +690,7 @@ logResults()
 	logResultLine( eogStatFS, timeStamp, "EG_B" +s+ getStatItem( "killstreak", s ) );
 	logResultLine( eogStatFS, timeStamp, "EG_B" +s+ getStatItem( "longest", s ) );
 	logResultLine( eogStatFS, timeStamp, "EG_B" +s+ getStatItem( "melee", s ) );
+	logResultLine( eogStatFS, timeStamp, "EG_B" +s+ getStatItem( "claymore", s ) );
 	logResultLine( eogStatFS, timeStamp, "EG_B" +s+ getStatItem( "headshots", s ) );
 	logResultLine( eogStatFS, timeStamp, "EG_B" +s+ getStatItem( "longesths", s ) );
 
@@ -715,27 +742,33 @@ getPlayerDistance( player )
 
 getWinnerString( sepChar )
 {
-	winner = "tie";
+	winPlayer = getHighestScoringPlayer();
+	winPlayerGuid = 0;
+	winPlayerName = "";
+	winTeam = "tie";
+
+	if ( isDefined( winPlayer ) )
+	{
+		winPlayerGuid = winPlayer getGUID();
+		winPlayerName = winPlayer.name;
+	}
+
 	if ( level.teamBased && level.gametype != "bel" )
  	{
  		if ( game["teamScores"]["allies"] == game["teamScores"]["axis"] )
-			winner = "tie";
+			winTeam = "tie";
 		else if ( game["teamScores"]["axis"] > game["teamScores"]["allies"] )
-			winner = "axis";
+			winTeam = "axis";
 		else
-			winner = "allies";
-
-		winner = winner +sepChar+ "0" +sepChar+ "0";
+			winTeam = "allies";
 	}
 	else
 	{
-		winPlayer = getHighestScoringPlayer();
+		winTeam = "player";
 
-		if ( isDefined( winPlayer ) )
-			winner = "player" +sepChar+ ( winPlayer getGUID() ) +sepChar+ winPlayer.name;
 	}
 
-	return winner;
+	return winTeam +sepChar+ winPlayerGuid +sepChar+ winPlayerName;
 }
 
 
