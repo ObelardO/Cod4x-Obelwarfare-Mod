@@ -54,6 +54,10 @@ onGameEnded()
 
 	// Initialize array for best/worst values
 	level.eogBest = [];
+	level.eogBest["score"]["name"] = "";
+	level.eogBest["score"]["value"] = 0;
+	level.eogBest["score"]["guid"] = 0;
+
 	level.eogBest["accuracy"]["name"] = "";
 	level.eogBest["accuracy"]["value"] = 0;
 	level.eogBest["accuracy"]["guid"] = 0;
@@ -121,7 +125,12 @@ onGameEnded()
 	level.eogBest["distance"]["name"] = "";
 	level.eogBest["distance"]["value"] = 0;	
 	level.eogBest["distance"]["guid"] = 0;	
-				
+	
+	for ( index = 0; index < level.players.size; index++ )
+	{
+		player.pers["stats"]["score"] = player.score;
+	}
+
 	// Get all the best/worst players for each stat item we monitor and display at the end of the game
 	for ( index = 0; index < level.players.size; index++ )
 	{
@@ -133,6 +142,9 @@ onGameEnded()
 		guid = player getGUID();
 
 		if ( isDefined( player ) && isDefined( player.pers["stats"] ) ) {	
+
+			player checkStatItem( player.pers["stats"]["score"], "score", guid);
+
 			if ( player.pers["stats"]["accuracy"]["total_shots"] != 0 ) {
 				player checkStatItem( int( player.pers["stats"]["accuracy"]["hits"] / player.pers["stats"]["accuracy"]["total_shots"] * 100 ), "accuracy", guid);
 			} else {
@@ -302,7 +314,8 @@ onPlayerConnected()
 		// Initialize variables to keep stats
 		self.pers["stats"] = [];
 		self.pers["stats"]["show"] = level.scr_realtime_stats_default_on;
-		
+		self.pers["stats"]["score"] = 0;
+
 		// Accuracy
 		self.pers["stats"]["accuracy"] = [];
 		self.pers["stats"]["accuracy"]["total_shots"] = 0;
@@ -657,6 +670,7 @@ logResults()
 		}		
 	}
 
+	logResultLine( eogStatFS, timeStamp, "EG_B" +s+ getStatItem( "score", s ) );
 	logResultLine( eogStatFS, timeStamp, "EG_B" +s+ getStatItem( "accuracy", s ) );
 
 	logResultLine( eogStatFS, timeStamp, "EG_B" +s+ getStatItem( "kills", s ) );
