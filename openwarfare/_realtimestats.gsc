@@ -132,6 +132,8 @@ onGameEnded()
 	
 	for ( index = 0; index < level.players.size; index++ )
 	{
+		player = level.players[index];	
+
 		player.pers["stats"]["score"] = player.score;
 	}
 
@@ -493,8 +495,7 @@ onPlayerKilled()
 					
 				// Check if this was a melee
 				} else if ( sMeansOfDeath == "MOD_MELEE" || sMeansOfDeath == "MOD_BAYONET" ) {
-					attacker.pers["stats"]["kills"]["knife"] += 1;
-				}				
+					attacker.pers["stats"]["kills"]["knife"] += 1;			
 
 				// Check if this was a claymore
 				} else if ( sMeansOfDeath == "MOD_GRENADE_SPLASH" && sWeapon == "claymore_mp" ) {
