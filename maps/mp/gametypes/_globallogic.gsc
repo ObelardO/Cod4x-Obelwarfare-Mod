@@ -841,6 +841,9 @@ spawnPlayer()
 				level.playedStartingMusic = true;
 		}
 
+		//Disable music here
+		music = undefined;
+
 		thread maps\mp\gametypes\_hud_message::oldNotifyMessage( game["strings"][team + "_name"], undefined, game["icons"][team], game["colors"][team], music );
 		if ( isDefined( game["dialog"]["gametype"] ) && (!level.splitscreen || self == level.players[0]) )
 			self leaderDialogOnPlayer( "gametype" );
@@ -3952,6 +3955,12 @@ Callback_StartGameType()
 				setDvar( "scr_axis", "arab" );
 				break;
 		}
+
+		//game["music"]["spawn_allies"] = "welcome_allies";
+		//game["music"]["spawn_axis"] = "welcome_axis";
+		game["music"]["spawn_allies"] = "welcome";
+		game["music"]["spawn_axis"] = "welcome";
+
 		game["music"]["defeat"] = "mp_defeat";
 		game["music"]["victory_spectator"] = "mp_defeat";
 		game["music"]["winning"] = "mp_time_running_out_winning";
