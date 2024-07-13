@@ -18,12 +18,10 @@ init()
     {
         level waittill("connected", player);
 
-        //player thread waitForKill();
-
         player thread beginFK();
     }
 
-    self SetClientDvar( "ui_ShowMenuOnly", "" );    
+    //self SetClientDvar( "ui_ShowMenuOnly", "" );    
 }
 
 SetKillcamStyle( style )
@@ -57,7 +55,7 @@ finalkillcam( attacker, attackerNum, deathtime, victim)
     self endon("disconnect");
     level endon("end_killcam");
     
-    self SetClientDvar("ui_ShowMenuOnly", "none");
+    //self SetClientDvar("ui_ShowMenuOnly", "none");
 
     camtime = 5;
     predelay = getTime()/1000 - deathTime;
@@ -85,7 +83,6 @@ finalkillcam( attacker, attackerNum, deathtime, victim)
     
     if(!isDefined(level.slowmostart))
         level.slowmostart = killcamlength - 3;
-
 
     wait 0.05;
 
@@ -124,14 +121,13 @@ finalkillcam( attacker, attackerNum, deathtime, victim)
     wait 0.05;
     
     self waittill("end_killcam");
-    
+
+    self thread CleanFK();
     self thread EndFK();
 }
 
 EndFK()
 {
-	self thread CleanFK();
-    
     self.killcamentity = -1;
 	self.archivetime = 0;
 	self.psoffsettime = 0;
@@ -164,7 +160,7 @@ CleanFK()
     self.bottom_fk_shader.alpha = 0;
     self.credits.alpha = 0;
     
-    self SetClientDvar("ui_ShowMenuOnly", "");
+    //self SetClientDvar("ui_ShowMenuOnly", "");
     
     visionSetNaked( "mpOutro", 1.0 );
 }
