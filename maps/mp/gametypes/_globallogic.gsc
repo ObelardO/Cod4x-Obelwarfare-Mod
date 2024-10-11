@@ -75,7 +75,7 @@ init()
 	
 	// Set mod name and version
 	setDvar( "_Mod", "ObelWarfare", true );
-	setDvar( "_ModVer", "v4.517", true );
+	setDvar( "_ModVer", "v4.1012", true );
 
 	// Make a health check of the server
 	level thread openwarfare\_servercheck::init();
@@ -5748,8 +5748,6 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 	self.joining_team = undefined;
 	self.leaving_team = undefined;
 
-	maps\mp\gametypes\_finalkillcam::onPlayerKilled( eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration );
-	self thread [[level.onPlayerKilled]]( eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration );
 
 	if ( sWeapon == "artillery_mp" || sWeapon == "claymore_mp" || sWeapon == "frag_grenade_short_mp" || sWeapon == "none" || isSubStr( sWeapon, "cobra" ) )
 		doKillcam = false;
@@ -5763,6 +5761,32 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 	{
 		killcamentity = -1;
 	}
+
+	//Killcam for c4, claymore, grenade
+	if(sMeansOfDeath != "MOD_MELEE" && isDefined(eInflictor) && (sWeapon == "c4_mp" || sWeapon == "claymore_mp" || sWeapon == "rpg_mp" || sWeapon == "frag_grenade_mp"))
+	{
+		dokillcam = true;
+		
+		if(lpattacknum < 0)
+		{
+			if(!isDefined(attacker) || (isDefined(attacker) && !isPlayer(attacker) && attacker.classname != "script_vehicle"))
+				lpattacknum = self getEntityNumber();
+			else 
+				lpattacknum = attacker getEntityNumber();
+		}
+
+		killcamentity = eInflictor getEntityNumber();
+
+		if(isDefined(eInflictor.killCamEnt))
+			killcamentity = eInflictor.killCamEnt getEntityNumber();
+
+		//if(isDefined(eInflictor.killcamstart))
+		//	killcamstart = eInflictor.killcamstart;
+	}
+
+	//Setup final killcam
+	maps\mp\gametypes\_finalkillcam::onPlayerKilled( eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, killcamentity );
+	self thread [[level.onPlayerKilled]]( eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration );
 
 	self.deathTime = getTime();
 

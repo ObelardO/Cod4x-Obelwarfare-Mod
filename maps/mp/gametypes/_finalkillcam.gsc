@@ -41,25 +41,63 @@ beginFK()
         
         if(level.TeamBased)
         {
-            self finalkillcam(level.KillInfo[winner]["attacker"], level.KillInfo[winner]["attackerNumber"], level.KillInfo[winner]["deathTime"], level.KillInfo[winner]["victim"]);
+            self finalkillcam(
+                level.KillInfo[winner]["attacker"], 
+                level.KillInfo[winner]["attackerNumber"], 
+                level.KillInfo[winner]["deathTime"], 
+                level.KillInfo[winner]["victim"], 
+                level.KillInfo[winner]["weapon"],
+                level.KillInfo[winner]["killcamentity"]);
         }
         else
         {
-            self finalkillcam(winner.KillInfo["attacker"], winner.KillInfo["attackerNumber"], winner.KillInfo["deathTime"], winner.KillInfo["victim"]);
+            self finalkillcam(
+                winner.KillInfo["attacker"], 
+                winner.KillInfo["attackerNumber"], 
+                winner.KillInfo["deathTime"], 
+                winner.KillInfo["victim"], 
+                winner.KillInfo["weapon"], 
+                winner.KillInfo["killcamentity"]);
         }
     }
 }
 
-finalkillcam( attacker, attackerNum, deathtime, victim)
+finalkillcam( attacker, attackerNum, deathtime, victim, weapon, killcamentity)
 {
     self endon("disconnect");
     level endon("end_killcam");
     
     //self SetClientDvar("ui_ShowMenuOnly", "none");
 
+    camdist = 40;
     camtime = 5;
+
+    if (weapon == "artillery_mp")
+    {
+        camtime = 1.3;
+        camdist = 60;
+    }
+
+    else if (weapon == "airstrike_mp")
+    {
+        camtime = 1.3;
+        camdist = 128;
+    }
+
+    else if (weapon == "claymore_mp")
+    {
+        camtime = 3.0;
+        camdist = 40;
+    }
+
+    else if (weapon == "frag_grenade_mp")
+    {
+        camtime = 4.0; // show long enough to see grenade thrown
+        camdist = 20;
+    }
+
     predelay = getTime()/1000 - deathTime;
-    postdelay = 2;
+    postdelay = 1;
     killcamlength = camtime + postdelay;
     killcamoffset = camtime + predelay;
     
@@ -76,7 +114,7 @@ finalkillcam( attacker, attackerNum, deathtime, victim)
     
     self.sessionstate = "spectator";
 	self.spectatorclient = attackerNum;
-	self.killcamentity = -1;
+	self.killcamentity = killcamentity;
 	self.archivetime = killcamoffset;
 	self.killcamlength = killcamlength;
 	self.psoffsettime = 0;
@@ -102,6 +140,7 @@ finalkillcam( attacker, attackerNum, deathtime, victim)
     
     self.killcam = true;
 
+    self setClientDvar ("cg_airstrikeKillCamDist", camdist );
     
     if(!isDefined(self.top_fk_shader))
     {
@@ -200,7 +239,7 @@ CreateFKMenu( victim , attacker)
     
     self.fk_title = newClientHudElem(self);
     self.fk_title.archived = false;
-    self.fk_title.y = 45;
+    self.fk_title.y = 55;
     self.fk_title.alignX = "center";
     self.fk_title.alignY = "middle";
     self.fk_title.horzAlign = "center";
@@ -252,7 +291,7 @@ CreateFKMenu( victim , attacker)
         self.fk_title setText("ROUND WINNER KILL");
 }
 
-onPlayerKilled( eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration )
+onPlayerKilled( eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, killcamentity )
 {
     if( attacker != self && isDefined( attacker ) && isDefined( attacker.team ) )
     {    
@@ -268,6 +307,8 @@ onPlayerKilled( eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHi
             level.KillInfo[team]["attackerNumber"] = attacker getEntityNumber();
             level.KillInfo[team]["victim"] = self;
             level.KillInfo[team]["deathTime"] = GetTime()/1000;
+            level.KillInfo[team]["weapon"] = sWeapon;
+            level.KillInfo[team]["killcamentity"] = killcamentity;
         }
         else
         {
@@ -275,6 +316,8 @@ onPlayerKilled( eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHi
             attacker.KillInfo["attackerNumber"] = attacker getEntityNumber();
             attacker.KillInfo["victim"] = self;
             attacker.KillInfo["deathTime"] = GetTime()/1000;
+            attacker.KillInfo["weapon"] = sWeapon;
+            attacker.KillInfo["killcamentity"] = killcamentity;
         }
     }
 }

@@ -34,15 +34,37 @@ killcam(
 
 	if(attackerNum < 0)
 		return;
+
+	camdist = 40;
+
     self.cancelKillcam = false;
 	// length from killcam start to killcam end
-	if (getdvar("scr_killcam_time") == "") {
+	if (getdvar("scr_killcam_time") == "") 
+	{
 		if (sWeapon == "artillery_mp")
+		{
 			camtime = 1.3;
-		else if ( !respawn ) // if we're not going to respawn, we can take more time to watch what happened
-			camtime = 5.0;
+			camdist = 60;
+		}
+		else if (sWeapon == "airstrike_mp")
+		{
+			camtime = 1.3;
+			camdist = 128;
+		}
+		else if (sWeapon == "claymore_mp")
+		{
+			camtime = 3.0;
+			camdist = 40;
+		}
 		else if (sWeapon == "frag_grenade_mp")
-			camtime = 4.5; // show long enough to see grenade thrown
+		{
+			camtime = 4.0; // show long enough to see grenade thrown
+			camdist = 20;
+		}
+		else if ( !respawn ) // if we're not going to respawn, we can take more time to watch what happened
+		{
+			camtime = 5.0;
+		}
 		else
 			camtime = 2.5;
 	}
@@ -132,6 +154,8 @@ killcam(
 	}
 	
 	self.killcam = true;
+
+	self setClientDvar ("cg_airstrikeKillCamDist", camdist );
 
 	if ( !isdefined( self.kc_skiptext ) )
 	{
