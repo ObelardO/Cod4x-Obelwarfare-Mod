@@ -89,6 +89,7 @@ init()
 	thread openwarfare\_weaponrangemodifier::init();
 	thread openwarfare\_weaponweightmodifier::init();
 	thread openwarfare\_welcomerulesinfo::init();
+	thread openwarfare\_nightvision::init();
 }
 
 
