@@ -23,7 +23,16 @@ init()
 	// If dynamic attachments is disabled there's nothing else to do here
 	if ( level.scr_dynamic_attachments_enable == 0 )
 		return;
-	
+
+	level.attachments = [];
+	level.attachments[0] = "";
+	level.attachments[1] = "_silencer_";
+	level.attachments[2] = "_reflex_";
+	level.attachments[3] = "_acog_";
+
+	//self.validAttachments = [];
+	//self.validAttachments["_silencer_"] = "m4_mp";
+
 	level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );	
 }
 
@@ -51,74 +60,74 @@ attachDetachAttachment()
 	if ( level.scr_dynamic_attachments_enable == 0 || !isAlive(self) )
 		return;
 	
+	// Initiate attaching/detaching action. If there's already another action running we'll cancel the request
+	if ( self.attachmentAction ) return;
+
 	// Make sure the current weapon supports an attach/detach action
 	currentWeapon = self getCurrentWeapon();
-	detachmentAction = validForDetachmentAction( currentWeapon );
-	attachmentAction = validForAttachmentAction( currentWeapon, self.attachmentPocket );
-	if ( detachmentAction != "" || attachmentAction ) {
-		// If we already have something in the pocket we will not allow a second detachment
-		if ( detachmentAction != "" && self.attachmentPocket != "" )
-			return;
-		
-		// Initiate attaching/detaching action. If there's already another action running we'll cancel the request
-		if ( self.attachmentAction ) {
-			return;
-		} else {
-			self.attachmentAction = true;
+	attachment = validForDetachmentAction( currentWeapon );
+	newAttachment = "";
+	baseWeapon = currentWeapon;
+	
+	if (attachment != "")
+	{
+		baseWeapon = getSubStr( currentWeapon, 0, currentWeapon.size - attachment.size - 2 ) + "_mp";
+	}
+
+	if (level.scr_dynamic_attachments_enable > 0)
+	{
+		attachmentDetected = false;
+
+		for ( i = 0; i <= level.scr_dynamic_attachments_enable; i++ )
+		{
+			if (!attachmentDetected && level.attachments[i] == attachment)
+				attachmentDetected = true;
+
+			if (attachmentDetected && level.attachments[i] != attachment && validForAttachmentAction(baseWeapon, level.attachments[i]))
+			{
+				newAttachment = level.attachments[i];
+				break;
+			}
 		}
-		
+	}
+
+	if (newAttachment != attachment)
+	{
+		self.attachmentAction = true;
+
 		// Get the ammo info for the current weapon
 		totalAmmo = self getAmmoCount( currentWeapon );
 		clipAmmo = self getWeaponAmmoClip( currentWeapon );
-		
+
 		// Disable the player's weapons
 		self thread maps\mp\gametypes\_gameobjects::_disableWeapon();
-				
+
 		// Wait for certain time to complete the requested action
-		self playLocalSound( "scramble" );
+		self playSound( "scramble" );
 		xWait (1);
-		
+
 		// Take the current weapon from the player
 		self takeWeapon( currentWeapon );
-		
-		// Check which weapon we should give in exchange
-		if ( detachmentAction != "" ) {
 
-			// Construct the name of the weapon without the attachment
-			newWeapon = getSubStr( currentWeapon, 0, currentWeapon.size - detachmentAction.size - 2 ) + "_mp";
+		if (newAttachment == "")
+		{
+			newWeapon = baseWeapon;
 
-			self.attachmentPocket = detachmentAction;
-
-			iPrintLn("DETACHMENT POCKET: " + self.attachmentPocket, self);
-
-		} else {
-			// Construct the name of the weapon with the attachment
-
-			canAttachReflex = validForAttachmentAction(currentWeapon, "_reflex_");
-			canAttachAcog = validForAttachmentAction(currentWeapon, "_acog_");
-			canAttachSilencer = validForAttachmentAction(currentWeapon, "_silencer_");
-
-			iPrintLn("ATTACHMENT POCKET: " + self.attachmentPocket + "(reflex:" +canAttachReflex+ ", Acog:" +canAttachAcog+ ", silencer:" +canAttachSilencer+ ") ", self);
-
-			if (self.attachmentPocket == "_silencer_" && canAttachReflex) 
-				self.attachmentPocket = "_reflex_";
-			else if (self.attachmentPocket == "_reflex_" && canAttachAcog)
-				self.attachmentPocket = "_acog_";
-			else if (self.attachmentPocket == "_acog_" && canAttachSilencer)
-				self.attachmentPocket = "_silencer_";
-
-			iPrintLn("ATTACHMENT POCKET REPLACED: " +self.attachmentPocket+ " ", self);
-
-			newWeapon = getSubStr( currentWeapon, 0, currentWeapon.size - 3 ) + self.attachmentPocket + "mp";
-			self.attachmentPocket = "";				
+			iPrintLn("ATTACHMENT: NONE");
 		}
-		
+		else
+		{
+			newWeapon = getSubStr( baseWeapon, 0, baseWeapon.size - 3 ) + newAttachment + "mp";
+
+			iPrintLn("ATTACHMENT: " +newAttachment);
+		}
+
 		if ( isDefined( self.camo_num ) ) {
 			self giveWeapon( newWeapon, self.camo_num );
 		} else {
 			self giveWeapon( newWeapon );
 		}
-			
+
 		// Assign the proper ammo again
 		self setWeaponAmmoClip( newWeapon, clipAmmo );
 		self setWeaponAmmoStock( newWeapon, totalAmmo - clipAmmo );
@@ -126,7 +135,7 @@ attachDetachAttachment()
 		self switchToWeapon( newWeapon );
 		self thread maps\mp\gametypes\_gameobjects::_enableWeapon();
 		self.attachmentAction = false;		
-	}	
+	}
 }
 
 
