@@ -18,7 +18,7 @@
 init()
 {
 	// Get the main module's dvar
-	level.scr_dynamic_attachments_enable = getdvarx( "scr_dynamic_attachments_enable", "int", 0, 0, 2 );
+	level.scr_dynamic_attachments_enable = getdvarx( "scr_dynamic_attachments_enable", "int", 0, 0, 3 );
 
 	// If dynamic attachments is disabled there's nothing else to do here
 	if ( level.scr_dynamic_attachments_enable == 0 )
@@ -76,19 +76,39 @@ attachDetachAttachment()
 				
 		// Wait for certain time to complete the requested action
 		self playLocalSound( "scramble" );
-		xWait (3);
+		xWait (1);
 		
 		// Take the current weapon from the player
 		self takeWeapon( currentWeapon );
 		
 		// Check which weapon we should give in exchange
 		if ( detachmentAction != "" ) {
+
 			// Construct the name of the weapon without the attachment
 			newWeapon = getSubStr( currentWeapon, 0, currentWeapon.size - detachmentAction.size - 2 ) + "_mp";
+
 			self.attachmentPocket = detachmentAction;
-			
+
+			iPrintLn("DETACHMENT POCKET: " + self.attachmentPocket, self);
+
 		} else {
 			// Construct the name of the weapon with the attachment
+
+			canAttachReflex = validForAttachmentAction(currentWeapon, "_reflex_");
+			canAttachAcog = validForAttachmentAction(currentWeapon, "_acog_");
+			canAttachSilencer = validForAttachmentAction(currentWeapon, "_silencer_");
+
+			iPrintLn("ATTACHMENT POCKET: " + self.attachmentPocket + "(reflex:" +canAttachReflex+ ", Acog:" +canAttachAcog+ ", silencer:" +canAttachSilencer+ ") ", self);
+
+			if (self.attachmentPocket == "_silencer_" && canAttachReflex) 
+				self.attachmentPocket = "_reflex_";
+			else if (self.attachmentPocket == "_reflex_" && canAttachAcog)
+				self.attachmentPocket = "_acog_";
+			else if (self.attachmentPocket == "_acog_" && canAttachSilencer)
+				self.attachmentPocket = "_silencer_";
+
+			iPrintLn("ATTACHMENT POCKET REPLACED: " +self.attachmentPocket+ " ", self);
+
 			newWeapon = getSubStr( currentWeapon, 0, currentWeapon.size - 3 ) + self.attachmentPocket + "mp";
 			self.attachmentPocket = "";				
 		}
@@ -119,7 +139,9 @@ validForDetachmentAction( currentWeapon )
 	// Check if the current weapon is valid for detachment
 	if ( isSubStr( currentWeapon, "_silencer_" ) ) {
 		return "_silencer_";
-	} else if ( level.scr_dynamic_attachments_enable == 2 && isSubStr( currentWeapon, "_acog_" ) ) {
+	} else if ( level.scr_dynamic_attachments_enable > 2 && isSubStr( currentWeapon, "_reflex_" ) ) {
+		return "_reflex_";
+	} else if ( level.scr_dynamic_attachments_enable > 1 && isSubStr( currentWeapon, "_acog_" ) ) {
 		return "_acog_";
 	} else {
 		return "";
@@ -139,7 +161,11 @@ validForAttachmentAction( currentWeapon, playerPocket )
 			if ( isSubStr( "ak47_mp;ak74u_mp;beretta_mp;colt45_mp;g36c_mp;g3_mp;m14_mp;m16_mp;m4_mp;mp5_mp;p90_mp;skorpion_mp;usp_mp;uzi_mp", currentWeapon ) ) {
 				return true;
 			}
-		}	else if ( level.scr_dynamic_attachments_enable == 2 && playerPocket == "_acog_" ) {
+		} 	else if ( level.scr_dynamic_attachments_enable > 2 && playerPocket == "_reflex_" ) {
+			if ( isSubStr( "ak47_mp;ak74u_mp;g36c_mp;g3_mp;m1014_mp;m14_mp;m16_mp;m4_mp;m60e4_mp;mp5_mp;p90_mp;rpd_mp;saw_mp;skorpion_mp;uzi_mp;winchester1200_mp", currentWeapon ) ) {
+				return true;
+			}
+		}	else if ( level.scr_dynamic_attachments_enable > 1 && playerPocket == "_acog_" ) {
 			if ( isSubStr( "ak47_mp;ak74u_mp;barrett_mp;dragunov_mp;g36c_mp;g3_mp;m14_mp;m16_mp;m21_mp;m40a3_mp;m4_mp;m60e4_mp;mp5_mp;p90_mp;remington700_mp;rpd_mp;saw_mp;skorpion_mp;uzi_mp", currentWeapon ) ) {
 				return true;
 			}
