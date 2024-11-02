@@ -16,6 +16,8 @@
 
 init()
 {
+	//return;
+
 	level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
 }
 
@@ -47,7 +49,7 @@ onJoinedSpectators()
 
 	self setClientDvars("cg_laserforceon", 0);
 
-	self iPrintlnBold("^2NABLUDENIE");
+	//self iPrintlnBold("^2NABLUDENIE");
 }
 
 onPlayerDeath()
@@ -57,7 +59,7 @@ onPlayerDeath()
 
 	self setClientDvars("cg_laserforceon", 0);
 
-	self iPrintlnBold("^2DEATH");
+	//self iPrintlnBold("^2DEATH");
 }
 
 
@@ -75,6 +77,10 @@ laser_nv()
 			self setClientDvar("cg_laserforceon", 1);
 			self.laseron = true;
 		}
+
+		//wait 3;
+		//self SetActionSlot( 1, "" );
+		//self VisionSetNakedForPlayer( "default", 5 );
 
 		self waittill("night_vision_off");
 		self.nvon = false;
