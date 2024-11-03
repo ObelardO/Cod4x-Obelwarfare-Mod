@@ -25,17 +25,23 @@ init()
 		return;
 
 	level.attachments = [];
-	level.attachments[0] = "";
-	level.attachments[1] = "_silencer_";
-	level.attachments[2] = "_reflex_";
-	level.attachments[3] = "_acog_";
+	level.attachments[0]["tag"] = "";
+	level.attachments[0]["weapons"] = "";
+	level.attachments[0]["name"] = "";
 
-	level.validWeapons = [];
-	level.validWeapons["_silencer_"] = "ak47_mp;ak74u_mp;beretta_mp;colt45_mp;g36c_mp;g3_mp;m14_mp;m16_mp;m4_mp;mp5_mp;p90_mp;skorpion_mp;usp_mp;uzi_mp";
-	level.validWeapons["_reflex_"] = "ak47_mp;ak74u_mp;g36c_mp;g3_mp;m1014_mp;m14_mp;m16_mp;m4_mp;m60e4_mp;mp5_mp;p90_mp;rpd_mp;saw_mp;skorpion_mp;uzi_mp;winchester1200_mp";
-	level.validWeapons["_acog_"] =  "ak47_mp;ak74u_mp;barrett_mp;dragunov_mp;g36c_mp;g3_mp;m14_mp;m16_mp;m21_mp;m40a3_mp;m4_mp;m60e4_mp;mp5_mp;p90_mp;remington700_mp;rpd_mp;saw_mp;skorpion_mp;uzi_mp";
+	level.attachments[1]["tag"] = "_silencer_";
+	level.attachments[1]["weapons"] = "ak47_mp;ak74u_mp;beretta_mp;colt45_mp;g36c_mp;g3_mp;m14_mp;m16_mp;m4_mp;mp5_mp;p90_mp;skorpion_mp;usp_mp;uzi_mp";
+	level.attachments[1]["name"] = "Silencer";
 
-	level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );	
+	level.attachments[2]["tag"] = "_reflex_";
+	level.attachments[2]["weapons"] = "ak47_mp;ak74u_mp;g36c_mp;g3_mp;m1014_mp;m14_mp;m16_mp;m4_mp;m60e4_mp;mp5_mp;p90_mp;rpd_mp;saw_mp;skorpion_mp;uzi_mp;winchester1200_mp";
+	level.attachments[2]["name"] = "Reflex";
+
+	level.attachments[3]["tag"] = "_acog_";
+	level.attachments[3]["weapons"] = "ak47_mp;ak74u_mp;g36c_mp;g3_mp;m1014_mp;m14_mp;m16_mp;m4_mp;m60e4_mp;mp5_mp;p90_mp;rpd_mp;saw_mp;skorpion_mp;uzi_mp;winchester1200_mp";
+	level.attachments[3]["name"] = "ACOG";
+
+	level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
 }
 
 
@@ -66,20 +72,11 @@ attachDetachAttachment()
 
 	// Get weapon and attachment
 	currentWeapon = self getCurrentWeapon();
-	attachment = validForDetachmentAction( currentWeapon );
+	attachment = getWeaponAttachment( currentWeapon );
+	baseWeapon = getWeaponWithoutAttachments ( currentWeapon, attachment );
 	newAttachment = "";
-	baseWeapon = currentWeapon;
+	newAttachmentName = "";
 	
-	// Get base weapon without attacments
-	if (attachment != "")
-	{
-		baseWeapon = getSubStr( currentWeapon, 0, currentWeapon.size - attachment.size - 2 ) + "_mp";
-	}
-
-	iprintln("Weapon: " + currentWeapon);
-	iprintln("Base Weapon: " + baseWeapon);
-	iprintln("Attachment: " + attachment);
-
 	// Get next attachment 
 	if (level.scr_dynamic_attachments_enable > 0)
 	{
@@ -87,19 +84,25 @@ attachDetachAttachment()
 
 		for ( i = 0; i <= level.scr_dynamic_attachments_enable; i++ )
 		{
-			if (!attachmentDetected && level.attachments[i] == attachment)
+			if (!attachmentDetected && level.attachments[i]["tag"] == attachment)
 				attachmentDetected = true;
 
-			if (attachmentDetected && level.attachments[i] != attachment && validForAttachmentAction(baseWeapon, level.attachments[i]))
+			if (attachmentDetected && level.attachments[i]["tag"] != attachment && isWeaponValidForAttachment(currentWeapon, baseWeapon, level.attachments[i]["tag"]))
 			{
-				newAttachment = level.attachments[i];
+				newAttachment = level.attachments[i]["tag"];
+				newAttachmentName = level.attachments[i]["name"];
 				break;
 			}
 		}
 	}
 
+	/* Debug output
+	iprintln("Weapon: " + currentWeapon);
+	iprintln("Base Weapon: " + baseWeapon);
+	iprintln("Attachment: " + attachment);
 	iprintln("New attachment: " + newAttachment);
-	
+	*/
+
 	// If new attacment can be installed
 	if (newAttachment != attachment)
 	{
@@ -129,7 +132,7 @@ attachDetachAttachment()
 		{
 			newWeapon = getSubStr( baseWeapon, 0, baseWeapon.size - 3 ) + newAttachment + "mp";
 
-			iprintlnbold("Attachment installed: ^3" + newAttachment + " to " + baseWeapon);
+			iprintlnbold("Attachment installed: ^3" + newAttachmentName);
 		}
 
 		if ( isDefined( self.camo_num ) ) {
@@ -150,7 +153,7 @@ attachDetachAttachment()
 }
 
 
-validForDetachmentAction( currentWeapon )
+getWeaponAttachment( currentWeapon )
 {
 	// Check if the weapon is a special firing mode weapon
 	if ( isSubStr( currentWeapon, "_single_" ) || isSubStr( currentWeapon, "_burst_" ) || isSubStr( currentWeapon, "_full_" ) )
@@ -159,11 +162,11 @@ validForDetachmentAction( currentWeapon )
 	// Check if the current weapon is valid for detachment
 	for ( i = 1; i <= level.scr_dynamic_attachments_enable; i++ )
 	{
-		if ( isSubStr( currentWeapon, level.attachments[i] ) )
+		if ( isSubStr( currentWeapon, level.attachments[i]["tag"] ) )
 		{
-			baseWeapon = getSubStr( currentWeapon, 0, currentWeapon.size - level.attachments[i].size - 2 ) + "_mp";
+			baseWeapon = getWeaponWithoutAttachments( currentWeapon, level.attachments[i]["tag"] );
 
-			if ( isSubStr( level.validWeapons[level.attachments[i]], baseWeapon ) ) return level.attachments[i];
+			if ( isSubStr( level.attachments[i]["weapons"], baseWeapon ) ) return level.attachments[i]["tag"];
 		}
 	}
 
@@ -171,7 +174,7 @@ validForDetachmentAction( currentWeapon )
 }
 
 
-validForAttachmentAction( currentWeapon, attachment	)
+isWeaponValidForAttachment( currentWeapon, baseWeapon, attachment	)
 {
 	// Check if the weapon is a special firing mode weapon
 	if ( isSubStr( currentWeapon, "_single_" ) || isSubStr( currentWeapon, "_burst_" ) || isSubStr( currentWeapon, "_full_" ) )
@@ -180,10 +183,20 @@ validForAttachmentAction( currentWeapon, attachment	)
 	// Check if the current weapon is valid for the attachment that the player has
 	for ( i = 1; i <= level.scr_dynamic_attachments_enable; i++ )
 	{
-		if (level.attachments[i] == attachment && isSubStr( level.validWeapons[attachment], currentWeapon ) ) return true;
+		if (level.attachments[i]["tag"] == attachment && isSubStr( level.attachments[i]["weapons"], baseWeapon ) ) return true;
 	}
 
 	return false;	
+}
+
+getWeaponWithoutAttachments( currentWeapon, attachment )
+{
+	if (attachment != "")
+	{
+		return getSubStr( currentWeapon, 0, currentWeapon.size - attachment.size - 2 ) + "_mp";
+	}
+
+	return currentWeapon;
 }
 
 playSoundinSpace( alias, origin )
