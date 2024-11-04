@@ -1192,6 +1192,19 @@ LANG_ENGLISH "Press ^1[[{+activate}]] ^7to scroll through commands.\nPress ^1[[{
 
 
 //******************************************************************************
+// openwarfare/_dynamicattachments.gsc
+//******************************************************************************
+REFERENCE DYNATTACH_INSTALLING
+LANG_ENGLISH "Installing attachment..."
+
+REFERENCE DYNATTACH_INSTALLED
+LANG_ENGLISH "Attachment installed: ^3&&1"
+
+REFERENCE DYNATTACH_REMOVED_ALL
+LANG_ENGLISH "All attachments removed."
+
+
+//******************************************************************************
 // ui_mp/connect.menu
 //******************************************************************************
 REFERENCE BROUGHT2UBY

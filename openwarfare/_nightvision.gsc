@@ -78,10 +78,6 @@ laser_nv()
 			self.laseron = true;
 		}
 
-		//wait 3;
-		//self SetActionSlot( 1, "" );
-		//self VisionSetNakedForPlayer( "default", 5 );
-
 		self waittill("night_vision_off");
 		self.nvon = false;
 

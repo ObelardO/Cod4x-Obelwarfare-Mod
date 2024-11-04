@@ -24,6 +24,13 @@ init()
 	if ( level.scr_dynamic_attachments_enable == 0 )
 		return;
 
+	precacheString( &"OW_DYNATTACH_INSTALLING" );
+	precacheString( &"OW_DYNATTACH_INSTALLED" );
+	precacheString( &"OW_DYNATTACH_REMOVED_ALL" );
+	precacheString( &"MPUI_SILENCER" );
+	precacheString( &"MPUI_RED_DOT_SIGHT" );
+	precacheString( &"MPUI_ACOG_SCOPE" );
+
 	level.attachments = [];
 	level.attachments[0]["tag"] = "";
 	level.attachments[0]["weapons"] = "";
@@ -31,15 +38,15 @@ init()
 
 	level.attachments[1]["tag"] = "_silencer_";
 	level.attachments[1]["weapons"] = "ak47_mp;ak74u_mp;beretta_mp;colt45_mp;g36c_mp;g3_mp;m14_mp;m16_mp;m4_mp;mp5_mp;p90_mp;skorpion_mp;usp_mp;uzi_mp";
-	level.attachments[1]["name"] = "Silencer";
+	level.attachments[1]["name"] = &"MPUI_SILENCER";
 
 	level.attachments[2]["tag"] = "_reflex_";
 	level.attachments[2]["weapons"] = "ak47_mp;ak74u_mp;g36c_mp;g3_mp;m1014_mp;m14_mp;m16_mp;m4_mp;m60e4_mp;mp5_mp;p90_mp;rpd_mp;saw_mp;skorpion_mp;uzi_mp;winchester1200_mp";
-	level.attachments[2]["name"] = "Reflex";
+	level.attachments[2]["name"] = &"MPUI_RED_DOT_SIGHT";
 
 	level.attachments[3]["tag"] = "_acog_";
 	level.attachments[3]["weapons"] = "ak47_mp;ak74u_mp;g36c_mp;g3_mp;m1014_mp;m14_mp;m16_mp;m4_mp;m60e4_mp;mp5_mp;p90_mp;rpd_mp;saw_mp;skorpion_mp;uzi_mp;winchester1200_mp";
-	level.attachments[3]["name"] = "ACOG";
+	level.attachments[3]["name"] = &"MPUI_ACOG_SCOPE";
 
 	level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
 }
@@ -126,13 +133,13 @@ attachDetachAttachment()
 		{
 			newWeapon = baseWeapon;
 
-			iprintlnbold("All attachments removed.");
+			self iprintln( &"OW_DYNATTACH_REMOVED_ALL" );
 		}
 		else
 		{
-			newWeapon = getSubStr( baseWeapon, 0, baseWeapon.size - 3 ) + newAttachment + "mp";
+			newWeapon = getSubStr( baseWeapon, 0, baseWeapon.size - 3 ) +newAttachment+ "mp";
 
-			iprintlnbold("Attachment installed: ^3" + newAttachmentName);
+			self iprintln( &"OW_DYNATTACH_INSTALLED", newAttachmentName );
 		}
 
 		if ( isDefined( self.camo_num ) ) {
