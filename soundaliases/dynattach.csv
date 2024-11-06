@@ -1,0 +1,4 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage,center percentage,platform,envelop_min,envelop_max,envelop percentage
+
+# dynattach sounds,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+dyn_attach_change,,dynattach/player_change_attachment.mp3,0.5,1,max,1,1,200,600,auto,streamed,,,,,,,,,,,,,,,,,,mp3

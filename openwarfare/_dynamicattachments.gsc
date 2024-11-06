@@ -123,8 +123,9 @@ attachDetachAttachment()
 		self thread maps\mp\gametypes\_gameobjects::_disableWeapon();
 
 		// Wait for certain time to complete the requested action
-		self playSound( "US_1mc_rsp_comeon" );
-		xWait (2);
+		self playSound( "dyn_attach_change" );
+		//playSoundinSpace ( "dyn_attach_change", self.origin )
+		xWait (4);
 
 		// Take the current weapon from the player
 		self takeWeapon( currentWeapon );
@@ -181,7 +182,7 @@ getWeaponAttachment( currentWeapon )
 }
 
 
-isWeaponValidForAttachment( currentWeapon, baseWeapon, attachment	)
+isWeaponValidForAttachment( currentWeapon, baseWeapon, attachment )
 {
 	// Check if the weapon is a special firing mode weapon
 	if ( isSubStr( currentWeapon, "_single_" ) || isSubStr( currentWeapon, "_burst_" ) || isSubStr( currentWeapon, "_full_" ) )
@@ -211,6 +212,6 @@ playSoundinSpace( alias, origin )
 	org = spawn( "script_origin", origin );
 	org.origin = origin;
 	org playSound( alias  );
-	wait 10; // MP doesn't have "sounddone" notifies =(
+	wait 5; // MP doesn't have "sounddone" notifies =(
 	org delete();
 }
