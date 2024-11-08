@@ -378,6 +378,7 @@ sound,misc,,all_mp
 sound,music,,all_mp
 sound,unreal,,all_mp
 sound,items,,all_mp
+sound,dynattach,,all_mp
 
 xanim,viewmodel_binoculars_idle
 
