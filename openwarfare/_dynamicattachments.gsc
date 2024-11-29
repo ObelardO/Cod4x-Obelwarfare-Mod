@@ -51,18 +51,25 @@ init()
 	level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
 }
 
-
 onPlayerConnected()
 {
 	self thread addNewEvent( "onPlayerSpawned", ::onPlayerSpawned );
+	self thread addNewEvent( "onPlayerKilled", ::onPlayerKilled );
 }	
-
 
 onPlayerSpawned()
 {
 	self.attachmentAction = false;
 }
 
+onPlayerKilled()
+{
+	if ( isDefined( self.attachmentAction ) && self.attachmentAction ) 
+	{
+		self.attachmentAction = false;
+		self updateSecondaryProgressBar( undefined, undefined, true, undefined );
+	}
+}
 
 attachDetachAttachment()
 {
@@ -120,11 +127,15 @@ attachDetachAttachment()
 		clipAmmo = self getWeaponAmmoClip( currentWeapon );
 
 		// Disable the player's weapons
-		self thread maps\mp\gametypes\_gameobjects::_disableWeapon();
+		//self thread maps\mp\gametypes\_gameobjects::_disableWeapon();
+		self stopPlayer( true );
 
 		// Wait for certain time to complete the requested action
-		self playSound( "dyn_attach_change" );
-		//playSoundinSpace ( "dyn_attach_change", self.origin )
+		//self playSound( "dyn_attach_change" );
+		self thread playSoundinSpace ( "dyn_attach_change", self.origin );
+
+		// Wait and display progress
+		self thread displayProgressBar ( 4000 );
 		xWait (4);
 
 		// Take the current weapon from the player
@@ -154,7 +165,10 @@ attachDetachAttachment()
 		self setWeaponAmmoStock( newWeapon, totalAmmo - clipAmmo );
 		
 		self switchToWeapon( newWeapon );
-		self thread maps\mp\gametypes\_gameobjects::_enableWeapon();
+
+		//self thread maps\mp\gametypes\_gameobjects::_enableWeapon();
+		self stopPlayer( false );
+
 		self.attachmentAction = false;		
 	}
 	
@@ -205,6 +219,41 @@ getWeaponWithoutAttachments( currentWeapon, attachment )
 	}
 
 	return currentWeapon;
+}
+
+stopPlayer( condition )
+{
+	if ( condition )
+	{
+		self thread openwarfare\_speedcontrol::setModifierSpeed( "_healthsystem", 80 );
+		self thread maps\mp\gametypes\_gameobjects::_disableWeapon();
+		self thread maps\mp\gametypes\_gameobjects::_disableJump();
+		self thread maps\mp\gametypes\_gameobjects::_disableSprint();
+	}
+	else
+	{
+		self thread openwarfare\_speedcontrol::setModifierSpeed( "_healthsystem", 0 );
+		self thread maps\mp\gametypes\_gameobjects::_enableWeapon();
+		self thread maps\mp\gametypes\_gameobjects::_enableJump();
+		self thread maps\mp\gametypes\_gameobjects::_enableSprint();
+	}
+}
+
+displayProgressBar( totalTime )
+{
+	time = 0;
+	startTime = openwarfare\_timer::getTimePassed();
+
+	while ( time < totalTime )
+	{
+		wait (0.05);
+
+		self updateSecondaryProgressBar( time, totalTime, false, "Change attachment" );
+
+		time += openwarfare\_timer::getTimePassed() - startTime;
+	}
+
+	self updateSecondaryProgressBar( undefined, undefined, true, undefined );
 }
 
 playSoundinSpace( alias, origin )
