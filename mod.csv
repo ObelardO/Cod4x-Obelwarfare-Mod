@@ -340,6 +340,7 @@ rawfile,openwarfare/_weaponrangemodifier.gsc
 rawfile,openwarfare/_weaponweightmodifier.gsc
 rawfile,openwarfare/_welcomerulesinfo.gsc
 rawfile,openwarfare/_nightvision.gsc
+rawfile,openwarfare/_weather.gsc
 
 menufile,ui_mp/connect.menu
 menufile,ui_mp/controls_multi.menu
