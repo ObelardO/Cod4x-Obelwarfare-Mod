@@ -53,20 +53,21 @@ displayGreetingsMessages()
 		xwait (0.05);
 	}
 
-	if (sv_greetings_start_delay > 0)
+	if (level.sv_greetings_start_delay > 0)
 	{
 		wait (level.sv_greetings_start_delay);
 	}
 	
-	notifyData = spawnStruct();
-	if ( isDefined ( level.sv_greetings_messages_sound ) )
-	{
-		notifyData.sound = level.sv_greetings_messages_sound;
-	}
+
 	
 	for ( msgIndex = 0; msgIndex < level.sv_greetings_messages_text.size; msgIndex++ )
 	{
+		notifyData = spawnStruct();
 		notifyData.titleText = level.sv_greetings_messages_text[msgIndex];
+		if ( isDefined ( level.sv_greetings_messages_sound ) )
+		{
+			notifyData.sound = level.sv_greetings_messages_sound;
+		}
 
 		self maps\mp\gametypes\_hud_message::notifyMessage(notifyData);
 

@@ -90,6 +90,7 @@ init()
 	thread openwarfare\_weaponweightmodifier::init();
 	thread openwarfare\_welcomerulesinfo::init();
 	thread openwarfare\_nightvision::init();
+	thread openwarfare\_greetings::init();
 	thread openwarfare\_weather::init();
 }
 
