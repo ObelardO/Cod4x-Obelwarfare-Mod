@@ -128,7 +128,7 @@ echo  OpenWarfare will be created in %CLANGUAGE%!
 if "%make_option%"=="1" goto MAKE_OPENWARFARE_IWD
 if "%make_option%"=="2" goto MAKE_OPENWARFARE_IWD
 if "%make_option%"=="3" goto MAKE_RULES_IWD
-if "%make_option%"=="4" goto MAKE_MOD_FF
+if "%make_option%"=="4" goto MAKE_OPENWARFARE_EVENT_PATCH_IWD
 goto END
 
 
@@ -171,6 +171,27 @@ echo    Adding OpenWarfare standard rulesets...
 7za a -r -tzip z_openwarfare.iwd rulesets\leagues.gsc > NUL
 echo    Adding empty mod.arena file...
 7za a -r -tzip z_openwarfare.iwd mod.arena > NUL
+
+
+if not "%eventDir%"=="none" goto BUILD_EVENT
+goto FINALE_OPENWARFARE_IWD
+
+
+:BUILD_EVENT
+echo    Adding Happy birthday event assets...
+
+move z_openwarfare.iwd %eventDir% > NUL
+cd %eventDir%
+
+..\7za a -r -tzip z_openwarfare.iwd images\*.iwi > NUL
+..\7za a -r -tzip z_openwarfare.iwd sound\*.mp3 > NUL
+
+move z_openwarfare.iwd ..\ > NUL
+cd ..\
+goto FINALE_OPENWARFARE_IWD
+
+
+:FINALE_OPENWARFARE_IWD
 echo  New z_openwarfare.iwd file successfully built!
 del /f /q weapons\mp\* >NUL
 rmdir weapons\mp >NUL
@@ -180,19 +201,48 @@ goto END
 
 :WEAPONS_FIXES
 xcopy weapons\fixes weapons\mp /SYI > NUL
-goto BUILD_OPENWARFARE_IWD
+goto MAKE_OPENWARFARE_EVENT_PATCH_IWD
 
 :WEAPONS_FIXES_NOGUNSWAY
 xcopy weapons\fixes+nogunsway weapons\mp /SYI > NUL
-goto BUILD_OPENWARFARE_IWD
+goto MAKE_OPENWARFARE_EVENT_PATCH_IWD
 
 :WEAPONS_FIXES_NOGUNSWAY_SNIPER
 xcopy weapons\fixes+nogunsway+sniper weapons\mp /SYI > NUL
-goto BUILD_OPENWARFARE_IWD
+goto MAKE_OPENWARFARE_EVENT_PATCH_IWD
 
 :WEAPONS_THECOMPANY
 xcopy weapons\thecompany weapons\mp /SYI > NUL
-goto BUILD_OPENWARFARE_IWD
+goto MAKE_OPENWARFARE_EVENT_PATCH_IWD
+
+
+
+:MAKE_OPENWARFARE_EVENT_PATCH_IWD
+echo _________________________________________________________________
+echo.
+echo  Please choose what event files to use:
+echo    1. None.
+echo    2. Happy Birthday
+echo    3. Christmas.
+echo.
+echo    0. Back
+echo.
+set /p zow_option_event=:
+set zow_option_event=%zow_option_event:~0,1%
+
+set eventDir=none
+if "%zow_option_event%"=="2" set eventDir=server_event_patch_hb\
+if "%zow_option_event%"=="3" set eventDir=server_event_patch_xmas\
+if "%zow_option_event%"=="0" goto MAKE_OPENWARFARE_IWD
+
+if "%make_option%"=="4" goto MAKE_MOD_FF
+
+if "%zow_option_event%"=="1" goto BUILD_OPENWARFARE_IWD
+if "%zow_option_event%"=="2" goto BUILD_OPENWARFARE_IWD
+if "%zow_option_event%"=="3" goto BUILD_OPENWARFARE_IWD
+
+goto MAKE_OPENWARFARE_EVENT_PATCH_IWD
+
 
 :MAKE_RULES_IWD
 echo _________________________________________________________________
@@ -245,6 +295,11 @@ xcopy xanim ..\..\raw\xanim /SYI > NUL
 xcopy xmodel ..\..\raw\xmodel /SYI > NUL
 xcopy xmodelparts ..\..\raw\xmodelparts /SYI > NUL
 xcopy xmodelsurfs ..\..\raw\xmodelsurfs /SYI > NUL
+
+if not "%eventDir%"=="none" (
+xcopy %eventDir%images ..\..\raw\images /SYI > NUL
+xcopy %eventDir%sound ..\..\raw\images /SYI > NUL
+)
 
 echo    Copying OpenWarfare source code...
 xcopy openwarfare ..\..\raw\openwarfare /SYI > NUL
