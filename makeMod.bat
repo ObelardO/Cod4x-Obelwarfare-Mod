@@ -164,6 +164,7 @@ echo    Adding images...
 7za a -r -tzip z_openwarfare.iwd images\*.iwi > NUL
 echo    Adding sounds...
 7za a -r -tzip z_openwarfare.iwd sound\*.mp3 > NUL
+7za a -r -tzip z_openwarfare.iwd sound\*.wav > NUL
 echo    Adding weapons...
 7za a -r -tzip z_openwarfare.iwd weapons\mp\*_mp > NUL
 echo    Adding OpenWarfare standard rulesets...
@@ -178,13 +179,14 @@ goto FINALE_OPENWARFARE_IWD
 
 
 :BUILD_EVENT
-echo    Adding Happy birthday event assets...
+echo    Adding event assets...
 
 move z_openwarfare.iwd %eventDir% > NUL
 cd %eventDir%
 
 ..\7za a -r -tzip z_openwarfare.iwd images\*.iwi > NUL
 ..\7za a -r -tzip z_openwarfare.iwd sound\*.mp3 > NUL
+..\7za a -r -tzip z_openwarfare.iwd sound\*.wav > NUL
 
 move z_openwarfare.iwd ..\ > NUL
 cd ..\
@@ -297,8 +299,9 @@ xcopy xmodelparts ..\..\raw\xmodelparts /SYI > NUL
 xcopy xmodelsurfs ..\..\raw\xmodelsurfs /SYI > NUL
 
 if not "%eventDir%"=="none" (
+echo    Copying event resources...
 xcopy %eventDir%images ..\..\raw\images /SYI > NUL
-xcopy %eventDir%sound ..\..\raw\images /SYI > NUL
+xcopy %eventDir%sound ..\..\raw\sound /SYI > NUL
 )
 
 echo    Copying OpenWarfare source code...
