@@ -222,13 +222,13 @@ fontPulse(player)
 
 	scaleRange = self.maxFontScale - self.baseFontScale;
 
-	while ( self.fontScale < self.maxFontScale )
+	while ( isDefined ( self.fontScale ) && self.fontScale < self.maxFontScale )
 	{
 		self.fontScale = min( self.maxFontScale, self.fontScale + (scaleRange / self.inFrames) );
 		wait 0.05;
 	}
 
-	while ( self.fontScale > self.baseFontScale )
+	while ( isDefined ( self.fontScale ) && self.fontScale > self.baseFontScale )
 	{
 		self.fontScale = max( self.baseFontScale, self.fontScale - (scaleRange / self.outFrames) );
 		wait 0.05;
