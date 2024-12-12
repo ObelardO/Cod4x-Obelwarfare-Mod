@@ -28,3 +28,4 @@ CDFinalOT,,misc/OWB_countdown_ot.mp3,1,1,max,,,,,announcer,streamed,,,master,all
 # Player connections/disconnections,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 player_connected,,misc/player_connected.mp3,1,1,max,,,,,announcer,streamed,,,master,all_mp,,,,,,radio,nowetlevel fulldrylevel,,,,,,,mp3
 player_disconnected,,misc/player_disconnected.mp3,1,1,max,,,,,announcer,streamed,,,master,all_mp,,,,,,radio,nowetlevel fulldrylevel,,,,,,,mp3
+welcome,3,misc/welcome.mp3,1,,music,,,,,auto2d,streamed,,,master,all_mp,,,,,,music,nowetlevel fulldrylevel,,,,,,,mp3

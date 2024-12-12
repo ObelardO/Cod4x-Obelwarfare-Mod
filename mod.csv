@@ -381,6 +381,8 @@ sound,music,,all_mp
 sound,unreal,,all_mp
 sound,items,,all_mp
 sound,dynattach,,all_mp
+sound,weapons,,all_mp
+sound,explosions,,all_mp
 
 xanim,viewmodel_binoculars_idle
 
