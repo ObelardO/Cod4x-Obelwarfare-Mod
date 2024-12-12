@@ -20,6 +20,7 @@ init()
 	level.sv_greetings_enable = getdvarx( "sv_greetings_enable", "int", 0, 0, 1 );
 	level.sv_greetings_start_once = getdvarx( "sv_greetings_start_once", "int", 0, 0, 1 );
 	level.sv_greetings_start_delay = getdvarx( "sv_greetings_start_delay", "int", 0, 0, 10 );
+	level.sv_greetings_start_sound = getdvarx( "sv_greetings_start_sound", "int", 0, 0, 1 );
 	level.sv_greetings_messages_delay = getdvarx( "sv_greetings_messages_delay", "int", 2, 2, 10 );
 	level.sv_greetings_messages_sound = getdvarx( "sv_greetings_messages_sound", "string", "" );
 
@@ -29,58 +30,99 @@ init()
 	if ( level.sv_greetings_enable == 0 || level.sv_greetings_messages_text.size == 0)
 		return;
 
-	level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
-}
-
-onPlayerConnected()
-{
-	self thread addNewEvent( "onPlayerSpawned", ::displayGreetingsMessages );
-}
-
-displayGreetingsMessages()
-{
-	self endon("disconnect");
-	self endon("death");
-	level endon( "game_ended" );
-
-	if (level.sv_greetings_start_once == 1 && isDefined ( level.isGreetingsDone ) && level.isGreetingsDone == true)
+	if ( level.sv_greetings_start_once && game["roundsplayed"] > 0 )
 	{
+		setDefaultSpawnMusic();
+
 		return;
 	}
-
-	while ( level.inReadyUpPeriod || level.inStrategyPeriod || level.inStrategyPeriod )
+	
+	if (level.sv_greetings_start_sound == 1)
 	{
-		xwait (0.05);
+		setGreetingsSpawnMusic();
 	}
+
+	level thread runGreetingsMessages();
+}
+
+
+runGreetingsMessages()
+{
+	level endon("intermission");
+	level endon("game_ended");
+
+	level waittill("prematch_start");
 
 	if (level.sv_greetings_start_delay > 0)
 	{
 		wait (level.sv_greetings_start_delay);
 	}
-	
 
-	
 	for ( msgIndex = 0; msgIndex < level.sv_greetings_messages_text.size; msgIndex++ )
 	{
-		notifyData = spawnStruct();
-		notifyData.titleText = level.sv_greetings_messages_text[msgIndex];
-		if ( isDefined ( level.sv_greetings_messages_sound ) )
-		{
-			notifyData.sound = level.sv_greetings_messages_sound;
-		}
+		sendNotifyToPlayers ( level.sv_greetings_messages_text[msgIndex], level.sv_greetings_messages_sound );
 
-		self maps\mp\gametypes\_hud_message::notifyMessage(notifyData);
-
-		wait (level.sv_greetings_start_delay);
-	}			
+		wait (level.sv_greetings_messages_delay);
+	}
+}
 
 
-	if (level.sv_greetings_start_once == 1)
+sendNotifyToPlayers( message, sound )
+{
+	notifyData = spawnStruct();
+	notifyData.titleText = message;
+	if ( sound != "" )
 	{
-		level.isGreetingsDone = true;
+		notifyData.sound = sound;
 	}
 
-	//wait (2);
+	players = level.players;
+	for ( index = 0; index < players.size; index++ )
+	{
+		player = players[index];
 
-	//delete (notifyData);
+		if (player.hasSpawned && player.sessionteam != "spectator" && isAlive ( player ) )
+		{
+			player maps\mp\gametypes\_hud_message::notifyMessage( notifyData );
+		}
+	}
+}
+
+
+
+setGreetingsSpawnMusic()
+{
+	game["music"]["spawn_axis"] = "welcome";
+	game["music"]["spawn_allies"] = "welcome";
+}
+
+
+setDefaultSpawnMusic()
+{
+	switch ( game["allies"] )
+	{
+		case "sas":
+			game["music"]["spawn_allies"] = "mp_spawn_sas";
+			game["music"]["victory_allies"] = "mp_victory_sas";
+			break;
+		case "marines":
+		default:
+			game["music"]["spawn_allies"] = "mp_spawn_usa";
+			game["music"]["victory_allies"] = "mp_victory_usa";
+			break;
+	}
+
+	switch ( game["axis"] )
+	{
+		case "russian":
+			game["music"]["spawn_axis"] = "mp_spawn_soviet";
+			game["music"]["victory_axis"] = "mp_victory_soviet";
+			break;
+		case "arab":
+		case "opfor":
+		default:
+			game["music"]["spawn_axis"] = "mp_spawn_opfor";
+			game["music"]["victory_axis"] = "mp_victory_opfor";
+			break;
+	}
 }
