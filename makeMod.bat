@@ -137,10 +137,10 @@ goto END
 echo _________________________________________________________________
 echo.
 echo  Please choose what set of weapon files to use:
-echo    1. Only fixes.
-echo    2. No Gun Sway.
-echo    3. Sniper Increased Distance.
-echo    4. "The Company Hub" weapons by Buster.
+echo    1. Only fixes
+echo    2. No Gun Sway
+echo    3. Sniper Increased Distance
+echo    4. "The Company Hub" weapons by Buster
 echo.
 echo    0. Back
 echo.
@@ -187,6 +187,7 @@ cd %eventDir%
 ..\7za a -r -tzip z_openwarfare.iwd images\*.iwi > NUL
 ..\7za a -r -tzip z_openwarfare.iwd sound\*.mp3 > NUL
 ..\7za a -r -tzip z_openwarfare.iwd sound\*.wav > NUL
+..\7za a -r -tzip z_openwarfare.iwd vision\*.vision > NUL
 
 move z_openwarfare.iwd ..\ > NUL
 cd ..\
@@ -223,9 +224,9 @@ goto MAKE_OPENWARFARE_EVENT_PATCH_IWD
 echo _________________________________________________________________
 echo.
 echo  Please choose what event files to use:
-echo    1. None.
+echo    1. None
 echo    2. Happy Birthday
-echo    3. Christmas.
+echo    3. Christmas
 echo.
 echo    0. Back
 echo.
@@ -302,6 +303,8 @@ if not "%eventDir%"=="none" (
 echo    Copying event resources...
 xcopy %eventDir%images ..\..\raw\images /SYI > NUL
 xcopy %eventDir%sound ..\..\raw\sound /SYI > NUL
+xcopy %eventDir%vision ..\..\raw\vision /SYI > NUL
+xcopy %eventDir%maps ..\..\raw\maps /SYI > NUL
 )
 
 echo    Copying OpenWarfare source code...
