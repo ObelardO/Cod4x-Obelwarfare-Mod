@@ -76,12 +76,8 @@ dayCycleController()
 	level endon( "game_ended" );
 	
 	// Initialize visions and sounds for each day cycle
-	dayCycle = [];
-	dayCycle[0] = initDayCycleData( level.scr_dcs_dawn_length, "ow_sunrise1;ow_sunrise2;ow_sunrise3;ow_sunrise4", "dcsdawn", true, false, level.scr_dcs_dawn_length); 
-	dayCycle[1] = initDayCycleData( level.scr_dcs_day_length, openwarfare\_daycycleutils::getDayVision(), "dcsday", false, false, 0);
-	dayCycle[2] = initDayCycleData( level.scr_dcs_dusk_length, "ow_sunset1;ow_sunset2;ow_sunset3;ow_sunset4", "dcsdusk", false, true, level.scr_dcs_dusk_length);
-	dayCycle[3] = initDayCycleData( level.scr_dcs_night_length, "ow_night1;ow_night2;ow_night3;ow_night4", "dcsnight", true, true, 0);
-	
+	dayCycle = openwarfare\_daycycleutils::getDayCycleData();
+
 	// Wait until the game starts
 	level waittill("prematch_over");
 	
@@ -113,13 +109,14 @@ dayCycleController()
 				fogStart = dayCycle[ game["_dcs_daycycle"] ]["fog_start"];
 				fogEnd = dayCycle[ game["_dcs_daycycle"] ]["fog_end"];
 				fogTime = dayCycle[ game["_dcs_daycycle"] ]["fog_time"] / visionCount / 1000;
+				fogClr = dayCycle[ game["_dcs_daycycle"] ]["fog_clr"];
 
 				if ( firstCycle ) {
-					setFog(visionIndex, visionCount, fogStart, fogEnd, 0);
+					setFog(visionIndex, visionCount, fogStart, fogEnd, 0, fogClr);
 					wait (0.05);
 				} 
 
-				setFog(visionIndex + 1, visionCount, fogStart, fogEnd, fogTime);
+				setFog(visionIndex + 1, visionCount, fogStart, fogEnd, fogTime, fogClr);
 			}
 
 			if ( firstCycle ) firstCycle = false;
@@ -175,27 +172,14 @@ dayCycleSounds( dayCycle )
 	}	
 }
 
-initDayCycleData( cycleLength, visionFiles, soundAlias, isFogOnStart, isFogOnEnd, fogTime )
-{
-	dayCycle = [];
-	dayCycle["visions"] = strtok( visionFiles, ";" );
-	dayCycle["length"] = int( cycleLength / dayCycle["visions"].size );
-	dayCycle["sound"] = soundAlias;
 
-	dayCycle["fog_start"] = isFogOnStart;
-	dayCycle["fog_end"] = isFogOnEnd;
-	dayCycle["fog_time"] = fogTime;
-
-	return dayCycle;	
-}
-
-setFog(index, count, isFogOnStart, isFogOnEnd, fogTime)
+setFog(index, count, isFogOnStart, isFogOnEnd, fogTime, fogClr)
 {
 	FOG_MIN_DIST_ON = 30;
-	FOG_MIN_DIST_OFF = 1000;
+	FOG_MIN_DIST_OFF = 350;
 
 	FOG_MAX_DIST_ON = 200;
-	FOG_MAX_DIST_OFF = 50000;
+	FOG_MAX_DIST_OFF = 5000;
 
 	if (isFogOnStart) {
 		fogStartDistMin = FOG_MIN_DIST_ON;
@@ -216,7 +200,7 @@ setFog(index, count, isFogOnStart, isFogOnEnd, fogTime)
 	targetFogMinDist = fogStartDistMin + (fogEndDistMin - fogStartDistMin) / count * index;
 	targetFogMaxDist = fogStartDistMax + (fogEndDistMax - fogStartDistMax) / count * index;
 
-	setExpFog( targetFogMinDist, targetFogMaxDist, 1/255, 1/255, 1/255, fogTime);
+	setExpFog( targetFogMinDist, targetFogMaxDist, fogClr[0], fogClr[1], fogClr[2], fogTime);
 
 	//iprintln( "Switching FOG: index: " + index + " of " + count + "   start: " + targetFogMinDist + "   end: " + targetFogMaxDist + "   time: " + fogTime );
 }

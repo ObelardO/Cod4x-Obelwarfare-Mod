@@ -311,6 +311,7 @@ xcopy %eventDir%sound ..\..\raw\sound /SYI > NUL
 xcopy %eventDir%vision ..\..\raw\vision /SYI > NUL
 xcopy %eventDir%maps ..\..\raw\maps /SYI > NUL
 xcopy %eventDir%openwarfare ..\..\raw\openwarfare /SYI
+xcopy %eventDir%fx ..\..\raw\fx /SYI
 )
 
 echo    Compiling mod...
