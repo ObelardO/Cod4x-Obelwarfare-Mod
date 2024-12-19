@@ -299,22 +299,22 @@ xcopy xmodel ..\..\raw\xmodel /SYI > NUL
 xcopy xmodelparts ..\..\raw\xmodelparts /SYI > NUL
 xcopy xmodelsurfs ..\..\raw\xmodelsurfs /SYI > NUL
 
+echo    Copying OpenWarfare source code...
+xcopy openwarfare ..\..\raw\openwarfare /SYI > NUL
+copy /Y mod.csv ..\..\zone_source > NUL
+copy /Y mod_ignore.csv ..\..\zone_source\%LTARGET%\assetlist > NUL
+
 if not "%eventDir%"=="none" (
 echo    Copying event resources...
 xcopy %eventDir%images ..\..\raw\images /SYI > NUL
 xcopy %eventDir%sound ..\..\raw\sound /SYI > NUL
 xcopy %eventDir%vision ..\..\raw\vision /SYI > NUL
 xcopy %eventDir%maps ..\..\raw\maps /SYI > NUL
+xcopy %eventDir%openwarfare ..\..\raw\openwarfare /SYI
 )
 
-echo    Copying OpenWarfare source code...
-xcopy openwarfare ..\..\raw\openwarfare /SYI > NUL
-copy /Y mod.csv ..\..\zone_source > NUL
-copy /Y mod_ignore.csv ..\..\zone_source\%LTARGET%\assetlist > NUL
-cd ..\..\bin > NUL
-
-
 echo    Compiling mod...
+cd ..\..\bin > NUL
 linker_pc.exe -language %LTARGET% -compress -cleanup mod 
 cd %COMPILEDIR% > NUL
 copy ..\..\zone\%LTARGET%\mod.ff > NUL
