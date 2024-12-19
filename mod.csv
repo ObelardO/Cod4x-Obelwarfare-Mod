@@ -103,6 +103,7 @@ rawfile,openwarfare/maps/mp_showdown_fx.gsc
 rawfile,openwarfare/maps/mp_strike_fx.gsc
 rawfile,openwarfare/maps/mp_vacant_fx.gsc
 
+
 rawfile,vision/ow_night1.vision
 rawfile,vision/ow_night2.vision
 rawfile,vision/ow_night3.vision
@@ -116,6 +117,8 @@ rawfile,vision/ow_sunset2.vision
 rawfile,vision/ow_sunset3.vision
 rawfile,vision/ow_sunset4.vision
 rawfile,vision/default_night.vision
+rawfile,vision/default_day.vision
+
 
 rawfile,maps/mp/_createfx.gsc
 rawfile,maps/mp/_explosive_barrels.gsc
@@ -193,6 +196,12 @@ fx,greed/ui_pickup_green
 fx,greed/ui_pickup_yellow
 fx,greed/ui_pickup_purple
 fx,greed/ui_pickup_red
+fx,weather/snow_light_mp_bloc
+fx,weather/snow_light
+fx,weather/snow_wind
+fx,dust/dust_spiral_runner
+fx,dust/dust_wind_fast
+fx,dust/dust_wind_slow_yel_loop
 #fx,props/american_smoke_grenade_mp
 
 
@@ -274,6 +283,7 @@ rawfile,openwarfare/_clanvsall.gsc
 rawfile,openwarfare/_cyclefpslag.gsc
 rawfile,openwarfare/_damageeffect.gsc
 rawfile,openwarfare/_daycyclesystem.gsc
+rawfile,openwarfare/_daycycleutils.gsc
 rawfile,openwarfare/_disarmexplosives.gsc
 rawfile,openwarfare/_dogtags.gsc
 rawfile,openwarfare/_dvarmonitor.gsc
