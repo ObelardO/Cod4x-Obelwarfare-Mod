@@ -3,6 +3,8 @@ init()
 	level._effect["snow_light"] = loadfx("weather/snow_light_mp_bloc");
 
 	thread snow();
+
+	ambientPlay("ambient_day");
 }
 
 snow()

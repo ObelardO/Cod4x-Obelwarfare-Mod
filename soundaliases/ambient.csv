@@ -1,0 +1,3 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage,center percentage,platform,envelop_min,envelop_max,envelop percentage
+
+ambient_day,,ambient/ambient_day.mp3,1.00,,ambience,,,,,ambient,streamed,,looping,,all_mp,,,,,,amb_front,nowetlevel fulldrylevel,0.3,,!PC
