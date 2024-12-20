@@ -78,6 +78,10 @@ laser_nv()
 			self.laseron = true;
 		}
 
+		//wait (2);
+		//self ExecClientCommand( "+actionslot 1");
+		//wait (0.1);
+
 		self waittill("night_vision_off");
 		self.nvon = false;
 

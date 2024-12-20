@@ -614,6 +614,17 @@ bombs()
 			}
 		}
 
+		for ( i = 0; i < visuals.size; i++ )
+		{
+			if ( isDefined( visuals[i].model ) )
+			{
+				visuals[i].modelscale = 0.5;
+				visuals[i] setModel ("xmas_tree");
+
+				break;
+			}
+		}
+
 		level.bombZones[level.bombZones.size] = bombZone;
 
 		bombZone.bombDefuseTrig = getent( visuals[0].target, "targetname" );
