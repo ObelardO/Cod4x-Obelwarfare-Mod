@@ -263,6 +263,27 @@ material,weapon_knife
 material,animbg_blur_back
 material,nightvision_overlay_goggles
 
+#Xmas mats
+material,holiday_light_snowflake
+material,giftbox_5
+material,giftbox_4
+material,giftbox_3
+material,giftbox_2
+material,giftbox_2_col
+material,giftbox_1_col
+material,classic_santa
+material,pole_stripe
+material,pole_cap
+material,dead_pine_snow_col#0
+material,dead_pine_snow
+material,candy_cane
+material,tree_xmas_pine_unlit#0
+material,holiday_color_lights
+material,holiday_icicle_lights
+material,tree_xmas_pine
+material,icicles_01
+material,snowman
+
 rawfile,mp/CoD2maps.arena
 stringtable,mp/propsTable.csv
 stringtable,mp/rankIconTable.csv
@@ -403,6 +424,19 @@ xmodel,health_obj
 xmodel,hp_medium
 xmodel,iceberg
 xmodel,icebergred
+
+#xmas models
+xmodel,giftbox_5
+xmodel,giftbox_4
+xmodel,giftbox_3
+xmodel,giftbox_2
+xmodel,giftbox_1
+xmodel,santa
+xmodel,north_pole_2
+xmodel,snowman
+xmodel,xmas_tree
+xmodel,candy_cane
+xmodel,dead_pine_snow
 
 weapon,mp/binoculars_mp
 

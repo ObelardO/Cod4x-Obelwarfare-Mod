@@ -311,7 +311,11 @@ xcopy %eventDir%sound ..\..\raw\sound /SYI > NUL
 xcopy %eventDir%vision ..\..\raw\vision /SYI > NUL
 xcopy %eventDir%maps ..\..\raw\maps /SYI > NUL
 xcopy %eventDir%openwarfare ..\..\raw\openwarfare /SYI
-xcopy %eventDir%fx ..\..\raw\fx /SYI
+xcopy %eventDir%material_properties ..\..\raw\material_properties /SYI
+xcopy %eventDir%materials ..\..\raw\materials /SYI
+xcopy %eventDir%xmodelsurfs ..\..\raw\xmodelsurfs /SYI
+xcopy %eventDir%xmodelparts ..\..\raw\xmodelparts /SYI
+xcopy %eventDir%xmodel ..\..\raw\xmodel /SYI
 )
 
 echo    Compiling mod...
