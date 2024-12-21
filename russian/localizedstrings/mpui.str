@@ -1,0 +1,37 @@
+//******************************************************************************
+//  _____                  _    _             __
+// |  _  |                | |  | |           / _|
+// | | | |_ __   ___ _ __ | |  | | __ _ _ __| |_ __ _ _ __ ___
+// | | | | '_ \ / _ \ '_ \| |/\| |/ _` | '__|  _/ _` | '__/ _ \
+// \ \_/ / |_) |  __/ | | \  /\  / (_| | |  | || (_| | | |  __/
+//  \___/| .__/ \___|_| |_|\/  \/ \__,_|_|  |_| \__,_|_|  \___|
+//       | |               We don't make the game you play.
+//       |_|                 We make the game you play BETTER.
+//
+//            Website: http://openwarfaremod.com/
+//******************************************************************************
+
+VERSION          "1"
+CONFIG           "C:\trees\cod3\cod3\bin\StringEd.cfg"
+FILENOTES        ""
+
+//******************************************************************************
+// maps/mp/gametypes/ass.gsc
+//******************************************************************************
+
+REFERENCE BROADCAST
+LANG_RUSSIAN "Телестанция"
+
+REFERENCE CARENTAN
+LANG_RUSSIAN "Чайнатаун"
+
+REFERENCE CREEK
+LANG_RUSSIAN "Бухта"
+
+REFERENCE KILLHOUSE
+LANG_RUSSIAN "Мясорубка"
+
+REFERENCE CRASH_SNOW
+LANG_RUSSIAN "Снежное крушение"
+
+ENDMARKER

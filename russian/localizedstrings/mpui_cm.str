@@ -18,163 +18,193 @@ FILENOTES        ""
 //******************************************************************************
 // maps/mp/gametypes/ass.gsc
 //******************************************************************************
-REFERENCE MP_ATP
-LANG_RUSSIAN "АТП"
-
-REFERENCE MP_BACKLOT_2
-LANG_RUSSIAN "Площадка 2"
-
-REFERENCE MP_BRDO
-LANG_RUSSIAN "Брдо"
-
-REFERENCE MP_BURG_B1
-LANG_RUSSIAN "Бёрг"
-
-REFERENCE MP_CARGO_SHIPMENT
-LANG_RUSSIAN "Мокрое отправление"
-
-REFERENCE MP_CHERNOBYL
-LANG_RUSSIAN "Чернобль"
-
-REFERENCE MP_CRASH3
-LANG_RUSSIAN "Крушение 3"
-
-REFERENCE MP_CROSSFIRE2
-LANG_RUSSIAN "Перестрелка 2"
-
-REFERENCE MP_EFA_THE_TOMB
-LANG_RUSSIAN "Пирамида"
-
-REFERENCE MP_FATAL_MORGANA
-LANG_RUSSIAN "Моргана"
-
-REFERENCE MP_KILLHOUSE_2
-LANG_RUSSIAN "Мясорубка 2"
-
-REFERENCE MP_KOB_BREAKOUT
-LANG_RUSSIAN "Прорыв"
-
-REFERENCE MP_MISSION
-LANG_RUSSIAN "Миссия в Рио"
-
-REFERENCE MP_MTL_THE_ROCK
-LANG_RUSSIAN "Скала"
-
-REFERENCE MP_MW2_UNDERPASS_NIGHT
-LANG_RUSSIAN "Туннель"
-
-REFERENCE MP_OUKHTA
-LANG_RUSSIAN "Охта"
-
-REFERENCE MP_PRIPYAT
-LANG_RUSSIAN "Припять"
-
-REFERENCE MP_RASALEM
-LANG_RUSSIAN "Расалем"
-
-REFERENCE MP_RUSMATA
-LANG_RUSSIAN "Русмата"
-
-REFERENCE MP_SC_HANGAR
-LANG_RUSSIAN "Ангар"
-
-REFERENCE MP_SELO
-LANG_RUSSIAN "Село"
-
-REFERENCE MP_SMALLTOWNX
-LANG_RUSSIAN "Городок"
-
-REFERENCE MP_STEAMLAB
-LANG_RUSSIAN "Лаборатория"
-
-REFERENCE MP_STREAM
-LANG_RUSSIAN "Сток"
-
-REFERENCE MP_STRIKE_2
-LANG_RUSSIAN "Удар 2"
-
-REFERENCE MP_82AB_BOULOGNE4
-LANG_RUSSIAN "Булонь"
-
-REFERENCE MP_VACANT_2
-LANG_RUSSIAN "Офис 2"
 
 REFERENCE MP_WINTER_RASALEM
 LANG_RUSSIAN "Снежный Русалем"
 
-REFERENCE MP_AERODROME
-LANG_RUSSIAN "Аэропорт"
+REFERENCE mp_backlot_snow
+LANG_RUSSIAN "Снежная площадка"
 
-REFERENCE MP_STRUGGLE
-LANG_RUSSIAN "Стычка"
+REFERENCE mp_carentan_snow
+LANG_RUSSIAN "Снежный чайнатаун"
 
-REFERENCE MP_FAV
-LANG_RUSSIAN "Фавела"
+REFERENCE mp_compact
+LANG_RUSSIAN "Автосвалка"
 
-REFERENCE MP_BJWIFI_PORT
-LANG_RUSSIAN "Восточный порт"
+REFERENCE mp_dome_night
+LANG_RUSSIAN "Снежный радар"
 
-REFERENCE MP_WOODRR
-LANG_RUSSIAN "Низина"
+REFERENCE mp_naout_s
+LANG_RUSSIAN "Снежный переулок"
 
-REFERENCE MP_VIADVILLAGE
-LANG_RUSSIAN "Виадук"
+REFERENCE mp_ngbc_shipmentw
+LANG_RUSSIAN "Снежная погрузка"
 
-REFERENCE MP_DESTROYED_VILLAGE
-LANG_RUSSIAN "Руины"
+REFERENCE mp_rd_xmas
+LANG_RUSSIAN "Снежная деревня"
 
-REFERENCE MP_HISAR
-LANG_RUSSIAN "Хисар"
+REFERENCE mp_seatown_snow
+LANG_RUSSIAN "Cнежная крепость"
 
-REFERENCE MP_MONTARGIS4
-LANG_RUSSIAN "Немецкий замок"
+REFERENCE mp_shipment_xmas
+LANG_RUSSIAN "Снежное отправление"
 
-REFERENCE MP_INV
-LANG_RUSSIAN "Вторжение"
+REFERENCE mp_showdown_xmas
+LANG_RUSSIAN "Снежный занавес"
 
-REFERENCE MP_HOUSES
-LANG_RUSSIAN "Дома"
+REFERENCE mp_summit_xmas
+LANG_RUSSIAN "Снежный фуникулёр"
 
-REFERENCE MP_FALLEN
-LANG_RUSSIAN "Промзона"
+REFERENCE mp_vac_2_snow
+LANG_RUSSIAN "Снежный офис"
 
-REFERENCE MP_DOOWOOD
-LANG_RUSSIAN "Топи"
+REFERENCE mp_waw_castle_snow
+LANG_RUSSIAN "Снежный храм"
 
-REFERENCE MP_BO2NUKETOWN
-LANG_RUSSIAN "Дум таун"
 
-REFERENCE MP_NGBC
-LANG_RUSSIAN "Ночная кирха"
 
-REFERENCE MP_NGBC_DAY
-LANG_RUSSIAN "Кирха"
+REFERENCE mp_after_tchernobyl
+LANG_RUSSIAN "После Чернобыля"
 
-REFERENCE MP_NGBC_SHIPMENT
-LANG_RUSSIAN "Порт 1944"
+REFERENCE mp_apesgorod
+LANG_RUSSIAN "Мирный"
 
-REFERENCE MP_ROUNDUP
-LANG_RUSSIAN "Круговая"
+REFERENCE mp_atp
+LANG_RUSSIAN "АТП"
 
-REFERENCE MP_SHIPMENT44
-LANG_RUSSIAN "Отправление 1944"
+REFERENCE mp_blackrock
+LANG_RUSSIAN "Черная скала"
 
-REFERENCE MP_ZASEDA
-LANG_RUSSIAN "Осень"
+REFERENCE mp_bo2nuketown
+LANG_RUSSIAN "Дум-таун"
 
-REFERENCE MP_RESCUE2014
-LANG_RUSSIAN "Эвакуация"
-
-REFERENCE MP_BO2PAINTBALL
+REFERENCE mp_bo2paintball
 LANG_RUSSIAN "Пейнтбол"
 
-REFERENCE MP_HOLLOW
+REFERENCE mp_brdo
+LANG_RUSSIAN "Брдо"
+
+REFERENCE mp_broadcast2
+LANG_RUSSIAN "Новая телестанция"
+
+REFERENCE mp_burg
+LANG_RUSSIAN "Бёрг"
+
+REFERENCE mp_cargo_shipment
+LANG_RUSSIAN "Мокрое отправление"
+
+REFERENCE mp_chernobyl
+LANG_RUSSIAN "Чернобль"
+
+REFERENCE mp_crash_2
+LANG_RUSSIAN "Крушение Ремейк"
+
+REFERENCE mp_crash3
+LANG_RUSSIAN "Новое крушение"
+
+REFERENCE mp_doowood
+LANG_RUSSIAN "Топи"
+
+REFERENCE mp_dust2
+LANG_RUSSIAN "Пыльная"
+
+REFERENCE mp_fabrika
+LANG_RUSSIAN "Фабрика"
+
+REFERENCE mp_fallen
+LANG_RUSSIAN "Промзона"
+
+REFERENCE mp_farmhouse
+LANG_RUSSIAN "Ферма 1944"
+
+REFERENCE mp_hollow
 LANG_RUSSIAN "Окружение"
 
-REFERENCE MP_FR_HV2
-LANG_RUSSIAN "Авиагородок"
+REFERENCE mp_i2
+LANG_RUSSIAN "Рудник"
 
-REFERENCE MP_FARMHOUSE
-LANG_RUSSIAN "Ферма 1944"
+REFERENCE mp_inv
+LANG_RUSSIAN "Вторжение"
+
+REFERENCE mp_mission
+LANG_RUSSIAN "Миссия в Рио"
+
+REFERENCE mp_fatal_morgana
+LANG_RUSSIAN "Моргана"
+
+REFERENCE mp_fav
+LANG_RUSSIAN "Фавела"
+
+REFERENCE mp_hisar
+LANG_RUSSIAN "Хисар"
+
+REFERENCE mp_mw2_rust
+LANG_RUSSIAN "Коррозия"
+
+REFERENCE mp_ngbc
+LANG_RUSSIAN "Ночная кирха"
+
+REFERENCE mp_ngbc_day
+LANG_RUSSIAN "Кирха"
+
+REFERENCE mp_ngbc_shipment
+LANG_RUSSIAN "Погрузка"
+
+REFERENCE mp_oldschool
+LANG_RUSSIAN "Школа"
+
+REFERENCE mp_oukhta
+LANG_RUSSIAN "Охта"
+
+REFERENCE mp_pripyat
+LANG_RUSSIAN "Припять"
+
+REFERENCE mp_rasalem
+LANG_RUSSIAN "Расалем"
+
+REFERENCE mp_rescue2014
+LANG_RUSSIAN "Эвакуация"
+
+REFERENCE mp_ricochet
+LANG_RUSSIAN "Рикошет"
+
+REFERENCE mp_sc_hangar
+LANG_RUSSIAN "Ангар"
+
+REFERENCE mp_sconsegrad
+LANG_RUSSIAN "Арзамас"
+
+REFERENCE mp_selo
+LANG_RUSSIAN "Село"
+
+REFERENCE mp_shipment44
+LANG_RUSSIAN "Отправление 1994"
+
+REFERENCE mp_spbase
+LANG_RUSSIAN "Гарнизон"
+
+REFERENCE mp_steamlab
+LANG_RUSSIAN "Лаборатория"
+
+REFERENCE mp_stream
+LANG_RUSSIAN "Сток"
+
+REFERENCE mp_strike_2
+LANG_RUSSIAN "Удар Ремейк"
+
+REFERENCE mp_struggle
+LANG_RUSSIAN "Стычка"
+
+REFERENCE mp_summit
+LANG_RUSSIAN "Канатная дорога"
+
+REFERENCE mp_uplink
+LANG_RUSSIAN "UPLINK"
+
+REFERENCE mp_vertical
+LANG_RUSSIAN "Холм"
+
+REFERENCE mp_vukovar
+LANG_RUSSIAN "Факел"
 
 ENDMARKER
