@@ -16,11 +16,11 @@ snow()
 
 	snow1 = spawnfx(level._effect["snow_light"], getWeatherOrigin()+(0,0,170));
 	snow2 = spawnfx(level._effect["snow_light"], getWeatherOrigin()+(0,0,140));
-	snow3 = spawnfx(level._effect["snow_light"], getWeatherOrigin()+(0,0,110));
+	//snow3 = spawnfx(level._effect["snow_light"], getWeatherOrigin()+(0,0,110));
 	
 	triggerfx(snow1,-15);
 	triggerfx(snow2,-15);
-	triggerfx(snow3,-15);
+	//triggerfx(snow3,-15);
 }
 /*
 rain()
