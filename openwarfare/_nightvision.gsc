@@ -18,6 +18,9 @@ init()
 {
 	//return;
 
+	//precacheShader("ac130_overlay_25mm");
+	precacheShader("ac130_overlay_grain");
+
 	level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
 }
 
@@ -31,7 +34,8 @@ onPlayerConnected()
 	self thread addNewEvent( "joined_spectators", ::onJoinedSpectators );
 	self thread addNewEvent( "onPlayerDeath", ::onPlayerDeath );
 
-	self setClientDvars("cg_laserforceon", 0);
+	self setClientDvar("cg_laserforceon", 0);
+	self setClientDvar("cg_fovscale", 1);
 }
 
 onPlayerSpawned()
@@ -39,7 +43,13 @@ onPlayerSpawned()
 	self.nvon = false;
 	self.laseron = false;
 
-	self setClientDvars("cg_laserforceon", 0);
+	self setClientDvar("cg_laserforceon", 0);
+	self setClientDvar("cg_fovscale", 1);
+
+	if(isDefined(self.grainOverlay))
+	{
+		self.grainOverlay.alpha = 0.0;
+	}
 }
 
 onJoinedSpectators()
@@ -47,9 +57,15 @@ onJoinedSpectators()
 	self.nvon = false;
 	self.laseron = false;
 
-	self setClientDvars("cg_laserforceon", 0);
+	self setClientDvar("cg_laserforceon", 0);
+	self setClientDvar("cg_fovscale", 1);
 
 	//self iPrintlnBold("^2NABLUDENIE");
+
+	if(isDefined(self.grainOverlay))
+	{
+		self.grainOverlay.alpha = 0.0;
+	}
 }
 
 onPlayerDeath()
@@ -57,9 +73,15 @@ onPlayerDeath()
 	self.nvon = false;
 	self.laseron = false;
 
-	self setClientDvars("cg_laserforceon", 0);
+	self setClientDvar("cg_laserforceon", 0);
+	self setClientDvar("cg_fovscale", 1);
 
 	//self iPrintlnBold("^2DEATH");
+
+	if(isDefined(self.grainOverlay))
+	{
+		self.grainOverlay.alpha = 0.0;
+	}
 }
 
 
@@ -75,7 +97,26 @@ laser_nv()
 		if(!self.laseron)
 		{
 			self setClientDvar("cg_laserforceon", 1);
+			self setClientDvar("cg_fovscale", 0.85);
 			self.laseron = true;
+		}
+
+		if(!isDefined(self.grainOverlay))
+		{
+			self.grainOverlay = newClientHudElem( self );
+			self.grainOverlay.x = 0;
+			self.grainOverlay.y = 0;
+			self.grainOverlay.alignX = "left";
+			self.grainOverlay.alignY = "top";
+			self.grainOverlay.horzAlign = "fullscreen";
+			self.grainOverlay.vertAlign = "fullscreen";
+			self.grainOverlay setshader ("ac130_overlay_grain", 640, 480);
+			self.grainOverlay.alpha = 0.4;
+			self.grainOverlay.sort = -100;
+		}
+		else
+		{
+			self.grainOverlay.alpha = 0.3;
 		}
 
 		//wait (2);
@@ -88,7 +129,13 @@ laser_nv()
 		if(self.laseron)
 		{
 			self setClientDvar("cg_laserforceon", 0);
+			self setClientDvar("cg_fovscale", 1);
 			self.laseron = false;
+		}
+
+		if(isDefined(self.grainOverlay))
+		{
+			self.grainOverlay.alpha = 0.0;
 		}
 	}
 }
