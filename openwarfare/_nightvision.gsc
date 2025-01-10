@@ -26,97 +26,78 @@ init()
 
 onPlayerConnected()
 {
-	self.nvon = false;
-	self.laseron = false;
+	self makeNightVisionHud();
+	self resetNightVision();
 
-	self thread laser_nv();
+	self thread switchNightVisionThread();
 	self thread addNewEvent( "onPlayerSpawned", ::onPlayerSpawned );
 	self thread addNewEvent( "joined_spectators", ::onJoinedSpectators );
 	self thread addNewEvent( "onPlayerDeath", ::onPlayerDeath );
+}
+
+resetNightVision()
+{
+	self.nvon = false;
+	self.laseron = false;
 
 	self setClientDvar("cg_laserforceon", 0);
 	self setClientDvar("cg_fovscale", 1);
+
+	if(isDefined(self.grainOverlay))
+	{
+		self.grainOverlay.alpha = 0.0;
+	}
+}
+
+makeNightVisionHud()
+{
+	self.grainOverlay = newClientHudElem( self );
+	self.grainOverlay.x = 0;
+	self.grainOverlay.y = 0;
+	self.grainOverlay.alignX = "left";
+	self.grainOverlay.alignY = "top";
+	self.grainOverlay.horzAlign = "fullscreen";
+	self.grainOverlay.vertAlign = "fullscreen";
+	self.grainOverlay setshader ("ac130_overlay_grain", 640, 480);
+	self.grainOverlay.alpha = 0.0;
+	self.grainOverlay.sort = -1000;
 }
 
 onPlayerSpawned()
 {
-	self.nvon = false;
-	self.laseron = false;
-
-	self setClientDvar("cg_laserforceon", 0);
-	self setClientDvar("cg_fovscale", 1);
-
-	if(isDefined(self.grainOverlay))
-	{
-		self.grainOverlay.alpha = 0.0;
-	}
+	self resetNightVision();
 }
 
 onJoinedSpectators()
 {
-	self.nvon = false;
-	self.laseron = false;
-
-	self setClientDvar("cg_laserforceon", 0);
-	self setClientDvar("cg_fovscale", 1);
-
-	//self iPrintlnBold("^2NABLUDENIE");
-
-	if(isDefined(self.grainOverlay))
-	{
-		self.grainOverlay.alpha = 0.0;
-	}
+	self resetNightVision();
 }
 
 onPlayerDeath()
 {
-	self.nvon = false;
-	self.laseron = false;
-
-	self setClientDvar("cg_laserforceon", 0);
-	self setClientDvar("cg_fovscale", 1);
-
-	//self iPrintlnBold("^2DEATH");
-
-	if(isDefined(self.grainOverlay))
-	{
-		self.grainOverlay.alpha = 0.0;
-	}
+	self resetNightVision();
 }
 
-
-laser_nv()
+switchNightVisionThread()
 {
 	self endon("disconnect");
 
 	for(;;)
 	{
 		self waittill("night_vision_on");
-		self.nvon = true;
 
-		if(!self.laseron)
+		if(!self.nvon)
 		{
-			self setClientDvar("cg_laserforceon", 1);
-			self setClientDvar("cg_fovscale", 0.85);
+			self.nvon = true;
 			self.laseron = true;
-		}
 
-		if(!isDefined(self.grainOverlay))
-		{
-			self.grainOverlay = newClientHudElem( self );
-			self.grainOverlay.x = 0;
-			self.grainOverlay.y = 0;
-			self.grainOverlay.alignX = "left";
-			self.grainOverlay.alignY = "top";
-			self.grainOverlay.horzAlign = "fullscreen";
-			self.grainOverlay.vertAlign = "fullscreen";
-			self.grainOverlay setshader ("ac130_overlay_grain", 640, 480);
-			self.grainOverlay.alpha = 0.4;
-			self.grainOverlay.sort = -100;
-		}
-		else
-		{
-			self.grainOverlay.alpha = 0.3;
+			self setClientDvar("cg_laserforceon", 1);
+			self setClientDvar("cg_fovscale", 0.9);
+			
+			if(isDefined(self.grainOverlay))
+			{
+				self.grainOverlay.alpha = 0.2;
+			}
 		}
 
 		//wait (2);
@@ -124,18 +105,7 @@ laser_nv()
 		//wait (0.1);
 
 		self waittill("night_vision_off");
-		self.nvon = false;
 
-		if(self.laseron)
-		{
-			self setClientDvar("cg_laserforceon", 0);
-			self setClientDvar("cg_fovscale", 1);
-			self.laseron = false;
-		}
-
-		if(isDefined(self.grainOverlay))
-		{
-			self.grainOverlay.alpha = 0.0;
-		}
+		resetNightVision();
 	}
 }
