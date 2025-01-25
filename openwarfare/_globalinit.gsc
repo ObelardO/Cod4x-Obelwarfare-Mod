@@ -92,6 +92,7 @@ init()
 	thread openwarfare\_nightvision::init();
 	thread openwarfare\_greetings::init();
 	thread openwarfare\_weather::init();
+	thread openwarfare\_ping::init();
 }
 
 

@@ -131,7 +131,12 @@ onMenuResponse()
 						self iprintln( &"OW_AACP_NOTENABLED" );
 					}
 					break;		
-												
+					
+				case "ping":
+
+					self thread openwarfare\_ping::pingRightNow();
+					break;
+
 				default:
 					break;
 			}

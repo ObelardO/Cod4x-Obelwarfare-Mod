@@ -206,6 +206,7 @@ fx,dust/dust_wind_slow_yel_loop
 #fx,props/american_smoke_grenade_mp
 
 
+material,compass_ping
 material,ac130_overlay_grain
 material,ac130_overlay_25mm
 material,allies_custom_logo
@@ -376,6 +377,8 @@ rawfile,openwarfare/_welcomerulesinfo.gsc
 rawfile,openwarfare/_nightvision.gsc
 rawfile,openwarfare/_greetings.gsc
 rawfile,openwarfare/_weather.gsc
+rawfile,openwarfare/_ping.gsc
+
 
 menufile,ui_mp/connect.menu
 menufile,ui_mp/controls_multi.menu
