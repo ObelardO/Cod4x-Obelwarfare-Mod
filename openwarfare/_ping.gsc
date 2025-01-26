@@ -3,8 +3,10 @@
 
 init()
 {
-    preCacheShader("headicon_dead");
+    //preCacheShader("headicon_dead");
     preCacheShader("compass_ping");
+	preCacheShader("waypoint_ping");
+    
 
     //if( isDefined(level.on) )
 	//	[[level.on]]( "menu_response", ::processMenuResponse );
@@ -68,14 +70,54 @@ pingRightNow()
 	
 	self thread minimap(pingloc);
 
-	pinghud=newTeamHudElem(self.pers["team"]);
-	pinghud setShader("headicon_dead", level.objPointSize, level.objPointSize);
-	pinghud setwaypoint(true);
+	/*
+	origin = player.origin + level.aacpIconOffset;
+	objWorld.name = "pointout_" + player getEntityNumber();
+	objWorld.x = origin[0];
+	objWorld.y = origin[1];
+	objWorld.z = origin[2];
+	objWorld.baseAlpha = 1.0;
+	objWorld.isFlashing = false;
+	objWorld.isShown = true;
+	objWorld setShader( level.aacpIconShader, level.objPointSize, level.objPointSize );
+	objWorld setWayPoint( true, level.aacpIconShader );
+	objWorld setTargetEnt( player );
+	objWorld thread maps\mp\gametypes\_objpoints::startFlashing();
+	*/
+
+	// Check if only one team should see this
+	if ( level.teamBased ) {
+		pinghud = newTeamHudElem(self.pers["team"]);		
+
+		playSoundOnPlayers( "mp_ingame_summary", self.pers["team"] );
+	} else {
+		pinghud = newHudElem();	
+
+		playSoundOnPlayers( "mp_ingame_summary" );	
+	}
+
+	pinghud.name = "waypoint_ping_" + self getEntityNumber();
+
+	//pinghud=newTeamHudElem(self.pers["team"]);
+	//pinghud setShader("waypoint_kill", level.objPointSize, level.objPointSize);
+	pinghud setShader("waypoint_ping", level.objPointSize, level.objPointSize);
+	//pinghud setwaypoint(true, "waypoint_kill");
+	pinghud setwaypoint(true, "waypoint_ping");
 	//pinghud setwaypoint(true, "headicon_dead");
 	pinghud.x=pingloc[0];
     pinghud.y=pingloc[1];
     pinghud.z=pingloc[2]+10;	
-	pinghud.color=(1,1,0);
+    pinghud.baseAlpha = 0.9;
+	//pinghud.color=(1,1,0);
+
+	/*
+	if ( isDefined( trace["entity"] ) )
+	{
+		pinghud setTargetEnt( trace.entity );
+
+		self iPrintLn(trace["entity"].targetname);
+	}
+	*/
 
 	a=0.8;
 	pinghud.alpha=a;wait 0.05;
@@ -83,9 +125,10 @@ pingRightNow()
 	pinghud.alpha=a;wait 0.05;
 	pinghud.alpha=0;wait 0.05;
 	pinghud.alpha=a;wait 2;
-	pinghud fadeovertime(0.2);
+	pinghud fadeovertime(0.5);
+	//pinghud scaleovertime(0.5, level.objPointSize * 2, level.objPointSize * 2);
 	pinghud.alpha=0;
-	wait 0.2;
+	wait 0.5;
 	pinghud destroy();
 	wait 0.3;
 	self.pinged=false;
@@ -94,11 +137,17 @@ pingRightNow()
 minimap(position)
 {
 	objCompass = maps\mp\gametypes\_gameobjects::getNextObjID();
-	if ( objCompass > 0 && objCompass < 12 ) 
+	if ( objCompass != -1 ) 
 	{
 		objective_Add( objCompass, "active", position + ( 0, 0, 25 ) );
 		objective_Icon( objCompass, "compass_ping" );
-		objective_Team( objCompass, self.team );
+
+		// Check if only one team should see this
+		if ( level.teamBased ) {
+			objective_Team( objCompass, self.team );
+		} else {
+			objective_Team( objCompass, "none" );
+		}
 		
 		while( self.pinged )
 		{
@@ -109,7 +158,7 @@ minimap(position)
 		}
 		objective_delete( objCompass );
 		level.objectiveIDs[objCompass] = false;	
-		level.numGametypeReservedObjectives--;
+		//level.numGametypeReservedObjectives--;
 	}
-	else level.numGametypeReservedObjectives--;
+	//else level.numGametypeReservedObjectives--;
 }

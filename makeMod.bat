@@ -7,7 +7,7 @@ REM //**************************************************************************
 
 @echo off
 set COMPILEDIR=%CD%
-set color=1e
+set color=0E
 color %color%
 
 :START

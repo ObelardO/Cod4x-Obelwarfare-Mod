@@ -266,6 +266,8 @@ material,waypoint_extraction_zone
 material,weapon_knife
 material,animbg_blur_back
 material,nightvision_overlay_goggles
+material,waypoint_ping
+
 
 #Xmas mats
 material,holiday_light_snowflake
