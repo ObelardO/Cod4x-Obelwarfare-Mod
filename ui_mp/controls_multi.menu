@@ -102,7 +102,7 @@
 		CHOICE_BIND( 39, "@OW_TIMEOUT_CALL", "openScriptMenu modkeybind calltimeout", ; )
 		CHOICE_BIND( 40, "@OW_CYCLE_FPSLAG", "openScriptMenu modkeybind cyclefpslag", ; )
 		CHOICE_BIND( 41, "@OW_AACP_MENU", "openScriptMenu modkeybind advancedacp", ; )	
-		CHOICE_BIND( 42, "TEST PING", "openScriptMenu modkeybind ping", ; )	
+		CHOICE_BIND( 42, "@OW_PING", "openScriptMenu modkeybind ping", ; )	
 
 
 		CHOICE_KEYBINDHELP
