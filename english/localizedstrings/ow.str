@@ -1262,6 +1262,9 @@ LANG_ENGLISH "Zoom Out"
 REFERENCE STATS_TOGGLE
 LANG_ENGLISH "Toggle Statistics"
 
+REFERENCE PING
+LANG_ENGLISH "Place marker"
+
 
 //******************************************************************************
 // ui_mp/hud.menu
