@@ -121,6 +121,9 @@ rawfile,vision/default_night.vision
 rawfile,vision/default_day.vision
 
 
+rawfile,shock/nightvision.shock
+
+
 rawfile,maps/mp/_createfx.gsc
 rawfile,maps/mp/_explosive_barrels.gsc
 rawfile,maps/mp/_flashgrenades.gsc

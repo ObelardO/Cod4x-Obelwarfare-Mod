@@ -298,6 +298,7 @@ xcopy xanim ..\..\raw\xanim /SYI > NUL
 xcopy xmodel ..\..\raw\xmodel /SYI > NUL
 xcopy xmodelparts ..\..\raw\xmodelparts /SYI > NUL
 xcopy xmodelsurfs ..\..\raw\xmodelsurfs /SYI > NUL
+xcopy shock ..\..\raw\shock /SYI > NUL
 
 echo    Copying OpenWarfare source code...
 xcopy openwarfare ..\..\raw\openwarfare /SYI > NUL

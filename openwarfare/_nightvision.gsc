@@ -21,6 +21,8 @@ init()
 	//precacheShader("ac130_overlay_25mm");
 	precacheShader("ac130_overlay_grain");
 
+	PreCacheShellShock("nightvision");
+
 	level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
 }
 
@@ -100,11 +102,15 @@ switchNightVisionThread()
 			}
 		}
 
+		self ShellShock("nightvision", 60);
+
 		//wait (2);
 		//self ExecClientCommand( "+actionslot 1");
 		//wait (0.1);
 
 		self waittill("night_vision_off");
+
+		self StopShellShock();
 
 		resetNightVision();
 	}
