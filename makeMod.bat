@@ -310,12 +310,12 @@ xcopy %eventDir%images ..\..\raw\images /SYI > NUL
 xcopy %eventDir%sound ..\..\raw\sound /SYI > NUL
 xcopy %eventDir%vision ..\..\raw\vision /SYI > NUL
 xcopy %eventDir%maps ..\..\raw\maps /SYI > NUL
-xcopy %eventDir%openwarfare ..\..\raw\openwarfare /SYI
-xcopy %eventDir%material_properties ..\..\raw\material_properties /SYI
-xcopy %eventDir%materials ..\..\raw\materials /SYI
-xcopy %eventDir%xmodelsurfs ..\..\raw\xmodelsurfs /SYI
-xcopy %eventDir%xmodelparts ..\..\raw\xmodelparts /SYI
-xcopy %eventDir%xmodel ..\..\raw\xmodel /SYI
+xcopy %eventDir%openwarfare ..\..\raw\openwarfare /SYI > NUL
+xcopy %eventDir%material_properties ..\..\raw\material_properties /SYI > NUL
+xcopy %eventDir%materials ..\..\raw\materials /SYI > NUL
+xcopy %eventDir%xmodelsurfs ..\..\raw\xmodelsurfs /SYI > NUL
+xcopy %eventDir%xmodelparts ..\..\raw\xmodelparts /SYI > NUL
+xcopy %eventDir%xmodel ..\..\raw\xmodel /SYI > NUL
 )
 
 echo    Compiling mod...
