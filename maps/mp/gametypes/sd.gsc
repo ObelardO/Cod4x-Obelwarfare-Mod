@@ -488,6 +488,7 @@ giveLastAttackerWarning()
 	self endon("death");
 	self endon("disconnect");
 
+	/*	WTF?! There is no notification sometimes becase this strange thing don't allow it
 	fullHealthTime = 0;
 	interval = .05;
 
@@ -503,6 +504,7 @@ giveLastAttackerWarning()
 		if (self.health == self.maxhealth && fullHealthTime >= 3)
 			break;
 	}
+	*/
 
 	//self iprintlnbold(&"MP_YOU_ARE_THE_ONLY_REMAINING_PLAYER");
 	self maps\mp\gametypes\_globallogic::leaderDialogOnPlayer( "last_alive" );
@@ -819,10 +821,14 @@ onDrop( player )
 
 	self maps\mp\gametypes\_gameobjects::set3DIcon( "friendly", "waypoint_bomb" );
 	
-	if ( isDefined( player ) && player.pers["team"] == game["attackers"] )
-		maps\mp\_utility::playSoundOnPlayers( game["bomb_dropped_sound"], game["attackers"] );
-	else if ( isDefined( player ) )
- 	    player playSoundToPlayer( game["bomb_dropped_sound"], player );
+	if ( isDefined( player ) )
+ 	{
+ 		carryTeam = undefined;
+
+ 		if ( player.pers["team"] == game["attackers"] ) carryTeam = game["attackers"];
+
+ 		maps\mp\_utility::playSoundOnPlayers( game["bomb_dropped_sound"], carryTeam );
+ 	}
 }
 
 
@@ -834,8 +840,18 @@ onPickup( player )
 		player.statusicon = "hud_status_bomb";
 	}
 
-	if ( isDefined( player ) && player.pers["team"] == game["defenders"] && level.scr_sd_allow_defender_explosivedestroy )
-		player iprintln( &"OW_DESTROY_EXPLOSIVES" );
+	if ( isDefined( player ) && player.pers["team"] == game["defenders"] ) {
+		
+		maps\mp\gametypes\_globallogic::leaderDialog( "bomb_lost", game["attackers"] );
+		maps\mp\gametypes\_globallogic::leaderDialog( "bomb_taken", game["defenders"] );
+		
+		printBoldOnTeam( &"OW_EXPLOSIVES_STOLEN", game["attackers"]);
+
+		if ( level.scr_sd_allow_defender_explosivedestroy == 1 )
+		{
+			player iprintlnbold( &"OW_DESTROY_EXPLOSIVES" );
+		}
+	}
  	 
 	if ( isDefined( player ) && player.pers["team"] == game["attackers"] )
 		self maps\mp\gametypes\_gameobjects::set3DIcon( "friendly", "waypoint_defend" );
@@ -848,10 +864,15 @@ onPickup( player )
 		maps\mp\gametypes\_globallogic::leaderDialog( "bomb_taken", player.pers["team"] );
 		player logString( "bomb taken" );
 	}
-	if ( isDefined( player ) && player.pers["team"] == game["attackers"] )
-		maps\mp\_utility::playSoundOnPlayers( game["bomb_recovered_sound"], game["attackers"] );
-	else if ( isDefined( player ) )
- 	  player playSoundToPlayer( game["bomb_recovered_sound"], player );
+
+ 	if ( isDefined( player ) )
+ 	{
+ 		carryTeam = undefined;
+
+ 		if ( player.pers["team"] == game["attackers"] ) carryTeam = game["attackers"];
+
+ 		maps\mp\_utility::playSoundOnPlayers( game["bomb_recovered_sound"], carryTeam );
+ 	}
 }
 
 

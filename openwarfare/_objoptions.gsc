@@ -412,7 +412,7 @@ allowDefenderExplosiveDestroy()
       if ( startTime == 0 )
       {
         if ( level.scr_sd_allow_defender_explosivedestroy_sound )
-          playSoundOnPlayers( "mp_ingame_summary", game["attackers"] );
+          playSoundOnPlayers( "mp_bomb_defuse", game["attackers"] );
         wait( 0.5 ); //Give time for melee animation to finish
         if ( self meleeButtonpressed() )
         {
@@ -474,6 +474,8 @@ allowDefenderExplosiveDestroy()
   
   if ( !level.bombPlanted && !level.gameEnded && level.scr_sd_allow_defender_explosivedestroy_win )
   {
+    maps\mp\gametypes\_globallogic::leaderDialog( "bomb_defused" );
+
     setGameEndTime( 0 );
     maps\mp\gametypes\sd::sd_endGame( game["defenders"], &"OW_EXPLOSIVES_DESTROYED" );
 
