@@ -49,6 +49,9 @@ resetNightVision()
 	{
 		self.grainOverlay.alpha = 0.0;
 	}
+
+	self notify ("nightvision_shellshock_off");
+	self StopShellShock();
 }
 
 makeNightVisionHud()
@@ -100,9 +103,9 @@ switchNightVisionThread()
 			{
 				self.grainOverlay.alpha = 0.2;
 			}
-		}
 
-		self ShellShock("nightvision", 60);
+			self thread doShellshock();
+		}
 
 		//wait (2);
 		//self ExecClientCommand( "+actionslot 1");
@@ -110,8 +113,20 @@ switchNightVisionThread()
 
 		self waittill("night_vision_off");
 
-		self StopShellShock();
+		self resetNightVision();
+	}
+}
 
-		resetNightVision();
+doShellshock()
+{
+	self endon( "nightvision_shellshock_off" );
+
+	for (;;)
+	{
+		duration = 10;
+		self shellshock( "nightvision", duration );
+		wait 0.1;
+		self AllowSprint (true);
+		wait duration;
 	}
 }
