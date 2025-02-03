@@ -175,8 +175,8 @@ dayCycleSounds( dayCycle )
 
 setFog(index, count, isFogOnStart, isFogOnEnd, fogTime, fogClr)
 {
-	FOG_MIN_DIST_ON = 30;
-	FOG_MIN_DIST_OFF = 350;
+	FOG_MIN_DIST_ON = 0;
+	FOG_MIN_DIST_OFF = 500;
 
 	FOG_MAX_DIST_ON = 200;
 	FOG_MAX_DIST_OFF = 5000;

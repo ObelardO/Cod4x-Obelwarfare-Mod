@@ -20,44 +20,49 @@
 
 init()
 {
-
-	//level.nightVisionFX = loadfx ("nv/light_white_big");
-	//level.nightVisionFX = loadfx ("explosions/clusterbomb");
-
-
-	level._effect["test_nv_fx"] = loadfx( "nv/light_white_big" );
-
-
-	//return;
-
-	//precacheShader("ac130_overlay_25mm");
+	level._effect["nv_light"] = loadfx( "nv/light_white_big" );
 	precacheShader("ac130_overlay_grain");
-
 	PreCacheShellShock("nightvision");
 
 	level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
-
-	//level.lightFXAass25 = loadfx ("nv/light_white_big");
-	//level.nightvision_entity = spawn("script_model", (0, 0, -2000));
-	//level.nightvision_entity setModel("tag_origin");
-	//wait 0.05;
-	
-
 }
+
 
 onPlayerConnected()
 {
 	self makeNightVisionHud();
 	self resetNightVision();
 
-	self thread switchNightVisionThread();
 	self thread addNewEvent( "onPlayerSpawned", ::onPlayerSpawned );
 	self thread addNewEvent( "joined_spectators", ::onJoinedSpectators );
 	self thread addNewEvent( "onPlayerDeath", ::onPlayerDeath );
 }
 
+
+onPlayerSpawned()
+{
+	self resetNightVision();
+	self spawnNightVisionEffects();
+	self thread switchNightVisionThread();
+}
+
+
+onJoinedSpectators()
+{
+	forceDisableAll();
+}
+
+
+onPlayerDeath()
+{
+	forceDisableAll();
+}
+
+
 resetNightVision()
 {
+	self notify ("nv_stop_updating_shock");
+
 	self.nvon = false;
 	self.laseron = false;
 
@@ -69,15 +74,15 @@ resetNightVision()
 		self.grainOverlay.alpha = 0.0;
 	}
 
-	self notify ("nightvision_shellshock_off");
 	self StopShellShock();
 
-	if (isDefined(self.nightvision_entity))
+	if (isDefined(self.nightvisionLightEnt))
 	{
-		self.nightvision_entity Unlink();
-		self.nightvision_entity.origin = (0, 0, -2000);
+		self.nightvisionLightEnt Unlink();
+		self.nightvisionLightEnt.origin = (0, 0, -2000);
 	}
 }
+
 
 makeNightVisionHud()
 {
@@ -93,43 +98,41 @@ makeNightVisionHud()
 	self.grainOverlay.sort = -1000;
 }
 
-onPlayerSpawned()
+
+spawnNightVisionEffects()
 {
-	self.nightvision_entity = spawn("script_model", (0, 0, -2000));
-	self.nightvision_entity setModel("tag_origin");
-	wait 0.05;
-	//playFxOnTag(level._effect["test_nv_fx"], self.nightvision_entity, "tag_origin");
-	self.nightvision_entity Hide();
-	self.nightvision_effect_played = false;
-
-	self resetNightVision();
-}
-
-onJoinedSpectators()
-{
-	self resetNightVision();
-
-	if (isDefined(self.nightvision_entity))
+	if (!isDefined(self.nightvisionLightEnt))
 	{
-		self.nightvision_entity Delete();
-		self.nightvision_effect_played = false;
+		self.nightvisionLightEnt = spawn("script_model", (0, 0, -2000));
+		self.nightvisionLightEnt setModel("tag_origin");
+		self.nightvisionLightEnt Hide();
+		self.nightvisionLightFXPlayed = false;
 	}
 }
 
-onPlayerDeath()
-{
-	self resetNightVision();
 
-	if (isDefined(self.nightvision_entity))
+deleteNightVisionEffects()
+{
+	if (isDefined(self.nightvisionLightEnt))
 	{
-		self.nightvision_entity Delete();
-		self.nightvision_effect_played = false;
+		self.nightvisionLightEnt Delete();
+		self.nightvisionLightFXPlayed = false;
 	}
 }
+
+
+forceDisableAll()
+{
+	self notify ("nv_stop_updating_switch");
+	self resetNightVision();
+	self deleteNightVisionEffects();
+}
+
 
 switchNightVisionThread()
 {
-	self endon("disconnect");
+	self endon( "disconnect" );
+	self endon( "nv_stop_updating_switch" );
 
 	for(;;)
 	{
@@ -148,41 +151,24 @@ switchNightVisionThread()
 				self.grainOverlay.alpha = 0.2;
 			}
 
-			self thread doShellshock();
+			self thread UpdateShellshockThread();
 
-			if (isDefined(self.nightvision_entity))
+			if (isDefined(self.nightvisionLightEnt))
 			{
-				self.nightvision_entity.origin = self getTagOrigin( "j_neck" ) + ( 0, 0, 6 );
-				self.nightvision_entity linkto(self);
-				self.nightvision_entity ShowToPlayer(self);
+				self.nightvisionLightEnt.origin = self GetEye() + ( 0, 0, 50 );
+				self.nightvisionLightEnt linkto(self);
+				self.nightvisionLightEnt ShowToPlayer(self);
 
-				if (!self.nightvision_effect_played)
+				if (!self.nightvisionLightFXPlayed)
 				{
-					wait 0.2;
-					playFxOnTag(level._effect["test_nv_fx"], self.nightvision_entity, "tag_origin");
-					self.nightvision_effect_played = true;
+					wait 0.1;
+					playFxOnTag(level._effect["nv_light"], self.nightvisionLightEnt, "tag_origin");
+					self.nightvisionLightFXPlayed = true;
 				}
-				
 			}
-
-			//playFxOnTag(level._effect["test_nv_fx"], level.nightvision_entity, "tag_origin");
-
-			/*
-			playfx( level._effect["test_nv_fx"], self.origin );
-
-			if(!isDefined(self.nightVisionModel))
-			{
-				self.nightVisionModel = spawn( "script_model", self getTagOrigin( "j_neck" ) + ( 0, 0, 6 ));
-		 		self.nightVisionModel setModel( "tag_origin" );
-		 		self.nightVisionModel linkto( self );
-
-				//self.nightVisionModel.origin = self getTagOrigin( "j_neck" ) + ( 0, 0, 6 );
-				//self.nightVisionModel linkto("j_neck");
-				playfxontag( level.nightVisionFX, self.nightVisionModel, "tag_origin" );
-			}
-			*/
 		}
 
+		// TODO: battary logic here
 		//wait (2);
 		//self ExecClientCommand( "+actionslot 1");
 		//wait (0.1);
@@ -193,9 +179,10 @@ switchNightVisionThread()
 	}
 }
 
-doShellshock()
+
+UpdateShellshockThread()
 {
-	self endon( "nightvision_shellshock_off" );
+	self endon( "nv_stop_updating_shock" );
 
 	for (;;)
 	{

@@ -4,8 +4,8 @@ r_filmDesaturation "0.5"
 r_filmInvert "0"
 
 r_filmBrightness "0.35"
-r_filmLightTint           "1.380 1.704 1.876"
-r_filmDarkTint            "0.0627 0.7255 0.6431"
+r_filmLightTint           "1.180 1.804 1.776"
+r_filmDarkTint            "0.0627 0.8255 0.6431"
 
 
 r_glow                    "1"
