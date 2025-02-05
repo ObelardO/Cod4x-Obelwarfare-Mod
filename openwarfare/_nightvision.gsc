@@ -143,6 +143,18 @@ switchNightVisionThread()
 			self.nvon = true;
 			self.laseron = true;
 
+			// Laser visual improvements
+			self setClientDvar("cg_laserEndOffset", "0.5");
+			self setClientDvar("cg_laserFlarePct", "0.2");
+			self setClientDvar("cg_laserLight", "1");
+			self setClientDvar("cg_laserLightBeginOffset", "13");
+			self setClientDvar("cg_laserLightBodyTweak", "15");
+			self setClientDvar("cg_laserLightEndOffset", "-3");
+			self setClientDvar("cg_laserLightRadius", "1.7");
+			self setClientDvar("cg_laserRadius", "0.5");
+			self setClientDvar("cg_laserRange","500");
+			self setClientDvar("cg_laserRangePlayer", "500");
+
 			self setClientDvar("cg_laserforceon", 1);
 			self setClientDvar("cg_fovscale", 0.9);
 			
