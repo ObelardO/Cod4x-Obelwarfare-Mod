@@ -17,6 +17,9 @@
 
 init()
 {
+	precacheMenu("dynamic_attachments");
+
+
 	// Get the main module's dvar
 	level.scr_dynamic_attachments_enable = getdvarx( "scr_dynamic_attachments_enable", "int", 0, 0, 3 );
 
@@ -26,7 +29,16 @@ init()
 
 	precacheString( &"OW_DYNATTACH_INSTALLING" );
 	precacheString( &"OW_DYNATTACH_INSTALLED" );
+	precacheString( &"OW_DYNATTACH_INSTALL_ERROR" );
 	precacheString( &"OW_DYNATTACH_REMOVED_ALL" );
+
+	precacheString( &"OW_DYNATTACH_MENU_INSTALL" );
+	precacheString( &"OW_DYNATTACH_MENU_1_SILENCER" );
+	precacheString( &"OW_DYNATTACH_MENU_2_REFLEX" );
+	precacheString( &"OW_DYNATTACH_MENU_3_ACOG" );
+	precacheString( &"OW_DYNATTACH_MENU_4_REMOVE" );
+	precacheString( &"OW_DYNATTACH_MENU_BACK" );
+
 	precacheString( &"MPUI_SILENCER" );
 	precacheString( &"MPUI_RED_DOT_SIGHT" );
 	precacheString( &"MPUI_ACOG_SCOPE" );
@@ -71,11 +83,18 @@ onPlayerKilled()
 	}
 }
 
-attachDetachAttachment()
+
+openDynamicAttachmentsMenu()
+{
+	self OpenMenuNoMouse("dynamic_attachments");
+}
+
+
+installAttachment( newAttachment )
 {
 	self endon("disconnect");
 	self endon("death");
-	level endon( "game_ended" );
+	level endon("game_ended");
 
 	// Make sure this module is active
 	if ( level.scr_dynamic_attachments_enable == 0 || !isAlive(self) )
@@ -88,11 +107,13 @@ attachDetachAttachment()
 	currentWeapon = self getCurrentWeapon();
 	attachment = getWeaponAttachment( currentWeapon );
 	baseWeapon = getWeaponWithoutAttachments ( currentWeapon, attachment );
-	newAttachment = "";
 	newAttachmentName = "";
 	
+	// Alias for direct function call from menus
+	if (newAttachment == "none") newAttachment = "";
+
 	// Get next attachment 
-	if (level.scr_dynamic_attachments_enable > 0)
+	if (newAttachment == "next")
 	{
 		attachmentDetected = false;
 
@@ -108,6 +129,18 @@ attachDetachAttachment()
 				break;
 			}
 		}
+	}
+	// Get specifited attachment
+	else if (isWeaponValidForAttachment(currentWeapon, baseWeapon, newAttachment))
+	{
+		newAttachmentName = getWeaponAttachmentName( newAttachment );
+	}
+	// Specifited attachment is not supported on this weapon
+	else if (newAttachment != "")
+	{
+		newAttachmentName = getWeaponAttachmentName( newAttachment );
+		self iprintln( &"OW_DYNATTACH_INSTALL_ERROR", newAttachmentName );
+		return;
 	}
 
 	/* Debug output
@@ -196,6 +229,20 @@ getWeaponAttachment( currentWeapon )
 }
 
 
+getWeaponAttachmentName( attachment )
+{	
+	for ( i = 1; i <= level.scr_dynamic_attachments_enable; i++ )
+	{
+		if ( level.attachments[i]["tag"] == attachment )
+		{
+			return level.attachments[i]["name"];
+		}
+	}
+
+	return "";
+}
+
+
 isWeaponValidForAttachment( currentWeapon, baseWeapon, attachment )
 {
 	// Check if the weapon is a special firing mode weapon
@@ -225,14 +272,14 @@ stopPlayer( condition )
 {
 	if ( condition )
 	{
-		self thread openwarfare\_speedcontrol::setModifierSpeed( "_healthsystem", 80 );
+		self thread openwarfare\_speedcontrol::setModifierSpeed( "_dynamic_attachments", 80 );
 		self thread maps\mp\gametypes\_gameobjects::_disableWeapon();
 		self thread maps\mp\gametypes\_gameobjects::_disableJump();
 		self thread maps\mp\gametypes\_gameobjects::_disableSprint();
 	}
 	else
 	{
-		self thread openwarfare\_speedcontrol::setModifierSpeed( "_healthsystem", 0 );
+		self thread openwarfare\_speedcontrol::setModifierSpeed( "_dynamic_attachments", 0 );
 		self thread maps\mp\gametypes\_gameobjects::_enableWeapon();
 		self thread maps\mp\gametypes\_gameobjects::_enableJump();
 		self thread maps\mp\gametypes\_gameobjects::_enableSprint();
@@ -241,16 +288,20 @@ stopPlayer( condition )
 
 displayProgressBar( totalTime )
 {
+	self endon("disconnect");
+	self endon("death");
+	level endon("game_ended");
+
 	time = 0;
 	startTime = openwarfare\_timer::getTimePassed();
 
 	while ( time < totalTime )
 	{
-		wait (0.05);
+		wait (0.01);
 
-		self updateSecondaryProgressBar( time, totalTime, false, "Change attachment" );
+		self updateSecondaryProgressBar( time, totalTime, false, &"OW_DYNATTACH_INSTALLING" );
 
-		time += openwarfare\_timer::getTimePassed() - startTime;
+		time = openwarfare\_timer::getTimePassed() - startTime;
 	}
 
 	self updateSecondaryProgressBar( undefined, undefined, true, undefined );

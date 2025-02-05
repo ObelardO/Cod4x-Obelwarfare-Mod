@@ -67,7 +67,7 @@ onMenuResponse()
 					break;
 
 				case "attachdetach":
-					self thread openwarfare\_dynamicattachments::attachDetachAttachment();
+					self thread openwarfare\_dynamicattachments::openDynamicAttachmentsMenu();
 					break;	
 
 				case "firingmode":
@@ -133,7 +133,6 @@ onMenuResponse()
 					break;		
 					
 				case "ping":
-
 					self thread openwarfare\_ping::pingRightNow();
 					break;
 
@@ -141,6 +140,11 @@ onMenuResponse()
 					break;
 			}
 			continue;
+		}
+
+		if( menu == "dynamic_attachments" )
+		{
+			self thread openwarfare\_dynamicattachments::installAttachment( response );
 		}
 	}
 }

@@ -1187,6 +1187,27 @@ LANG_RUSSIAN "Установлен модуль: ^3&&1"
 REFERENCE DYNATTACH_REMOVED_ALL
 LANG_RUSSIAN "Все модули сняты."
 
+REFERENCE DYNATTACH_INSTALL_ERROR
+LANG_RUSSIAN "^3&&1^7 невозможно установить на это оружее."
+
+REFERENCE DYNATTACH_MENU_INSTALL
+LANG_RUSSIAN "Установить модуль:"
+
+REFERENCE DYNATTACH_MENU_1_SILENCER
+LANG_RUSSIAN "^31.^7 Глушитель"
+
+REFERENCE DYNATTACH_MENU_2_REFLEX
+LANG_RUSSIAN "^32.^7 Коллиматорный прицел"
+
+REFERENCE DYNATTACH_MENU_3_ACOG
+LANG_RUSSIAN "^33.^7 Оптический прицел"
+
+REFERENCE DYNATTACH_MENU_4_REMOVE
+LANG_RUSSIAN "^34.^7 Без модуля"
+
+REFERENCE DYNATTACH_MENU_BACK
+LANG_RUSSIAN "^3Esc.^7 Отмена"
+
 
 //******************************************************************************
 // ui_mp/connect.menu

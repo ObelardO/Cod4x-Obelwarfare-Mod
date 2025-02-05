@@ -197,6 +197,6 @@ actionAttachDetach( whatToDo )
 		
 	// We only try to attach/detach the attachment when whatToDo is set to true
 	if ( whatToDo ) {
-		self thread openwarfare\_dynamicattachments::attachDetachAttachment();
+		self thread openwarfare\_dynamicattachments::installAttachment( "next" );
 	}		
 }

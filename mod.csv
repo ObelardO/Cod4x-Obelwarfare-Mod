@@ -407,6 +407,8 @@ menufile,ui_mp/scriptmenus/popup_addfavorite.menu
 menufile,ui_mp/scriptmenus/scoreboard.menu
 menufile,ui_mp/scriptmenus/serverinfo.menu
 menufile,ui_mp/scriptmenus/team_marinesopfor.menu
+menufile,ui_mp/scriptmenus/dynamic_attachments.menu
+
 
 rawfile,ui_mp/cac_ingame.inc
 rawfile,ui_mp/cac_loadout_ingame.inc
