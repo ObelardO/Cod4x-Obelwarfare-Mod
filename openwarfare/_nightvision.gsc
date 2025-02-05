@@ -131,8 +131,8 @@ forceDisableAll()
 
 switchNightVisionThread()
 {
-	self endon( "disconnect" );
 	self endon( "nv_stop_updating_switch" );
+	self endon( "disconnect" );
 
 	for(;;)
 	{
@@ -183,6 +183,7 @@ switchNightVisionThread()
 UpdateShellshockThread()
 {
 	self endon( "nv_stop_updating_shock" );
+	self endon( "disconnect" );
 
 	for (;;)
 	{
