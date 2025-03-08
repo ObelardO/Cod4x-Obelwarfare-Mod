@@ -6335,8 +6335,8 @@ delayStartRagdoll( ent, sHitLoc, vDir, sWeapon, eInflictor, sMeansOfDeath )
 			return;
 	}
 
-	if ( level.oldschool )
-	{
+	//if ( level.oldschool )
+	//{
 		if ( !isDefined( vDir ) )
 			vDir = (0,0,0);
 
@@ -6359,8 +6359,8 @@ delayStartRagdoll( ent, sHitLoc, vDir, sWeapon, eInflictor, sMeansOfDeath )
 
 		// apply extra physics force to make the ragdoll go crazy
 		physicsExplosionSphere( explosionPos, explosionRadius, explosionRadius/2, explosionForce );
-		return;
-	}
+		//return;
+	//}
 
 	wait( 0.2 );
 
