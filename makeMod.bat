@@ -29,7 +29,7 @@ echo _________________________________________________________________
 echo.
 echo  Please select an option:
 echo    1. Build everything (might take longer)
-echo    2. Build z_openwarfare.iwd
+echo    2. Build assets .IWD files
 echo    3. Build ruleset .IWD file
 echo    4. Build mod.ff
 echo.
@@ -157,45 +157,61 @@ goto MAKE_OPENWARFARE_IWD
 :BUILD_OPENWARFARE_IWD
 echo _________________________________________________________________
 echo.
-echo  Building z_openwarfare.iwd:
-echo    Deleting old z_openwarfare.iwd file...
-del z_openwarfare.iwd
+echo  Building z_ow_main.iwd:
+echo    Deleting old z_ow_main.iwd file...
+del z_ow_main.iwd > NUL
 echo    Adding images...
-7za a -r -tzip z_openwarfare.iwd images\*.iwi > NUL
-echo    Adding sounds...
-7za a -r -tzip z_openwarfare.iwd sound\*.mp3 > NUL
-7za a -r -tzip z_openwarfare.iwd sound\*.wav > NUL
+7za a -r -tzip z_ow_main.iwd images\*.iwi > NUL
 echo    Adding weapons...
-7za a -r -tzip z_openwarfare.iwd weapons\mp\*_mp > NUL
+7za a -r -tzip z_ow_main.iwd weapons\mp\*_mp > NUL
 echo    Adding OpenWarfare standard rulesets...
-7za a -r -tzip z_openwarfare.iwd rulesets\openwarfare\*.gsc > NUL
-7za a -r -tzip z_openwarfare.iwd rulesets\leagues.gsc > NUL
+7za a -r -tzip z_ow_main.iwd rulesets\openwarfare\*.gsc > NUL
+7za a -r -tzip z_ow_main.iwd rulesets\leagues.gsc > NUL
 echo    Adding empty mod.arena file...
-7za a -r -tzip z_openwarfare.iwd mod.arena > NUL
-
+7za a -r -tzip z_ow_main.iwd mod.arena > NUL
+echo.
+echo  Building z_ow_sounds.iwd:
+echo    Deleting old z_ow_sounds.iwd file...
+del z_ow_sounds.iwd > NUL
+echo    Adding sounds...
+7za a -r -tzip z_ow_sounds.iwd sound\*.mp3 > NUL
+7za a -r -tzip z_ow_sounds.iwd sound\*.wav > NUL
 
 if not "%eventDir%"=="none" goto BUILD_EVENT
 goto FINALE_OPENWARFARE_IWD
 
 
 :BUILD_EVENT
-echo    Adding event assets...
+echo.
+echo  Event patching:
 
-move z_openwarfare.iwd %eventDir% > NUL
+move z_ow_main.iwd %eventDir% > NUL
+move z_ow_sounds.iwd %eventDir% > NUL
+
 cd %eventDir%
 
-..\7za a -r -tzip z_openwarfare.iwd images\*.iwi > NUL
-..\7za a -r -tzip z_openwarfare.iwd sound\*.mp3 > NUL
-..\7za a -r -tzip z_openwarfare.iwd sound\*.wav > NUL
-..\7za a -r -tzip z_openwarfare.iwd vision\*.vision > NUL
+echo    Patch images...
+..\7za a -r -tzip z_ow_main.iwd images\*.iwi > NUL
+echo    Patch visions...
+..\7za a -r -tzip z_ow_main.iwd vision\*.vision > NUL
 
-move z_openwarfare.iwd ..\ > NUL
+echo    Patch sounds...
+..\7za a -r -tzip z_ow_sounds.iwd sound\*.mp3 > NUL
+..\7za a -r -tzip z_ow_sounds.iwd sound\*.wav > NUL
+
+move z_ow_main.iwd ..\ > NUL
+move z_ow_sounds.iwd ..\ > NUL
+
 cd ..\
+
 goto FINALE_OPENWARFARE_IWD
 
 
 :FINALE_OPENWARFARE_IWD
-echo  New z_openwarfare.iwd file successfully built!
+echo.
+echo  Assets .IWD building done:
+echo    New z_ow_main.iwd file successfully built!
+echo    New z_ow_sounds.iwd file successfully built!
 del /f /q weapons\mp\* >NUL
 rmdir weapons\mp >NUL
 if "%make_option%"=="1" goto MAKE_MOD_FF
@@ -302,11 +318,15 @@ xcopy shock ..\..\raw\shock /SYI > NUL
 
 echo    Copying OpenWarfare source code...
 xcopy openwarfare ..\..\raw\openwarfare /SYI > NUL
-copy /Y mod.csv ..\..\zone_source > NUL
 copy /Y mod_ignore.csv ..\..\zone_source\%LTARGET%\assetlist > NUL
 
-if not "%eventDir%"=="none" (
+if "%eventDir%"=="none" (
+copy /Y mod.csv ..\..\zone_source > NUL
+) else (
 echo    Copying event resources...
+
+copy /Y mod.csv + %eventDir%mod.csv ..\..\zone_source\mod.csv > NUL
+
 xcopy %eventDir%images ..\..\raw\images /SYI > NUL
 xcopy %eventDir%sound ..\..\raw\sound /SYI > NUL
 xcopy %eventDir%vision ..\..\raw\vision /SYI > NUL
@@ -324,10 +344,12 @@ cd ..\..\bin > NUL
 linker_pc.exe -language %LTARGET% -compress -cleanup mod 
 cd %COMPILEDIR% > NUL
 copy ..\..\zone\%LTARGET%\mod.ff > NUL
+echo.
 echo  New mod.ff file successfully built!
 goto END
 
 :END
+echo.
 pause
 goto FINAL
 
