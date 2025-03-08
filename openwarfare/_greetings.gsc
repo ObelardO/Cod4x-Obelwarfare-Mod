@@ -20,9 +20,10 @@ init()
 	level.sv_greetings_enable = getdvarx( "sv_greetings_enable", "int", 0, 0, 1 );
 	level.sv_greetings_start_once = getdvarx( "sv_greetings_start_once", "int", 0, 0, 1 );
 	level.sv_greetings_start_delay = getdvarx( "sv_greetings_start_delay", "int", 0, 0, 10 );
-	level.sv_greetings_start_sound = getdvarx( "sv_greetings_start_sound", "int", 0, 0, 1 );
+	level.sv_greetings_start_music = getdvarx( "sv_greetings_start_music", "int", 0, 0, 1 );
 	level.sv_greetings_messages_delay = getdvarx( "sv_greetings_messages_delay", "int", 2, 2, 10 );
 	level.sv_greetings_messages_sound = getdvarx( "sv_greetings_messages_sound", "string", "" );
+	level.sv_greetings_messages_music = getdvarx( "sv_greetings_messages_music", "string", "welcome" );
 
 	// Fetch the greetings messages and store them in a list.
 	level.sv_greetings_messages_text = getDvarListx( "sv_greetings_messages_text_", "string", "" );
@@ -37,7 +38,7 @@ init()
 		return;
 	}
 	
-	if (level.sv_greetings_start_sound == 1)
+	if (level.sv_greetings_start_music == 1)
 	{
 		setGreetingsSpawnMusic();
 	}
@@ -92,8 +93,8 @@ sendNotifyToPlayers( message, sound )
 
 setGreetingsSpawnMusic()
 {
-	game["music"]["spawn_axis"] = "welcome";
-	game["music"]["spawn_allies"] = "welcome";
+	game["music"]["spawn_axis"] = level.sv_greetings_messages_music;
+	game["music"]["spawn_allies"] = level.sv_greetings_messages_music;
 }
 
 
