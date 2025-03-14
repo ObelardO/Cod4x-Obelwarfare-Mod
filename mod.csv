@@ -417,19 +417,6 @@ xmodel,hp_medium
 xmodel,iceberg
 xmodel,icebergred
 
-#xmas models
-xmodel,giftbox_5
-xmodel,giftbox_4
-xmodel,giftbox_3
-xmodel,giftbox_2
-xmodel,giftbox_1
-xmodel,santa
-xmodel,north_pole_2
-xmodel,snowman
-xmodel,xmas_tree
-xmodel,candy_cane
-xmodel,dead_pine_snow
-
 weapon,mp/binoculars_mp
 
 #weapon,mp/ak47_single_mp

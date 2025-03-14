@@ -18,3 +18,16 @@ material,holiday_icicle_lights
 material,tree_xmas_pine
 material,icicles_01
 material,snowman
+
+#xmas models
+xmodel,giftbox_5
+xmodel,giftbox_4
+xmodel,giftbox_3
+xmodel,giftbox_2
+xmodel,giftbox_1
+xmodel,santa
+xmodel,north_pole_2
+xmodel,snowman
+xmodel,xmas_tree
+xmodel,candy_cane
+xmodel,dead_pine_snow
