@@ -19,7 +19,7 @@ FILENOTES        ""
 // maps/mp/gametypes/ass.gsc
 //******************************************************************************
 REFERENCE ASSASSINATION
-LANG_RUSSIAN "Эвакуация"
+LANG_RUSSIAN "Особо важная персона"
 
 REFERENCE ASSASSINATION_ATTACKER
 LANG_RUSSIAN "Защитите Важную Персону"
@@ -40,14 +40,14 @@ REFERENCE ASSASSINATION_VIP_EXTRACTED
 LANG_RUSSIAN "Важная Персона эвакуирована"
 
 REFERENCE ASSASSINATION_VIP_ELIMINATED
-LANG_RUSSIAN "Важная Персона уничтожена"
+LANG_RUSSIAN "Важная Персона ликвидирована"
 
 
 //******************************************************************************
 // maps/mp/gametypes/bel.gsc
 //******************************************************************************
 REFERENCE BEHIND_ENEMY_LINES
-LANG_RUSSIAN "В Тылу Врага"
+LANG_RUSSIAN "Охотники и Беглецы"
 
 REFERENCE OBJECTIVES_ATTACKERS_BEL
 LANG_RUSSIAN "Зарабатывайте очки уничтожая беглецов"
@@ -59,13 +59,13 @@ REFERENCE OBJECTIVES_ATTACKERS_BEL_SCORE
 LANG_RUSSIAN "Зарабатывайте очки уничтожая беглецов. Выигрывает игрок набравший &&1 очков."
 
 REFERENCE OBJECTIVES_DEFENDERS_BEL_SCORE
-LANG_RUSSIAN "Зарабатывайте очки за выживание и уничтожение врагов. Выигрывает игрок набравший &&1 очков."
+LANG_RUSSIAN "Зарабатывайте очки за выживание и уничтожение охотников. Выигрывает игрок набравший &&1 очков."
 
 REFERENCE OBJECTIVES_ATTACKERS_BEL_HINT
 LANG_RUSSIAN "Уничтожайте Беглецов."
 
 REFERENCE OBJECTIVES_DEFENDERS_BEL_HINT
-LANG_RUSSIAN "Выживите и уничтожьте врагов."
+LANG_RUSSIAN "Выживите и уничтожьте охотников."
 
 REFERENCE BEL_TIME_ALIVE
 LANG_RUSSIAN "Живой уже: &&1"
@@ -90,7 +90,7 @@ LANG_RUSSIAN "Вы Беглец!"
 // maps/mp/gametypes/ch.gsc
 //******************************************************************************
 REFERENCE CAPTURE_AND_HOLD
-LANG_RUSSIAN "Захватить и защитить"
+LANG_RUSSIAN "Захватить и удержать"
 
 REFERENCE CH_DONTHAVE_FLAG
 LANG_RUSSIAN "Верните ваш флаг: &&1"
@@ -309,7 +309,7 @@ LANG_RUSSIAN "Предметы могут отбрасывать гранаты, будьте осторожны."
 // maps/mp/gametypes/lms.gsc
 //******************************************************************************
 REFERENCE LASTMAN
-LANG_RUSSIAN "Выживший в бою"
+LANG_RUSSIAN "Последний выживший"
 
 REFERENCE OBJECTIVES_LMS
 LANG_RUSSIAN "Убейте остальных игроков."
@@ -341,7 +341,7 @@ LANG_RUSSIAN "Убейте всех игроков другой команды."
 // maps/mp/gametypes/oitc.gsc
 //******************************************************************************
 REFERENCE ONEINTHECHAMBER
-LANG_RUSSIAN "Каждый за себя"
+LANG_RUSSIAN "Последняя пуля"
 
 REFERENCE OBJECTIVES_ONEINTHECHAMBER
 LANG_RUSSIAN "Уничтожьте других игроков"
@@ -353,7 +353,7 @@ REFERENCE OBJECTIVES_ONEINTHECHAMBER_HINT
 LANG_RUSSIAN "Уничтожайте всех других игроков"
 
 REFERENCE UAV_ON
-LANG_ENGLISH "UAV Activated Permanently"
+LANG_ENGLISH "UAV Активирован для всех"
 
 
 //******************************************************************************
