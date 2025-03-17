@@ -47,7 +47,7 @@ LANG_RUSSIAN "Важная Персона ликвидирована"
 // maps/mp/gametypes/bel.gsc
 //******************************************************************************
 REFERENCE BEHIND_ENEMY_LINES
-LANG_RUSSIAN "Охотники и Беглецы"
+LANG_RUSSIAN "Охотники и беглецы"
 
 REFERENCE OBJECTIVES_ATTACKERS_BEL
 LANG_RUSSIAN "Зарабатывайте очки уничтожая беглецов"
@@ -62,7 +62,7 @@ REFERENCE OBJECTIVES_DEFENDERS_BEL_SCORE
 LANG_RUSSIAN "Зарабатывайте очки за выживание и уничтожение охотников. Выигрывает игрок набравший &&1 очков."
 
 REFERENCE OBJECTIVES_ATTACKERS_BEL_HINT
-LANG_RUSSIAN "Уничтожайте Беглецов."
+LANG_RUSSIAN "Уничтожайте беглецов."
 
 REFERENCE OBJECTIVES_DEFENDERS_BEL_HINT
 LANG_RUSSIAN "Выживите и уничтожьте охотников."
@@ -74,16 +74,16 @@ REFERENCE BEL_POINTS_EARNED
 LANG_RUSSIAN "Очки: &&1"
 
 REFERENCE BEL_WILLSPAWN_ATTACKER
-LANG_RUSSIAN "Вы возродитесь как Охотник!"
+LANG_RUSSIAN "Вы возродитесь как охотник!"
 
 REFERENCE BEL_WILLSPAWN_DEFENDER
-LANG_RUSSIAN "Вы возродитесь как Беглец!"
+LANG_RUSSIAN "Вы возродитесь как беглец!"
 
 REFERENCE BEL_SPAWNED_ATTACKER
-LANG_RUSSIAN "Вы Охотник!"
+LANG_RUSSIAN "Вы охотник!"
 
 REFERENCE BEL_SPAWNED_DEFENDER
-LANG_RUSSIAN "Вы Беглец!"
+LANG_RUSSIAN "Вы беглец!"
 
 
 //******************************************************************************
@@ -217,13 +217,35 @@ REFERENCE OBJECTIVES_GR_HINT
 LANG_RUSSIAN "Собирайте жетоны и доставьте их в точку сбора."
 
 REFERENCE DOGTAGS_CAPTURED_BY
-LANG_RUSSIAN "^3&&1^7 нашел жетонов: ^3&&2^7"
+LANG_RUSSIAN "^3&&1^7 доставил жетонов: ^3&&2^7"
 
 REFERENCE GR_DROPZONES_RELOCATING_IN
 LANG_RUSSIAN "Точки сбора изменятся через &&1"
 
 REFERENCE GR_DROPZONE_RELOCATING_IN
 LANG_RUSSIAN "Точка сбора изменится через &&1"
+
+
+//******************************************************************************
+// maps/mp/gametypes/tgr.gsc
+//******************************************************************************
+REFERENCE TEAM_GREED
+LANG_ENGLISH "Командная жадина"
+
+REFERENCE OBJECTIVES_TGR
+LANG_ENGLISH "Собирайте жетоны и доставьте их в точку сбора."
+
+REFERENCE OBJECTIVES_TGR_SCORE
+LANG_ENGLISH "Собирайте жетоны и доставьте их в точку сбора. Первая команда со счетом &&1 побеждает."
+
+REFERENCE OBJECTIVES_TGR_HINT
+LANG_ENGLISH "Собирайте жетоны и доставьте их в точку сбора."
+
+REFERENCE TEAM_DOGTAGS_CAPTURED_BY
+LANG_ENGLISH "^3&&1^7 доставил жетонов: ^3&&2^7"
+
+REFERENCE ENEMY_DOGTAGS_CAPTURED_BY
+LANG_ENGLISH "^3&&1^7 доставил жетонов: ^3&&2^7 для вражеской команды"
 
 
 //******************************************************************************
