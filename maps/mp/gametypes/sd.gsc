@@ -863,6 +863,7 @@ onPickup( player )
 
 		maps\mp\gametypes\_globallogic::leaderDialog( "bomb_taken", player.pers["team"] );
 		player logString( "bomb taken" );
+		//TODO: add log event with stealed bomb
 	}
 
  	if ( isDefined( player ) )
