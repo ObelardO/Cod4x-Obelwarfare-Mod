@@ -362,6 +362,7 @@ rawfile,openwarfare/_nightvision.gsc
 rawfile,openwarfare/_greetings.gsc
 rawfile,openwarfare/_weather.gsc
 rawfile,openwarfare/_ping.gsc
+rawfile,openwarfare/_specialpickups.gsc
 
 
 menufile,ui_mp/connect.menu
