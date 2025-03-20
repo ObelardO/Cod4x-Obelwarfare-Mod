@@ -1,0 +1,187 @@
+#include codescripts\character_mp;
+#include maps\mp\_utility;
+
+#include openwarfare\_eventmanager;
+#include openwarfare\_utils;
+
+init()
+{
+	if ( !isDefined( game["spec_picks"] ) )
+	{
+		game["spec_picks"] = [];
+
+		game["spec_picks"]["drop_zone_fx"] = loadFX( "misc/ui_flagbase_pink" );
+
+		game["spec_picks"]["drop_zone_points"] = [];
+
+		hqRadios = getentarray( "hq_hardpoint", "targetname" );
+		for ( i=0; i < hqRadios.size; i++ ) {
+			game["spec_picks"]["drop_zone_points"][i] = hqRadios[i].origin;
+		}	
+
+		game["spec_picks"]["player_models"] = [];
+		game["spec_picks"]["player_models"][0] = "Yuusha";
+		game["spec_picks"]["player_models"][1] = "Yuusha_2";
+		game["spec_picks"]["player_models"][2] = "Eo";
+		//game["spec_picks"]["player_models"][3] = "Elysium_SC5";
+
+		//precacheModel( game["spec_picks"]["player_model"] );
+		precacheModelArray( game["spec_picks"]["player_models"] );
+	}
+
+	//if ( isDefined( game["readyupperiod"] ) && game["readyupperiod"]  ) {
+	//	return;
+	//}
+
+	points =  game["spec_picks"]["drop_zone_points"];
+
+	if ( !isDefined( level.specPicksDropZone ) && points.size > 0 && !isDefined(level.specPicksUsed) )
+	{
+		level thread spawnDropZonesThread( points );
+	}
+
+	level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
+}
+
+onPlayerConnected()
+{
+	self thread addNewEvent( "onPlayerKilled", ::onPlayerKilled );
+}
+
+onPlayerKilled()
+{
+	// Hide the HUD elements
+	if ( isDefined( self.isSpecialPickuped ) ) {
+		playSoundOnPlayers ( "specpikcs_die" );
+	}
+}
+
+
+spawnDropZonesThread( points )
+{
+	level endon("intermission");
+	level endon("game_ended");
+
+	//if ( isDefined ( level.inReadyUpPeriod ) )
+	//{
+	//	level waittill ( "readyupperiod_ended" );
+	//}
+
+	level waittill("prematch_over");
+
+	randomCoord = points[randomInt( points.size )];
+
+	level.spec_picksDropZone = createDropZone ( randomCoord );
+}
+
+createDropZone( dropZoneCoord )
+{
+	// Create a new drop zone
+	dropZone = spawnstruct();
+	
+	// Create the trigger
+	dropZone.trigger = spawn( "trigger_radius", dropZoneCoord, 0, 40, 10 );
+	dropZone.origin = dropZoneCoord;
+	
+	// Spawn an special effect at the base of the drop zone to indicate where it is located
+	traceStart = dropZoneCoord + (0,0,32);
+	traceEnd = dropZoneCoord + (0,0,-32);
+	trace = bulletTrace( traceStart, traceEnd, false, undefined );
+	upangles = vectorToAngles( trace["normal"] );
+	dropZone.baseEffect = spawnFx( game["spec_picks"]["drop_zone_fx"], trace["position"], anglesToForward( upangles ), anglesToRight( upangles ) );
+	triggerFx( dropZone.baseEffect );
+	
+	// Start monitoring the trigger
+	dropZone thread onDropZoneUse();	
+	
+	return dropZone;
+}
+
+onDropZoneUse()
+{
+	level endon("game_ended");
+	self endon("death");
+	
+	player = undefined;
+
+	for (;;) {
+		self.trigger waittill( "trigger", otherPlayer );
+
+		player = otherPlayer;
+
+		break;
+	}
+
+	iprintln ( "^6&&1 became a ladyboy!", player.name );
+
+	player playLocalSound( "specpikcs_up" );
+
+	player.isSpecialPickuped = true;
+
+	self removeDropZone();
+
+	level.specPicksDropZone = undefined;
+	level.specPicksUsed = true;
+
+
+	//Detach Head Model (Original snip of script by BionicNipple)
+	count = player getattachsize();
+	for ( index = 0; index < count; index++ )
+	{
+		head = player getattachmodelname( index );
+
+		if ( startsWith( head, "head" ) )
+		{
+			player detach( head );
+			break;
+		}
+	}
+
+
+
+	//player setModel( game["spec_picks"]["player_model"] );
+	player setModelFromArray( game["spec_picks"]["player_models"] );
+
+	wait 0.5;
+
+	// Set 3rd. person view
+	player setClientDvars( 
+		"cg_thirdPerson", "1",
+		"cg_thirdPersonAngle", "360",
+		"cg_thirdPersonRange", "72"
+	);
+
+	wait 4;
+
+	player setClientDvar( 
+		"cg_thirdPerson", "0"
+	);
+}
+
+removeDropZone()
+{	
+	// Remove the base effect
+	self.baseEffect delete();
+	
+	// Remove the trigger
+	self.trigger delete();
+
+	//self delete();
+}
+
+
+startsWith( string, pattern )
+{
+    if ( string == pattern ) 
+		return true;
+    if ( pattern.size > string.size ) 
+		return false;
+
+    for ( index = 0; index < pattern.size; index++ )
+	{
+        if ( string[index] != pattern[index] ) 
+			return false;
+	}		
+
+    return true;
+}

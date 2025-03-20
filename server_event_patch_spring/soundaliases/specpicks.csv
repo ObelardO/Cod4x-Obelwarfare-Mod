@@ -1,0 +1,5 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage,center percentage,platform,envelop_min,envelop_max,envelop percentage
+
+# Special pickups sounds,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+specpikcs_die,,specpicks/specpikcs_die.mp3,1,1,max,,,,,announcer,streamed,,,master,all_mp,,,,,,radio,nowetlevel fulldrylevel,,,,,,,mp3
+specpikcs_up,,specpicks/specpikcs_up.mp3,1,1,max,,,,,announcer,streamed,,,master,all_mp,,,,,,radio,nowetlevel fulldrylevel,,,,,,,mp3
