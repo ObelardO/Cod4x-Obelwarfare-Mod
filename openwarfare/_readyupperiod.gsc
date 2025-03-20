@@ -168,6 +168,7 @@ start()
 
 	level notify("readyupperiod_ended");
 
+	//TODO Set vision from DAY\NIGHT cycle system
 	visionSetNaked( "mpIntro", 1.0 );
 
 	// Destroy the HUD elements
