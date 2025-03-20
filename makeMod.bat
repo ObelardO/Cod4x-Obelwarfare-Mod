@@ -332,6 +332,7 @@ copy /Y mod.csv + %eventDir%mod.csv ..\..\zone_source\mod.csv > NUL
 
 xcopy %eventDir%images ..\..\raw\images /SYI > NUL
 xcopy %eventDir%sound ..\..\raw\sound /SYI > NUL
+xcopy %eventDir%soundaliases ..\..\raw\soundaliases /SYI > NUL
 xcopy %eventDir%vision ..\..\raw\vision /SYI > NUL
 xcopy %eventDir%maps ..\..\raw\maps /SYI > NUL
 xcopy %eventDir%openwarfare ..\..\raw\openwarfare /SYI > NUL
