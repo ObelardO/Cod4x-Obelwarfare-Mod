@@ -6,34 +6,34 @@
 
 init()
 {
-	if ( !isDefined( game["spec_picks"] ) )
+	if ( !isDefined( game["sps"] ) )
 	{
-		game["spec_picks"] = [];
+		game["sps"] = [];
 
-		game["spec_picks"]["drop_zone_fx"] = loadFX( "misc/ui_flagbase_pink" );
+		game["sps"]["drop_zone_fx"] = loadFX( "misc/ui_flagbase_pink" );
 
-		game["spec_picks"]["drop_zone_points"] = [];
+		game["sps"]["drop_zone_points"] = [];
 
 		hqRadios = getentarray( "hq_hardpoint", "targetname" );
 		for ( i=0; i < hqRadios.size; i++ ) {
-			game["spec_picks"]["drop_zone_points"][i] = hqRadios[i].origin;
+			game["sps"]["drop_zone_points"][i] = hqRadios[i].origin;
 		}	
 
-		game["spec_picks"]["player_models"] = [];
-		game["spec_picks"]["player_models"][0] = "Yuusha";
-		game["spec_picks"]["player_models"][1] = "Yuusha_2";
-		game["spec_picks"]["player_models"][2] = "Eo";
-		//game["spec_picks"]["player_models"][3] = "Elysium_SC5";
+		game["sps"]["player_models"] = [];
+		game["sps"]["player_models"][0] = "Yuusha";
+		game["sps"]["player_models"][1] = "Yuusha_2";
+		game["sps"]["player_models"][2] = "Eo";
+		//game["sps"]["player_models"][3] = "Elysium_SC5";
 
-		//precacheModel( game["spec_picks"]["player_model"] );
-		precacheModelArray( game["spec_picks"]["player_models"] );
+		//precacheModel( game["sps"]["player_model"] );
+		precacheModelArray( game["sps"]["player_models"] );
 	}
 
 	//if ( isDefined( game["readyupperiod"] ) && game["readyupperiod"]  ) {
 	//	return;
 	//}
 
-	points =  game["spec_picks"]["drop_zone_points"];
+	points =  game["sps"]["drop_zone_points"];
 
 	if ( !isDefined( level.specPicksDropZone ) && points.size > 0 && !isDefined(level.specPicksUsed) )
 	{
@@ -46,14 +46,23 @@ init()
 onPlayerConnected()
 {
 	self thread addNewEvent( "onPlayerKilled", ::onPlayerKilled );
+	self thread addNewEvent( "onPlayerSpawned", ::onPlayerSpawned );
+
+	onPlayerSpawned
 }
 
 onPlayerKilled()
 {
 	// Hide the HUD elements
-	if ( isDefined( self.isSpecialPickuped ) ) {
+	if ( isDefined( self.isSpecialPickuped ) && self.isSpecialPickuped == true ) {
 		playSoundOnPlayers ( "specpikcs_die" );
+		self.isSpecialPickuped = false;
 	}
+}
+
+onPlayerSpawned()
+{
+	self.isSpecialPickuped = false;
 }
 
 
@@ -71,7 +80,7 @@ spawnDropZonesThread( points )
 
 	randomCoord = points[randomInt( points.size )];
 
-	level.spec_picksDropZone = createDropZone ( randomCoord );
+	level.spsDropZone = createDropZone ( randomCoord );
 }
 
 createDropZone( dropZoneCoord )
@@ -88,7 +97,7 @@ createDropZone( dropZoneCoord )
 	traceEnd = dropZoneCoord + (0,0,-32);
 	trace = bulletTrace( traceStart, traceEnd, false, undefined );
 	upangles = vectorToAngles( trace["normal"] );
-	dropZone.baseEffect = spawnFx( game["spec_picks"]["drop_zone_fx"], trace["position"], anglesToForward( upangles ), anglesToRight( upangles ) );
+	dropZone.baseEffect = spawnFx( game["sps"]["drop_zone_fx"], trace["position"], anglesToForward( upangles ), anglesToRight( upangles ) );
 	triggerFx( dropZone.baseEffect );
 	
 	// Start monitoring the trigger
@@ -112,7 +121,7 @@ onDropZoneUse()
 		break;
 	}
 
-	iprintln ( "^6&&1 became a ladyboy!", player.name );
+	iprintln ( "^6&&1 turned into a sexy waifu!", player.name );
 
 	player playLocalSound( "specpikcs_up" );
 
@@ -139,8 +148,8 @@ onDropZoneUse()
 
 
 
-	//player setModel( game["spec_picks"]["player_model"] );
-	player setModelFromArray( game["spec_picks"]["player_models"] );
+	//player setModel( game["sps"]["player_model"] );
+	player setModelFromArray( game["sps"]["player_models"] );
 
 	wait 0.5;
 
