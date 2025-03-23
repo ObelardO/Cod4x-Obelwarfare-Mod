@@ -29,26 +29,17 @@ init()
 		precacheModelArray( game["sps"]["player_models"] );
 	}
 
-	//if ( isDefined( game["readyupperiod"] ) && game["readyupperiod"]  ) {
-	//	return;
-	//}
-
-	points =  game["sps"]["drop_zone_points"];
-
-	if ( !isDefined( level.specPicksDropZone ) && points.size > 0 && !isDefined(level.specPicksUsed) )
-	{
-		level thread spawnDropZonesThread( points );
-	}
-
 	level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
+
+	level waittill("prematch_over");
+
+	spawnDropZone();
 }
 
 onPlayerConnected()
 {
 	self thread addNewEvent( "onPlayerKilled", ::onPlayerKilled );
 	self thread addNewEvent( "onPlayerSpawned", ::onPlayerSpawned );
-
-	onPlayerSpawned
 }
 
 onPlayerKilled()
@@ -57,6 +48,8 @@ onPlayerKilled()
 	if ( isDefined( self.isSpecialPickuped ) && self.isSpecialPickuped == true ) {
 		playSoundOnPlayers ( "specpikcs_die" );
 		self.isSpecialPickuped = false;
+
+		spawnDropZone();
 	}
 }
 
@@ -65,26 +58,18 @@ onPlayerSpawned()
 	self.isSpecialPickuped = false;
 }
 
-
-spawnDropZonesThread( points )
+spawnDropZone()
 {
-	level endon("intermission");
-	level endon("game_ended");
+	// Exit if there are no any point
+	points =  game["sps"]["drop_zone_points"];
+	if ( isDefined( level.specPicksDropZone ) || points.size == 0 )
+	{
+		return;
+	}
 
-	//if ( isDefined ( level.inReadyUpPeriod ) )
-	//{
-	//	level waittill ( "readyupperiod_ended" );
-	//}
+	// Get random coord
+	dropZoneCoord = points[randomInt( points.size )];
 
-	level waittill("prematch_over");
-
-	randomCoord = points[randomInt( points.size )];
-
-	level.spsDropZone = createDropZone ( randomCoord );
-}
-
-createDropZone( dropZoneCoord )
-{
 	// Create a new drop zone
 	dropZone = spawnstruct();
 	
@@ -130,8 +115,6 @@ onDropZoneUse()
 	self removeDropZone();
 
 	level.specPicksDropZone = undefined;
-	level.specPicksUsed = true;
-
 
 	//Detach Head Model (Original snip of script by BionicNipple)
 	count = player getattachsize();
