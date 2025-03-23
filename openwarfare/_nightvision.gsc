@@ -20,9 +20,26 @@
 
 init()
 {
-	level._effect["nv_light"] = loadfx( "nv/light_white_big" );
-	precacheShader("ac130_overlay_grain");
-	PreCacheShellShock("nightvision");
+	level.scr_nvs_enabled = getDvarx( "scr_nvs_enabled", "int", 0, 0, 1 ) && getDvarx( "scr_enable_nightvision", "int", 0, 0, 1 )
+
+	// If night vision system is disabled then there's nothing else to do here
+	if ( level.scr_nvs_enabled == 0 )
+		return;
+
+	level.scr_nvs_grain_enabled = getDvarx( "scr_nvs_grain_enabled", "int", 0, 0, 1 );
+	level.scr_nvs_shock_enabled = getDvarx( "scr_nvs_shock_enabled", "int", 0, 0, 1 );
+
+	if ( !isDefined( game["nvs"] ) )
+	{
+		game["nvs"] = [];
+		game["nvs"]["light_fx"] = loadFx( "nv/light_white_big" );
+
+		//if ( level.scr_nvs_grain_enabled )
+		game["nvs"]["grain_shader"] = preCacheShader("ac130_overlay_grain");
+
+		//if ( level.scr_nvs_shock_enabled )
+		game["nvs"]["night_shock"] = PreCacheShellShock("nightvision");
+	}
 
 	level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
 }
@@ -30,61 +47,34 @@ init()
 
 onPlayerConnected()
 {
-	self makeNightVisionHud();
-	self resetNightVision();
+	self setupLaserEffect();
+	self setupGrainEffect();
+	self resetAllEffects();
 
-	self thread addNewEvent( "onPlayerSpawned", ::onPlayerSpawned );
-	self thread addNewEvent( "joined_spectators", ::onJoinedSpectators );
-	self thread addNewEvent( "onPlayerDeath", ::onPlayerDeath );
+	self thread addNewEvent( "onPlayerSpawned",    ::onPlayerSpawned );
+
+	self thread addNewEvent( "onJoinedSpectators", ::resetAll );
+	self thread addNewEvent( "onPlayerDeath",      ::resetAll );
+	self thread addNewEvent( "onJoinedTeam",       ::resetAll );
 }
 
-
-onPlayerSpawned()
+setupLaserEffect()
 {
-	self resetNightVision();
-	self spawnNightVisionEffects();
-	self thread switchNightVisionThread();
+	// Laser visual improvements
+	// TODO: Move it to config or csv
+	self setClientDvar("cg_laserEndOffset",        "0.5" );
+	self setClientDvar("cg_laserFlarePct",         "0.2" );
+	self setClientDvar("cg_laserLight",            "1"   );
+	self setClientDvar("cg_laserLightBeginOffset", "13"  );
+	self setClientDvar("cg_laserLightBodyTweak",   "15"  );
+	self setClientDvar("cg_laserLightEndOffset",   "-3"  );
+	self setClientDvar("cg_laserLightRadius",      "1.7" );
+	self setClientDvar("cg_laserRadius",           "0.5" );
+	self setClientDvar("cg_laserRange",            "500" );
+	self setClientDvar("cg_laserRangePlayer",      "500" );
 }
 
-
-onJoinedSpectators()
-{
-	forceDisableAll();
-}
-
-
-onPlayerDeath()
-{
-	forceDisableAll();
-}
-
-
-resetNightVision()
-{
-	self notify ("nv_stop_updating_shock");
-
-	self.nvon = false;
-	self.laseron = false;
-
-	self setClientDvar("cg_laserforceon", 0);
-	self setClientDvar("cg_fovscale", 1);
-
-	if(isDefined(self.grainOverlay))
-	{
-		self.grainOverlay.alpha = 0.0;
-	}
-
-	self StopShellShock();
-
-	if (isDefined(self.nightvisionLightEnt))
-	{
-		self.nightvisionLightEnt Unlink();
-		self.nightvisionLightEnt.origin = (0, 0, -2000);
-	}
-}
-
-
-makeNightVisionHud()
+setupGrainEffect()
 {
 	self.grainOverlay = newClientHudElem( self );
 	self.grainOverlay.x = 0;
@@ -98,10 +88,9 @@ makeNightVisionHud()
 	self.grainOverlay.sort = -1000;
 }
 
-
-spawnNightVisionEffects()
+setupLightEffect()
 {
-	if (!isDefined(self.nightvisionLightEnt))
+	if ( !isDefined(self.nightvisionLightEnt) )
 	{
 		self.nightvisionLightEnt = spawn("script_model", (0, 0, -2000));
 		self.nightvisionLightEnt setModel("tag_origin");
@@ -110,10 +99,9 @@ spawnNightVisionEffects()
 	}
 }
 
-
-deleteNightVisionEffects()
+removeLightEffect()
 {
-	if (isDefined(self.nightvisionLightEnt))
+	if ( isDefined(self.nightvisionLightEnt) )
 	{
 		self.nightvisionLightEnt Delete();
 		self.nightvisionLightFXPlayed = false;
@@ -121,17 +109,45 @@ deleteNightVisionEffects()
 }
 
 
-forceDisableAll()
+onPlayerSpawned()
 {
-	self notify ("nv_stop_updating_switch");
-	self resetNightVision();
-	self deleteNightVisionEffects();
+	self resetAllEffects();
+	self setupLightEffect();
+	self thread switchVisionThread();
 }
 
 
-switchNightVisionThread()
+resetAllEffects()
 {
-	self endon( "nv_stop_updating_switch" );
+	self.nvon = false;
+
+	// Reset shellshock effect
+	self notify ("nvs_stop_shock_thread");
+	self StopShellShock();
+
+	// Reset laser effect
+	self.laseron = false;
+	self setClientDvar("cg_laserforceon", 0);
+	self setClientDvar("cg_fovscale", 1);
+
+	// Reset grain effect
+	if(isDefined(self.grainOverlay))
+	{
+		self.grainOverlay.alpha = 0.0;
+	}
+
+	// Reset light effect
+	if (isDefined(self.nightvisionLightEnt))
+	{
+		self.nightvisionLightEnt Unlink();
+		self.nightvisionLightEnt.origin = (0, 0, -2000);
+	}
+}
+
+
+switchVisionThread()
+{
+	self endon( "nvs_stop_switch_thread" );
 	self endon( "disconnect" );
 
 	for(;;)
@@ -141,31 +157,20 @@ switchNightVisionThread()
 		if(!self.nvon)
 		{
 			self.nvon = true;
+
 			self.laseron = true;
-
-			// Laser visual improvements
-			self setClientDvar("cg_laserEndOffset", "0.5");
-			self setClientDvar("cg_laserFlarePct", "0.2");
-			self setClientDvar("cg_laserLight", "1");
-			self setClientDvar("cg_laserLightBeginOffset", "13");
-			self setClientDvar("cg_laserLightBodyTweak", "15");
-			self setClientDvar("cg_laserLightEndOffset", "-3");
-			self setClientDvar("cg_laserLightRadius", "1.7");
-			self setClientDvar("cg_laserRadius", "0.5");
-			self setClientDvar("cg_laserRange","500");
-			self setClientDvar("cg_laserRangePlayer", "500");
-
+			
 			self setClientDvar("cg_laserforceon", 1);
 			self setClientDvar("cg_fovscale", 0.9);
-			
+
 			if(isDefined(self.grainOverlay))
 			{
 				self.grainOverlay.alpha = 0.2;
 			}
 
-			self thread UpdateShellshockThread();
+			self thread UpdateShockThread();
 
-			if (isDefined(self.nightvisionLightEnt))
+			if ( isDefined(self.nightvisionLightEnt) )
 			{
 				self.nightvisionLightEnt.origin = self GetEye() + ( 0, 0, 50 );
 				self.nightvisionLightEnt linkto(self);
@@ -174,7 +179,7 @@ switchNightVisionThread()
 				if (!self.nightvisionLightFXPlayed)
 				{
 					wait 0.1;
-					playFxOnTag(level._effect["nv_light"], self.nightvisionLightEnt, "tag_origin");
+					playFxOnTag(game["nvs"]["light_fx"], self.nightvisionLightEnt, "tag_origin");
 					self.nightvisionLightFXPlayed = true;
 				}
 			}
@@ -187,14 +192,14 @@ switchNightVisionThread()
 
 		self waittill("night_vision_off");
 
-		self resetNightVision();
+		self resetAllEffects();
 	}
 }
 
 
-UpdateShellshockThread()
+UpdateShockThread()
 {
-	self endon( "nv_stop_updating_shock" );
+	self endon( "nvs_stop_shock_thread" );
 	self endon( "disconnect" );
 
 	for (;;)
@@ -205,4 +210,12 @@ UpdateShellshockThread()
 		self AllowSprint (true);
 		wait duration;
 	}
+}
+
+
+resetAll()
+{
+	self notify ("nvs_stop_switch_thread");
+	self resetAllEffects();
+	self removeLightEffect();
 }
