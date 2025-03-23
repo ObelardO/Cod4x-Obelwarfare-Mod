@@ -20,7 +20,7 @@
 
 init()
 {
-	level.scr_nvs_enabled = getDvarx( "scr_nvs_enabled", "int", 0, 0, 1 ) && getDvarx( "scr_enable_nightvision", "int", 0, 0, 1 )
+	level.scr_nvs_enabled = getDvarx( "scr_nvs_enabled", "int", 1, 0, 1 ) && getDvarx( "scr_enable_nightvision", "int", 1, 0, 1 );
 
 	// If night vision system is disabled then there's nothing else to do here
 	if ( level.scr_nvs_enabled == 0 )
