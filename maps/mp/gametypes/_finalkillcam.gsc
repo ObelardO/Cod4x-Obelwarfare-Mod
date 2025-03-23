@@ -87,13 +87,13 @@ finalkillcam( attacker, attackerNum, deathtime, victim, weapon, killcamentity)
     else if (weapon == "claymore_mp")
     {
         camtime = 3.0;
-        camdist = 40;
+        camdist = 80;
     }
 
     else if (weapon == "frag_grenade_mp")
     {
         camtime = 4.0; // show long enough to see grenade thrown
-        camdist = 20;
+        camdist = 80;
     }
 
     predelay = getTime()/1000 - deathTime;
@@ -152,7 +152,7 @@ finalkillcam( attacker, attackerNum, deathtime, victim, weapon, killcamentity)
         self.fk_title_low.alpha = 1;
         self.top_fk_shader.alpha = 0.5;
         self.bottom_fk_shader.alpha = 0.5;
-        self.credits.alpha = 0;
+        //self.credits.alpha = 0;
     }
     
     self thread WaitEnd(killcamlength);
@@ -197,7 +197,7 @@ CleanFK()
     self.fk_title_low.alpha = 0;
     self.top_fk_shader.alpha = 0;
     self.bottom_fk_shader.alpha = 0;
-    self.credits.alpha = 0;
+    //self.credits.alpha = 0;
     
     //self SetClientDvar("ui_ShowMenuOnly", "");
     
@@ -239,7 +239,7 @@ CreateFKMenu( victim , attacker)
     
     self.fk_title = newClientHudElem(self);
     self.fk_title.archived = false;
-    self.fk_title.y = 55;
+    self.fk_title.y = 70;
     self.fk_title.alignX = "center";
     self.fk_title.alignY = "middle";
     self.fk_title.horzAlign = "center";
@@ -263,6 +263,7 @@ CreateFKMenu( victim , attacker)
     self.fk_title_low.fontscale = 1.4;
     self.fk_title_low.foreground = true;
     
+    /*
     self.credits = newClientHudElem(self);
     self.credits.archived = false;
     self.credits.x = 0;
@@ -275,14 +276,18 @@ CreateFKMenu( victim , attacker)
     self.credits.font = "default";
     self.credits.fontscale = 1.4;
     self.credits.foreground = true;
-        
+    */
+
     self.fk_title.alpha = 1;
     self.fk_title_low.alpha = 1;
     self.top_fk_shader.alpha = 0.5;
     self.bottom_fk_shader.alpha = 0.5;
+
+    /*
     self.credits.alpha = 0;
-    
     self.credits setText("^1Created by: ^2FzBr.^3d4rk");
+    */
+
     self.fk_title_low setText(attacker.name + " VS. " + victim.name);
     
     if( !level.killcam_style )
@@ -353,11 +358,11 @@ slowMotion()
     
     wait level.slowmostart;
     
-    SetDvar("timescale", ".2");
+    SetDvar("timescale", ".4");
     for(i=0;i<level.players.size;i++)
-        level.players[i] setclientdvar("timescale", ".3");
+        level.players[i] setclientdvar("timescale", ".4");
     
-    wait 1.7;
+    wait 1.2;
     
     SetDvar("timescale", "1");
     for(i=0;i<level.players.size;i++)
