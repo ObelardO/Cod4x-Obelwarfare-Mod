@@ -38,9 +38,13 @@ init()
 
 onPlayerConnected()
 {
-	self thread addNewEvent( "onPlayerKilled", ::onPlayerKilled );
+	self thread addNewEvent( "onPlayerKilled",  ::onPlayerKilled );
 	self thread addNewEvent( "onPlayerSpawned", ::onPlayerSpawned );
+	self thread addNewEvent( "onPlayerDeath",   ::onPlayerDeath );
 }
+
+
+
 
 onPlayerKilled()
 {
@@ -53,10 +57,20 @@ onPlayerKilled()
 	}
 }
 
+
 onPlayerSpawned()
 {
 	self.isSpecialPickuped = false;
 }
+
+
+onPlayerDeath()
+{
+	self setClientDvar( 
+		"cg_thirdPerson", "0"
+	);
+}
+
 
 spawnDropZone()
 {
