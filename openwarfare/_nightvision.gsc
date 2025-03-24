@@ -15,8 +15,9 @@
 #include maps\mp\gametypes\_hud_util;
 #include common_scripts\utility;
 
-#include openwarfare\_eventmanager;
 #include openwarfare\_utils;
+#include openwarfare\_eventmanager;
+#include openwarfare\_speedcontrol;
 
 init()
 {
@@ -26,8 +27,18 @@ init()
 	if ( level.scr_nvs_enabled == 0 )
 		return;
 
-	level.scr_nvs_grain_enabled = getDvarx( "scr_nvs_grain_enabled", "int", 0, 0, 1 );
-	level.scr_nvs_shock_enabled = getDvarx( "scr_nvs_shock_enabled", "int", 0, 0, 1 );
+	level.scr_nvs_grain_enabled = getDvarx( "scr_nvs_grain_enabled", "int", 1, 0, 1 );
+	level.scr_nvs_grain_power = getDvarx( "scr_nvs_grain_power", "float", 0.2, 0, 1 );
+
+	level.scr_nvs_shock_enabled = getDvarx( "scr_nvs_shock_enabled", "int", 1, 0, 1 );
+	level.scr_nvs_laser_enabled = getDvarx( "scr_nvs_laser_enabled", "int", 1, 0, 1 );
+	level.scr_nvs_light_enabled = getDvarx( "scr_nvs_light_enabled", "int", 1, 0, 1 );
+
+	level.scr_nvs_thick_enabled = getDvarx( "scr_nvs_thick_enabled", "int", 1, 0, 1 );
+	level.scr_nvs_thick_power = getDvarx( "scr_nvs_thick_power", "float", 0.2, 0, 1 );
+
+	level.scr_nvs_fovscale_enabled = getDvarx( "scr_nvs_fovscale_enabled", "int", 1, 0, 1 );
+	level.scr_nvs_fovscale_power = getDvarx( "scr_nvs_fovscale_power", "float", 0.9, 0.5, 1 );
 
 	if ( !isDefined( game["nvs"] ) )
 	{
@@ -35,10 +46,10 @@ init()
 		game["nvs"]["light_fx"] = loadFx( "nv/light_white_big" );
 
 		//if ( level.scr_nvs_grain_enabled )
-		game["nvs"]["grain_shader"] = preCacheShader("ac130_overlay_grain");
+		game["nvs"]["grain_shader"] = preCacheShader( "ac130_overlay_grain" );
 
 		//if ( level.scr_nvs_shock_enabled )
-		game["nvs"]["night_shock"] = PreCacheShellShock("nightvision");
+		game["nvs"]["night_shock"] = PreCacheShellShock( "nightvision" );
 	}
 
 	level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
@@ -60,51 +71,53 @@ onPlayerConnected()
 
 setupLaserEffect()
 {
+	if ( !level.scr_nvs_grain_enabled ) return;
+
 	// Laser visual improvements
 	// TODO: Move it to config or csv
-	self setClientDvar("cg_laserEndOffset",        "0.5" );
-	self setClientDvar("cg_laserFlarePct",         "0.2" );
-	self setClientDvar("cg_laserLight",            "1"   );
-	self setClientDvar("cg_laserLightBeginOffset", "13"  );
-	self setClientDvar("cg_laserLightBodyTweak",   "15"  );
-	self setClientDvar("cg_laserLightEndOffset",   "-3"  );
-	self setClientDvar("cg_laserLightRadius",      "1.7" );
-	self setClientDvar("cg_laserRadius",           "0.5" );
-	self setClientDvar("cg_laserRange",            "500" );
-	self setClientDvar("cg_laserRangePlayer",      "500" );
+	self setClientDvar( "cg_laserEndOffset",        "0.5" );
+	self setClientDvar( "cg_laserFlarePct",         "0.2" );
+	self setClientDvar( "cg_laserLight",            "1"   );
+	self setClientDvar( "cg_laserLightBeginOffset", "13"  );
+	self setClientDvar( "cg_laserLightBodyTweak",   "15"  );
+	self setClientDvar( "cg_laserLightEndOffset",   "-3"  );
+	self setClientDvar( "cg_laserLightRadius",      "1.7" );
+	self setClientDvar( "cg_laserRadius",           "0.5" );
+	self setClientDvar( "cg_laserRange",            "500" );
+	self setClientDvar( "cg_laserRangePlayer",      "500" );
 }
 
 setupGrainEffect()
 {
-	self.grainOverlay = newClientHudElem( self );
-	self.grainOverlay.x = 0;
-	self.grainOverlay.y = 0;
-	self.grainOverlay.alignX = "left";
-	self.grainOverlay.alignY = "top";
-	self.grainOverlay.horzAlign = "fullscreen";
-	self.grainOverlay.vertAlign = "fullscreen";
-	self.grainOverlay setshader ("ac130_overlay_grain", 640, 480);
-	self.grainOverlay.alpha = 0.0;
-	self.grainOverlay.sort = -1000;
+	self.nvsGrainEffectHud = newClientHudElem( self );
+	self.nvsGrainEffectHud.x = 0;
+	self.nvsGrainEffectHud.y = 0;
+	self.nvsGrainEffectHud.alignX = "left";
+	self.nvsGrainEffectHud.alignY = "top";
+	self.nvsGrainEffectHud.horzAlign = "fullscreen";
+	self.nvsGrainEffectHud.vertAlign = "fullscreen";
+	self.nvsGrainEffectHud setshader( "ac130_overlay_grain", 640, 480 );
+	self.nvsGrainEffectHud.alpha = 0.0;
+	self.nvsGrainEffectHud.sort = -1000;
 }
 
 setupLightEffect()
 {
-	if ( !isDefined(self.nightvisionLightEnt) )
+	if( !isDefined( self.nvsLightEffectEntity ) )
 	{
-		self.nightvisionLightEnt = spawn("script_model", (0, 0, -2000));
-		self.nightvisionLightEnt setModel("tag_origin");
-		self.nightvisionLightEnt Hide();
-		self.nightvisionLightFXPlayed = false;
+		self.nvsLightEffectEntity = spawn( "script_model" , ( 0, 0, -2000 ) );
+		self.nvsLightEffectEntity setModel( "tag_origin" );
+		self.nvsLightEffectEntity Hide();
+		self.nvsLightEffectFxPlayed = false;
 	}
 }
 
 removeLightEffect()
 {
-	if ( isDefined(self.nightvisionLightEnt) )
+	if( isDefined( self.nvsLightEffectEntity ) )
 	{
-		self.nightvisionLightEnt Delete();
-		self.nightvisionLightFXPlayed = false;
+		self.nvsLightEffectEntity Delete();
+		self.nvsLightEffectFxPlayed = false;
 	}
 }
 
@@ -122,25 +135,42 @@ resetAllEffects()
 	self.nvon = false;
 
 	// Reset shellshock effect
-	self notify ("nvs_stop_shock_thread");
-	self StopShellShock();
+	if( level.scr_nvs_shock_enabled )
+	{
+		self notify( "nvs_stop_shock_thread" );
+		self stopShellShock();
+	}
 
 	// Reset laser effect
-	self.laseron = false;
-	self setClientDvar("cg_laserforceon", 0);
-	self setClientDvar("cg_fovscale", 1);
-
-	// Reset grain effect
-	if(isDefined(self.grainOverlay))
+	if( level.scr_nvs_laser_enabled )
 	{
-		self.grainOverlay.alpha = 0.0;
+		self.laseron = false;
+		self setClientDvar( "cg_laserforceon", 0 );
+	}
+
+	// Reset FOV effect
+	if ( level.scr_nvs_fovscale_enabled )
+	{
+		self setClientDvar( "cg_fovscale", 1 );
+	}
+	
+	// Reset grain effect
+	if( isDefined( self.nvsGrainEffectHud ) )
+	{
+		self.nvsGrainEffectHud.alpha = 0.0;
 	}
 
 	// Reset light effect
-	if (isDefined(self.nightvisionLightEnt))
+	if( isDefined( self.nvsLightEffectEntity ) )
 	{
-		self.nightvisionLightEnt Unlink();
-		self.nightvisionLightEnt.origin = (0, 0, -2000);
+		self.nvsLightEffectEntity Unlink();
+		self.nvsLightEffectEntity.origin = (0, 0, -2000);
+	}
+
+	// Reset thick effect
+	if( level.scr_nvs_thick_enabled )
+	{
+		self thread setModifierSpeed( "_night_vision", 0 );
 	}
 }
 
@@ -152,36 +182,50 @@ switchVisionThread()
 
 	for(;;)
 	{
-		self waittill("night_vision_on");
+		self waittill( "night_vision_on" );
 
-		if(!self.nvon)
+		if( !self.nvon )
 		{
 			self.nvon = true;
 
-			self.laseron = true;
-			
-			self setClientDvar("cg_laserforceon", 1);
-			self setClientDvar("cg_fovscale", 0.9);
-
-			if(isDefined(self.grainOverlay))
+			if( level.scr_nvs_laser_enabled )
 			{
-				self.grainOverlay.alpha = 0.2;
+				self.laseron = true;
+				self setClientDvar( "cg_laserforceon", 1 );
 			}
 
-			self thread UpdateShockThread();
-
-			if ( isDefined(self.nightvisionLightEnt) )
+			if( level.scr_nvs_fovscale_enabled )
 			{
-				self.nightvisionLightEnt.origin = self GetEye() + ( 0, 0, 50 );
-				self.nightvisionLightEnt linkto(self);
-				self.nightvisionLightEnt ShowToPlayer(self);
+				self setClientDvar( "cg_fovscale", level.scr_nvs_fovscale_power );
+			}
+			
+			if( level.scr_nvs_grain_enabled && isDefined( self.nvsGrainEffectHud ) )
+			{
+				self.nvsGrainEffectHud.alpha = level.scr_nvs_grain_power;
+			}
 
-				if (!self.nightvisionLightFXPlayed)
+			if( level.scr_nvs_shock_enabled )
+			{
+				self thread updateShockThread();
+			}
+
+			if( level.scr_nvs_light_enabled && isDefined( self.nvsLightEffectEntity ) )
+			{
+				self.nvsLightEffectEntity.origin = self getEye() + ( 0, 0, 50 );
+				self.nvsLightEffectEntity linkto( self );
+				self.nvsLightEffectEntity showToPlayer( self );
+
+				if ( !self.nvsLightEffectFxPlayed )
 				{
 					wait 0.1;
-					playFxOnTag(game["nvs"]["light_fx"], self.nightvisionLightEnt, "tag_origin");
-					self.nightvisionLightFXPlayed = true;
+					playFxOnTag( game["nvs"]["light_fx"], self.nvsLightEffectEntity, "tag_origin" );
+					self.nvsLightEffectFxPlayed = true;
 				}
+			}
+
+			if( level.scr_nvs_thick_enabled )
+			{
+				self thread setModifierSpeed( "_night_vision", level.scr_nvs_thick_power * 100 );
 			}
 		}
 
@@ -190,14 +234,14 @@ switchVisionThread()
 		//self ExecClientCommand( "+actionslot 1");
 		//wait (0.1);
 
-		self waittill("night_vision_off");
+		self waittill( "night_vision_off" );
 
 		self resetAllEffects();
 	}
 }
 
 
-UpdateShockThread()
+updateShockThread()
 {
 	self endon( "nvs_stop_shock_thread" );
 	self endon( "disconnect" );
@@ -207,7 +251,7 @@ UpdateShockThread()
 		duration = 10;
 		self shellshock( "nightvision", duration );
 		wait 0.1;
-		self AllowSprint (true);
+		self allowSprint( true );
 		wait duration;
 	}
 }
@@ -215,7 +259,7 @@ UpdateShockThread()
 
 resetAll()
 {
-	self notify ("nvs_stop_switch_thread");
+	self notify( "nvs_stop_switch_thread" );
 	self resetAllEffects();
 	self removeLightEffect();
 }
