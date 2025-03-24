@@ -17,7 +17,6 @@
 
 #include openwarfare\_utils;
 #include openwarfare\_eventmanager;
-#include openwarfare\_speedcontrol;
 
 init()
 {
@@ -153,7 +152,7 @@ resetAllEffects()
 	{
 		self setClientDvar( "cg_fovscale", 1 );
 	}
-	
+
 	// Reset grain effect
 	if( isDefined( self.nvsGrainEffectHud ) )
 	{
@@ -170,7 +169,7 @@ resetAllEffects()
 	// Reset thick effect
 	if( level.scr_nvs_thick_enabled )
 	{
-		self thread setModifierSpeed( "_night_vision", 0 );
+		self thread openwarfare\_speedcontrol::setModifierSpeed( "_night_vision", 0 );
 	}
 }
 
@@ -225,7 +224,7 @@ switchVisionThread()
 
 			if( level.scr_nvs_thick_enabled )
 			{
-				self thread setModifierSpeed( "_night_vision", level.scr_nvs_thick_power * 100 );
+				self thread openwarfare\_speedcontrol::setModifierSpeed( "_night_vision", level.scr_nvs_thick_power * 100 );
 			}
 		}
 
