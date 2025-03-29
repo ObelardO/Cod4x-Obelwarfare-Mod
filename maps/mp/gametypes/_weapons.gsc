@@ -27,6 +27,8 @@ init()
 	level.scr_claymore_friendly_fire = getdvarx( "scr_claymore_friendly_fire", "int", 0, 0, 2 );
 	level.scr_claymore_arm_time = getdvarx( "scr_claymore_arm_time", "float", 0, 0, 10 ) * 1000;
 	level.scr_claymore_check_plant_distance = getdvarx( "scr_claymore_check_plant_distance", "int", 0, 0, 1 );
+	level.scr_claymore_detect_perk_distance =  getdvarx( "scr_claymore_detect_perk_distance", "int", 512, 64, 512 );
+
 
 	level.scr_show_c4_blink_effect = getdvarx( "scr_show_c4_blink_effect", "int", 1, 0, 1 );
 
@@ -42,8 +44,8 @@ init()
 	level.scr_smoke_grenades_allowdrop = getdvarx( "scr_smoke_grenades_allowdrop", "int", 0, 0, 1 );
 	
 	// Drop of explosives
-	/*level.scr_claymore_allowdrop = getdvarx( "scr_claymore_allowdrop", "int", 0, 0, 1 );
-	level.scr_rpg_allowdrop = getdvarx( "scr_rpg_allowdrop", "int", 0, 0, 1 );
+	level.scr_claymore_allowdrop = getdvarx( "scr_claymore_allowdrop", "int", 0, 0, 1 );
+	/*level.scr_rpg_allowdrop = getdvarx( "scr_rpg_allowdrop", "int", 0, 0, 1 );
 	level.scr_c4_allowdrop = getdvarx( "scr_c4_allowdrop", "int", 0, 0, 1 );*/
 
 	// Drop of weapons
@@ -508,9 +510,10 @@ dropOffhand()
 	if ( level.scr_smoke_grenades_allowdrop ) {
 		grenadeTypes[grenadeTypes.size] = "smoke_grenade_mp";
 	}
-	/*if ( level.scr_claymore_allowdrop ) {
+	if ( level.scr_claymore_allowdrop ) {
 		grenadeTypes[grenadeTypes.size] = "claymore_mp";
 	}
+	/*
 	if ( level.scr_rpg_allowdrop ) {
 		grenadeTypes[grenadeTypes.size] = "rpg_mp";
 	}
@@ -986,6 +989,7 @@ claymoreDetonation()
 				self.owner giveWeapon( "claymore_mp" );
 			}
 			currentAmmo++;
+
 			self.owner setWeaponAmmoStock( "claymore_mp", currentAmmo );
 			self.owner switchToWeapon( "claymore_mp" );
 			self delete();
@@ -1343,7 +1347,9 @@ c4DetectionTrigger( ownerTeam )
 
 	self waittill( "activated" );
 
-	trigger = spawn( "trigger_radius", self.origin-(0,0,128), 0, 512, 256 );
+	detectRadius = level.scr_claymore_detect_perk_distance;
+
+	trigger = spawn( "trigger_radius", self.origin-(0,0,128), 0, detectRadius, detectRadius / 2 );
 	trigger.detectId = "trigger" + getTime() + randomInt( 1000000 );
 
 	trigger thread detectIconWaiter( level.otherTeam[ownerTeam] );
@@ -1371,7 +1377,9 @@ claymoreDetectionTrigger_wait( ownerTeam )
 
 claymoreDetectionTrigger( ownerTeam )
 {
-	trigger = spawn( "trigger_radius", self.origin-(0,0,128), 0, 512, 256 );
+	detectRadius = level.scr_claymore_detect_perk_distance;
+
+	trigger = spawn( "trigger_radius", self.origin-(0,0,128), 0, detectRadius, detectRadius / 2 );
 	trigger.detectId = "trigger" + getTime() + randomInt( 1000000 );
 
 	trigger thread detectIconWaiter( level.otherTeam[ownerTeam] );
@@ -1445,9 +1453,9 @@ setupBombSquad()
 			self.bombSquadIcons[index].z = 0;
 			self.bombSquadIcons[index].alpha = 0;
 			self.bombSquadIcons[index].archived = true;
-			self.bombSquadIcons[index] setShader( "waypoint_bombsquad", 14, 14 );
+			self.bombSquadIcons[index] setShader( "waypoint_bombsquad", 8, 8 );
 			self.bombSquadIcons[index] setWaypoint( false );
-			self.bombSquadIcons[index].detectId = "";
+			self.bombSquadIcons[index].detectId = "";	
 		}
 	}
 	else if ( !self.detectExplosives )
