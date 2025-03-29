@@ -129,6 +129,8 @@ init()
 	forceClientDvar( "aim_automelee_range", level.scr_enable_auto_melee );
 	forceClientDvar( "compass_objectives", level.scr_hud_compass_objectives );
 	forceClientDvar( "cg_overheadNamesMaxDist", level.scr_hud_show_friendly_names_distance );
+	forceClientDvar( "waypointiconwidth", 20 );
+	forceClientDvar( "waypointiconheight", 20 );
 						 
 	// Set bob variables
 	if ( level.scr_bob_effect_enable == 0 ) {
