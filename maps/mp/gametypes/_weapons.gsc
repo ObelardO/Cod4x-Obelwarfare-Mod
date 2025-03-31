@@ -1349,7 +1349,7 @@ c4DetectionTrigger( ownerTeam )
 
 	detectRadius = level.scr_claymore_detect_perk_distance;
 
-	trigger = spawn( "trigger_radius", self.origin-(0,0,128), 0, detectRadius, detectRadius / 2 );
+	trigger = spawn( "trigger_radius", self.origin-(0,0,128), 0, detectRadius, 256 );
 	trigger.detectId = "trigger" + getTime() + randomInt( 1000000 );
 
 	trigger thread detectIconWaiter( level.otherTeam[ownerTeam] );
@@ -1379,7 +1379,7 @@ claymoreDetectionTrigger( ownerTeam )
 {
 	detectRadius = level.scr_claymore_detect_perk_distance;
 
-	trigger = spawn( "trigger_radius", self.origin-(0,0,128), 0, detectRadius, detectRadius / 2 );
+	trigger = spawn( "trigger_radius", self.origin-(0,0,128), 0, detectRadius, 256 );
 	trigger.detectId = "trigger" + getTime() + randomInt( 1000000 );
 
 	trigger thread detectIconWaiter( level.otherTeam[ownerTeam] );
