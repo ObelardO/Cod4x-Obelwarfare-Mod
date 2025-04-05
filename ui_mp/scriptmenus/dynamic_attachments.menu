@@ -29,7 +29,6 @@
 		itemDef
 		{
 			name			"window"
-			visible			1
 			rect			16 20 0 0
 			origin			ORIGIN_QUICKMESSAGEWINDOW
 			forecolor		1 1 1 1
@@ -38,10 +37,27 @@
 			textscale		TEXTSIZE_SMALL
 			textaligny		8
 			text			"@OW_DYNATTACH_MENU_1_SILENCER"
+			visible			when( dvarBool( cl_ow_das_silencer_allowed ) );
 			decoration
 		}
 		execKey "1" { scriptMenuResponse "_silencer_"; close dynamic_attachments }
 	
+		//Disabled state
+		itemDef
+		{
+			rect			16 20 0 0
+			origin			ORIGIN_QUICKMESSAGEWINDOW
+			forecolor		COLOR_DISABLED
+			textfont		UI_FONT_NORMAL
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textscale		TEXTSIZE_SMALL
+			textaligny		8
+			text			"@OW_DYNATTACH_MENU_1_SILENCER"
+			visible			when( !dvarBool( cl_ow_das_silencer_allowed ) );
+		}	
+
+
+
 		itemDef
 		{
 			name			"window"
@@ -54,10 +70,26 @@
 			textscale		TEXTSIZE_SMALL
 			textaligny		8
 			text			"@OW_DYNATTACH_MENU_2_REFLEX"
+			visible			when( dvarBool( cl_ow_das_reflex_allowed ) );
 			decoration
 		}
 		execKey "2" { scriptMenuResponse "_reflex_"; close dynamic_attachments }
 	
+		//Disabled state
+		itemDef
+		{
+			rect			16 36 0 0
+			origin			ORIGIN_QUICKMESSAGEWINDOW
+			forecolor		COLOR_DISABLED
+			textfont		UI_FONT_NORMAL
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textscale		TEXTSIZE_SMALL
+			textaligny		8
+			text			"@OW_DYNATTACH_MENU_2_REFLEX"
+			visible			when( !dvarBool( cl_ow_das_reflex_allowed ) );
+		}	
+
+
 		itemDef
 		{
 			name			"window"
@@ -70,9 +102,25 @@
 			textscale		TEXTSIZE_SMALL
 			textaligny		8
 			text			"@OW_DYNATTACH_MENU_3_ACOG"
+			visible			when( dvarBool( cl_ow_das_acog_allowed ) );
 			decoration
 		}
 		execKey "3" { scriptMenuResponse "_acog_"; close dynamic_attachments }
+
+		//Disabled state
+		itemDef
+		{
+			rect			16 52 0 0
+			origin			ORIGIN_QUICKMESSAGEWINDOW
+			forecolor		COLOR_DISABLED
+			textfont		UI_FONT_NORMAL
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textscale		TEXTSIZE_SMALL
+			textaligny		8
+			text			"@OW_DYNATTACH_MENU_3_ACOG"
+			visible			when( !dvarBool( cl_ow_das_acog_allowed ) );
+		}	
+
 
 		itemDef
 		{
@@ -86,9 +134,25 @@
 			textscale		TEXTSIZE_SMALL
 			textaligny		8
 			text			"@OW_DYNATTACH_MENU_4_REMOVE"
+			visible			when( dvarBool( cl_ow_das_none_allowed ) );
 			decoration
 		}
 		execKey "4" { scriptMenuResponse "none"; close dynamic_attachments }
+
+		//Disabled state
+		itemDef
+		{
+			rect			16 68 0 0
+			origin			ORIGIN_QUICKMESSAGEWINDOW
+			forecolor		COLOR_DISABLED
+			textfont		UI_FONT_NORMAL
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textscale		TEXTSIZE_SMALL
+			textaligny		8
+			text			"@OW_DYNATTACH_MENU_4_REMOVE"
+			visible			when( !dvarBool( cl_ow_das_none_allowed ) );
+		}	
+
 
 		itemDef
 		{

@@ -14,11 +14,9 @@
 #include openwarfare\_eventmanager;
 #include openwarfare\_utils;
 
-
 init()
 {
 	precacheMenu("dynamic_attachments");
-
 
 	// Get the main module's dvar
 	level.scr_dynamic_attachments_enable = getdvarx( "scr_dynamic_attachments_enable", "int", 0, 0, 3 );
@@ -61,6 +59,8 @@ init()
 	level.attachments[3]["name"] = &"MPUI_ACOG_SCOPE";
 
 	level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
+
+	forceClientDvar( "cl_ow_das_enabled", level.scr_dynamic_attachments_enable );
 }
 
 onPlayerConnected()
@@ -86,9 +86,76 @@ onPlayerKilled()
 
 openDynamicAttachmentsMenu()
 {
-	self OpenMenuNoMouse("dynamic_attachments");
+	// Don't open menu if system disabled or player is not alive
+	if ( level.scr_dynamic_attachments_enable == 0 || !isAlive( self ) ) return;
+
+	if ( self isSpectating() ) return ;
+
+	// || self isBotPlayer() ) return;
+
+	// Don't open menu if attachment is changing right now
+	//if ( !isDefined(self.attachmentAction) || self.attachmentAction ) return;
+
+	// Don't open menu if game perion is not valid
+	//if ( !checkGamePeriodValid() ) return;
+
+	self setupMenuDvars();
+
+	self openMenuNoMouse( "dynamic_attachments" );
 }
 
+setupMenuDvars()
+{
+	currentWeapon = self getCurrentWeapon();
+	currentAttachment = getWeaponAttachment( currentWeapon );
+	currentBaseWeapon = getWeaponWithoutAttachments ( currentWeapon, currentAttachment );
+
+	//for ( i = 1; i <= level.scr_dynamic_attachments_enable; i++ )
+	for ( i = 1; i < level.attachments.size; i++ )
+	{
+		checkAttachment = level.attachments[i]["tag"];
+		mdvarName = "cl_ow_das" +checkAttachment+ "allowed";
+
+		if ( checkAttachment == currentAttachment || i > level.scr_dynamic_attachments_enable )
+		{
+			self setClientDvar( mdvarName, "0" );
+			continue;
+		}
+
+		if ( isWeaponValidForAttachment(currentWeapon, currentBaseWeapon, checkAttachment ) )
+		{
+			self setClientDvar( mdvarName, "1" );
+		}
+		else
+		{
+			self setClientDvar( mdvarName, "0" );
+		}
+	}
+
+	if ( currentWeapon == currentBaseWeapon )
+	{
+		self setClientDvar( "cl_ow_das_none_allowed", "0" );
+	}
+	else
+	{
+		self setClientDvar( "cl_ow_das_none_allowed", "1" );
+	}
+}
+
+checkGamePeriodValid()
+{
+	if ( level.inReadyUpPeriod || level.inStrategyPeriod || level.inPrematchPeriod || level.inTimeoutPeriod || game["state"] == "postgame" )
+	{
+		return false;
+	}
+
+	return true;
+}
+
+checkTeamValid( player )
+{
+
+}
 
 installAttachment( newAttachment )
 {
