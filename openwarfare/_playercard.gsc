@@ -112,6 +112,7 @@ onPlayerSpawned()
 	        self.playercardName.sort = -1;
 	        self.playercardName.glowAlpha = 0;
                 self.playercardName.alpha = 0;
+                self.playercardName.color = (1, 1, 1);
 
         }
 
@@ -313,6 +314,7 @@ waitForKill()
         playercardVictim.icon = self maps\mp\gametypes\_rank::getRankInfoIcon( self.pers["rank"], self.pers["prestige"] );
         playercardVictim.team = game["icons"][self.team];
         playercardVictim.text = &"OW_KILLCARD_VICTIM";
+        playercardVictim.textcolor = ( 0.98, 0.67, 0.67 );
 
         //Attacker Info
         playercardAttacker = spawnstruct();
@@ -322,20 +324,23 @@ waitForKill()
         playercardAttacker.icon = attacker maps\mp\gametypes\_rank::getRankInfoIcon( attacker.pers["rank"], attacker.pers["prestige"] );
         playercardAttacker.team = game["icons"][attacker.team];
         playercardAttacker.text = &"OW_KILLCARD_ATTACKER";
-        playercardAttacker.weapon = sWeapon;
-        playercardAttacker.weaponIcon = attacker getWeaponImage( sWeapon );
-        playercardAttacker.hudIcon = attacker getHudIconImage( sWeapon );
+        playercardAttacker.textcolor = ( 0.73, 0.97, 0.71 );
 
+        //Weapon Info
+        weaponInfo = spawnstruct();
+        weaponInfo.weapon = sWeapon;
+        weaponInfo.weaponIcon = attacker getWeaponImage( sWeapon );
+        weaponInfo.hudIcon = attacker getHudIconImage( sWeapon );
 
         // Victim Thread
         if( isDefined( self ) )
                 //self thread showVictimCard( playercardVictim, playercardAttacker  );
-                self thread showKillCard( playercardVictim, playercardAttacker, playercardAttacker );
+                self thread showKillCard( playercardAttacker, playercardVictim, weaponInfo );
         
         // Attacker Thread
         if( isDefined( attacker ) )
                 //attacker thread showAttackerCard( playercardVictim, playercardAttacker );
-                attacker thread showKillCard( playercardVictim, playercardAttacker, playercardVictim );
+                attacker thread showKillCard( playercardVictim, playercardAttacker, weaponInfo );
 }
 
 waitTillHardpointCalled()
@@ -409,12 +414,10 @@ waitTillHardpointCalled()
 
         // Had to thread separate Friendly and Enemy functions all because of the damn text color!
         // If part of the spawnstruct(), color would change if player had Hp message waiting in queue.
-
-
 }
 
 
-showKillCard( playercardVictim, playercardAttacker, playercardDisplay )
+showKillCard( playercardVictim, playercardAttacker, weaponInfo )
 {
 	self endon("disconnect");
 
@@ -443,39 +446,27 @@ showKillCard( playercardVictim, playercardAttacker, playercardDisplay )
 
         // Victim Threads
         if( level.scr_playercards == 3 ) {
-                self thread showKillCardWeapon( playercardAttacker );
+                self thread showKillCardWeapon( weaponInfo );
         }
 
         if( level.scr_playercards == 2 ) {
-                self thread showKillCardWeapon( playercardAttacker );
+                self thread showKillCardWeapon( weaponInfo );
         }
 
         // Set shader and make visable
-        self.playercardImage setShader( "playercard_emblem_" + playercardDisplay.card, 300, 50 );
-        self.playercardRankIcon setShader( playercardDisplay.icon, 25, 25 );
+        self.playercardImage setShader( "playercard_emblem_" + playercardVictim.card, 300, 50 );
+        self.playercardRankIcon setShader( playercardVictim.icon, 25, 25 );
 
-        if ( playercardDisplay == playercardVictim )
-        {
-		self.playercardText setText( playercardAttacker.text );
-	        self.playercardText.color = ( 0.73, 0.97, 0.71 );
+        self.playercardText setText( playercardAttacker.text );
+	self.playercardText.color = playercardAttacker.textcolor;
 
-	        self.playercardName setText( playercardVictim.name );
-	        self.playercardName.color = ( 1, 1, 1 );
-        }
-        else if ( playercardDisplay == playercardAttacker )
-        {
-        	self.playercardText setText( playercardVictim.text );
-	        self.playercardText.color = ( 0.98, 0.67, 0.67 );
+	self.playercardName setText( playercardVictim.name );
 
-	        self.playercardName setText( playercardAttacker.name );
-	        self.playercardName.color = ( 1, 1, 1 );
-        }
-
-        self.playercardRankNumber setText( playercardAttacker.rank );
+        self.playercardRankNumber setText( playercardVictim.rank );
         self.playercardRankNumber.color = ( 0.97, 0.96, 0.34 );
 
         if( level.scr_playercards == 1 ) {
-                self.playercardTeamIcon setShader( playercardDisplay.team, 25, 25 );
+                self.playercardTeamIcon setShader( playercardVictim.team, 25, 25 );
         }
 
         self.playercardImage.alpha = 0.9;
@@ -582,7 +573,7 @@ showKillCard( playercardVictim, playercardAttacker, playercardDisplay )
 }
 
 
-showKillCardWeapon( playercardAttacker )
+showKillCardWeapon( weaponInfo )
 {
 	self endon("disconnect");
 
@@ -590,20 +581,20 @@ showKillCardWeapon( playercardAttacker )
         // Weapon Image Size
         if( level.scr_playercards == 2 ) {
 
-                imageSize = self getWeaponImageSize( playercardAttacker.weapon );
+                imageSize = self getWeaponImageSize( weaponInfo.weapon );
 
 	        if ( imageSize <= 2 ) {
-		        self.playercardKillWeapon setShader( playercardAttacker.weaponIcon, 34, 34 );
+		        self.playercardKillWeapon setShader( weaponInfo.weaponIcon, 34, 34 );
                         self.playercardKillWeapon.x = 90;
                 }
 
 	        if ( imageSize == 3 ) {
-		        self.playercardKillWeapon setShader( playercardAttacker.weaponIcon, 80, 40 );
+		        self.playercardKillWeapon setShader( weaponInfo.weaponIcon, 80, 40 );
                         self.playercardKillWeapon.x = 80;
                 }
 
 	        if ( imageSize == 4 ) {
-		        self.playercardKillWeapon setShader( playercardAttacker.weaponIcon, 64, 64 );
+		        self.playercardKillWeapon setShader( weaponInfo.weaponIcon, 64, 64 );
                         self.playercardKillWeapon.x = 80;
                 }
 
@@ -612,20 +603,20 @@ showKillCardWeapon( playercardAttacker )
        // Icon Image Size
         if( level.scr_playercards == 3 ) {
 
-                iconSize = self getHudIconSize( playercardAttacker.weapon );
+                iconSize = self getHudIconSize( weaponInfo.weapon );
 
 	        if ( iconSize <= 2 ) {
-		        self.playercardKillWeapon setShader( playercardAttacker.hudIcon, 34, 34 );
+		        self.playercardKillWeapon setShader( weaponInfo.hudIcon, 34, 34 );
                         self.playercardKillWeapon.x = 90;
                 }
 
 	        if ( iconSize == 3 ) {
-		        self.playercardKillWeapon setShader( playercardAttacker.hudIcon, 72, 18 );
+		        self.playercardKillWeapon setShader( weaponInfo.hudIcon, 72, 18 );
                         self.playercardKillWeapon.x = 80;
                 }
 
 	        if ( iconSize == 4 ) {
-		        self.playercardKillWeapon setShader( playercardAttacker.hudIcon, 72, 36 );
+		        self.playercardKillWeapon setShader( weaponInfo.hudIcon, 72, 36 );
                         self.playercardKillWeapon.x = 80;
                 }
 	
