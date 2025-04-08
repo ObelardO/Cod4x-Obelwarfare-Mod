@@ -108,7 +108,7 @@ onPlayerSpawned()
 	        self.playercardName.alignY = "top";
 	        self.playercardName.horzAlign = "center";
 	        self.playercardName.vertAlign = "bottom";
-	        self.playercardName.fontScale = 1.6;
+	        self.playercardName.fontScale = 1.4;
 	        self.playercardName.sort = -1;
 	        self.playercardName.glowAlpha = 0;
                 self.playercardName.alpha = 0;
@@ -184,7 +184,7 @@ onPlayerSpawned()
 	                self.playercardNameHardpoint.alignY = "middle";
 	                self.playercardNameHardpoint.horzAlign = "right";
 	                self.playercardNameHardpoint.vertAlign = "middle";
-	                self.playercardNameHardpoint.fontScale = 1.6;
+	                self.playercardNameHardpoint.fontScale = 1.4;
 	                self.playercardNameHardpoint.sort = -1;
 	                self.playercardNameHardpoint.glowAlpha = 0;
                         self.playercardNameHardpoint.alpha = 0;
@@ -326,16 +326,16 @@ waitForKill()
         playercardAttacker.weaponIcon = attacker getWeaponImage( sWeapon );
         playercardAttacker.hudIcon = attacker getHudIconImage( sWeapon );
 
+
         // Victim Thread
         if( isDefined( self ) )
-                self thread showVictimCard( playercardVictim, playercardAttacker  );
+                //self thread showVictimCard( playercardVictim, playercardAttacker  );
+                self thread showKillCard( playercardVictim, playercardAttacker, playercardAttacker );
         
         // Attacker Thread
         if( isDefined( attacker ) )
-                attacker thread showAttackerCard( playercardVictim, playercardAttacker );
-
-        
-
+                //attacker thread showAttackerCard( playercardVictim, playercardAttacker );
+                attacker thread showKillCard( playercardVictim, playercardAttacker, playercardVictim );
 }
 
 waitTillHardpointCalled()
@@ -413,7 +413,8 @@ waitTillHardpointCalled()
 
 }
 
-showVictimCard( playercardVictim, playercardAttacker )
+
+showKillCard( playercardVictim, playercardAttacker, playercardDisplay )
 {
 	self endon("disconnect");
 
@@ -442,28 +443,39 @@ showVictimCard( playercardVictim, playercardAttacker )
 
         // Victim Threads
         if( level.scr_playercards == 3 ) {
-                self thread showVictimWeapon( playercardAttacker );
+                self thread showKillCardWeapon( playercardAttacker );
         }
 
         if( level.scr_playercards == 2 ) {
-                self thread showVictimWeapon( playercardAttacker );
+                self thread showKillCardWeapon( playercardAttacker );
         }
 
         // Set shader and make visable
-        self.playercardImage setShader( "playercard_emblem_" + playercardAttacker.card, 256, 40 );
-        self.playercardRankIcon setShader( playercardAttacker.icon, 25, 25 );
+        self.playercardImage setShader( "playercard_emblem_" + playercardDisplay.card, 300, 50 );
+        self.playercardRankIcon setShader( playercardDisplay.icon, 25, 25 );
 
-        self.playercardName setText( playercardAttacker.name );
-        self.playercardName.color = ( 1, 1, 1 );
+        if ( playercardDisplay == playercardVictim )
+        {
+		self.playercardText setText( playercardAttacker.text );
+	        self.playercardText.color = ( 0.73, 0.97, 0.71 );
 
-        self.playercardText setText( playercardVictim.text );
-        self.playercardText.color = ( 0.98, 0.67, 0.67 );
+	        self.playercardName setText( playercardVictim.name );
+	        self.playercardName.color = ( 1, 1, 1 );
+        }
+        else if ( playercardDisplay == playercardAttacker )
+        {
+        	self.playercardText setText( playercardVictim.text );
+	        self.playercardText.color = ( 0.98, 0.67, 0.67 );
+
+	        self.playercardName setText( playercardAttacker.name );
+	        self.playercardName.color = ( 1, 1, 1 );
+        }
 
         self.playercardRankNumber setText( playercardAttacker.rank );
         self.playercardRankNumber.color = ( 0.97, 0.96, 0.34 );
 
         if( level.scr_playercards == 1 ) {
-                self.playercardTeamIcon setShader( playercardAttacker.team, 25, 25 );
+                self.playercardTeamIcon setShader( playercardDisplay.team, 25, 25 );
         }
 
         self.playercardImage.alpha = 0.9;
@@ -569,163 +581,8 @@ showVictimCard( playercardVictim, playercardAttacker )
 
 }
 
-showAttackerCard( playercardVictim, playercardAttacker ) // attacker is self
-{
-	self endon("disconnect");
 
-
-        // Wait if already showing a card
-        while( isDefined( self.showingPlayercard ) && self.showingPlayercard == true ) {
-                wait( 0.2 );
-        }
-/*
-        // Return if showing a card........... If get error/ exceeded limit of script variables
-        if( isDefined( self.showingPlayercard ) && self.showingPlayercard == true ) {
-                return;
-        }
-*/
-        // Self Spectating
-        if( self.sessionstate == "spectator" ) {
-                return;
-        }
-
-        // Game ended or Intermission
-        if( level.gameEnded || level.intermission ) {
-                return;
-        }
-
-        self.showingPlayercard = true;
-
-        // Attacker Threads
-        if( level.scr_playercards == 3 ) {
-                self thread showAttackerWeapon( playercardAttacker );
-        }
-
-        if( level.scr_playercards == 2 ) {
-                self thread showAttackerWeapon( playercardAttacker );
-        }
-
-        // Set shader and make visable
-        self.playercardImage setShader( "playercard_emblem_" + playercardVictim.card, 256, 40 );
-        self.playercardRankIcon setShader( playercardVictim.icon, 25, 25 );
-
-        self.playercardText setText( playercardAttacker.text );
-        self.playercardText.color = ( 0.73, 0.97, 0.71 );
-
-        self.playercardName setText( playercardVictim.name );
-        self.playercardName.color = ( 1, 1, 1 );
-
-        self.playercardRankNumber setText( playercardVictim.rank );
-        self.playercardRankNumber.color = ( 0.97, 0.96, 0.34 );
-
-        if( level.scr_playercards == 1 ) {
-                self.playercardTeamIcon setShader( playercardVictim.team, 25, 25 );
-        }
-
-        self.playercardImage.alpha = 0.9;
-        self.playercardRankIcon.alpha = 1;
-        self.playercardText.alpha = 1;
-        self.playercardName.alpha = 1;
-        self.playercardRankNumber.alpha = 1;
-
-        if( level.scr_playercards == 1 ) {
-                self.playercardTeamIcon.alpha = 1;
-        }
-
-        if( level.scr_playercards >= 2 ) {
-                self.playercardKillWeapon.alpha = 1;
-        }
-
-        // Time shader visible
-        wait( level.scr_playercards_time_visible );
-
-        // Move to bottom and set non-visible
-        self.playercardImage moveOverTime( 0.40 );
-        self.playercardRankIcon moveOverTime( 0.40 );
-        self.playercardText moveOverTime( 0.40 );
-        self.playercardName moveOverTime( 0.40 );
-        self.playercardRankNumber moveOverTime( 0.40 );
-
-        if( level.scr_playercards == 1 ) {
-                self.playercardTeamIcon moveOverTime( 0.40 );
-        }
-
-        if( level.scr_playercards >= 2 ) {
-                self.playercardKillWeapon moveOverTime( 0.40 );
-        }
-
-        self.playercardImage.y = 20;
-        self.playercardRankIcon.y = 40;
-        self.playercardText.y = 0;
-        self.playercardName.y = 30;
-        self.playercardRankNumber.y = 30;
-
-        if( level.scr_playercards == 1 ) {
-                self.playercardTeamIcon.y = 40;
-        }
-
-        if( level.scr_playercards >= 2 ) {
-                self.playercardKillWeapon.y = 40;
-        }
-     
-        // Time wait to move to bottom
-        wait( 0.4 );
-
-        // Move back to start position
-        self.playercardImage moveOverTime( 0.40 );
-        self.playercardRankIcon moveOverTime( 0.40 );
-        self.playercardText moveOverTime( 0.40 );
-        self.playercardName moveOverTime( 0.40 );
-        self.playercardRankNumber moveOverTime( 0.40 );
-
-        if( level.scr_playercards == 1 ) {
-                self.playercardTeamIcon moveOverTime( 0.40 );
-        }
-
-        if( level.scr_playercards >= 2 ) {
-                self.playercardKillWeapon moveOverTime( 0.40 );
-        }
-
-        self.playercardImage.y = -110;
-        self.playercardRankIcon.y = -90;
-        self.playercardText.y = -130;
-        self.playercardName.y = -100;
-        self.playercardRankNumber.y = -100;
-
-        if( level.scr_playercards == 1 ) {
-                self.playercardTeamIcon.y = -90;
-        }
-
-        if( level.scr_playercards >= 2 ) {
-                self.playercardKillWeapon.y = -90;
-        }
-
-        self.playercardImage.alpha = 0;
-        self.playercardRankIcon.alpha = 0;
-        self.playercardText.alpha = 0;
-        self.playercardName.alpha = 0;
-        self.playercardRankNumber.alpha = 0;
-
-        if( level.scr_playercards == 1 ) {
-                self.playercardTeamIcon.alpha = 0;
-        }
-
-        if( level.scr_playercards >= 2 ) {
-                self.playercardKillWeapon.alpha = 0;
-        }
-
-
-        // Time wait to move back
-        wait( 0.4 );
-
-        self.showingPlayercard = false;
-
-        // Hint - to make all the hud elements move together in time you must move the SAME number of units
-        //        for each element. Start and stop positions must total the same amount each element must move! 
-
-}
-
-showAttackerWeapon( playercardAttacker )
+showKillCardWeapon( playercardAttacker )
 {
 	self endon("disconnect");
 
@@ -776,56 +633,6 @@ showAttackerWeapon( playercardAttacker )
 
 }
 
-showVictimWeapon( playercardAttacker )
-{
-	self endon("disconnect");
-
-
-        // Weapon Image Size
-        if( level.scr_playercards == 2 ) {
-
-                imageSize = self getWeaponImageSize( playercardAttacker.weapon );
-
-	        if ( imageSize <= 2 ) {
-		        self.playercardKillWeapon setShader( playercardAttacker.weaponIcon, 34, 34 );
-                        self.playercardKillWeapon.x = 90;
-                }
-
-	        if ( imageSize == 3 ) {
-		        self.playercardKillWeapon setShader( playercardAttacker.weaponIcon, 80, 40 );
-                        self.playercardKillWeapon.x = 80;
-                }
-
-	        if ( imageSize == 4 ) {
-		        self.playercardKillWeapon setShader( playercardAttacker.weaponIcon, 64, 64 );
-                        self.playercardKillWeapon.x = 80;
-                }
-
-       }
-
-       // Icon Image Size
-        if( level.scr_playercards == 3 ) {
-
-                iconSize = self getHudIconSize( playercardAttacker.weapon );
-
-	        if ( iconSize <= 2 ) {
-		        self.playercardKillWeapon setShader( playercardAttacker.hudIcon, 34, 34 );
-                        self.playercardKillWeapon.x = 90;
-                }
-
-	        if ( iconSize == 3 ) {
-		        self.playercardKillWeapon setShader( playercardAttacker.hudIcon, 72, 18 );
-                        self.playercardKillWeapon.x = 80;
-                }
-
-	        if ( iconSize == 4 ) {
-		        self.playercardKillWeapon setShader( playercardAttacker.hudIcon, 72, 36 );
-                        self.playercardKillWeapon.x = 80;
-                }
-	
-        }
-
-}
 
 showEnemyPlayercardHardpoint( playercardHp )
 {
