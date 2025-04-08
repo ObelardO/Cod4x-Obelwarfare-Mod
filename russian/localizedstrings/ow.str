@@ -186,7 +186,7 @@ LANG_RUSSIAN "Заморозьте всех игроков из другой команды."
 // maps/mp/gametypes/gg.gsc
 //******************************************************************************
 REFERENCE GUNGAME
-LANG_RUSSIAN "Gun Game"
+LANG_RUSSIAN "Гонка вооружений"
 
 REFERENCE GUNGAME_OBJECTIVES
 LANG_RUSSIAN "Набирайте уровень, убивая других игроков из имеющегося у вас оружия."
@@ -1232,13 +1232,32 @@ LANG_RUSSIAN "^3Esc.^7 Отмена"
 
 
 //******************************************************************************
+// openwarfare/_playercard.gsc
+//******************************************************************************
+REFERENCE KILLCARD_VICTIM
+LANG_RUSSIAN "Вас убил:"
+
+REFERENCE KILLCARD_ATTACKER
+LANG_RUSSIAN "Вы убили:"
+
+REFERENCE KILLCARD_UAV_INBOUND
+LANG_RUSSIAN "Вызвал беспилотный разведчик"
+
+REFERENCE KILLCARD_AIRSTRIKE_INBOUN
+LANG_RUSSIAN "Вызвал авиаудар"
+
+REFERENCE KILLCARD_HELICOPTER_INBOUN
+LANG_RUSSIAN "Вызвал вертолет"
+
+
+//******************************************************************************
 // ui_mp/connect.menu
 //******************************************************************************
 REFERENCE BROUGHT2UBY
 LANG_RUSSIAN "Важная информация:"
 
 REFERENCE SERVERPOWEREDBY
-LANG_RUSSIAN "ObelWarfare"
+LANG_RUSSIAN "ObelWarfare Mod"
 
 
 //******************************************************************************
