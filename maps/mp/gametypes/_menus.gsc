@@ -268,11 +268,14 @@ onMenuResponse()
 		}	// the only responses remain are change class events
 		else if( menu == game["menu_changeclass"] || menu == game["menu_changeclass_offline"] )
 		{
-			self closeMenu();
-			self closeInGameMenu();
+			if ( !isDefined( level.ow_cac_allow_ingame_ranked ) || !level.ow_cac_allow_ingame_ranked )
+			{	
+				self closeMenu();
+				self closeInGameMenu();
 
-			self.selectedClass = true;
-			self [[level.class]](response);
+				self.selectedClass = true;
+				self [[level.class]]( response );
+			}
 		}
 		else if ( !level.console )
 		{
