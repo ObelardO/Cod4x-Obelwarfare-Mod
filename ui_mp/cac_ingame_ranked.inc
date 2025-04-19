@@ -16,6 +16,10 @@
 #define ORIGIN_STATUS			390 20
 #define MENU_FONT_COLOR2		1 1 1 0.75
 
+#define REF_SPECIALTY_EQUIPMENT	"perk_equipment"
+#define REF_SPECIALTY_WEAPON	"perk_weapon"
+#define REF_SPECIALTY_ABILITY	"perk_ability"
+
 #include "ui_mp/stats_info.inc"
 
 	menuDef	{
@@ -401,6 +405,7 @@
 		execNow "statGetInDvar "CAC_S_PRIMARY_ATTACHMENT" ui_primary_attachment_slot"; \
 		execNowOnDvarStringValue ui_primary_attachment_slot 4 "statset "CAC_S_SPECIALTY_EQUIPMENT" 193"; \
 		execNowOnDvarStringValue ui_primary_attachment_slot 5 "statset "CAC_S_SPECIALTY_EQUIPMENT" 193"; \
+		scriptMenuResponse "cac_set,secondary,"weapRef; \
 		uiScript openMenuOnDvar "selected_weapon_class" assault CAC_PREFIX"attachment_popup_assault"suffix; \
 		uiScript openMenuOnDvar "selected_weapon_class" SMG CAC_PREFIX"attachment_popup_SMG"suffix; \
 		uiScript openMenuOnDvar "selected_weapon_class" LMG CAC_PREFIX"attachment_popup_LMG"suffix; \
@@ -418,6 +423,7 @@
 		execNow "statGetInDvar "CAC_S_SECONDARY_ATTACHMENT" ui_secondary_attachment_slot"; \
 		execNowOnDvarStringValue ui_secondary_attachment_slot 4 "statset "CAC_S_SPECIALTY_EQUIPMENT" 193"; \
 		execNowOnDvarStringValue ui_secondary_attachment_slot 5 "statset "CAC_S_SPECIALTY_EQUIPMENT" 193"; \
+		scriptMenuResponse "cac_set,primary,"weapRef; \
 		open CAC_PREFIX"attachment_popup_fake"; \
 		open CAC_PREFIX"popup_cac_camo2";
 		
@@ -432,6 +438,7 @@
 		execNow "statGetInDvar "CAC_S_PRIMARY_ATTACHMENT" ui_primary_attachment_slot"; \
 		execNowOnDvarStringValue ui_primary_attachment_slot 4 "statset "CAC_S_SPECIALTY_EQUIPMENT" 193"; \
 		execNowOnDvarStringValue ui_primary_attachment_slot 5 "statset "CAC_S_SPECIALTY_EQUIPMENT" 193"; \
+		scriptMenuResponse "cac_set,secondary,"weapRef; \
 		PREPROC_ATTACH_CLOSEALL
 		
 	// hacked to hide the second primary if same weapon is selected in first primary, change weapon description to "Already selected"
@@ -513,13 +520,13 @@
 	menuDef	{\
 		IMPROVED_POPUP_SETUP_ONOPEN( CAC_PREFIX"popup_cac_assault"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+20+y_offset), ;, execnow "set "UI_FOCUSFIRST" "REF_M16"; set ui_inside_popup assault";, 0 )\
 		LOCAL_WEAPON_INFO_WINDOW( "ui_primary_highlighted" )\
-		LOCAL_WEAPON_ITEM( suffix, 1, "@WEAPON_M16", STAT_ASSAULT_M16, REF_M16, "ui_primary_highlighted", "3025" )\
-		LOCAL_WEAPON_ITEM( suffix, 2, "@WEAPON_AK47", STAT_ASSAULT_AK47, REF_AK47, "ui_primary_highlighted", "3020" )\
-		LOCAL_WEAPON_ITEM( suffix, 3, "@WEAPON_M4_CARBINE", STAT_ASSAULT_M4, REF_M4, "ui_primary_highlighted", "3026" )\
-		LOCAL_WEAPON_ITEM( suffix, 4, "@WEAPON_G3", STAT_ASSAULT_G3, REF_G3, "ui_primary_highlighted", "3023" )\
-		LOCAL_WEAPON_ITEM( suffix, 5, "@WEAPON_G36C", STAT_ASSAULT_G36C, REF_G36C, "ui_primary_highlighted", "3024" )\
-		LOCAL_WEAPON_ITEM( suffix, 6, "@WEAPON_M14", STAT_ASSAULT_M14, REF_M14, "ui_primary_highlighted", "3021" )\
-		LOCAL_WEAPON_ITEM2( suffix, 7, "@WEAPON_MP44", STAT_ASSAULT_MP44, REF_MP44, "ui_primary_highlighted", "3022" )\
+		LOCAL_WEAPON_ITEM( suffix, 1, "@WEAPON_M16", STAT_ASSAULT_M16, REF_M16, "ui_primary_highlighted", 3025 )\
+		LOCAL_WEAPON_ITEM( suffix, 2, "@WEAPON_AK47", STAT_ASSAULT_AK47, REF_AK47, "ui_primary_highlighted", 3020 )\
+		LOCAL_WEAPON_ITEM( suffix, 3, "@WEAPON_M4_CARBINE", STAT_ASSAULT_M4, REF_M4, "ui_primary_highlighted", 3026 )\
+		LOCAL_WEAPON_ITEM( suffix, 4, "@WEAPON_G3", STAT_ASSAULT_G3, REF_G3, "ui_primary_highlighted", 3023 )\
+		LOCAL_WEAPON_ITEM( suffix, 5, "@WEAPON_G36C", STAT_ASSAULT_G36C, REF_G36C, "ui_primary_highlighted", 3024 )\
+		LOCAL_WEAPON_ITEM( suffix, 6, "@WEAPON_M14", STAT_ASSAULT_M14, REF_M14, "ui_primary_highlighted", 3021 )\
+		LOCAL_WEAPON_ITEM2( suffix, 7, "@WEAPON_MP44", STAT_ASSAULT_MP44, REF_MP44, "ui_primary_highlighted", 3022 )\
 	}\
 	menuDef	{\
 		IMPROVED_POPUP_SETUP_ONOPEN( CAC_PREFIX"popup_cac_LMG"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+20+y_offset), ;, execnow "set "UI_FOCUSFIRST" "REF_M249SAW"; set ui_inside_popup lmg";, 0 )\
@@ -578,19 +585,21 @@
 		/* pointer icon */ \
 		PREPROC_SHADER_DRAW_ALIGNED( 200 -16 16 8 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "hitech_arrow_right", 0.55 0.95 0.55 0.7, 0, 2, CHOICE_POPUP_BORDER_COLOR )
 
-	#define LOCAL_ATTACHMENT_ACTION( pslot, pnum, paction ) \
+	#define LOCAL_ATTACHMENT_ACTION( pslot, pnum, paction, pname ) \
 		paction; \
 		statsetusingtable( pslot, pnum ); \
+		scriptMenuResponse "cac_set,primary_attachment,"pname; \
 		open CAC_PREFIX"popup_cac_camo";
 		
-	#define LOCAL_ATTACHMENT_ACTION2( pslot, pnum, paction) \
+	#define LOCAL_ATTACHMENT_ACTION2( pslot, pnum, paction, pname) \
 		paction; \
-		statsetusingtable( pslot, pnum );\
+		statsetusingtable( pslot, pnum ); \
+		scriptMenuResponse "cac_set,secondary_attachment,"pname; \
 		PREPROC_ATTACH_CLOSEALL
 
 	#define LOCAL_ATTACHMENT_ITEM( itemNum, p_setstat, p_numref, pname, paction, ptype, statDvar, bitMask )\
-		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,pname,3), LOCAL_ATTACHMENT_ACTION( p_setstat, p_numref, paction );CLEAR_NEW( statDvar, bitMask ); scriptMenuResponse "cac_set,primary_attachment,"pname;, execnow "set ui_attachment_highlighted "pname;, CLEAR_NEW( statDvar, bitMask );, when( ptype == "primary" && ( stat( stat( p_setstat-1 )+3000 ) & int(tablelookup( "mp/attachmenttable.csv", 9, p_numref, 10 ) ) ) ), ptype == "primary" && ( stat( stat( p_setstat-1 )+3000 ) & int(tablelookup( "mp/attachmenttable.csv", 9, p_numref, 10 ) ) ) ) \
-		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,pname,3), LOCAL_ATTACHMENT_ACTION2( p_setstat, p_numref, paction );CLEAR_NEW( statDvar, bitMask );, execnow "set ui_attachment_highlighted "pname;, CLEAR_NEW( statDvar, bitMask );, when( ptype == "secondary" && ( stat( stat( p_setstat-1 )+3000 ) & int(tablelookup( "mp/attachmenttable.csv", 9, p_numref, 10 )) ) ), ptype == "secondary" && ( stat( stat( p_setstat-1 )+3000 ) & int(tablelookup( "mp/attachmenttable.csv", 9, p_numref, 10 ) ) ) ) \
+		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,pname,3), LOCAL_ATTACHMENT_ACTION( p_setstat, p_numref, paction, pname );CLEAR_NEW( statDvar, bitMask );, execnow "set ui_attachment_highlighted "pname;, CLEAR_NEW( statDvar, bitMask );, when( ptype == "primary" && ( stat( stat( p_setstat-1 )+3000 ) & int(tablelookup( "mp/attachmenttable.csv", 9, p_numref, 10 ) ) ) ), ptype == "primary" && ( stat( stat( p_setstat-1 )+3000 ) & int(tablelookup( "mp/attachmenttable.csv", 9, p_numref, 10 ) ) ) ) \
+		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,pname,3), LOCAL_ATTACHMENT_ACTION2( p_setstat, p_numref, paction, pname );CLEAR_NEW( statDvar, bitMask );, execnow "set ui_attachment_highlighted "pname;, CLEAR_NEW( statDvar, bitMask );, when( ptype == "secondary" && ( stat( stat( p_setstat-1 )+3000 ) & int(tablelookup( "mp/attachmenttable.csv", 9, p_numref, 10 )) ) ), ptype == "secondary" && ( stat( stat( p_setstat-1 )+3000 ) & int(tablelookup( "mp/attachmenttable.csv", 9, p_numref, 10 ) ) ) ) \
 		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, execnow "set ui_attachment_highlighted "pname, ;, when( ( stat( stat( p_setstat-1 )+3000 ) & int(tablelookup( "mp/attachmenttable.csv", 9, p_numref, 10 ))) == 0 ); ) \
 		CHOICE_DBUTTON_VIS( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,pname,3), when( ( stat( stat( p_setstat-1 )+3000 ) & int(tablelookup( "mp/attachmenttable.csv", 9, p_numref, 10 ))) == 0 ); ) \
 		CHOICE_NEWICON_VIS( itemNum, "specialty_new", when( ( int(tablelookup( "mp/attachmenttable.csv", 9, p_numref, 10 )) != 1 ) && (stat( stat( p_setstat-1 )+3000 ) & int(tablelookup( "mp/attachmenttable.csv", 9, p_numref, 10 ))<<16 )) ) \
@@ -696,6 +705,7 @@
 			statsetusingtable( CAC_SECONDARY_STORAGE, tableLookup( "mp/statstable.csv", 4, weapRef, 1 ) ); \
 			execNow "statGetInDvar "CAC_S_SECONDARY_STORAGE" ui_secondary_weapon"; \
 			CLEAR_NEW( ui_secondary_weapon, WEAPON_NEW_BITMASK ); \
+			scriptMenuResponse "cac_set,secondary,"weapRef; \
 			PREPROC_ATTACH_CLOSEALL
 
 	#define LOCAL_SIDEARM_ACTION2( pstat, weapRef ) \		
@@ -705,6 +715,7 @@
 			statsetusingtable( CAC_SECONDARY_STORAGE, tableLookup( "mp/statstable.csv", 4, weapRef, 1 ) ); \
 			execNow "statGetInDvar "CAC_S_SECONDARY_STORAGE" ui_secondary_weapon"; \
 			CLEAR_NEW( ui_secondary_weapon, WEAPON_NEW_BITMASK ); \
+			scriptMenuResponse "cac_set,secondary,"weapRef; \
 			play "mouse_click"; \
 			uiScript openMenuOnDvar "selected_weapon_class" pistol CAC_PREFIX"attachment_popup_pistol";
 		
@@ -837,13 +848,14 @@
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 56 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/statstable.csv",4,dvarString(highlight_dvar),10), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE \
 		visible when( (dvarString(ui_sgrenade_highlighted)=="smoke_grenade") && (tableLookup("mp/statsTable.csv",0,stat(CAC_SPECIALTY_EQUIPMENT),4)=="specialty_specialgrenade") ); )
 
-	#define LOCAL_SGRENADE_ACTION( pstat ) \
+	#define LOCAL_SGRENADE_ACTION( pstat, weapRef ) \
 			play "mouse_click"; \
 			statsetusingtable( CAC_SPECIAL_GRENADE, pstat ); \
+			scriptMenuResponse "cac_set,spec_grenade,"weapRef; \
 			close CAC_PREFIX"popup_cac_extra"
 		
 	#define LOCAL_SGRENADE_ITEM( itemNum, weaponName, weaponStat, weaponRef, highlight_dvar )\
-		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, weaponName, LOCAL_SGRENADE_ACTION( weaponStat ), execnow "set "highlight_dvar" "weaponRef, ;, \
+		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, weaponName, LOCAL_SGRENADE_ACTION( weaponStat, weaponRef ), execnow "set "highlight_dvar" "weaponRef, ;, \
 		when( ( (tableLookup("mp/statsTable.csv",0,weaponStat,4)=="smoke_grenade") && (tableLookup("mp/statsTable.csv",0,stat(CAC_SPECIALTY_EQUIPMENT),4)=="specialty_specialgrenade") ) == 0 );, \
 			  ( (tableLookup("mp/statsTable.csv",0,weaponStat,4)=="smoke_grenade") && (tableLookup("mp/statsTable.csv",0,stat(CAC_SPECIALTY_EQUIPMENT),4)=="specialty_specialgrenade") ) == 0 ) \
 		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, execnow "set "highlight_dvar" "weaponRef, ;, when( (tableLookup("mp/statsTable.csv",0,weaponStat,4)=="smoke_grenade") && (tableLookup("mp/statsTable.csv",0,stat(CAC_SPECIALTY_EQUIPMENT),4)=="specialty_specialgrenade") ); ) \
@@ -888,17 +900,18 @@
 		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+6) 0 (CHOICE_SIZE_Y*2) CHOICE_SIZE_Y CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "specialty_locked", 1 1 1 1, 0, 2, CHOICE_POPUP_BORDER_COLOR \
 		visible when( stat( int(tablelookup("mp/statsTable.csv",4,dvarString(highlight_dvar),1)) ) == 0 ); ) \
 
-	#define LOCAL_PERK_ACTION( pslot, pstat, paction ) \
+	#define LOCAL_PERK_ACTION( pslot, pstat, paction, slotRef, perkRef ) \
 			play "mouse_click"; \
 			close self \
 			statsetusingtable( pslot, pstat ); \
+			scriptMenuResponse "cac_set,"slotRef","perkRef;\
 			paction
 		
-	#define LOCAL_PERK_ITEM( itemNum, camoName, pstat, perkRef, pslot, highlight_dvar, paction )\
-		LOCAL_PERK_ITEM_VIS( itemNum, camoName, pstat, perkRef, pslot, highlight_dvar, paction, 1 )
+	#define LOCAL_PERK_ITEM( itemNum, camoName, pstat, perkRef, pslot, slotRef, highlight_dvar, paction )\
+		LOCAL_PERK_ITEM_VIS( itemNum, camoName, pstat, perkRef, pslot, slotRef, highlight_dvar, paction, 1 )
 		
-	#define LOCAL_PERK_ITEM_VIS( itemNum, camoName, pstat, perkRef, pslot, highlight_dvar, paction, visArg )\
-		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, camoName, LOCAL_PERK_ACTION( pslot, pstat, paction );CLEAR_PERK_NEW( perkRef );, execnow "set "highlight_dvar" "perkRef, CLEAR_PERK_NEW( perkRef );, \
+	#define LOCAL_PERK_ITEM_VIS( itemNum, camoName, pstat, perkRef, pslot, slotRef, highlight_dvar, paction, visArg )\
+		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, camoName, LOCAL_PERK_ACTION( pslot, pstat, paction, slotRef, perkRef );CLEAR_PERK_NEW( perkRef );, execnow "set "highlight_dvar" "perkRef, CLEAR_PERK_NEW( perkRef );, \
 		when( stat( pstat ) > 0 && ( tableLookup("mp/statsTable.csv",0,stat(CAC_SPECIAL_GRENADE),4)=="smoke_grenade" && tableLookup("mp/statsTable.csv",0,pstat,4)=="specialty_specialgrenade" )==0 && visArg );, \
 			  stat( pstat ) > 0 && ( tableLookup("mp/statsTable.csv",0,stat(CAC_SPECIAL_GRENADE),4)=="smoke_grenade" && tableLookup("mp/statsTable.csv",0,pstat,4)=="specialty_specialgrenade" )==0 && visArg ) \
 		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, execnow "set "highlight_dvar" "perkRef, ;, \
@@ -922,13 +935,13 @@
 		IMPROVED_POPUP_SETUP_ONOPEN( CAC_PREFIX"popup_cac_perk1", 7, (CHOICE_X( 4 )-2), (CHOICE_Y( 4 )+18), ;, execnow "set "UI_FOCUSFIRST" "REF_C4_X2"; set ui_inside_popup perk1";, 1 )
 		onClose{ execnow "set ui_inside_popup 0"; }
 		LOCAL_PERK_INFO_WINDOW( "ui_perk_highlighted" )
-		LOCAL_PERK_ITEM( 1, "@PERKS_C4_X_2", STAT_C4_X2, REF_C4_X2, CAC_SPECIALTY_EQUIPMENT, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 2, "@PERKS_SPECIAL_GRENADES_X_3", STAT_SPECIALGRENADE_X3, REF_SPECIALGRENADE_X3, CAC_SPECIALTY_EQUIPMENT, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 3, "@PERKS_RPG7_X_2", STAT_RPG_X2, REF_RPG_X2, CAC_SPECIALTY_EQUIPMENT, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 4, "@PERKS_CLAYMORE_X_2", STAT_CLAYMORE_X2, REF_CLAYMORE_X2, CAC_SPECIALTY_EQUIPMENT, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 5, "@PERKS_FRAG_X_3", STAT_FRAG_X3, REF_FRAG_X3, CAC_SPECIALTY_EQUIPMENT, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 6, "@PERKS_BANDOLIER", STAT_EXTRAAMMO, REF_EXTRAAMMO, CAC_SPECIALTY_EQUIPMENT, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 7, "@PERKS_BOMB_SQUAD", STAT_DETECTEXPLOSIVE, REF_DETECTEXPLOSIVE, CAC_SPECIALTY_EQUIPMENT, "ui_perk_highlighted", ; )
+		LOCAL_PERK_ITEM( 1, "@PERKS_C4_X_2", STAT_C4_X2, REF_C4_X2, CAC_SPECIALTY_EQUIPMENT, REF_SPECIALTY_EQUIPMENT, "ui_perk_highlighted", ; )
+		LOCAL_PERK_ITEM( 2, "@PERKS_SPECIAL_GRENADES_X_3", STAT_SPECIALGRENADE_X3, REF_SPECIALGRENADE_X3, CAC_SPECIALTY_EQUIPMENT, REF_SPECIALTY_EQUIPMENT, "ui_perk_highlighted", ; )
+		LOCAL_PERK_ITEM( 3, "@PERKS_RPG7_X_2", STAT_RPG_X2, REF_RPG_X2, CAC_SPECIALTY_EQUIPMENT, REF_SPECIALTY_EQUIPMENT, "ui_perk_highlighted", ; )
+		LOCAL_PERK_ITEM( 4, "@PERKS_CLAYMORE_X_2", STAT_CLAYMORE_X2, REF_CLAYMORE_X2, CAC_SPECIALTY_EQUIPMENT, REF_SPECIALTY_EQUIPMENT, "ui_perk_highlighted", ; )
+		LOCAL_PERK_ITEM( 5, "@PERKS_FRAG_X_3", STAT_FRAG_X3, REF_FRAG_X3, CAC_SPECIALTY_EQUIPMENT, REF_SPECIALTY_EQUIPMENT, "ui_perk_highlighted", ; )
+		LOCAL_PERK_ITEM( 6, "@PERKS_BANDOLIER", STAT_EXTRAAMMO, REF_EXTRAAMMO, CAC_SPECIALTY_EQUIPMENT, REF_SPECIALTY_EQUIPMENT, "ui_perk_highlighted", ; )
+		LOCAL_PERK_ITEM( 7, "@PERKS_BOMB_SQUAD", STAT_DETECTEXPLOSIVE, REF_DETECTEXPLOSIVE, CAC_SPECIALTY_EQUIPMENT, REF_SPECIALTY_EQUIPMENT, "ui_perk_highlighted", ; )
 	}
 	
 	#define LOCAL_RESET_PISTOL \
@@ -950,14 +963,14 @@
 		IMPROVED_POPUP_SETUP_ONOPEN( CAC_PREFIX"popup_cac_perk2", 7, (CHOICE_X( 5 )-2), (CHOICE_Y( 5 )+22), ;, execnow "set "UI_FOCUSFIRST" "REF_BULLETDAMAGE"; set ui_inside_popup perk2";, 1 )
 		onClose{ execnow "set ui_inside_popup 0"; }
 		LOCAL_PERK_INFO_WINDOW( "ui_perk_highlighted" )
-		LOCAL_PERK_ITEM( 1, "@PERKS_STOPPING_POWER", STAT_BULLETDAMAGE, REF_BULLETDAMAGE, CAC_SPECIALTY_WEAPON, "ui_perk_highlighted", LOCAL_RESET_PISTOL )
-		LOCAL_PERK_ITEM( 2, "@PERKS_JUGGERNAUT", STAT_ARMORVEST, REF_ARMORVEST, CAC_SPECIALTY_WEAPON, "ui_perk_highlighted", LOCAL_RESET_PISTOL )
-		LOCAL_PERK_ITEM( 3, "@PERKS_SLEIGHT_OF_HAND", STAT_FASTRELOAD, REF_FASTRELOAD, CAC_SPECIALTY_WEAPON, "ui_perk_highlighted", LOCAL_RESET_PISTOL )
-		LOCAL_PERK_ITEM( 4, "@PERKS_DOUBLE_TAP", STAT_ROF, REF_ROF, CAC_SPECIALTY_WEAPON, "ui_perk_highlighted", LOCAL_RESET_PISTOL )
-		/*hacked, init to m16 if not m16*/	LOCAL_PERK_ITEM_VIS( 5, "@PERKS_OVERKILL", STAT_TWOPRIMARIES, REF_TWOPRIMARIES, CAC_SPECIALTY_WEAPON, "ui_perk_highlighted", LOCAL_INIT_DUAL_PRIMARY_M16, (stat(CAC_PRIMARY) != 25) )
-		/*hacked, init to ak47 if m16*/		LOCAL_PERK_ITEM_VIS( 5, "@PERKS_OVERKILL", STAT_TWOPRIMARIES, REF_TWOPRIMARIES, CAC_SPECIALTY_WEAPON, "ui_perk_highlighted", LOCAL_INIT_DUAL_PRIMARY_AK47, (stat(CAC_PRIMARY) == 25) )
-		LOCAL_PERK_ITEM( 6, "@PERKS_UAV_JAMMER", STAT_GPSJAMMER, REF_GPSJAMMER, CAC_SPECIALTY_WEAPON, "ui_perk_highlighted", LOCAL_RESET_PISTOL )
-		LOCAL_PERK_ITEM( 7, "@PERKS_SONIC_BOOM", STAT_EXPLOSIVEDAMAGE, REF_EXPLOSIVEDAMAGE, CAC_SPECIALTY_WEAPON, "ui_perk_highlighted", LOCAL_RESET_PISTOL )
+		LOCAL_PERK_ITEM( 1, "@PERKS_STOPPING_POWER", STAT_BULLETDAMAGE, REF_BULLETDAMAGE, CAC_SPECIALTY_WEAPON, REF_SPECIALTY_WEAPON, "ui_perk_highlighted", LOCAL_RESET_PISTOL )
+		LOCAL_PERK_ITEM( 2, "@PERKS_JUGGERNAUT", STAT_ARMORVEST, REF_ARMORVEST, CAC_SPECIALTY_WEAPON, REF_SPECIALTY_WEAPON, "ui_perk_highlighted", LOCAL_RESET_PISTOL )
+		LOCAL_PERK_ITEM( 3, "@PERKS_SLEIGHT_OF_HAND", STAT_FASTRELOAD, REF_FASTRELOAD, CAC_SPECIALTY_WEAPON, REF_SPECIALTY_WEAPON, "ui_perk_highlighted", LOCAL_RESET_PISTOL )
+		LOCAL_PERK_ITEM( 4, "@PERKS_DOUBLE_TAP", STAT_ROF, REF_ROF, CAC_SPECIALTY_WEAPON, REF_SPECIALTY_WEAPON, "ui_perk_highlighted", LOCAL_RESET_PISTOL )
+		/*hacked, init to m16 if not m16*/	LOCAL_PERK_ITEM_VIS( 5, "@PERKS_OVERKILL", STAT_TWOPRIMARIES, REF_TWOPRIMARIES, CAC_SPECIALTY_WEAPON, REF_SPECIALTY_WEAPON, "ui_perk_highlighted", LOCAL_INIT_DUAL_PRIMARY_M16, (stat(CAC_PRIMARY) != 25) )
+		/*hacked, init to ak47 if m16*/		LOCAL_PERK_ITEM_VIS( 5, "@PERKS_OVERKILL", STAT_TWOPRIMARIES, REF_TWOPRIMARIES, CAC_SPECIALTY_WEAPON, REF_SPECIALTY_WEAPON, "ui_perk_highlighted", LOCAL_INIT_DUAL_PRIMARY_AK47, (stat(CAC_PRIMARY) == 25) )
+		LOCAL_PERK_ITEM( 6, "@PERKS_UAV_JAMMER", STAT_GPSJAMMER, REF_GPSJAMMER, CAC_SPECIALTY_WEAPON, REF_SPECIALTY_WEAPON, "ui_perk_highlighted", LOCAL_RESET_PISTOL )
+		LOCAL_PERK_ITEM( 7, "@PERKS_SONIC_BOOM", STAT_EXPLOSIVEDAMAGE, REF_EXPLOSIVEDAMAGE, CAC_SPECIALTY_WEAPON, REF_SPECIALTY_WEAPON, "ui_perk_highlighted", LOCAL_RESET_PISTOL )
 	}
 				
 	// perk3 selection for primary weapon popup menu
@@ -966,14 +979,14 @@
 		IMPROVED_POPUP_SETUP_ONOPEN( CAC_PREFIX"popup_cac_perk3", 8, (CHOICE_X( 6 )-2), (CHOICE_Y( 6 )+26), ;, execnow "set "UI_FOCUSFIRST" "REF_LONGERSPRINT"; set ui_inside_popup perk3";, 1 )
 		onClose{ execnow "set ui_inside_popup 0"; }
 		LOCAL_PERK_INFO_WINDOW( "ui_perk_highlighted" )
-		LOCAL_PERK_ITEM( 1, "@PERKS_EXTREME_CONDITIONING", STAT_LONGERSPRINT, REF_LONGERSPRINT, CAC_SPECIALTY_ABILITY, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 2, "@PERKS_STEADY_AIM", STAT_BULLETACCURACY, REF_BULLETACCURACY, CAC_SPECIALTY_ABILITY, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 3, "@PERKS_LAST_STAND", STAT_PISTOLDEATH, REF_PISTOLDEATH, CAC_SPECIALTY_ABILITY, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 4, "@PERKS_MARTYRDOM", STAT_GRENADEPULLDEATH, REF_GRENADEPULLDEATH, CAC_SPECIALTY_ABILITY, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 5, "@PERKS_DEEP_IMPACT", STAT_BULLETPENETRATION, REF_BULLETPENETRATION, CAC_SPECIALTY_ABILITY, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 6, "@PERKS_IRON_LUNGS", STAT_HOLDBREATH, REF_HOLDBREATH, CAC_SPECIALTY_ABILITY, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 7, "@PERKS_DEAD_SILENCE", STAT_QUIETER, REF_QUIETER, CAC_SPECIALTY_ABILITY, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 8, "@PERKS_EAVESDROP", STAT_PARABOLIC, REF_PARABOLIC, CAC_SPECIALTY_ABILITY, "ui_perk_highlighted", ; )
+		LOCAL_PERK_ITEM( 1, "@PERKS_EXTREME_CONDITIONING", STAT_LONGERSPRINT, REF_LONGERSPRINT, CAC_SPECIALTY_ABILITY, REF_SPECIALTY_ABILITY, "ui_perk_highlighted", ; )
+		LOCAL_PERK_ITEM( 2, "@PERKS_STEADY_AIM", STAT_BULLETACCURACY, REF_BULLETACCURACY, CAC_SPECIALTY_ABILITY, REF_SPECIALTY_ABILITY, "ui_perk_highlighted", ; )
+		LOCAL_PERK_ITEM( 3, "@PERKS_LAST_STAND", STAT_PISTOLDEATH, REF_PISTOLDEATH, CAC_SPECIALTY_ABILITY, REF_SPECIALTY_ABILITY, "ui_perk_highlighted", ; )
+		LOCAL_PERK_ITEM( 4, "@PERKS_MARTYRDOM", STAT_GRENADEPULLDEATH, REF_GRENADEPULLDEATH, CAC_SPECIALTY_ABILITY, REF_SPECIALTY_ABILITY, "ui_perk_highlighted", ; )
+		LOCAL_PERK_ITEM( 5, "@PERKS_DEEP_IMPACT", STAT_BULLETPENETRATION, REF_BULLETPENETRATION, CAC_SPECIALTY_ABILITY, REF_SPECIALTY_ABILITY, "ui_perk_highlighted", ; )
+		LOCAL_PERK_ITEM( 6, "@PERKS_IRON_LUNGS", STAT_HOLDBREATH, REF_HOLDBREATH, CAC_SPECIALTY_ABILITY, REF_SPECIALTY_ABILITY, "ui_perk_highlighted", ; )
+		LOCAL_PERK_ITEM( 7, "@PERKS_DEAD_SILENCE", STAT_QUIETER, REF_QUIETER, CAC_SPECIALTY_ABILITY, REF_SPECIALTY_ABILITY, "ui_perk_highlighted", ; )
+		LOCAL_PERK_ITEM( 8, "@PERKS_EAVESDROP", STAT_PARABOLIC, REF_PARABOLIC, CAC_SPECIALTY_ABILITY, REF_SPECIALTY_ABILITY, "ui_perk_highlighted", ; )
 	}
 	
 	// ====================================================================================================

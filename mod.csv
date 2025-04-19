@@ -132,6 +132,7 @@ rawfile,maps/mp/_utility.gsc
 rawfile,maps/mp/gametypes/_battlechatter_mp.gsc
 rawfile,maps/mp/gametypes/_class.gsc
 rawfile,maps/mp/gametypes/_class_unranked.gsc
+rawfile,maps/mp/gametypes/_class_ingame.gsc
 rawfile,maps/mp/gametypes/_damagefeedback.gsc
 rawfile,maps/mp/gametypes/_finalkillcam.gsc
 rawfile,maps/mp/gametypes/_friendicons.gsc
@@ -388,6 +389,9 @@ menufile,ui_mp/scriptmenus/scoreboard.menu
 menufile,ui_mp/scriptmenus/serverinfo.menu
 menufile,ui_mp/scriptmenus/team_marinesopfor.menu
 menufile,ui_mp/scriptmenus/dynamic_attachments.menu
+
+#custom class editing on ranked mode
+menufile,ui_mp/scriptmenus/cac_assault_ingame.menu
 
 
 rawfile,ui_mp/cac_ingame.inc

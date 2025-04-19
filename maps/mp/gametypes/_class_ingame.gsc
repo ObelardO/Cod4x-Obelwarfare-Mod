@@ -28,6 +28,12 @@ init()
         level.cacIngameItemInfo = [];
         initItemInfo( "primary", "stats_table", 1 );
         initItemInfo( "primary_attachment", "attachment_table", 2 );
+        initItemInfo( "secondary", "stats_table", 3 );
+        initItemInfo( "secondary_attachment", "attachment_table", 4 );
+        initItemInfo( "perk_equipment", "stats_table", 5 );
+        initItemInfo( "perk_weapon", "stats_table", 6 );
+        initItemInfo( "perk_ability", "stats_table", 7 );
+        initItemInfo( "spec_grenade", "stats_table", 8 );
 
         level.cacIngameInitialized = true;
 
@@ -140,7 +146,7 @@ onMenuResponse()
                 {
                     self iPrintLn( "CAC GO! menu match: ^2" + menu ); 
 
-                    saveTempStatData( level.cacIngameClassInfo[i].statOffset );
+                    //saveTempStatData( level.cacIngameClassInfo[i].statOffset );
 
                     self closeMenu();
                     self closeInGameMenu();
@@ -173,7 +179,11 @@ onMenuResponse()
                         switch( level.cacIngameItemInfo[i].tableSource )
                         {
                             case "stats_table":
-                                statValue = int( tableLookup( "mp/statsTable.csv", 4, valueRaw, 1 ) ) - 3000;
+                                statValue = int( tableLookup( "mp/statsTable.csv", 4, valueRaw, 1 ) );
+
+                                //Move from temp stats storage
+                                if( statValue > 3000 ) statValue -= 3000; 
+
                                 break;
 
                             case "attachment_table":
@@ -189,13 +199,6 @@ onMenuResponse()
                 }
                  
                 self iPrintLn( "CAC SET: type: ^2" + dataType + "^7  value: ^2" + statValue + "^7 raw: ^2" + valueRaw +  "^7 menu: " + menu );
-
-                //if( value > 3000 ) 
-                //{
-                //    value -= 3000;
-                //
-                //    self iPrintLn( "CAC SET: -3000" );
-                //}
             }
         }
     }
