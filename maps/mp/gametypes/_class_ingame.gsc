@@ -23,17 +23,19 @@ init()
     if( !isDefined( level.cacIngameInitialized ) )
     {
         level.cacIngameClassInfo = [];
-        initCacInfo( "custom1,0", "cac_assault_ingame", 200 );
+        initCacInfo( 200, "custom1,0", "cac_assault_ingame" );
+        initCacInfo( 210, "custom2,0", "cac_specops_ingame" );
 
         level.cacIngameItemInfo = [];
-        initItemInfo( "primary", "stats_table", 1 );
-        initItemInfo( "primary_attachment", "attachment_table", 2 );
-        initItemInfo( "secondary", "stats_table", 3 );
-        initItemInfo( "secondary_attachment", "attachment_table", 4 );
-        initItemInfo( "perk_equipment", "stats_table", 5 );
-        initItemInfo( "perk_weapon", "stats_table", 6 );
-        initItemInfo( "perk_ability", "stats_table", 7 );
-        initItemInfo( "spec_grenade", "stats_table", 8 );
+        initItemInfo( 1, "primary", "stats_table" );
+        initItemInfo( 2, "primary_attachment", "attachment_table" );
+        initItemInfo( 3, "secondary", "stats_table" );
+        initItemInfo( 4, "secondary_attachment", "attachment_table" );
+        initItemInfo( 5, "perk_equipment", "stats_table" );
+        initItemInfo( 6, "perk_weapon", "stats_table" );
+        initItemInfo( 7, "perk_ability", "stats_table" );
+        initItemInfo( 8, "spec_grenade", "stats_table" );
+        initItemInfo( 9, "camo", "stats_table" );
 
         level.cacIngameInitialized = true;
 
@@ -53,28 +55,27 @@ init()
 }
 
 
-initCacInfo( stockResponse, menuName, statOffset )
+initCacInfo( statOffset, stockResponse, menuName )
 {
     index = level.cacIngameClassInfo.size;
 
     level.cacIngameClassInfo[index] = spawnStruct();
-
+    level.cacIngameClassInfo[index].statOffset = statOffset;
     level.cacIngameClassInfo[index].stockResponse = stockResponse;
     level.cacIngameClassInfo[index].menuName = menuName;
-    level.cacIngameClassInfo[index].statOffset = statOffset;
 
     precacheMenu( menuName );
 }
 
 
-initItemInfo( dataType, tableSource, statOffset )
+initItemInfo( statOffset, dataType, tableSource )
 {
     index = level.cacIngameItemInfo.size;
 
     level.cacIngameItemInfo[index] = spawnStruct();
+    level.cacIngameItemInfo[index].statOffset = statOffset;
     level.cacIngameItemInfo[index].dataType = dataType;
     level.cacIngameItemInfo[index].tableSource = tableSource;
-    level.cacIngameItemInfo[index].statOffset = statOffset;
 }
 
 
@@ -169,39 +170,89 @@ onMenuResponse()
                 assertex( responseTok.size != 3, "Item selection in create-a-class-ingame is sending bad response:" + response );
 
                 dataType = responseTok[1];
-                valueRaw = responseTok[2]; // int( tableLookup( "mp/statsTable.csv", 4, responseTok[2], 1 ) );
-                statValue = -1;
+                valueRef = responseTok[2]; // int( tableLookup( "mp/statsTable.csv", 4, responseTok[2], 1 ) );
+                
+                statValue = getStatValueFromTableByType( dataType, valueRef );
 
-                for( i = 0; i < level.cacIngameItemInfo.size; i++ )
+                setTempStatData( dataType, statValue );
+
+                self iPrintLn( "CAC SET: type: ^2" + dataType + "^7  value: ^2" + statValue + "^7 ref: ^2" + valueRef +  "^7 menu: " + menu );
+            }
+
+            if ( responseType == "cac_upd" )
+            {
+                assertex( responseTok.size != 5, "Item update in create-a-class-ingame is sending bad response:" + response );
+
+                dataType = responseTok[1];
+                valueRef = responseTok[2];
+                //tableSource = responseTok[3];
+                condtionStatOffset = responseTok[3];
+                condtionValidValue = responseTok[4];
+
+                //TODO SET STAT WITH VALIDATION
+
+                conditionStatValue = int( self getStat( condtionStatOffset ) );
+
+                conditionValidArray = strTok( condtionValidValue, "-" );
+
+
+
+                for( i = 0; i < conditionValidArray.size; i++ )
                 {
-                    if( level.cacIngameItemInfo[i].dataType == dataType )
+                    self iPrintLn( "CAC UPD: check for: ^2" + conditionStatValue + "^7 == ^2" + conditionValidArray[i] );
+
+                    if ( conditionStatValue == int( conditionValidArray[i] ) )
                     {
-                        switch( level.cacIngameItemInfo[i].tableSource )
-                        {
-                            case "stats_table":
-                                statValue = int( tableLookup( "mp/statsTable.csv", 4, valueRaw, 1 ) );
-
-                                //Move from temp stats storage
-                                if( statValue > 3000 ) statValue -= 3000; 
-
-                                break;
-
-                            case "attachment_table":
-                                statValue = int( tableLookup( "mp/attachmentTable.csv", 4, valueRaw, 9 ) );
-                                break;
-                        }
+                        statValue = getStatValueFromTableByType( dataType, valueRef );
 
                         setTempStatData( dataType, statValue );
-                        
+
+                        self iPrintLn( "CAC UPD: type: ^2" + dataType + "^7  value: ^2" + statValue + "^7 ref: ^2" + valueRef + "^7 condition: ^2" + conditionStatValue + " in " + condtionValidValue + " ^7 menu: " + menu );
+
                         break;
                     }
-
                 }
-                 
-                self iPrintLn( "CAC SET: type: ^2" + dataType + "^7  value: ^2" + statValue + "^7 raw: ^2" + valueRaw +  "^7 menu: " + menu );
             }
         }
     }
+}
+
+
+getStatValueFromTableByType( dataType, valueRef )
+{
+    for( i = 0; i < level.cacIngameItemInfo.size; i++ )
+    {
+        if( level.cacIngameItemInfo[i].dataType == dataType )
+        {   
+            return getStatValueFromTableByRef( level.cacIngameItemInfo[i].tableSource, valueRef );
+        }
+    }
+
+    return -1;
+}
+
+
+getStatValueFromTableByRef( tableSource, valueRef )
+{
+    switch( tableSource )
+    {
+        case "stats_table":
+            statValue = int( tableLookup( "mp/statsTable.csv", 4, valueRef, 1 ) );
+
+            //Move from temp stats storage
+            if( statValue > 3000 ) 
+            {
+                self iPrintLn( "CAC 3000 " + statValue ); 
+                statValue -= 3000; 
+            }
+
+            return statValue;
+
+        case "attachment_table":
+            return int( tableLookup( "mp/attachmentTable.csv", 4, valueRef, 9 ) );
+    }
+
+    return -1;
 }
 
 
@@ -221,6 +272,7 @@ setTempStatData( dataType, value )
         self.cacTempStatData[dataType] = value;
     }
 }
+
 
 
 saveTempStatData( classStatOffset )
