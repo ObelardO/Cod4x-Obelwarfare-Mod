@@ -35,7 +35,7 @@ init()
         initItemInfo( 6, "perk_weapon", "stats_table" );
         initItemInfo( 7, "perk_ability", "stats_table" );
         initItemInfo( 8, "spec_grenade", "stats_table" );
-        initItemInfo( 9, "camo", "stats_table" );
+        initItemInfo( 9, "camo", "camp_table" );
 
         level.cacIngameInitialized = true;
 
@@ -147,7 +147,7 @@ onMenuResponse()
                 {
                     self iPrintLn( "CAC GO! menu match: ^2" + menu ); 
 
-                    //saveTempStatData( level.cacIngameClassInfo[i].statOffset );
+                    saveTempStatData( level.cacIngameClassInfo[i].statOffset );
 
                     self closeMenu();
                     self closeInGameMenu();
@@ -179,6 +179,7 @@ onMenuResponse()
                 self iPrintLn( "CAC SET: type: ^2" + dataType + "^7  value: ^2" + statValue + "^7 ref: ^2" + valueRef +  "^7 menu: " + menu );
             }
 
+            /*
             if ( responseType == "cac_upd" )
             {
                 assertex( responseTok.size != 5, "Item update in create-a-class-ingame is sending bad response:" + response );
@@ -213,6 +214,7 @@ onMenuResponse()
                     }
                 }
             }
+            */
         }
     }
 }
@@ -250,6 +252,14 @@ getStatValueFromTableByRef( tableSource, valueRef )
 
         case "attachment_table":
             return int( tableLookup( "mp/attachmentTable.csv", 4, valueRef, 9 ) );
+
+        case "camp_table":
+            return int( tableLookup( "mp/attachmentTable.csv", 4, valueRef, 11 ) );
+
+
+            //self setstat( stat_offset+202, int( tableLookup( "mp/attachmentTable.csv", 4, responseTok[2], 9 ) ) );
+
+
     }
 
     return -1;
