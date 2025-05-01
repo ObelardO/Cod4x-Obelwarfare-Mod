@@ -46,12 +46,13 @@
 			setfocus primary_weapon_selection;		
 		}
 		onEsc {
-			execnow "uploadstats";
-			close CAC_MENU_NAME;
+			//execnow "uploadstats";
+			scriptMenuResponse "cac_esc";
+			//close CAC_MENU_NAME;
 		}
-		onClose{
-			showmenu "changeclass";
-		}
+		//onClose{
+		//	showmenu "changeclass";
+		//}
 
 		// ------------------  statics ------------------------
 		itemDef

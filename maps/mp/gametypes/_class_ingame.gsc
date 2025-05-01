@@ -76,6 +76,9 @@ initItemInfo( statOffset, dataType, tableSource )
     level.cacIngameItemInfo[index].statOffset = statOffset;
     level.cacIngameItemInfo[index].dataType = dataType;
     level.cacIngameItemInfo[index].tableSource = tableSource;
+
+    //TODO tempValue
+    //TODO backupvalue
 }
 
 
@@ -85,6 +88,7 @@ onPlayerConnecting()
 	{
 		level waittill( "connecting", player );
 
+        player.cacBackStatData = [];
         player.cacTempStatData = [];
 
         player flushTempStatData();
@@ -104,26 +108,29 @@ onMenuResponse()
 
         self iPrintLn( "RAW RES: " + response );
 
-        if( menu == game["menu_changeclass"] )
+        if( menu == game["menu_changeclass"] && response != "back" )
         {
             self closeMenu();
 			self closeInGameMenu();
 
             cacMenu = undefined;
+            classOffset = undefined;
 
             for( i = 0; i < level.cacIngameClassInfo.size; i++ )
             {
                 if( level.cacIngameClassInfo[i].stockResponse == response )
                 {
                     cacMenu = level.cacIngameClassInfo[i].menuName;
+                    classOffset =  level.cacIngameClassInfo[i].statOffset;
                     break;
                 }
             }
 
             //Override open CAC menu for selected custom class
-            if( isDefined( cacMenu ) )
+            if( isDefined( cacMenu ) && isDefined( classOffset ) )
             {
                 flushTempStatData();
+                loadBackupStatData( classOffset );
 
                 self openMenu( cacMenu );
             }
@@ -136,6 +143,26 @@ onMenuResponse()
 
             continue;
         } 
+
+        if ( response == "cac_esc" )
+        {
+            self closeMenu();
+			self closeInGameMenu();
+
+            self iPrintLn( "CAC ESC! menu: ^7" + menu );
+
+            for( i = 0; i < level.cacIngameClassInfo.size; i++ )
+            {
+                if( level.cacIngameClassInfo[i].menuName == menu )
+                {
+                    self iPrintLn( "CAC ESC! menu match: ^2" + menu ); 
+
+                    saveBackStatData( level.cacIngameClassInfo[i].statOffset );
+                }
+            }
+
+            continue;
+        }
 
         if ( response == "cac_go" )
         {
@@ -156,6 +183,8 @@ onMenuResponse()
                     self [[level.class]]( level.cacIngameClassInfo[i].stockResponse );
                 }
             }
+
+            continue;
         }
 
         responseTok = strTok( response, "," );
@@ -284,7 +313,6 @@ setTempStatData( dataType, value )
 }
 
 
-
 saveTempStatData( classStatOffset )
 {
     for( i = 0; i < level.cacIngameItemInfo.size; i++ )
@@ -302,4 +330,34 @@ saveTempStatData( classStatOffset )
     }
 
     flushTempStatData();
+}
+
+
+saveBackStatData( classStatOffset )
+{
+    for( i = 0; i < level.cacIngameItemInfo.size; i++ )
+    {
+        dataType = level.cacIngameItemInfo[i].dataType;
+        itemStatOffset = level.cacIngameItemInfo[i].statOffset;
+
+        tempOffset = 0;
+
+        if( level.cacIngameItemInfo[i].tableSource == "stats_table" )
+        {
+            tempOffset = 3000;
+        }
+
+        self setStat ( classStatOffset + itemStatOffset + tempOffset, self.cacBackStatData[dataType] );
+    }
+}
+
+
+loadBackupStatData( classStatOffset )
+{
+    for( i = 0; i < level.cacIngameItemInfo.size; i++ )
+    {
+        itemStatOffset = level.cacIngameItemInfo[i].statOffset;
+
+        self.cacBackStatData[level.cacIngameItemInfo[i].dataType] = self getStat ( classStatOffset + itemStatOffset );
+    }
 }
