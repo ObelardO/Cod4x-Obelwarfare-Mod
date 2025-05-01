@@ -244,6 +244,7 @@ echo    1. None
 echo    2. Happy Birthday
 echo    3. Christmas
 echo    4. Spring
+echo    5. 9 May
 echo.
 echo    0. Back
 echo.
@@ -254,6 +255,7 @@ set eventDir=none
 if "%zow_option_event%"=="2" set eventDir=server_event_patch_hb\
 if "%zow_option_event%"=="3" set eventDir=server_event_patch_xmas\
 if "%zow_option_event%"=="4" set eventDir=server_event_patch_spring\
+if "%zow_option_event%"=="5" set eventDir=server_event_patch_9may\
 if "%zow_option_event%"=="0" goto MAKE_OPENWARFARE_IWD
 
 if "%make_option%"=="4" goto MAKE_MOD_FF
@@ -262,6 +264,7 @@ if "%zow_option_event%"=="1" goto BUILD_OPENWARFARE_IWD
 if "%zow_option_event%"=="2" goto BUILD_OPENWARFARE_IWD
 if "%zow_option_event%"=="3" goto BUILD_OPENWARFARE_IWD
 if "%zow_option_event%"=="4" goto BUILD_OPENWARFARE_IWD
+if "%zow_option_event%"=="5" goto BUILD_OPENWARFARE_IWD
 
 goto MAKE_OPENWARFARE_EVENT_PATCH_IWD
 
