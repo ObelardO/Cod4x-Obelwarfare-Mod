@@ -266,7 +266,11 @@
 		/* ================================ LOADOUT DISPLAY ================================ */
 		/* ================================================================================= */
 
-		#define STAT_CAC_PRIMARY				stat( CAC_PRIMARY )
+		//#define STAT_CAC_PRIMARY				stat( CAC_PRIMARY )
+		
+
+		#define STAT_CAC_PRIMARY				dvarInt( ow_cac_stat_primary )
+		//#define STAT_CAC_PRIMARY				stat( CAC_PRIMARY )
 		#define STAT_CAC_PRIMARY_ATTACHMENT		stat( CAC_PRIMARY_ATTACHMENT )
 		#define STAT_CAC_SECONDARY				stat( CAC_SECONDARY )
 		#define STAT_CAC_SECONDARY_ATTACHMENT	stat( CAC_SECONDARY_ATTACHMENT )
@@ -383,7 +387,7 @@
 	#define LOCAL_PRIMARY_WEAPON_ACTION( suffix, pstat, weapRef ) \
 		execnow "statset "CAC_S_PRIMARY_ATTACHMENT" 0; statset "CAC_S_CAMO" 0"; \
 		play "mouse_click"; \
-		statsetusingtable( CAC_PRIMARY, pstat ); \
+		/*statsetusingtable( CAC_PRIMARY, pstat );*/ \
 		statsetusingtable( CAC_PRIMARY_STORAGE, tableLookup( "mp/statstable.csv", 4, weapRef, 1 ) ); \
 		execNow "statGetInDvar "CAC_S_PRIMARY_STORAGE" ui_primary_weapon"; \
 		CLEAR_NEW( ui_primary_weapon, WEAPON_NEW_BITMASK ); \
@@ -402,7 +406,7 @@
 	#define LOCAL_PRIMARY_WEAPON_ACTION2( suffix, pstat, weapRef ) \		
 		execnow "statset "CAC_S_SECONDARY_ATTACHMENT" 0"; \
 		play "mouse_click"; \
-		statsetusingtable( CAC_SECONDARY, pstat ); \
+		/*statsetusingtable( CAC_SECONDARY, pstat );*/ \
 		statsetusingtable( CAC_SECONDARY_STORAGE, tableLookup( "mp/statstable.csv", 4, weapRef, 1 ) ); \
 		execNow "statGetInDvar "CAC_S_SECONDARY_STORAGE" ui_secondary_weapon"; \
 		CLEAR_NEW( ui_secondary_weapon, WEAPON_NEW_BITMASK ); \
@@ -420,7 +424,7 @@
 	#define LOCAL_PRIMARY_WEAPON_ACTION3( suffix, pstat, weapRef ) \
 		execnow "statset "CAC_S_PRIMARY_ATTACHMENT" 0; statset "CAC_S_CAMO" 0"; \
 		play "mouse_click"; \
-		statsetusingtable( CAC_PRIMARY, pstat ); \
+		/*statsetusingtable( CAC_PRIMARY, pstat );*/ \
 		statsetusingtable( CAC_PRIMARY_STORAGE, tableLookup( "mp/statstable.csv", 4, weapRef, 1 ) ); \
 		execNow "statGetInDvar "CAC_S_PRIMARY_STORAGE" ui_primary_weapon"; \
 		CLEAR_NEW( ui_primary_weapon, WEAPON_NEW_BITMASK ); \
@@ -435,7 +439,7 @@
 	#define LOCAL_PRIMARY_WEAPON_ACTION4( suffix, pstat, weapRef ) \		
 		execnow "statset "CAC_S_SECONDARY_ATTACHMENT" 0"; \
 		play "mouse_click"; \
-		statsetusingtable( CAC_SECONDARY, pstat ); \
+		/*statsetusingtable( CAC_SECONDARY, pstat );*/ \
 		statsetusingtable( CAC_SECONDARY_STORAGE, tableLookup( "mp/statstable.csv", 4, weapRef, 1 ) ); \
 		execNow "statGetInDvar "CAC_S_SECONDARY_STORAGE" ui_secondary_weapon"; \
 		CLEAR_NEW( ui_secondary_weapon, WEAPON_NEW_BITMASK ); \
@@ -454,8 +458,8 @@
 		execnow "set "highlight_dvar" "weaponRef;, CLEAR_WEAP_NEW( weaponRef );, when( ( stat( int(weaponStat)+3000 ) & 1 ) && dvarString( ui_primary_selected ) == "Primary Weapon" && int(weaponStat) != stat(CAC_SECONDARY) );, \
 		( stat( int(weaponStat)+3000 ) & 1 ) && dvarString( ui_primary_selected ) == "Primary Weapon" && int(weaponStat) != stat(CAC_SECONDARY) ) \
 		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, weaponName, LOCAL_PRIMARY_WEAPON_ACTION2( suffix, weaponStat, weaponRef ), \
-		execnow "set "highlight_dvar" "weaponRef;, CLEAR_WEAP_NEW( weaponRef );, when( ( stat( int(weaponStat)+3000 ) & 1 ) && dvarString( ui_primary_selected ) == "Secondary Weapon" && int(weaponStat) != stat(CAC_PRIMARY) );, \
-		( stat( int(weaponStat)+3000 ) & 1 ) && dvarString( ui_primary_selected ) == "Secondary Weapon" && int(weaponStat) != stat(CAC_PRIMARY) ) \
+		execnow "set "highlight_dvar" "weaponRef;, CLEAR_WEAP_NEW( weaponRef );, when( ( stat( int(weaponStat)+3000 ) & 1 ) && dvarString( ui_primary_selected ) == "Secondary Weapon" && int(weaponStat) != dvarInt(ow_cac_stat_primary) );, \
+		( stat( int(weaponStat)+3000 ) & 1 ) && dvarString( ui_primary_selected ) == "Secondary Weapon" && int(weaponStat) != dvarInt(ow_cac_stat_primary) ) \
 		CHOICE_NEWICON_VIS( itemNum, "specialty_new", when( ( stat( int(weaponStat)+3000 ) & (NEW_WEAPON_BITMASK+NEW_ITEMS_MASK)) > 0 ) ) \
 		CHOICE_NEWICON_VIS( itemNum, "specialty_locked", when( ( stat( int(weaponStat)+3000 ) & 1 ) == 0 ); ) 
 		
@@ -466,8 +470,8 @@
 		execnow "set "highlight_dvar" "weaponRef;, CLEAR_WEAP_NEW( weaponRef );, when( ( stat( int(weaponStat)+3000 ) & 1 ) && dvarString( ui_primary_selected ) == "Primary Weapon" && int(weaponStat) != stat(CAC_SECONDARY) );, \
 		( stat( int(weaponStat)+3000 ) & 1 ) && dvarString( ui_primary_selected ) == "Primary Weapon" && int(weaponStat) != stat(CAC_SECONDARY) ) \
 		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, weaponName, LOCAL_PRIMARY_WEAPON_ACTION4( suffix, weaponStat, weaponRef ), \
-		execnow "set "highlight_dvar" "weaponRef;, CLEAR_WEAP_NEW( weaponRef );, when( ( stat( int(weaponStat)+3000 ) & 1 ) && dvarString( ui_primary_selected ) == "Secondary Weapon" && int(weaponStat) != stat(CAC_PRIMARY) );, \
-		( stat( int(weaponStat)+3000 ) & 1 ) && dvarString( ui_primary_selected ) == "Secondary Weapon" && int(weaponStat) != stat(CAC_PRIMARY) ) \
+		execnow "set "highlight_dvar" "weaponRef;, CLEAR_WEAP_NEW( weaponRef );, when( ( stat( int(weaponStat)+3000 ) & 1 ) && dvarString( ui_primary_selected ) == "Secondary Weapon" && int(weaponStat) != dvarInt(ow_cac_stat_primary) );, \
+		( stat( int(weaponStat)+3000 ) & 1 ) && dvarString( ui_primary_selected ) == "Secondary Weapon" && int(weaponStat) != dvarInt(ow_cac_stat_primary) ) \
 		CHOICE_NEWICON_VIS( itemNum, "specialty_new", when( ( stat( int(weaponStat)+3000 ) & (NEW_WEAPON_BITMASK+NEW_ITEMS_MASK)) > 0 ) ) \
 		CHOICE_NEWICON_VIS( itemNum, "specialty_locked", when( ( stat( int(weaponStat)+3000 ) & 1 ) == 0 ); ) 
 		
@@ -668,7 +672,7 @@
 		IMPROVED_POPUP_SETUP_ONOPEN( CAC_PREFIX"attachment_popup_fake", 7, (CHOICE_X( 1 )-2), (CHOICE_Y( 1 ) + 44), ;, ;, 0 )
 		LOCAL_ATTACHMENT_INFO_WINDOW( CAC_PRIMARY_ATTACHMENT )
 		PREPROC_SHADER_DRAW_ALIGNED( 0 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "white", 0.15 0.15 0.17 1, 0, 2, CHOICE_POPUP_BORDER_COLOR )
-		PREPROC_TEXT_DRAW_ALIGNED_EXP( 8 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, -32 0, "@"+tablelookup("mp/statstable.csv",0,stat(CAC_PRIMARY),3), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_RIGHT, CHOICE_TEXTCOLOR )
+		PREPROC_TEXT_DRAW_ALIGNED_EXP( 8 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, -32 0, "@"+tablelookup("mp/statstable.csv",0,dvarInt(ow_cac_stat_primary),3), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_RIGHT, CHOICE_TEXTCOLOR )
 		/* pointer icon */
 		PREPROC_SHADER_DRAW_ALIGNED( 200 -16 16 8 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "hitech_arrow_right", 0.55 0.95 0.55 0.7, 0, 2, CHOICE_POPUP_BORDER_COLOR )
 	}
@@ -770,9 +774,9 @@
 		/* camo title*/\
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 58 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/attachmenttable.csv",4,dvarString(highlight_dvar),3), TEXTSIZE_DEFAULT, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE ) \
 		/* camo desc unlocked*/\
-		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/attachmenttable.csv",4,dvarString(highlight_dvar),7), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, CHOICE_TEXTCOLOR visible when( stat(stat(CAC_PRIMARY)+3000) & int(tablelookup( "mp/attachmenttable.csv", 4, dvarString(ui_camo_highlighted), 10 )) ); )\
-		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/attachmenttable.csv",4,dvarString(highlight_dvar),8), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( ( stat(stat(CAC_PRIMARY)+3000) & int(tablelookup( "mp/attachmenttable.csv", 4, dvarString(ui_camo_highlighted), 10 )) ) == 0 ); )\
-		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+6) 0 (CHOICE_SIZE_Y*2) CHOICE_SIZE_Y CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "specialty_locked", 1 1 1 1, 0, 2, CHOICE_POPUP_BORDER_COLOR visible when( ( stat(stat(CAC_PRIMARY)+3000) & int(tablelookup( "mp/attachmenttable.csv", 4, dvarString(ui_camo_highlighted), 10 )) ) == 0 ); ) \
+		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/attachmenttable.csv",4,dvarString(highlight_dvar),7), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, CHOICE_TEXTCOLOR visible when( stat(dvarInt(ow_cac_stat_primary)+3000) & int(tablelookup( "mp/attachmenttable.csv", 4, dvarString(ui_camo_highlighted), 10 )) ); )\
+		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/attachmenttable.csv",4,dvarString(highlight_dvar),8), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( ( stat(dvarInt(ow_cac_stat_primary)+3000) & int(tablelookup( "mp/attachmenttable.csv", 4, dvarString(ui_camo_highlighted), 10 )) ) == 0 ); )\
+		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+6) 0 (CHOICE_SIZE_Y*2) CHOICE_SIZE_Y CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "specialty_locked", 1 1 1 1, 0, 2, CHOICE_POPUP_BORDER_COLOR visible when( ( stat(dvarInt(ow_cac_stat_primary)+3000) & int(tablelookup( "mp/attachmenttable.csv", 4, dvarString(ui_camo_highlighted), 10 )) ) == 0 ); ) \
 		PREPROC_SHADER_DRAW_ALIGNED( 0 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "white", 0.15 0.15 0.17 1, 0, 2, CHOICE_POPUP_BORDER_COLOR )\
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( 8 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, -32 0, "@"+tablelookup("mp/attachmenttable.csv",9,stat(CAC_PRIMARY_ATTACHMENT),3), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_RIGHT, CHOICE_TEXTCOLOR )\
 		/* pointer icon */ \
@@ -786,13 +790,13 @@
 		
 	#define LOCAL_CAMO_ITEM( itemNum, camoName, pnum, camoRef, highlight_dvar, bitMask, visArg )\
 		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, camoName, LOCAL_CAMO_ACTION( pnum, camoRef );CLEAR_NEW( "ui_primary_weapon", bitMask );, execnow "set "highlight_dvar" "camoRef, CLEAR_NEW( "ui_primary_weapon", bitMask );, \
-		when( stat(stat(CAC_PRIMARY)+3000) & int(tablelookup( "mp/attachmenttable.csv", 11, pnum, 10 )) && ( visArg ) );, \
-			  stat(stat(CAC_PRIMARY)+3000) & int(tablelookup( "mp/attachmenttable.csv", 11, pnum, 10 )) && ( visArg ) ) \
-		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, execnow "set "highlight_dvar" "camoRef, ;, when( ( stat(stat(CAC_PRIMARY)+3000) & int(tablelookup( "mp/attachmenttable.csv", 11, pnum, 10 )) ) == 0 && ( visArg ) ); ) \
-		CHOICE_DBUTTON_VIS( itemNum, camoName, when( ( stat(stat(CAC_PRIMARY)+3000) & int(tablelookup( "mp/attachmenttable.csv", 11, pnum, 10 )) ) == 0 && ( visArg ) ); ) \
+		when( stat(dvarInt(ow_cac_stat_primary)+3000) & int(tablelookup( "mp/attachmenttable.csv", 11, pnum, 10 )) && ( visArg ) );, \
+			  stat(dvarInt(ow_cac_stat_primary)+3000) & int(tablelookup( "mp/attachmenttable.csv", 11, pnum, 10 )) && ( visArg ) ) \
+		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, execnow "set "highlight_dvar" "camoRef, ;, when( ( stat(dvarInt(ow_cac_stat_primary)+3000) & int(tablelookup( "mp/attachmenttable.csv", 11, pnum, 10 )) ) == 0 && ( visArg ) ); ) \
+		CHOICE_DBUTTON_VIS( itemNum, camoName, when( ( stat(dvarInt(ow_cac_stat_primary)+3000) & int(tablelookup( "mp/attachmenttable.csv", 11, pnum, 10 )) ) == 0 && ( visArg ) ); ) \
 		CHOICE_NEWICON_VIS( itemNum, "specialty_new", when( ( int(tablelookup( "mp/attachmenttable.csv", 11, pnum, 10 )) != 1 ) && \
-		( stat(stat(CAC_PRIMARY)+3000) & int(tablelookup( "mp/attachmenttable.csv", 11, pnum, 10 ))<<16 ) && ( visArg ) ) ) \
-		CHOICE_NEWICON_VIS( itemNum, "specialty_locked", when( ( stat(stat(CAC_PRIMARY)+3000) & int(tablelookup( "mp/attachmenttable.csv", 11, pnum, 10 )) ) == 0 && ( visArg ) ); )
+		( stat(dvarInt(ow_cac_stat_primary)+3000) & int(tablelookup( "mp/attachmenttable.csv", 11, pnum, 10 ))<<16 ) && ( visArg ) ) ) \
+		CHOICE_NEWICON_VIS( itemNum, "specialty_locked", when( ( stat(dvarInt(ow_cac_stat_primary)+3000) & int(tablelookup( "mp/attachmenttable.csv", 11, pnum, 10 )) ) == 0 && ( visArg ) ); )
 				
 	#define GOLDEN_VIS_CONDITION \
 		tablelookup("mp/statstable.csv",1,dvarString(ui_primary_weapon),4)==REF_UZI ||\
@@ -977,8 +981,8 @@
 		LOCAL_PERK_ITEM( 2, "@PERKS_JUGGERNAUT", STAT_ARMORVEST, REF_ARMORVEST, CAC_SPECIALTY_WEAPON, REF_SPECIALTY_WEAPON, "ui_perk_highlighted", LOCAL_RESET_PISTOL )
 		LOCAL_PERK_ITEM( 3, "@PERKS_SLEIGHT_OF_HAND", STAT_FASTRELOAD, REF_FASTRELOAD, CAC_SPECIALTY_WEAPON, REF_SPECIALTY_WEAPON, "ui_perk_highlighted", LOCAL_RESET_PISTOL )
 		LOCAL_PERK_ITEM( 4, "@PERKS_DOUBLE_TAP", STAT_ROF, REF_ROF, CAC_SPECIALTY_WEAPON, REF_SPECIALTY_WEAPON, "ui_perk_highlighted", LOCAL_RESET_PISTOL )
-		/*hacked, init to m16 if not m16*/	LOCAL_PERK_ITEM_VIS( 5, "@PERKS_OVERKILL", STAT_TWOPRIMARIES, REF_TWOPRIMARIES, CAC_SPECIALTY_WEAPON, REF_SPECIALTY_WEAPON, "ui_perk_highlighted", LOCAL_INIT_DUAL_PRIMARY_M16, (stat(CAC_PRIMARY) != 25) )
-		/*hacked, init to ak47 if m16*/		LOCAL_PERK_ITEM_VIS( 5, "@PERKS_OVERKILL", STAT_TWOPRIMARIES, REF_TWOPRIMARIES, CAC_SPECIALTY_WEAPON, REF_SPECIALTY_WEAPON, "ui_perk_highlighted", LOCAL_INIT_DUAL_PRIMARY_AK47, (stat(CAC_PRIMARY) == 25) )
+		/*hacked, init to m16 if not m16*/	LOCAL_PERK_ITEM_VIS( 5, "@PERKS_OVERKILL", STAT_TWOPRIMARIES, REF_TWOPRIMARIES, CAC_SPECIALTY_WEAPON, REF_SPECIALTY_WEAPON, "ui_perk_highlighted", LOCAL_INIT_DUAL_PRIMARY_M16, (dvarInt(ow_cac_stat_primary) != 25) )
+		/*hacked, init to ak47 if m16*/		LOCAL_PERK_ITEM_VIS( 5, "@PERKS_OVERKILL", STAT_TWOPRIMARIES, REF_TWOPRIMARIES, CAC_SPECIALTY_WEAPON, REF_SPECIALTY_WEAPON, "ui_perk_highlighted", LOCAL_INIT_DUAL_PRIMARY_AK47, (dvarInt(ow_cac_stat_primary) == 25) )
 		LOCAL_PERK_ITEM( 6, "@PERKS_UAV_JAMMER", STAT_GPSJAMMER, REF_GPSJAMMER, CAC_SPECIALTY_WEAPON, REF_SPECIALTY_WEAPON, "ui_perk_highlighted", LOCAL_RESET_PISTOL )
 		LOCAL_PERK_ITEM( 7, "@PERKS_SONIC_BOOM", STAT_EXPLOSIVEDAMAGE, REF_EXPLOSIVEDAMAGE, CAC_SPECIALTY_WEAPON, REF_SPECIALTY_WEAPON, "ui_perk_highlighted", LOCAL_RESET_PISTOL )
 	}
