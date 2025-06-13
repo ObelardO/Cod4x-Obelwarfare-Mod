@@ -395,6 +395,7 @@ menufile,ui_mp/scriptmenus/cac_assault_ingame.menu
 menufile,ui_mp/scriptmenus/cac_specops_ingame.menu
 
 rawfile,ui_mp/cac_ingame.inc
+rawfile,ui_mp/cac_ingame_new.inc
 rawfile,ui_mp/cac_loadout_ingame.inc
 rawfile,ui_mp/ow_cac_loadout.inc
 rawfile,ui_mp/tactical_map.inc

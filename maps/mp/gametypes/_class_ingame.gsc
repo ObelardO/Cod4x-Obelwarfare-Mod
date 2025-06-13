@@ -22,7 +22,8 @@ init()
 
     if( !isDefined( level.cacIngameInitialized ) )
     {
-        statsTableRef = "stats_table";
+        perksTableRef = "perks_table";
+        weaponsTableRef = "weapons_table";
         attachmentTableRef = "attachment_table";
         camoTableRef = "camo_table";
 
@@ -31,14 +32,14 @@ init()
         initCacInfo( 210, "custom2,0", "cac_specops_ingame" );
 
         level.cacIngameItemInfo = [];
-        initItemInfo( 1, "primary", statsTableRef );
+        initItemInfo( 1, "primary", weaponsTableRef );
         initItemInfo( 2, "primary_attachment", attachmentTableRef );
-        initItemInfo( 3, "secondary", statsTableRef );
+        initItemInfo( 3, "secondary", weaponsTableRef );
         initItemInfo( 4, "secondary_attachment", attachmentTableRef );
-        initItemInfo( 5, "perk_equipment", statsTableRef );
-        initItemInfo( 6, "perk_weapon", statsTableRef );
-        initItemInfo( 7, "perk_ability", statsTableRef );
-        initItemInfo( 8, "spec_grenade", statsTableRef );
+        initItemInfo( 5, "perk1", perksTableRef ); // equipment
+        initItemInfo( 6, "perk2", perksTableRef ); // weapon
+        initItemInfo( 7, "perk3", perksTableRef ); // ability
+        initItemInfo( 8, "grenade", weaponsTableRef );
         initItemInfo( 9, "camo", camoTableRef );
 
         level.cacIngameInitialized = true;
@@ -80,7 +81,7 @@ initItemInfo( statOffset, dataType, tableSource, dvarName )
     level.cacIngameItemInfo[index].statOffset = statOffset;
     level.cacIngameItemInfo[index].dataType = dataType;
     level.cacIngameItemInfo[index].tableSource = tableSource;
-    level.cacIngameItemInfo[index].dvarName = "ow_cac_stat_" + dataType;
+    level.cacIngameItemInfo[index].dvarName = "loadout_" + dataType;
 
     //TODO tempValue
     //TODO backupvalue
@@ -217,7 +218,7 @@ onMenuResponse()
                 dataType = responseTok[1];
                 valueRef = responseTok[2]; // int( tableLookup( "mp/statsTable.csv", 4, responseTok[2], 1 ) );
                 
-                statValue = getStatValueFromTableByType( dataType, valueRef );
+                statValue = getStatValueByType( dataType, valueRef );
 
                 setTempStatData( dataType, statValue );
 
@@ -265,46 +266,52 @@ onMenuResponse()
 }
 
 
-getStatValueFromTableByType( dataType, valueRef )
+getStatValueByType( dataType, valueRef )
 {
     for( i = 0; i < level.cacIngameItemInfo.size; i++ )
     {
         if( level.cacIngameItemInfo[i].dataType == dataType )
         {   
-            return getStatValueFromTableByRef( level.cacIngameItemInfo[i].tableSource, valueRef );
+            return getStatValueByRef( level.cacIngameItemInfo[i].tableSource, valueRef );
         }
     }
 
     return -1;
 }
 
-
-getStatValueFromTableByRef( tableSource, valueRef )
+getRefByStatValue( tableSource, statValue )
 {
     switch( tableSource )
     {
-        case "stats_table":
-            statValue = int( tableLookup( "mp/statsTable.csv", 4, valueRef, 1 ) );
+        case "perks_table":
+            return tableLookup( "mp/statsTable.csv", 1, statValue, 4 );
 
-            //Move from temp stats storage
-            if( statValue > 3000 ) 
-            {
-                self iPrintLn( "CAC 3000 " + statValue ); 
-                statValue -= 3000; 
-            }
+        case "weapons_table":
+            return tableLookup( "mp/statsTable.csv", 1, statValue + 3000, 4 );
 
-            return statValue;
+        case "attachment_table":
+            return tableLookup( "mp/attachmentTable.csv", 9, statValue, 4 );
+
+        case "camo_table":
+            return tableLookup( "mp/attachmentTable.csv", 11, statValue, 4 );
+    }
+}
+
+getStatValueByRef( tableSource, valueRef )
+{
+    switch( tableSource )
+    {
+        case "perks_table":
+            return int( tableLookup( "mp/statsTable.csv", 4, valueRef, 1 ) );
+
+        case "weapons_table":
+            return int( tableLookup( "mp/statsTable.csv", 4, valueRef, 1 ) ) + 3000;
 
         case "attachment_table":
             return int( tableLookup( "mp/attachmentTable.csv", 4, valueRef, 9 ) );
 
         case "camo_table":
             return int( tableLookup( "mp/attachmentTable.csv", 4, valueRef, 11 ) );
-
-
-            //self setstat( stat_offset+202, int( tableLookup( "mp/attachmentTable.csv", 4, responseTok[2], 9 ) ) );
-
-
     }
 
     return -1;
@@ -380,7 +387,7 @@ saveBackStatData( classStatOffset )
         self iPrintLn( "[CAC] Set stat: ^2" + (classStatOffset + itemStatOffset) + "^7  value: ^2" + value );
 
         self setStat ( classStatOffset + itemStatOffset, value );
-        self setStat ( classStatOffset + itemStatOffset + tempOffset, value );
+        //self setStat ( classStatOffset + itemStatOffset + tempOffset, value );
     }
 }
 
@@ -391,10 +398,16 @@ loadBackupStatData( classStatOffset )
     {
         itemStatOffset = level.cacIngameItemInfo[i].statOffset;
 
-        value = self getStat ( classStatOffset + itemStatOffset );
+        dataType = level.cacIngameItemInfo[i].dataType;
 
-        self.cacBackStatData[level.cacIngameItemInfo[i].dataType] = value;
+        statValue = self getStat ( classStatOffset + itemStatOffset );
 
-        self setClientDvar( level.cacIngameItemInfo[i].dvarName, value );
+        self.cacBackStatData[dataType] = statValue;
+
+        valueRef = getRefByStatValue( level.cacIngameItemInfo[i].tableSource, statValue );
+
+        self setClientDvar( level.cacIngameItemInfo[i].dvarName, valueRef );
+
+        self iPrintLn( "[CAC] Store backup: type: ^2" + dataType + "^7  value: ^2" + statValue + "^7  ref: ^2" + valueRef );
     }
 }
