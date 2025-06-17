@@ -94,8 +94,8 @@ initAllowedWeapons()
 
         for( weapIndex = weapOffset; weapIndex < weapOffset + 10; weapIndex++ )
         {
+            //Add allowed weapons
             weaponName = tableLookup( "mp/statsTable.csv", 0, weapIndex, 4 );
-
             if ( !isDefined( weaponName ) || weaponName == "" )
                 continue;
 
@@ -105,6 +105,52 @@ initAllowedWeapons()
             level.cacIngameAllowedWeaps[allowIndex] = spawnStruct();
             level.cacIngameAllowedWeaps[allowIndex].dvarName = dvarName;
             level.cacIngameAllowedWeaps[allowIndex].dvarValue = getdvarx( dvarName, "int", 1, 0, 2 );
+
+            //---------------------------
+
+            //Add allowed no attachments
+            allowIndex = level.cacIngameAllowedWeaps.size;
+            dvarName = "attach_allow_" + className + "_none";
+
+            level.cacIngameAllowedWeaps[allowIndex] = spawnStruct();
+            level.cacIngameAllowedWeaps[allowIndex].dvarName = dvarName;
+            level.cacIngameAllowedWeaps[allowIndex].dvarValue = getdvarx( dvarName, "int", 1, 0, 2 );
+
+            //---------------------------
+
+            //Add allowed attachments for weapon
+            attachments = tableLookup( "mp/statsTable.csv", 0, weapIndex, 8 );
+            if( !isdefined( attachments ) || attachments == "" )
+			    continue;
+
+            //Get attachment names
+            attachmentsNames = strTok( attachments, " " );
+		    if( !isDefined( attachmentsNames ) )
+			    continue;
+
+            //Only 1 attachment for this weapon
+            if ( attachmentsNames.size == 0 )
+            {
+                allowIndex = level.cacIngameAllowedWeaps.size;
+                dvarName = "attach_allow_" + className + "_" + attachments;
+
+                level.cacIngameAllowedWeaps[allowIndex] = spawnStruct();
+                level.cacIngameAllowedWeaps[allowIndex].dvarName = dvarName;
+                level.cacIngameAllowedWeaps[allowIndex].dvarValue = getdvarx( dvarName, "int", 1, 0, 2 );
+            }
+            //Multiple attachment options
+            else
+            {
+                for( attachIndex = 0; attachIndex < attachmentsNames.size; attachIndex++ )
+                {
+                    allowIndex = level.cacIngameAllowedWeaps.size;
+                    dvarName = "attach_allow_" + className + "_" + attachmentsNames[attachIndex];
+
+                    level.cacIngameAllowedWeaps[allowIndex] = spawnStruct();
+                    level.cacIngameAllowedWeaps[allowIndex].dvarName = dvarName;
+                    level.cacIngameAllowedWeaps[allowIndex].dvarValue = getdvarx( dvarName, "int", 1, 0, 2 );
+                }
+            }
         }
     }
 }

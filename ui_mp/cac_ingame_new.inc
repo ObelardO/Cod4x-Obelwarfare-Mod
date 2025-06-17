@@ -78,30 +78,6 @@
 			open "nocd_popup_cac_primary";
 		
 		CHOICE_BUTTON_EX( 1, "@MPUI_PRIMARY_WEAPON1", CAC_SETUP_ACTION1, name primary_weapon_selection )
-		//CHOICE_NEWICON_VIS( 1, "specialty_new", when( statRangeAnyBitsSet( 3010, 3089, WEAPON_NEW_BITMASK ) ); )
-		
-		/*
-		// PRIMARY WEAPON BUTTON =============================================================
-		#define CAC_SETUP_ACTION1 \
-			play "mouse_click"; \
-			execOnDvarStringValue loadout_class assault "set selected_weapon_class assault;set ui_weapon_class_selected @MPUI_ASSAULT_RIFLES"; \
-			execOnDvarStringValue loadout_class heavygunner "set selected_weapon_class heavygunner;set ui_weapon_class_selected @MPUI_SUB_MACHINE_GUNS"; \
-			execOnDvarStringValue loadout_class specops "set selected_weapon_class specops;set ui_weapon_class_selected @MPUI_LIGHT_MACHINE_GUNS"; \
-			execOnDvarStringValue loadout_class demolitions "set selected_weapon_class demolitions;set ui_weapon_class_selected @MPUI_SHOTGUNS"; \
-			execOnDvarStringValue loadout_class sniper "set selected_weapon_class sniper;set ui_weapon_class_selected @MPUI_SNIPER_RIFLES"; \
-			uiScript openMenuOnDvar loadout_class assault "ocd_popup_cac_assault"; \
-			uiScript openMenuOnDvar loadout_class specops "ocd_popup_cac_specops"; \
-			uiScript openMenuOnDvar loadout_class heavygunner "ocd_popup_cac_heavygunner"; \
-			uiScript openMenuOnDvar loadout_class demolitions "ocd_popup_cac_demolitions"; \
-			uiScript openMenuOnDvar loadout_class sniper "ocd_popup_cac_sniper";
-
-		CHOICE_BUTTON_BG( 1, 1 )
-		CHOICE_HIGHLIGHT( 1, 1 )		
-		CHOICE_BUTTON_VIS_NOHI( 1, "@MPUI_PRIMARY_WEAPON1", CAC_SETUP_ACTION1, when( !dvarBool( lock_primary ) ) )
-		CHOICE_DBUTTON_VIS_NOHI( 1, "@MPUI_PRIMARY_WEAPON1", when( dvarBool( lock_primary ) ) )
-		//CHOICE_BUTTON_EX( 1, "@MPUI_PRIMARY_WEAPON1", CAC_SETUP_ACTION1, name primary_weapon_selection )
-		*/
-
 
 		#define CAC_SETUP_ACTION_ATTACHMENT \
 			play "mouse_click"; \
@@ -220,6 +196,7 @@
 	close "nocd_attachment_popup_demolitions"; \
 	close "nocd_attachment_popup_pistol"; \
 	close "nocd_popup_cac_camo"; \
+	close "nocd_popup_cac_camo_no_attach"; \
 	close "nocd_attachment_popup_fake";	
 	
 	// including weapon data
@@ -243,7 +220,7 @@
 	#define LOCAL_WEAPON_INFO_WINDOW( highlight_dvar ) \
 		/* weapon information side frame*/ \
 		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH-6) -4 280 CHOICE_POPUP_HEIGHT( 7 ) CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "white", CHOICE_POPUP_BORDER_COLOR, 1, 2, CHOICE_POPUP_BORDER_COLOR visible when( dvarString(ui_inside_popup) != "attachment" && dvarString(ui_inside_popup) != "camo" ); ) \
-		LOADOUT_PLATING_RAW( CHOICE_POPUP_WIDTH 8, -2, 0, 280, (CHOICE_POPUP_HEIGHT( 7 )-4), CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN visible when( dvarString(ui_inside_popup) != "attachment" && dvarString(ui_inside_popup) != "camo" );, 0, 0 )\
+		LOADOUT_PLATING_RAW( CHOICE_POPUP_WIDTH 8, -2, 0, 280, (CHOICE_POPUP_HEIGHT( 7 )-4), CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN visible when( dvarString(ui_inside_popup) != "attachment" && dvarString(ui_inside_popup) != "camo" );, 0, 0 )\ \
 		/* weapon image*/ \
 		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+6) 30 256 48 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "gradient_bottom", 1 1 1 0.3, 0, 2, CHOICE_POPUP_BORDER_COLOR visible when( dvarString(ui_inside_popup) != "attachment" && dvarString(ui_inside_popup) != "camo" ); ) \
 		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+72) -6 180 90 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, tablelookup("mp/statsTable.csv",4,dvarString(highlight_dvar),6), 1 1 1 1, 0, 2, CHOICE_POPUP_BORDER_COLOR visible when( dvarString(ui_inside_popup) != "attachment" && dvarString(ui_inside_popup) != "camo" ); ) \
@@ -260,12 +237,14 @@
 
 	#define LOCAL_PRIMARY_WEAPON_ACTION( suffix, weapClass, weapRef ) \
 		play "mouse_click"; \
-		execOnDvarStringValue loadout_primary_attachment gl ""; \
+		execOnDvarStringValue loadout_primary_attachment gl "";\
 		scriptMenuResponse "loadout_primary:"weapRef;\
-		setdvar loadout_primary weapRef; \
-		close self;\
-		setdvar loadout_camo camo_none; \
-		open "nocd_popup_cac_camo";		
+		setdvar loadout_primary weapRef;\
+		/*close self;*/\
+		setdvar loadout_primary_attachment none;\
+		open "nocd_attachment_popup_"weapClass
+		//setdvar loadout_camo camo_none; \
+		//open "nocd_popup_cac_camo";		
 
 	#define LOCAL_PRIMARY_WEAPON_ACTION3( suffix, weapClass, weapRef ) \
 		play "mouse_click"; \
@@ -274,9 +253,12 @@
 		setdvar loadout_primary weapRef; \
 		setdvar	loadout_primary_attachment none; \
 		setdvar loadout_perk1_locked 0; \
-		close self;\
+		open "nocd_attachment_popup_fake"; \
 		setdvar loadout_camo camo_none; \
-		open "nocd_popup_cac_camo";
+		open "nocd_popup_cac_camo_no_attach";	
+		//close self;\
+		//setdvar loadout_camo camo_none; \
+		//open "nocd_popup_cac_camo";
 		
 	#define WI_FOCUS_ACTION( weaponClass, weaponRef ) \
 		execOnDvarStringValue "weap_allow_"weaponClass"_"weaponRef 0 "set ui_primary_hl_unlocked 0";\
@@ -393,7 +375,10 @@
 		setdvar loadout_primary_attachment attachmentName; \
 		scriptMenuResponse "loadout_primary_attachment:"groupArg":"attachmentName;\
 		UPDATE_PERK1 \
-		close self;
+		/*close self;*/ \
+		setdvar loadout_camo camo_none; \
+		open "nocd_popup_cac_camo";	
+
 		
 	#define LOCAL_ATTACHMENT_ACTION2( attachmentName, paction, groupArg ) \
 		setdvar loadout_secondary_attachment attachmentName; \
@@ -462,7 +447,7 @@
 	}
 
 	menuDef	{ /* fake attachment heading for weapons without attachments to be displayed on top of camo popup */
-		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_attachment_popup_fake", 7, (CHOICE_X( 1 )-2), (CHOICE_Y( 1 ) + 44), ;, ;, 0 )
+		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_attachment_popup_fake", 7, (CHOICE_X( 1 )-2), (CHOICE_Y( 1 ) + 44), ;, execnow "set ui_inside_popup attachment";, 0 )
 		LOCAL_ATTACHMENT_INFO_WINDOW( "loadout_primary" )
 		PREPROC_SHADER_DRAW_ALIGNED( 0 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "white", 0.15 0.15 0.17 1, 0, 2, CHOICE_POPUP_BORDER_COLOR )
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( 8 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, -32 0, "@"+tablelookup("mp/statstable.csv",4,dvarString(loadout_primary),3), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_RIGHT, CHOICE_TEXTCOLOR )
@@ -602,7 +587,7 @@
 	// camo skin selection for primary weapon popup menu
 	LOCAL_CAMO_GROUP( "", execnow "set ui_inside_popup attachment" )
 	// camo skin selection for primary weapon without attachments
-	LOCAL_CAMO_GROUP( "2", execnow "set ui_inside_popup 0"; close "nocd_attachment_popup_fake" )
+	LOCAL_CAMO_GROUP( "_no_attach", execnow "set ui_inside_popup 0"; close "nocd_attachment_popup_fake" )
 	
 	
 	// ====================================================================================================
