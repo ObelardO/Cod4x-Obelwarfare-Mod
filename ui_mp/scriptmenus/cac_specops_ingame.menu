@@ -32,4 +32,5 @@
 #define CAC_CUSTOM_NAME				"customclass2"
 
 #include "ui_mp/common_macro.inc"
-#include "ui_mp/cac_ingame_ranked.inc"
+//#include "ui_mp/cac_ingame_ranked.inc"
+#include "ui_mp/cac_ingame_new.inc"

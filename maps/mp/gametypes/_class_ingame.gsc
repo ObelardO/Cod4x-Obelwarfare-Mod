@@ -28,8 +28,8 @@ init()
         camoTableRef = "camo_table";
 
         level.cacIngameClassInfo = [];
-        initCacInfo( 200, "custom1,0", "cac_assault_ingame" );
-        initCacInfo( 210, "custom2,0", "cac_specops_ingame" );
+        initClassInfo( 200, "custom1,0", "assault", 20 );
+        initClassInfo( 210, "custom2,0", "specops", 10 );
 
         level.cacIngameItemInfo = [];
         initItemInfo( 1, "primary", weaponsTableRef );
@@ -42,38 +42,39 @@ init()
         initItemInfo( 8, "grenade", weaponsTableRef );
         initItemInfo( 9, "camo", camoTableRef );
 
+        level.cacIngameAllowedWeaps = [];
+        initAllowedWeapons();
+        
         level.cacIngameInitialized = true;
 
-        /*
-        level.cacIngameStatDataClassOffset = [];
-        level.cacIngameStatDataClassOffset["customclass1"] = 200;
-        level.cacIngameStatDataClassOffset["customclass2"] = 210;
-        level.cacIngameStatDataClassOffset["customclass3"] = 220;
-        level.cacIngameStatDataClassOffset["customclass4"] = 230;
-        level.cacIngameStatDataClassOffset["customclass5"] = 240;
-        */
-
-        //game["cac_ingame_initialized"] = true;
+        precacheMenu( "cac_ingame" );
     }
 
+
+
+
     level thread onPlayerConnecting();
+
+
 }
 
 
-initCacInfo( statOffset, stockResponse, menuName )
+initClassInfo( classStatOffset, stockResponse, className, weaponsStatOffset )
 {
     index = level.cacIngameClassInfo.size;
 
     level.cacIngameClassInfo[index] = spawnStruct();
-    level.cacIngameClassInfo[index].statOffset = statOffset;
+    level.cacIngameClassInfo[index].statOffset = classStatOffset;
     level.cacIngameClassInfo[index].stockResponse = stockResponse;
-    level.cacIngameClassInfo[index].menuName = menuName;
+    level.cacIngameClassInfo[index].className = className;
+    level.cacIngameClassInfo[index].menuName = "cac_" + className + "_ingame";
+    level.cacIngameClassInfo[index].weaponsStatOffset = weaponsStatOffset;
 
-    precacheMenu( menuName );
+    precacheMenu( level.cacIngameClassInfo[index].menuName );
 }
 
 
-initItemInfo( statOffset, dataType, tableSource, dvarName )
+initItemInfo( statOffset, dataType, tableSource, dvarName ) //, weaponId, weaponCount )
 {
     index = level.cacIngameItemInfo.size;
 
@@ -82,9 +83,30 @@ initItemInfo( statOffset, dataType, tableSource, dvarName )
     level.cacIngameItemInfo[index].dataType = dataType;
     level.cacIngameItemInfo[index].tableSource = tableSource;
     level.cacIngameItemInfo[index].dvarName = "loadout_" + dataType;
+}
 
-    //TODO tempValue
-    //TODO backupvalue
+initAllowedWeapons()
+{
+    for( classIndex = 0; classIndex < level.cacIngameClassInfo.size; classIndex++ )
+    {
+        className = level.cacIngameClassInfo[classIndex].className;
+        weapOffset = level.cacIngameClassInfo[classIndex].weaponsStatOffset;
+
+        for( weapIndex = weapOffset; weapIndex < weapOffset + 10; weapIndex++ )
+        {
+            weaponName = tableLookup( "mp/statsTable.csv", 0, weapIndex, 4 );
+
+            if ( !isDefined( weaponName ) || weaponName == "" )
+                continue;
+
+            allowIndex = level.cacIngameAllowedWeaps.size;
+            dvarName = "weap_allow_" + className + "_" + weaponName;
+
+            level.cacIngameAllowedWeaps[allowIndex] = spawnStruct();
+            level.cacIngameAllowedWeaps[allowIndex].dvarName = dvarName;
+            level.cacIngameAllowedWeaps[allowIndex].dvarValue = getdvarx( dvarName, "int", 1, 0, 2 );
+        }
+    }
 }
 
 
@@ -100,6 +122,23 @@ onPlayerConnecting()
         player flushTempStatData();
         
         player thread onMenuResponse();
+
+        for( allowIndex = 0; allowIndex < level.cacIngameAllowedWeaps.size; allowIndex++ )
+        {
+            player setClientDvar( level.cacIngameAllowedWeaps[allowIndex].dvarName, level.cacIngameAllowedWeaps[allowIndex].dvarValue  );
+        }
+  
+        /*
+        player setClientDvars( 
+            "weap_allow_assault_m16", 1,
+            "weap_allow_assault_ak47", 1,
+            "weap_allow_assault_m4", 1,
+            "weap_allow_assault_g3", 1,
+            "weap_allow_assault_g36c", 1,
+            "weap_allow_assault_m14", 1,
+            "weap_allow_assault_mp44", 1
+        );
+        */
 	}
 }
 
@@ -133,16 +172,14 @@ onMenuResponse()
             }
 
             //Override open CAC menu for selected custom class
-            if( isDefined( cacMenu ) && isDefined( classOffset ) )
+            //if( isDefined( cacMenu ) && isDefined( classOffset ) )
+            if( isDefined( classOffset ) )
             {
                 flushTempStatData();
                 loadBackupStatData( classOffset );
 
-                //self setClientDvar( "ow_cac_stat_primary", 26 );
-
-
-
-                self openMenu( cacMenu );
+                //self openMenu( cacMenu );
+                self openMenu( "cac_ingame" );
             }
             //Othervise stock logic
             else
