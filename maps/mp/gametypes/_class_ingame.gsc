@@ -28,8 +28,11 @@ init()
         camoTableRef = "camo_table";
 
         level.cacIngameClassInfo = [];
-        initClassInfo( 200, "custom1,0", "assault", 20 );
-        initClassInfo( 210, "custom2,0", "specops", 10 );
+        initClassInfo( 200, "custom1,0" );
+        initClassInfo( 210, "custom2,0" );
+        initClassInfo( 220, "custom3,0" );
+        initClassInfo( 230, "custom4,0" );
+        initClassInfo( 240, "custom5,0" );
 
         level.cacIngameItemInfo = [];
         initItemInfo( 1, "primary", weaponsTableRef );
@@ -43,8 +46,22 @@ init()
         initItemInfo( 9, "camo", camoTableRef );
 
         level.cacIngameAllowedWeaps = [];
-        initAllowedWeapons();
-        
+        initAllowedWeapons( 20, "assault", "" );
+        initAllowedWeapons( 10, "specops", "" );
+        initAllowedWeapons( 80, "heavygunner", "" );
+        initAllowedWeapons( 70, "demolitions", "" );
+        initAllowedWeapons( 60, "sniper", "" );
+        initAllowedWeapons( 0, "", "pistol" );
+        initAllowedWeapons( 100, "", "" );
+
+        //
+        initAllowedPerks( "" );
+        initAllowedPerks( "assault" );
+        initAllowedPerks( "specops" );
+        initAllowedPerks( "heavygunner" );
+        initAllowedPerks( "demolitions" );
+        initAllowedPerks( "sniper" );
+
         level.cacIngameInitialized = true;
 
         precacheMenu( "cac_ingame" );
@@ -59,18 +76,18 @@ init()
 }
 
 
-initClassInfo( classStatOffset, stockResponse, className, weaponsStatOffset )
+initClassInfo( classStatOffset, stockResponse )
 {
     index = level.cacIngameClassInfo.size;
 
     level.cacIngameClassInfo[index] = spawnStruct();
     level.cacIngameClassInfo[index].statOffset = classStatOffset;
     level.cacIngameClassInfo[index].stockResponse = stockResponse;
-    level.cacIngameClassInfo[index].className = className;
-    level.cacIngameClassInfo[index].menuName = "cac_" + className + "_ingame";
-    level.cacIngameClassInfo[index].weaponsStatOffset = weaponsStatOffset;
+    //level.cacIngameClassInfo[index].className = className;
+    //level.cacIngameClassInfo[index].menuName = "cac_" + className + "_ingame";
+    //level.cacIngameClassInfo[index].weaponsStatOffset = weaponsStatOffset;
 
-    precacheMenu( level.cacIngameClassInfo[index].menuName );
+    //precacheMenu( level.cacIngameClassInfo[index].menuName );
 }
 
 
@@ -85,72 +102,100 @@ initItemInfo( statOffset, dataType, tableSource, dvarName ) //, weaponId, weapon
     level.cacIngameItemInfo[index].dvarName = "loadout_" + dataType;
 }
 
-initAllowedWeapons()
+initAllowedWeapons( statOffset, className, attachName )
 {
-    for( classIndex = 0; classIndex < level.cacIngameClassInfo.size; classIndex++ )
+    for( weapIndex = statOffset; weapIndex < statOffset + 10; weapIndex++ )
     {
-        className = level.cacIngameClassInfo[classIndex].className;
-        weapOffset = level.cacIngameClassInfo[classIndex].weaponsStatOffset;
+        //---- WEAPONS ----
 
-        for( weapIndex = weapOffset; weapIndex < weapOffset + 10; weapIndex++ )
-        {
-            //Add allowed weapons
-            weaponName = tableLookup( "mp/statsTable.csv", 0, weapIndex, 4 );
-            if ( !isDefined( weaponName ) || weaponName == "" )
-                continue;
+        //Add allowed weapons
+        weaponName = tableLookup( "mp/statsTable.csv", 0, weapIndex, 4 );
+        if ( !isDefined( weaponName ) || weaponName == "" )
+            continue;
 
-            allowIndex = level.cacIngameAllowedWeaps.size;
+        if ( className == "" )
+            dvarName = "weap_allow_" + weaponName;
+        else
             dvarName = "weap_allow_" + className + "_" + weaponName;
 
-            level.cacIngameAllowedWeaps[allowIndex] = spawnStruct();
-            level.cacIngameAllowedWeaps[allowIndex].dvarName = dvarName;
-            level.cacIngameAllowedWeaps[allowIndex].dvarValue = getdvarx( dvarName, "int", 1, 0, 2 );
+        addAllowedWeapon( dvarName );
 
-            //---------------------------
+        //---- NO ATTACHMENTS ----
 
-            //Add allowed no attachments
-            allowIndex = level.cacIngameAllowedWeaps.size;
-            dvarName = "attach_allow_" + className + "_none";
+        if ( !isDefined( attachName ) || attachName == "" )
+        {
+            attachName = className;
+        }
 
-            level.cacIngameAllowedWeaps[allowIndex] = spawnStruct();
-            level.cacIngameAllowedWeaps[allowIndex].dvarName = dvarName;
-            level.cacIngameAllowedWeaps[allowIndex].dvarValue = getdvarx( dvarName, "int", 1, 0, 2 );
+        //Add allowed no attachments
+        if ( attachName != "" )
+        {            
+            dvarName = "attach_allow_" + attachName + "_none";
+            addAllowedWeapon( dvarName );
+        }
 
-            //---------------------------
+        //---- ATTACHMENTS ----
 
-            //Add allowed attachments for weapon
-            attachments = tableLookup( "mp/statsTable.csv", 0, weapIndex, 8 );
-            if( !isdefined( attachments ) || attachments == "" )
-			    continue;
+        //Add allowed attachments for weapon
+        attachments = tableLookup( "mp/statsTable.csv", 0, weapIndex, 8 );
+        if( !isdefined( attachments ) || attachments == "" )
+            continue;
 
-            //Get attachment names
-            attachmentsNames = strTok( attachments, " " );
-		    if( !isDefined( attachmentsNames ) )
-			    continue;
+        //Get attachment names
+        attachmentsNames = strTok( attachments, " " );
+        if( !isDefined( attachmentsNames ) )
+            continue;
 
-            //Only 1 attachment for this weapon
-            if ( attachmentsNames.size == 0 )
+        //Only 1 attachment for this weapon
+        if ( attachmentsNames.size == 0 )
+        {
+            dvarName = "attach_allow_" + attachName + "_" + attachments;
+            addAllowedWeapon( dvarName );
+        }
+        //Multiple attachment options
+        else
+        {
+            for( attachIndex = 0; attachIndex < attachmentsNames.size; attachIndex++ )
             {
-                allowIndex = level.cacIngameAllowedWeaps.size;
-                dvarName = "attach_allow_" + className + "_" + attachments;
-
-                level.cacIngameAllowedWeaps[allowIndex] = spawnStruct();
-                level.cacIngameAllowedWeaps[allowIndex].dvarName = dvarName;
-                level.cacIngameAllowedWeaps[allowIndex].dvarValue = getdvarx( dvarName, "int", 1, 0, 2 );
+                dvarName = "attach_allow_" + attachName + "_" + attachmentsNames[attachIndex];
+                addAllowedWeapon( dvarName );
             }
-            //Multiple attachment options
-            else
-            {
-                for( attachIndex = 0; attachIndex < attachmentsNames.size; attachIndex++ )
-                {
-                    allowIndex = level.cacIngameAllowedWeaps.size;
-                    dvarName = "attach_allow_" + className + "_" + attachmentsNames[attachIndex];
+        }
+    }
+}
 
-                    level.cacIngameAllowedWeaps[allowIndex] = spawnStruct();
-                    level.cacIngameAllowedWeaps[allowIndex].dvarName = dvarName;
-                    level.cacIngameAllowedWeaps[allowIndex].dvarValue = getdvarx( dvarName, "int", 1, 0, 2 );
-                }
-            }
+
+addAllowedWeapon( dvarName )
+{
+    allowIndex = level.cacIngameAllowedWeaps.size;
+    level.cacIngameAllowedWeaps[allowIndex] = spawnStruct();
+    level.cacIngameAllowedWeaps[allowIndex].dvarName = dvarName;
+    level.cacIngameAllowedWeaps[allowIndex].dvarValue = getdvarx( dvarName, "int", 1, 0, 2 );
+}
+
+
+initAllowedPerks( className )
+{
+    for( perkIndex = 150; perkIndex < 190; perkIndex++ )
+    {
+        perkName = tableLookup( "mp/statsTable.csv", 0, perkIndex, 4 );
+        if ( !isDefined( perkName ) || perkName == "" )
+            continue;
+
+        perkGroup = tableLookup( "mp/statsTable.csv", 0, perkIndex, 8 );
+        if ( !isDefined( perkGroup ) || perkGroup == "" )
+            continue;
+
+        //Master Option
+        if ( className == "")
+        {
+            dvarName = "perk_allow_" + perkName;
+            addAllowedWeapon( dvarName );
+        }
+        //Class depends perks
+        {
+            dvarName = "perk_" + className + "_allow_" + perkName;
+            addAllowedWeapon( dvarName );
         }
     }
 }
@@ -167,29 +212,26 @@ onPlayerConnecting()
 
         player flushTempStatData();
         
-        player thread onMenuResponse();
-
-        for( allowIndex = 0; allowIndex < level.cacIngameAllowedWeaps.size; allowIndex++ )
-        {
-            player setClientDvar( level.cacIngameAllowedWeaps[allowIndex].dvarName, level.cacIngameAllowedWeaps[allowIndex].dvarValue  );
-        }
-  
-        /*
-        player setClientDvars( 
-            "weap_allow_assault_m16", 1,
-            "weap_allow_assault_ak47", 1,
-            "weap_allow_assault_m4", 1,
-            "weap_allow_assault_g3", 1,
-            "weap_allow_assault_g36c", 1,
-            "weap_allow_assault_m14", 1,
-            "weap_allow_assault_mp44", 1
-        );
-        */
+        player thread onMenuResponseThread();
 	}
 }
 
 
-onMenuResponse()
+sendAllowedLoadoutThread()
+{
+    for( allowIndex = 0; allowIndex < level.cacIngameAllowedWeaps.size; allowIndex++ )
+    {
+        self setClientDvar( level.cacIngameAllowedWeaps[allowIndex].dvarName, level.cacIngameAllowedWeaps[allowIndex].dvarValue  );
+    
+        if ( allowIndex % 10 == 0 ) 
+        {
+            wait 0.05;
+        }
+    }
+}
+
+
+onMenuResponseThread()
 {
 	self endon("disconnect");
 
@@ -204,14 +246,14 @@ onMenuResponse()
             self closeMenu();
 			self closeInGameMenu();
 
-            cacMenu = undefined;
+            //cacMenu = undefined;
             classOffset = undefined;
 
             for( i = 0; i < level.cacIngameClassInfo.size; i++ )
             {
                 if( level.cacIngameClassInfo[i].stockResponse == response )
                 {
-                    cacMenu = level.cacIngameClassInfo[i].menuName;
+                    //cacMenu = level.cacIngameClassInfo[i].menuName;
                     classOffset =  level.cacIngameClassInfo[i].statOffset;
                     break;
                 }
@@ -223,6 +265,8 @@ onMenuResponse()
             {
                 flushTempStatData();
                 loadBackupStatData( classOffset );
+
+                self thread sendAllowedLoadoutThread();
 
                 //self openMenu( cacMenu );
                 self openMenu( "cac_ingame" );
@@ -307,43 +351,6 @@ onMenuResponse()
 
                 self iPrintLn( "CAC SET: type: ^2" + dataType + "^7  value: ^2" + statValue + "^7 ref: ^2" + valueRef +  "^7 menu: " + menu );
             }
-
-            /*
-            if ( responseType == "cac_upd" )
-            {
-                assertex( responseTok.size != 5, "Item update in create-a-class-ingame is sending bad response:" + response );
-
-                dataType = responseTok[1];
-                valueRef = responseTok[2];
-                //tableSource = responseTok[3];
-                condtionStatOffset = responseTok[3];
-                condtionValidValue = responseTok[4];
-
-                //TODO SET STAT WITH VALIDATION
-
-                conditionStatValue = int( self getStat( condtionStatOffset ) );
-
-                conditionValidArray = strTok( condtionValidValue, "-" );
-
-
-
-                for( i = 0; i < conditionValidArray.size; i++ )
-                {
-                    self iPrintLn( "CAC UPD: check for: ^2" + conditionStatValue + "^7 == ^2" + conditionValidArray[i] );
-
-                    if ( conditionStatValue == int( conditionValidArray[i] ) )
-                    {
-                        statValue = getStatValueFromTableByType( dataType, valueRef );
-
-                        setTempStatData( dataType, statValue );
-
-                        self iPrintLn( "CAC UPD: type: ^2" + dataType + "^7  value: ^2" + statValue + "^7 ref: ^2" + valueRef + "^7 condition: ^2" + conditionStatValue + " in " + condtionValidValue + " ^7 menu: " + menu );
-
-                        break;
-                    }
-                }
-            }
-            */
         }
     }
 }

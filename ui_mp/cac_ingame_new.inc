@@ -81,11 +81,12 @@
 
 		#define CAC_SETUP_ACTION_ATTACHMENT \
 			play "mouse_click"; \
-			uiScript openMenuOnDvar loadout_class assault "nocd_attachment_popup_assault"; \
-			uiScript openMenuOnDvar loadout_class specops "nocd_attachment_popup_specops"; \
-			uiScript openMenuOnDvar loadout_class heavygunner "nocd_attachment_popup_heavygunner"; \
-			uiScript openMenuOnDvar loadout_class demolitions "nocd_attachment_popup_demolitions"; \
-			uiScript openMenuOnDvar loadout_class sniper "nocd_attachment_popup_sniper";
+			setdvar ui_inside_popup_nested 0; \
+			uiScript openMenuOnDvar loadout_class assault "nocd_attachment_popup_assault_not_nested"; \
+			uiScript openMenuOnDvar loadout_class specops "nocd_attachment_popup_specops_not_nested"; \
+			uiScript openMenuOnDvar loadout_class heavygunner "nocd_attachment_popup_heavygunner_not_nested"; \
+			uiScript openMenuOnDvar loadout_class demolitions "nocd_attachment_popup_demolitions_not_nested"; \
+			uiScript openMenuOnDvar loadout_class sniper "nocd_attachment_popup_sniper_not_nested";
 
 		CHOICE_BUTTON_BG( 2, 1 )
 		CHOICE_HIGHLIGHT( 2, 1 )		
@@ -194,14 +195,18 @@
 	close "nocd_attachment_popup_heavygunner"; \
 	close "nocd_attachment_popup_sniper"; \
 	close "nocd_attachment_popup_demolitions"; \
+	close "nocd_attachment_popup_assault_not_nested"; \
+	close "nocd_attachment_popup_specops_not_nested"; \
+	close "nocd_attachment_popup_heavygunner_not_nested"; \
+	close "nocd_attachment_popup_sniper_not_nested"; \
+	close "nocd_attachment_popup_demolitions_not_nested"; \
 	close "nocd_attachment_popup_pistol"; \
+	close "nocd_attachment_popup_fake";	\
 	close "nocd_popup_cac_camo"; \
-	close "nocd_popup_cac_camo_no_attach"; \
-	close "nocd_attachment_popup_fake";	
+	close "nocd_popup_cac_camo_no_attach";
 	
-	// including weapon data
-	#include "ui_mp/weaponinfo.menu"
-	
+// including weapon data
+#include "ui_mp/weaponinfo.menu"
 #include "ui_mp/popupstyle.inc"	
 #include "ui/choices_setup_popmenu.menu"
 
@@ -242,6 +247,7 @@
 		setdvar loadout_primary weapRef;\
 		/*close self;*/\
 		setdvar loadout_primary_attachment none;\
+		setdvar ui_inside_popup_nested 1; \
 		open "nocd_attachment_popup_"weapClass
 		//setdvar loadout_camo camo_none; \
 		//open "nocd_popup_cac_camo";		
@@ -253,6 +259,7 @@
 		setdvar loadout_primary weapRef; \
 		setdvar	loadout_primary_attachment none; \
 		setdvar loadout_perk1_locked 0; \
+		setdvar ui_inside_popup_nested 1; \
 		open "nocd_attachment_popup_fake"; \
 		setdvar loadout_camo camo_none; \
 		open "nocd_popup_cac_camo_no_attach";	
@@ -366,18 +373,20 @@
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/attachmentTable.csv",4,dvarString(ui_attachment_highlighted),7), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, CHOICE_TEXTCOLOR visible when( dvarBool( ui_attachment_hl_unlocked ) ); )\
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@MENU_DISABLED", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( !dvarBool( ui_attachment_hl_unlocked ) ); )\
 		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+6) 0 (CHOICE_SIZE_Y*2) CHOICE_SIZE_Y CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "specialty_locked", 1 1 1 1, 0, 2, CHOICE_POPUP_BORDER_COLOR visible when( !dvarBool( ui_attachment_hl_unlocked ) && dvarString(ui_inside_popup) != "camo" ); ) \
-		PREPROC_SHADER_DRAW_ALIGNED( 0 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "white", 0.15 0.15 0.17 1, 0, 2, CHOICE_POPUP_BORDER_COLOR )\
-		PREPROC_TEXT_DRAW_ALIGNED_EXP( 8 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, -32 0, "@"+tablelookup("mp/statstable.csv",4,dvarString(parentDvar),3), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_RIGHT, CHOICE_TEXTCOLOR )\
+		PREPROC_SHADER_DRAW_ALIGNED( 0 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "white", 0.15 0.15 0.17 1, 0, 2, CHOICE_POPUP_BORDER_COLOR visible when( dvarBool( ui_inside_popup_nested ) ); )\
+		PREPROC_TEXT_DRAW_ALIGNED_EXP( 8 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, -32 0, "@"+tablelookup("mp/statstable.csv",4,dvarString(parentDvar),3), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_RIGHT, CHOICE_TEXTCOLOR visible when( dvarBool( ui_inside_popup_nested ) ); )\
 		/* pointer icon */ \
-		PREPROC_SHADER_DRAW_ALIGNED( 200 -16 16 8 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "hitech_arrow_right", 0.55 0.95 0.55 0.7, 0, 2, CHOICE_POPUP_BORDER_COLOR )
+		PREPROC_SHADER_DRAW_ALIGNED( 200 -16 16 8 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "hitech_arrow_right", 0.55 0.95 0.55 0.7, 0, 2, CHOICE_POPUP_BORDER_COLOR visible when( dvarBool( ui_inside_popup_nested ) ); )
+
 
 	#define LOCAL_ATTACHMENT_ACTION( attachmentName, paction, groupArg ) \
 		setdvar loadout_primary_attachment attachmentName; \
 		scriptMenuResponse "loadout_primary_attachment:"groupArg":"attachmentName;\
 		UPDATE_PERK1 \
-		/*close self;*/ \
-		setdvar loadout_camo camo_none; \
-		open "nocd_popup_cac_camo";	
+		close self;\
+		uiScript openMenuOnDvar ui_inside_popup_nested 1 "nocd_attachment_popup_"groupArg;\
+		execOnDvarStringValue ui_inside_popup_nested 1 "set loadout_camo camo_none";\
+		uiScript openMenuOnDvar ui_inside_popup_nested 1 "nocd_popup_cac_camo";
 
 		
 	#define LOCAL_ATTACHMENT_ACTION2( attachmentName, paction, groupArg ) \
@@ -468,7 +477,8 @@
 	
 	// primary and second primary attachment popup menus
 	//LOCAL_MASTER_ATTACHMENT_GROUP( CAC_PRIMARY_ATTACHMENT, "", 1, "primary", 0, "loadout_primary_attachment" )
-	LOCAL_MASTER_ATTACHMENT_GROUP( "", 1, "primary", 0)
+	LOCAL_MASTER_ATTACHMENT_GROUP( "", 1, "primary", 0 )
+	LOCAL_MASTER_ATTACHMENT_GROUP( "_not_nested", 1, "primary", -48)
 
 	// ====================================================================================================
 	// side arm selection ===============================================================================
@@ -651,11 +661,11 @@
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 58 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/statsTable.csv",4,dvarString(highlight_dvar),3), TEXTSIZE_DEFAULT, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE ) \
 		/* perk desc unlocked*/\
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0,  "@"+tablelookup("mp/statsTable.csv",4,dvarString(highlight_dvar),7), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, CHOICE_TEXTCOLOR \
-		visible when( dvarBool( ui_perk_hl_unlocked ) && ( dvarString( loadout_grenade )=="smoke_grenade" && dvarString(highlight_dvar)=="specialty_specialgrenade" )==0 ); )\
+		visible when( dvarBool( ui_perk_hl_unlocked ) && dvarBool( "perk_"+dvarString( loadout_class )+"_allow_"+dvarString( highlight_dvar )) && ( dvarString( loadout_grenade )=="smoke_grenade" && dvarString(highlight_dvar)=="specialty_specialgrenade" )==0 ); )\
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0,  "@MENU_DISABLED", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE \
-		visible when( !dvarBool( ui_perk_hl_unlocked ) || ( dvarString( loadout_grenade )=="smoke_grenade" && dvarString(highlight_dvar)=="specialty_specialgrenade" ) ); )\
+		visible when( !dvarBool( ui_perk_hl_unlocked ) || !dvarBool( "perk_"+dvarString( loadout_class )+"_allow_"+dvarString( highlight_dvar )) || ( dvarString( loadout_grenade )=="smoke_grenade" && dvarString(highlight_dvar)=="specialty_specialgrenade" ) ); )\
 		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+6) 0 (CHOICE_SIZE_Y*2) CHOICE_SIZE_Y CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "specialty_locked", 1 1 1 1, 0, 2, CHOICE_POPUP_BORDER_COLOR \
-		visible when( !dvarBool( ui_perk_hl_unlocked ) ); ) \
+		visible when( !dvarBool( ui_perk_hl_unlocked ) || !dvarBool( "perk_"+dvarString( loadout_class )+"_allow_"+dvarString( highlight_dvar )) ); ) \
 
 	#define LOCAL_PERK_ACTION( perkDvar, perkRef, paction ) \
 			play "mouse_click"; \
@@ -667,19 +677,21 @@
 	#define LOCAL_PERK_ITEM( itemNum, camoName, perkDvar, perkRef, highlight_dvar, paction )\
 		LOCAL_PERK_ITEM_VIS( itemNum, camoName, perkDvar, perkRef, highlight_dvar, paction, 1 )
 
+
 	#define PI_FOCUS_ACTION( perkRef ) \
 		execOnDvarStringValue "perk_allow_"perkRef 0 "set ui_perk_hl_unlocked 0";\
 		execOnDvarStringValue "perk_allow_"perkRef 1 "set ui_perk_hl_unlocked 1";\
 		exec "set ui_perk_highlighted "perkRef;
+
 		
 	#define LOCAL_PERK_ITEM_VIS( itemNum, camoName, perkDvar, perkRef, highlight_dvar, paction, visArg )\
 		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, camoName, LOCAL_PERK_ACTION( perkDvar, perkRef, paction );, PI_FOCUS_ACTION( perkRef ), ;, \
-		when( dvarBool( "perk_allow_"perkRef ) && ( dvarString(loadout_grenade)==REF_SMOKE_X1 && perkRef==REF_SPECIALGRENADE_X3 )==0 && visArg );, \
-			  dvarBool( "perk_allow_"perkRef ) && ( dvarString(loadout_grenade)==REF_SMOKE_X1 && perkRef==REF_SPECIALGRENADE_X3 )==0 && visArg ) \
+		when( dvarBool( "perk_" + dvarString( loadout_class ) + "_allow_"perkRef ) && dvarBool( "perk_allow_"perkRef ) && ( dvarString(loadout_grenade)==REF_SMOKE_X1 && perkRef==REF_SPECIALGRENADE_X3 )==0 && visArg );, \
+			  dvarBool( "perk_" + dvarString( loadout_class ) + "_allow_"perkRef ) && dvarBool( "perk_allow_"perkRef ) && ( dvarString(loadout_grenade)==REF_SMOKE_X1 && perkRef==REF_SPECIALGRENADE_X3 )==0 && visArg ) \
 		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;,PI_FOCUS_ACTION( perkRef ), ;, \
-		when( ( !dvarBool( "perk_allow_"perkRef ) || ( dvarString(loadout_grenade)==REF_SMOKE_X1 && perkRef==REF_SPECIALGRENADE_X3 ) ) && visArg ); ) \
+		when( ( !dvarBool( "perk_" + dvarString( loadout_class ) + "_allow_"perkRef ) || !dvarBool( "perk_allow_"perkRef ) || ( dvarString(loadout_grenade)==REF_SMOKE_X1 && perkRef==REF_SPECIALGRENADE_X3 ) ) && visArg ); ) \
 		CHOICE_DBUTTON_VIS( itemNum, camoName, \
-		when( ( !dvarBool( "perk_allow_"perkRef ) || dvarString(loadout_grenade)==REF_SMOKE_X1 && perkRef==REF_SPECIALGRENADE_X3 ) && visArg ); )
+		when( ( !dvarBool( "perk_" + dvarString( loadout_class ) + "_allow_"perkRef ) || !dvarBool( "perk_allow_"perkRef ) || ( dvarString(loadout_grenade)==REF_SMOKE_X1 && perkRef==REF_SPECIALGRENADE_X3 ) ) && visArg ); )
 
 	// hackaround to work for PC's floating mouse unfocusing
 	#undef  UI_FOCUSFIRST
