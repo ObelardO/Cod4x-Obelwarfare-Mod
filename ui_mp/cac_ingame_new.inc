@@ -243,7 +243,7 @@
 	#define LOCAL_PRIMARY_WEAPON_ACTION( suffix, weapClass, weapRef ) \
 		play "mouse_click"; \
 		execOnDvarStringValue loadout_primary_attachment gl "";\
-		scriptMenuResponse "loadout_primary:"weapRef;\
+		scriptMenuResponse "set:loadout_primary:"weapRef;\
 		setdvar loadout_primary weapRef;\
 		/*close self;*/\
 		setdvar loadout_primary_attachment none;\
@@ -255,7 +255,7 @@
 	#define LOCAL_PRIMARY_WEAPON_ACTION3( suffix, weapClass, weapRef ) \
 		play "mouse_click"; \
 		execOnDvarStringValue loadout_primary_attachment gl ""; \
-		scriptMenuResponse "loadout_primary:"weapRef;\
+		scriptMenuResponse "set:loadout_primary:"weapRef;\
 		setdvar loadout_primary weapRef; \
 		setdvar	loadout_primary_attachment none; \
 		setdvar loadout_perk1_locked 0; \
@@ -272,30 +272,33 @@
 		execOnDvarStringValue "weap_allow_"weaponClass"_"weaponRef 1 "set ui_primary_hl_unlocked 1";\
 		exec "set ui_primary_highlighted "weaponRef;
 	
+	#define CHOICE_BUTTON_FOCUS_VIS_ADV_HK( itemIndex, textArg, actionArg, onFocusArg, leaveFocusArg, visArg, vis )\
+		CHOICE_BUTTON_FOCUS_VIS_ADV( itemIndex, textArg, actionArg, onFocusArg, leaveFocusArg, visArg, vis )\
+		execKey itemIndex { actionArg }
+
 	// hacked to hide the second primary if same weapon is selected in first primary, change weapon description to "Already selected"
 	#define LOCAL_WEAPON_ITEM( suffix, itemNum, weaponName, weaponClass, weaponRef )\
 		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, WI_FOCUS_ACTION( weaponClass, weaponRef ), ;, when( !dvarBool( "weap_allow_"weaponClass"_"weaponRef ) ); ) \
 		CHOICE_DBUTTON_VIS( itemNum, weaponName, when( 1 ); ) \
-		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, weaponName, LOCAL_PRIMARY_WEAPON_ACTION( suffix, weaponClass, weaponRef ), \
+		CHOICE_BUTTON_FOCUS_VIS_ADV_HK( itemNum, weaponName, LOCAL_PRIMARY_WEAPON_ACTION( suffix, weaponClass, weaponRef ), \
 		WI_FOCUS_ACTION( weaponClass, weaponRef ), ;, when( dvarBool( "weap_allow_"weaponClass"_"weaponRef ) );, \
-		dvarBool( "weap_allow_"weaponClass"_"weaponRef ) ) \
+		dvarBool( "weap_allow_"weaponClass"_"weaponRef ) )
 		
 	#define LOCAL_WEAPON_ITEM2( suffix, itemNum, weaponName, weaponClass, weaponRef )\
 		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, WI_FOCUS_ACTION( weaponClass, weaponRef ), ;, when( !dvarBool( "weap_allow_"weaponClass"_"weaponRef ) ); ) \
 		CHOICE_DBUTTON_VIS( itemNum, weaponName, when( 1 ); ) \
-		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, weaponName, LOCAL_PRIMARY_WEAPON_ACTION3( suffix, weaponClass, weaponRef ), \
+		CHOICE_BUTTON_FOCUS_VIS_ADV_HK( itemNum, weaponName, LOCAL_PRIMARY_WEAPON_ACTION3( suffix, weaponClass, weaponRef ), \
 		WI_FOCUS_ACTION( weaponClass, weaponRef ), ;, when( dvarBool( "weap_allow_"weaponClass"_"weaponRef ) );, \
-		dvarBool( "weap_allow_"weaponClass"_"weaponRef ) ) \
+		dvarBool( "weap_allow_"weaponClass"_"weaponRef ) )
+
+	#define LOCAL_WEAPON_CLASS( itemNum, ptext, plabel ) \
+		CHOICE_BUTTON_EX( itemNum, plabel, play "mouse_click"; execnow "set loadout_class "ptext"; set ui_weapon_class_selected "plabel; open "nocd_popup_cac_"ptext;, name ptext )
 
 	// primary weapon class dropdown
 	menuDef
 	{
 		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_primary", 5, (CHOICE_X( 1 )-2), (CHOICE_Y( 1 )-4), ;, execnow "set ui_inside_popup weapon_class; set ui_show_preview 1";, 1 )
 		onClose{	execnow "set ui_show_preview 0; set ui_primary_highlighted 0; set ui_attachment_highlighted 0";	}
-		
-		#define LOCAL_WEAPON_CLASS( itemNum, ptext, plabel ) \
-			CHOICE_BUTTON_EX( itemNum, plabel, play "mouse_click"; execnow "set loadout_class "ptext"; set ui_weapon_class_selected "plabel; open "nocd_popup_cac_"ptext;, name ptext )
-			//CHOICE_BUTTON_EX( itemNum, plabel, play "mouse_click"; execnow "set selected_weapon_class "ptext"; set ui_weapon_class_selected "plabel; open "nocd_popup_cac_"ptext;, name ptext )
 
 		LOCAL_WEAPON_CLASS( 1, "assault", "@MPUI_ASSAULT_RIFLES" )
 		LOCAL_WEAPON_CLASS( 2, "specops", "@MPUI_SUB_MACHINE_GUNS" )
@@ -381,7 +384,8 @@
 
 	#define LOCAL_ATTACHMENT_ACTION( attachmentName, paction, groupArg ) \
 		setdvar loadout_primary_attachment attachmentName; \
-		scriptMenuResponse "loadout_primary_attachment:"groupArg":"attachmentName;\
+		/*scriptMenuResponse "set:loadout_primary_attachment:"groupArg":"attachmentName;*/\
+		scriptMenuResponse "set:loadout_primary_attachment:"attachmentName;\
 		UPDATE_PERK1 \
 		close self;\
 		uiScript openMenuOnDvar ui_inside_popup_nested 1 "nocd_attachment_popup_"groupArg;\
@@ -391,7 +395,8 @@
 		
 	#define LOCAL_ATTACHMENT_ACTION2( attachmentName, paction, groupArg ) \
 		setdvar loadout_secondary_attachment attachmentName; \
-		scriptMenuResponse "loadout_secondary_attachment:"groupArg":"attachmentName;\
+		/*scriptMenuResponse "set:loadout_primary_attachment:"groupArg":"attachmentName;*/\
+		scriptMenuResponse "set:loadout_primary_attachment:"attachmentName;\
 		UPDATE_PERK1 \
 		PREPROC_ATTACH_CLOSEALL
 
@@ -404,8 +409,8 @@
 		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,pname,3), LOCAL_ATTACHMENT_ACTION( pname, paction, groupArg );, AI_FOCUS_ACTION(groupArg,pname), ;, when( ptype == "primary" && dvarBool( "attach_allow_"groupArg"_"pname ) ), ptype == "primary" && dvarBool( "attach_allow_"groupArg"_"pname ) ) \
 		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,pname,3), LOCAL_ATTACHMENT_ACTION2( pname, paction, groupArg );, AI_FOCUS_ACTION(groupArg,pname), ;, when( ptype == "secondary" && dvarBool( "attach_allow_"groupArg"_"pname ) ), ptype == "primary" && dvarBool( "attach_allow_"groupArg"_"pname ) ) \
 		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, AI_FOCUS_ACTION(groupArg,pname), ;, when( !dvarBool( "attach_allow_"groupArg"_"pname ) ); ) \
-		CHOICE_DBUTTON_VIS( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,pname,3), when( !dvarBool( "attach_allow_"groupArg"_"pname ) ); )
-	// hackaround to work for PC's floating mouse unfocusing
+		CHOICE_DBUTTON_VIS( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,pname,3), when( !dvarBool( "attach_allow_"groupArg"_"pname ) ); ) \
+		
 	#undef  UI_FOCUSFIRST
 	#define UI_FOCUSFIRST "ui_attachment_highlighted"
 		
@@ -501,14 +506,14 @@
 			play "mouse_click"; \
 			setdvar	loadout_secondary weaponRef; \
 			setdvar	loadout_secondary_attachment none; \
-			scriptMenuResponse "loadout_secondary:"weaponRef;\
+			scriptMenuResponse "set:loadout_secondary:"weaponRef;\
 			PREPROC_ATTACH_CLOSEALL
 
 	#define LOCAL_SIDEARM_ACTION2( weaponRef ) \		
 			play "mouse_click"; \
 			setdvar	loadout_secondary weaponRef; \
 			setdvar	loadout_secondary_attachment none; \
-			scriptMenuResponse "loadout_secondary:"weaponRef;\
+			scriptMenuResponse "set:loadout_secondary:"weaponRef;\
 			uiScript openMenuOnDvar "selected_weapon_class" pistol "nocd_attachment_popup_pistol";
 	
 	#define SI_FOCUS_ACTION( weaponRef ) \
@@ -570,7 +575,7 @@
 	#define LOCAL_CAMO_ACTION( camoRef ) \
 			play "mouse_click"; \
 			setdvar loadout_camo camoRef;\
-			scriptMenuResponse "loadout_camo:"camoRef;\
+			scriptMenuResponse "set:loadout_camo:"camoRef;\
 			PREPROC_ATTACH_CLOSEALL
 
 	#define LOCAL_CAMO_ITEM( itemNum, camoName, pnum, camoRef, highlight_dvar, bitMask, visArg )\
@@ -622,7 +627,7 @@
 	#define LOCAL_SGRENADE_ACTION( weaponRef ) \
 			play "mouse_click"; \
 			setdvar loadout_grenade weaponRef; \
-			scriptMenuResponse "loadout_grenade:"weaponRef;\
+			scriptMenuResponse "set:loadout_grenade:"weaponRef;\
 			close "nocd_popup_cac_extra"
 		
 	#define LOCAL_SGRENADE_ITEM( itemNum, weaponName, weaponRef, highlight_dvar )\
@@ -671,7 +676,7 @@
 			play "mouse_click"; \
 			close self \
 			exec "set "perkDvar" "perkRef;\
-			scriptMenuResponse perkDvar":"perkRef;\
+			scriptMenuResponse "set:"perkDvar":"perkRef;\
 			paction
 		
 	#define LOCAL_PERK_ITEM( itemNum, camoName, perkDvar, perkRef, highlight_dvar, paction )\

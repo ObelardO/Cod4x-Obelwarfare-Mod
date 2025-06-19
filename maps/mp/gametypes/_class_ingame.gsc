@@ -20,21 +20,23 @@ init()
     if( !level.ow_cac_allow_ingame_ranked || level.oldschool || level.console )
         return;
 
-    if( !isDefined( level.cacIngameInitialized ) )
+    level.cacIngame = spawnStruct();
+
+    if( !isDefined( level.cacIngame.initialized ) )
     {
         perksTableRef = "perks_table";
         weaponsTableRef = "weapons_table";
         attachmentTableRef = "attachment_table";
         camoTableRef = "camo_table";
 
-        level.cacIngameClassInfo = [];
+        level.cacIngame.classInfo = [];
         initClassInfo( 200, "custom1,0" );
         initClassInfo( 210, "custom2,0" );
         initClassInfo( 220, "custom3,0" );
         initClassInfo( 230, "custom4,0" );
         initClassInfo( 240, "custom5,0" );
 
-        level.cacIngameItemInfo = [];
+        level.cacIngame.itemInfo = [];
         initItemInfo( 1, "primary", weaponsTableRef );
         initItemInfo( 2, "primary_attachment", attachmentTableRef );
         initItemInfo( 3, "secondary", weaponsTableRef );
@@ -45,7 +47,7 @@ init()
         initItemInfo( 8, "grenade", weaponsTableRef );
         initItemInfo( 9, "camo", camoTableRef );
 
-        level.cacIngameAllowedWeaps = [];
+        level.cacIngame.allowedWeaps = [];
         initAllowedWeapons( 20, "assault", "" );
         initAllowedWeapons( 10, "specops", "" );
         initAllowedWeapons( 80, "heavygunner", "" );
@@ -62,45 +64,37 @@ init()
         initAllowedPerks( "demolitions" );
         initAllowedPerks( "sniper" );
 
-        level.cacIngameInitialized = true;
+        level.cacIngame.initialized = true;
+        level.cacIngame.menu = "cac_ingame";
 
-        precacheMenu( "cac_ingame" );
+        precacheMenu( level.cacIngame.menu );
     }
 
-
-
-
     level thread onPlayerConnecting();
-
-
 }
 
 
 initClassInfo( classStatOffset, stockResponse )
 {
-    index = level.cacIngameClassInfo.size;
+    index = level.cacIngame.classInfo.size;
 
-    level.cacIngameClassInfo[index] = spawnStruct();
-    level.cacIngameClassInfo[index].statOffset = classStatOffset;
-    level.cacIngameClassInfo[index].stockResponse = stockResponse;
-    //level.cacIngameClassInfo[index].className = className;
-    //level.cacIngameClassInfo[index].menuName = "cac_" + className + "_ingame";
-    //level.cacIngameClassInfo[index].weaponsStatOffset = weaponsStatOffset;
-
-    //precacheMenu( level.cacIngameClassInfo[index].menuName );
+    level.cacIngame.classInfo[index] = spawnStruct();
+    level.cacIngame.classInfo[index].statOffset = classStatOffset;
+    level.cacIngame.classInfo[index].stockResponse = stockResponse;
 }
 
 
 initItemInfo( statOffset, dataType, tableSource, dvarName ) //, weaponId, weaponCount )
 {
-    index = level.cacIngameItemInfo.size;
+    index = level.cacIngame.itemInfo.size;
 
-    level.cacIngameItemInfo[index] = spawnStruct();
-    level.cacIngameItemInfo[index].statOffset = statOffset;
-    level.cacIngameItemInfo[index].dataType = dataType;
-    level.cacIngameItemInfo[index].tableSource = tableSource;
-    level.cacIngameItemInfo[index].dvarName = "loadout_" + dataType;
+    level.cacIngame.itemInfo[index] = spawnStruct();
+    level.cacIngame.itemInfo[index].statOffset = statOffset;
+    //level.cacIngame.itemInfo[index].dataType = dataType;
+    level.cacIngame.itemInfo[index].tableSource = tableSource;
+    level.cacIngame.itemInfo[index].dvarName = "loadout_" + dataType;
 }
+
 
 initAllowedWeapons( statOffset, className, attachName )
 {
@@ -167,10 +161,10 @@ initAllowedWeapons( statOffset, className, attachName )
 
 addAllowedWeapon( dvarName )
 {
-    allowIndex = level.cacIngameAllowedWeaps.size;
-    level.cacIngameAllowedWeaps[allowIndex] = spawnStruct();
-    level.cacIngameAllowedWeaps[allowIndex].dvarName = dvarName;
-    level.cacIngameAllowedWeaps[allowIndex].dvarValue = getdvarx( dvarName, "int", 1, 0, 2 );
+    allowIndex = level.cacIngame.allowedWeaps.size;
+    level.cacIngame.allowedWeaps[allowIndex] = spawnStruct();
+    level.cacIngame.allowedWeaps[allowIndex].dvarName = dvarName;
+    level.cacIngame.allowedWeaps[allowIndex].dvarValue = getdvarx( dvarName, "int", 1, 0, 2 );
 }
 
 
@@ -207,11 +201,11 @@ onPlayerConnecting()
 	{
 		level waittill( "connecting", player );
 
-        player.cacBackStatData = [];
-        player.cacTempStatData = [];
+        player.cacIngame = spawnStruct();
+        player.cacIngame.loadoutDataRef = [];
+        player.cacIngame.classInfoIndex = 0;
+        player.cacIngame.stockResponse = "";
 
-        player flushTempStatData();
-        
         player thread onMenuResponseThread();
 	}
 }
@@ -219,9 +213,9 @@ onPlayerConnecting()
 
 sendAllowedLoadoutThread()
 {
-    for( allowIndex = 0; allowIndex < level.cacIngameAllowedWeaps.size; allowIndex++ )
+    for( allowIndex = 0; allowIndex < level.cacIngame.allowedWeaps.size; allowIndex++ )
     {
-        self setClientDvar( level.cacIngameAllowedWeaps[allowIndex].dvarName, level.cacIngameAllowedWeaps[allowIndex].dvarValue  );
+        self setClientDvar( level.cacIngame.allowedWeaps[allowIndex].dvarName, level.cacIngame.allowedWeaps[allowIndex].dvarValue  );
     
         if ( allowIndex % 10 == 0 ) 
         {
@@ -237,7 +231,7 @@ onMenuResponseThread()
 
 	for(;;)
 	{
-		self waittill("menuresponse", menu, response);
+		self waittill("menuresponse", menu, response, args);
 
         self iPrintLn( "RAW RES: " + response );
 
@@ -246,29 +240,24 @@ onMenuResponseThread()
             self closeMenu();
 			self closeInGameMenu();
 
-            //cacMenu = undefined;
-            classOffset = undefined;
+            classInfoIndex = undefined;
 
-            for( i = 0; i < level.cacIngameClassInfo.size; i++ )
+            for( i = 0; i < level.cacIngame.classInfo.size; i++ )
             {
-                if( level.cacIngameClassInfo[i].stockResponse == response )
+                if( level.cacIngame.classInfo[i].stockResponse == response )
                 {
-                    //cacMenu = level.cacIngameClassInfo[i].menuName;
-                    classOffset =  level.cacIngameClassInfo[i].statOffset;
+                    classInfoIndex = i;
                     break;
                 }
             }
 
             //Override open CAC menu for selected custom class
-            //if( isDefined( cacMenu ) && isDefined( classOffset ) )
-            if( isDefined( classOffset ) )
+            if( isDefined( classInfoIndex ) )
             {
-                flushTempStatData();
-                loadBackupStatData( classOffset );
+                initLoadoutData( classInfoIndex );
 
                 self thread sendAllowedLoadoutThread();
 
-                //self openMenu( cacMenu );
                 self openMenu( "cac_ingame" );
             }
             //Othervise stock logic
@@ -281,93 +270,33 @@ onMenuResponseThread()
             continue;
         } 
 
-        if ( response == "cac_esc" )
+        if ( response == "go" && menu == level.cacIngame.menu )
         {
+            saveLoadoutData();
+
+            self iPrintLn( "[CAC Ingame] Go!" );
+
             self closeMenu();
-			self closeInGameMenu();
+            self closeInGameMenu();
 
-            self iPrintLn( "CAC ESC! menu: ^7" + menu );
-
-            for( i = 0; i < level.cacIngameClassInfo.size; i++ )
-            {
-                if( level.cacIngameClassInfo[i].menuName == menu )
-                {
-                    self iPrintLn( "CAC ESC! menu match: ^2" + menu ); 
-
-                    saveBackStatData( level.cacIngameClassInfo[i].statOffset );
-                }
-            }
-
-            //self setClientDvar( "ui_primary_weapon", 85 );
-
-
-            //hack to reload loadout display (not worked)
-            wait 0.05;
-            self openMenu( game["menu_changeclass"] );
+            self.selectedClass = true;
+            self [[level.class]]( self.cacIngame.stockResponse );
 
             continue;
         }
 
-        if ( response == "cac_go" )
-        {
-            self iPrintLn( "CAC GO! menu: ^7" + menu );
+        responseTok = strTok( response, ":" );
 
-            for( i = 0; i < level.cacIngameClassInfo.size; i++ )
-            {
-                if( level.cacIngameClassInfo[i].menuName == menu )
-                {
-                    self iPrintLn( "CAC GO! menu match: ^2" + menu ); 
-
-                    saveTempStatData( level.cacIngameClassInfo[i].statOffset );
-
-                    self closeMenu();
-                    self closeInGameMenu();
-
-                    self.selectedClass = true;
-                    self [[level.class]]( level.cacIngameClassInfo[i].stockResponse );
-                }
-            }
-
-            continue;
-        }
-
-        responseTok = strTok( response, "," );
-
-    	if( isdefined( responseTok ) && responseTok.size > 1 )
+    	if( isdefined( responseTok ) && responseTok.size == 3 )
 		{
-			responseType = responseTok[0];
-
-            if( responseType == "cac_set" )
+            if( responseTok[0] == "set" )
             {
-                // primary weapon selection
-                assertex( responseTok.size != 3, "Item selection in create-a-class-ingame is sending bad response:" + response );
-
-                dataType = responseTok[1];
-                valueRef = responseTok[2]; // int( tableLookup( "mp/statsTable.csv", 4, responseTok[2], 1 ) );
-                
-                statValue = getStatValueByType( dataType, valueRef );
-
-                setTempStatData( dataType, statValue );
-
-                self iPrintLn( "CAC SET: type: ^2" + dataType + "^7  value: ^2" + statValue + "^7 ref: ^2" + valueRef +  "^7 menu: " + menu );
+                setLoadoutData( responseTok[1], responseTok[2] );
             }
         }
     }
 }
 
-
-getStatValueByType( dataType, valueRef )
-{
-    for( i = 0; i < level.cacIngameItemInfo.size; i++ )
-    {
-        if( level.cacIngameItemInfo[i].dataType == dataType )
-        {   
-            return getStatValueByRef( level.cacIngameItemInfo[i].tableSource, valueRef );
-        }
-    }
-
-    return -1;
-}
 
 getRefByStatValue( tableSource, statValue )
 {
@@ -395,7 +324,7 @@ getStatValueByRef( tableSource, valueRef )
             return int( tableLookup( "mp/statsTable.csv", 4, valueRef, 1 ) );
 
         case "weapons_table":
-            return int( tableLookup( "mp/statsTable.csv", 4, valueRef, 1 ) ) + 3000;
+            return int( tableLookup( "mp/statsTable.csv", 4, valueRef, 1 ) ) - 3000;
 
         case "attachment_table":
             return int( tableLookup( "mp/attachmentTable.csv", 4, valueRef, 9 ) );
@@ -408,96 +337,54 @@ getStatValueByRef( tableSource, valueRef )
 }
 
 
-flushTempStatData()
+initLoadoutData( classInfoIndex )
 {
-    for( i = 0; i < level.cacIngameItemInfo.size; i++ )
+    self iPrintLn( "[CAC Ingame] Load..." );
+
+    self.cacIngame.classInfoIndex = classInfoIndex;
+    self.cacIngame.stockResponse =  level.cacIngame.classInfo[classInfoIndex].stockResponse;
+
+    classStatOffset = level.cacIngame.classInfo[classInfoIndex].statOffset;
+
+    for( i = 0; i < level.cacIngame.itemInfo.size; i++ )
     {
-        self.cacTempStatData[level.cacIngameItemInfo[i].dataType] = -1;
+        itemInfo = level.cacIngame.itemInfo[i];
+
+        itemStatValue = self getStat ( classStatOffset + itemInfo.statOffset );
+        itemValueRef = getRefByStatValue( itemInfo.tableSource, itemStatValue );
+
+        self.cacIngame.loadoutDataRef[itemInfo.dvarName] = itemValueRef;
+        self setClientDvar( itemInfo.dvarName, itemValueRef );
+        self iPrintLn( "[CAC Ingame] (Loading). dvar: ^2" + itemInfo.dvarName + "^7 value: ^2" + itemStatValue + "^7 ref: ^2" + itemValueRef );
     }
 }
 
 
-setTempStatData( dataType, value )
+setLoadoutData( dvarName, valueRef )
 {
-    if( isDefined( self.cacTempStatData[dataType] ) )
+    if( isDefined( self.cacIngame.loadoutDataRef[dvarName] ) )
     {
-        self.cacTempStatData[dataType] = value;
+        self.cacIngame.loadoutDataRef[dvarName] = valueRef;
 
-        //TODO: move to function
-        for( i = 0; i < level.cacIngameItemInfo.size; i++ )
-        {
-            if( level.cacIngameItemInfo[i].dataType == dataType )
-            {   
-                self setClientDvar( level.cacIngameItemInfo[i].dvarName, value );
-            }
-        }
-        //
+        self iPrintLn( "[CAC Ingame] (Setting). dvar: ^2" + dvarName + "^7  value: ^2" + valueRef );
     }
 }
 
 
-saveTempStatData( classStatOffset )
+saveLoadoutData()
 {
-    for( i = 0; i < level.cacIngameItemInfo.size; i++ )
+    self iPrintLn( "[CAC Ingame] Save..." );
+
+    classStatOffset = level.cacIngame.classInfo[self.cacIngame.classInfoIndex].statOffset;
+
+    for( i = 0; i < level.cacIngame.itemInfo.size; i++ )
     {
-        dataType = level.cacIngameItemInfo[i].dataType;
+        itemInfo = level.cacIngame.itemInfo[i];
 
-        if( self.cacTempStatData[dataType] < 0 )
-        {
-            continue;
-        }
+        itemValueRef = self.cacIngame.loadoutDataRef[itemInfo.dvarName];
+        itemStatValue = getStatValueByRef( itemInfo.tableSource, itemValueRef );
 
-        itemStatOffset = level.cacIngameItemInfo[i].statOffset;
-
-        self setStat ( classStatOffset + itemStatOffset, self.cacTempStatData[dataType] );
-    }
-
-    flushTempStatData();
-}
-
-
-saveBackStatData( classStatOffset )
-{
-    for( i = 0; i < level.cacIngameItemInfo.size; i++ )
-    {
-        dataType = level.cacIngameItemInfo[i].dataType;
-        itemStatOffset = level.cacIngameItemInfo[i].statOffset;
-
-        tempOffset = 0;
-
-        if( level.cacIngameItemInfo[i].tableSource == "stats_table" )
-        {
-            tempOffset = 3000;
-        }
-
-        value = self.cacBackStatData[dataType];
-
-        //TODO Restore UI dvars
-        self iPrintLn( "[CAC] Restore backup: type: ^2" + dataType + "^7  value: ^2" + value );
-        self iPrintLn( "[CAC] Set stat: ^2" + (classStatOffset + itemStatOffset) + "^7  value: ^2" + value );
-
-        self setStat ( classStatOffset + itemStatOffset, value );
-        //self setStat ( classStatOffset + itemStatOffset + tempOffset, value );
-    }
-}
-
-
-loadBackupStatData( classStatOffset )
-{
-    for( i = 0; i < level.cacIngameItemInfo.size; i++ )
-    {
-        itemStatOffset = level.cacIngameItemInfo[i].statOffset;
-
-        dataType = level.cacIngameItemInfo[i].dataType;
-
-        statValue = self getStat ( classStatOffset + itemStatOffset );
-
-        self.cacBackStatData[dataType] = statValue;
-
-        valueRef = getRefByStatValue( level.cacIngameItemInfo[i].tableSource, statValue );
-
-        self setClientDvar( level.cacIngameItemInfo[i].dvarName, valueRef );
-
-        self iPrintLn( "[CAC] Store backup: type: ^2" + dataType + "^7  value: ^2" + statValue + "^7  ref: ^2" + valueRef );
+        self setStat ( classStatOffset + itemInfo.statOffset, itemStatValue );
+        self iPrintLn( "[CAC Ingame] (Saving) dvar: ^2" + itemInfo.dvarName + "^7 value: ^2" + itemStatValue + "^7 ref: ^2" + itemValueRef );
     }
 }
