@@ -1383,6 +1383,12 @@ LANG_RUSSIAN "В избранное"
 REFERENCE SERVER_INFORMATION
 LANG_RUSSIAN "О сервере"
 
+REFERENCE CAC_EQUIPPED
+LANG_RUSSIAN "Экипировано."
+
+REFERENCE CAC_EDIT_INGAME
+LANG_RUSSIAN "ИЗМЕНИТЬ КЛАСС"
+
 
 //******************************************************************************
 // ui_mp/scriptmenus/eog_statistics.menu
