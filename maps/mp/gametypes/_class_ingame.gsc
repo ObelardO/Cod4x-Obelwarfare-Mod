@@ -211,13 +211,13 @@ onPlayerConnecting()
 }
 
 
-sendAllowedLoadoutThread()
+prepareAndOpenMenuThread()
 {
     for( allowIndex = 0; allowIndex < level.cacIngame.allowedWeaps.size; allowIndex++ )
     {
         self setClientDvar( level.cacIngame.allowedWeaps[allowIndex].dvarName, level.cacIngame.allowedWeaps[allowIndex].dvarValue  );
     
-        if ( allowIndex % 10 == 0 ) 
+        if ( allowIndex % 10 == 0 && allowIndex > 0 ) 
         {
             wait 0.05;
         }
@@ -256,8 +256,8 @@ onMenuResponseThread()
             {
                 initLoadoutData( classInfoIndex );
 
-                self thread sendAllowedLoadoutThread();
-
+                self thread prepareAndOpenMenuThread();
+                
                 self openMenu( "cac_ingame" );
             }
             //Othervise stock logic

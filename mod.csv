@@ -367,6 +367,7 @@ rawfile,openwarfare/_specialpickups.gsc
 rawfile,openwarfare/_playercard.gsc
 
 
+
 menufile,ui_mp/connect.menu
 menufile,ui_mp/controls_multi.menu
 menufile,ui_mp/options_graphics_pc.menu
@@ -392,12 +393,10 @@ menufile,ui_mp/scriptmenus/dynamic_attachments.menu
 
 #custom class editing on ranked mode
 menufile,ui_mp/scriptmenus/cac_ingame.menu
-menufile,ui_mp/scriptmenus/cac_assault_ingame.menu
-menufile,ui_mp/scriptmenus/cac_specops_ingame.menu
-
-rawfile,ui_mp/cac_ingame.inc
 rawfile,ui_mp/cac_ingame_new.inc
 rawfile,ui_mp/cac_loadout_ingame.inc
+rawfile,ui_mp/cac_ingame.inc
+
 rawfile,ui_mp/ow_cac_loadout.inc
 rawfile,ui_mp/tactical_map.inc
 rawfile,ui_mp/teamicon.inc
