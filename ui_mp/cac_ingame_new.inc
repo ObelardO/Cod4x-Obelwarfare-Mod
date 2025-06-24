@@ -242,7 +242,6 @@
 	// close all 2nd and 3rd layer popups on end action
 	#define PREPROC_ATTACH_CLOSEALL \
 	close "nocd_popup_cac_primary"; \
-	/*close "nocd_popup_cac_primary_overkill";*/ \
 	close "nocd_popup_cac_secondary"; \
 	close "nocd_popup_cac_assault"; \
 	close "nocd_popup_cac_specops"; \
@@ -340,16 +339,13 @@
 		LOCAL_SECONDART_WEAPON_SET(weapRef); \
 		PREPROC_ATTACH_CLOSEALL
 
-	//#define WI_ALLOW_DVAR( wClass, weaponRef ) \
-	//	"weap_allow_"wClass"_"weaponRef
-
 	#define WI_FOCUS_ACTION( wClass, wRef ) \
 		execOnDvarStringValue "weap_allow_"wClass"_"wRef 0 "set ui_primary_hl_unlocked 0"; \
 		execOnDvarStringValue "weap_allow_"wClass"_"wRef 1 "set ui_primary_hl_unlocked 1"; \
 		exec "set ui_primary_highlighted "wRef; \
 		setdvar ui_primary_equipped_overkill 0;
 
-	#define WI_FOCUS_ACTION_OVERKILL( wClass, weaponRef ) \
+	#define WI_FOCUS_ACTION_OVERKILL( wClass, wRef ) \
 		setdvar ui_primary_hl_unlocked 0;\
 		exec "set ui_primary_highlighted "wRef;\
 		setdvar ui_primary_equipped_overkill 1;
@@ -371,17 +367,19 @@
 		dvarString( ui_primary_selected ) == "secondary" && dvarString ( loadout_primary ) != wRef
 
 	#define LOCAL_WEAPON_DISABLED_OVERKILL( wClass, wRef ) \
-		LOCAL_WEAPON_ALLOWED (wClass, wRef) && \
-		dvarString( loadout_perk2 ) == "specialty_twoprimaries" && \
-		! ( LOCAL_PRIMARY_WEAPON_ALLOWED_OVERKILL ( wRef ) && LOCAL_SECONDARY_WEAPON_ALLOWED_OVERKILL ( wRef ) )
-		
+		LOCAL_WEAPON_ALLOWED ( wClass, wRef ) && dvarString( loadout_perk2 ) == "specialty_twoprimaries" && \
+		( \
+			( dvarString( ui_primary_selected ) == "primary" && dvarString ( loadout_secondary ) == wRef ) || \
+			( dvarString( ui_primary_selected ) == "secondary" && dvarString ( loadout_primary ) == wRef ) \
+		)
+
 	#define LOCAL_WEAPON_ALLOWED( wClass, wRef ) \
 		dvarBool( "weap_allow_"wClass"_"wRef )
 
 	// hacked to hide the second primary if same weapon is selected in first primary, change weapon description to "Already selected"
 	#define LOCAL_WEAPON_ITEM( suffix, itemNum, wName, wClass, wRef )\
 		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, WI_FOCUS_ACTION( wClass, wRef ), ;, when( ! ( LOCAL_WEAPON_ALLOWED( wClass, wRef ) ) ); )\
-		/*CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, WI_FOCUS_ACTION_OVERKILL( wClass, wRef ), ;, when( LOCAL_WEAPON_DISABLED_OVERKILL( wClass, wRef ) ); )*/\
+		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, WI_FOCUS_ACTION_OVERKILL( wClass, wRef ), ;, when( LOCAL_WEAPON_DISABLED_OVERKILL( wClass, wRef ) ); )\
 		CHOICE_DBUTTON_VIS( itemNum, wName, when( 1 ); ) \
 		/*Primary*/\
 		CHOICE_BUTTON_FOCUS_VIS_ADV_HK( itemNum, wName, LOCAL_PRIMARY_WEAPON_ACTION( suffix, wClass, wRef ), \
@@ -426,7 +424,6 @@
 
 	// primary and second primary class selection popup menus
 	LOCAL_MASTER_CLASS_GROUP( "", 1, 0)
-	//LOCAL_MASTER_CLASS_GROUP( "_overkill", 1, 0)
 
 	// hackaround to work for PC's floating mouse unfocusing
 	#undef  UI_FOCUSFIRST
