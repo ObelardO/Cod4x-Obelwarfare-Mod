@@ -176,12 +176,14 @@ initAllowedPerks( className )
         if ( !isDefined( perkGroup ) || perkGroup == "" )
             continue;
 
+        dvarName = undefined;
+
         //Master Option
         if ( className == "")
         {
             dvarName = "perk_allow_" + perkName;
         }
-        //Class depends perks
+        else //Class depends perks
         {
             dvarName = "perk_" + className + "_allow_" + perkName;
         }
@@ -205,10 +207,6 @@ addAllowedItem( className, itemName, dvarName, tag )
 
 validateAllowedItem( itemName, tag )
 {
-    return itemName;
-
-    /*
-
     if ( !isDefined( tag ) || tag == "" ) return itemName;
 
     firstAllowedItem = undefined;
@@ -236,7 +234,6 @@ validateAllowedItem( itemName, tag )
     if ( isDefined ( firstAllowedItem ) ) return firstAllowedItem.itemName;
 
     return itemName;
-    */
 }
 
 
@@ -305,12 +302,11 @@ onMenuResponseThread()
                 
                 self openMenu( "cac_ingame" );
             }
-            //Othervise stock logic
-            /* else
+            else //Othervise stock logic
             {
 				self.selectedClass = true;
 				self [[level.class]]( response );
-            }*/
+            }
 
             continue;
         } 

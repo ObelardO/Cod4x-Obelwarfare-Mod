@@ -59,7 +59,7 @@
 
 	menuDef	{
 		name			CAC_MENU_NAME
-		fullScreen		1
+		//fullScreen		1
 		rect			0 0 640 480
 		focuscolor		COLOR_FOCUSED
 		style			WINDOW_STYLE_EMPTY
