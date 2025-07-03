@@ -59,11 +59,12 @@
 
 	menuDef	{
 		name			CAC_MENU_NAME
+		fullScreen		1
 		rect			0 0 640 480
 		focuscolor		COLOR_FOCUSED
 		style			WINDOW_STYLE_EMPTY
 		blurWorld		7.0
-		onOpen {			
+		onOpen {		
 			setfocus primary_weapon_selection;
 			UPDATE_PERK1;
 		}
@@ -74,7 +75,7 @@
 		// background overlay
 		itemDef	{
 			style			WINDOW_STYLE_FILLED
-			rect			0 0 640 480 HORIZONTAL_ALIGN_FULLSCREEN VERTICAL_ALIGN_FULLSCREEN
+			rect			FULLSCREEN_WIDE
 			backcolor		0 0 0 .75 //0 0.05 0.15 0.5
 			visible			1
 			decoration
