@@ -512,7 +512,6 @@
 		uiScript openMenuOnDvar ui_inside_popup_nested 1 "nocd_attachment_popup_"groupArg;\
 		execOnDvarStringValue ui_inside_popup_nested 1 "set loadout_camo camo_none";\
 		uiScript openMenuOnDvar ui_inside_popup_nested 1 "nocd_popup_cac_camo";
-
 		
 	#define LOCAL_ATTACHMENT_ACTION_OVERKILL( attachmentName, paction, groupArg ) \
 		setdvar loadout_secondary_attachment attachmentName; \
@@ -520,29 +519,43 @@
 		UPDATE_PERK1 \
 		PREPROC_ATTACH_CLOSEALL
 
+	#define LOCAL_PISTOL_ATTACHMENT_ACTION( attachmentName, paction, groupArg ) \
+		setdvar loadout_secondary_attachment attachmentName; \
+		scriptMenuResponse "set:loadout_secondary_attachment:"attachmentName;\
+		REPROC_ATTACH_CLOSEALL
+
 	#define AI_FOCUS_ACTION( groupArg, weaponRef ) \
 		execOnDvarStringValue "attach_allow_"groupArg"_"weaponRef 0 "set ui_attachment_hl_unlocked 0";\
 		execOnDvarStringValue "attach_allow_"groupArg"_"weaponRef 1 "set ui_attachment_hl_unlocked 1";\
 		exec "set ui_attachment_highlighted "weaponRef;
 
 	#define LOCAL_ATTACHMENT_ITEM( itemNum, groupArg ,p_numref, pname, paction, ptype, bitMask )\
-		/*Primary*/\
+		/*Primary attachment*/\
 		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,pname,3), LOCAL_ATTACHMENT_ACTION( pname, paction, groupArg );, \
 			AI_FOCUS_ACTION(groupArg,pname), ;, when( dvarString( ui_primary_selected ) == "primary" && dvarBool( "attach_allow_"groupArg"_"pname ) ), dvarString( ui_primary_selected ) == "primary" && dvarBool( "attach_allow_"groupArg"_"pname ) ) \
-		/*Secondary (overkill perk)*/\
+		/*Secondary attachment (overkill perk)*/\
 		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,pname,3), LOCAL_ATTACHMENT_ACTION_OVERKILL( pname, paction, groupArg );, \
 			AI_FOCUS_ACTION(groupArg,pname), ;, when( dvarString( ui_primary_selected ) == "secondary" && dvarBool( "attach_allow_"groupArg"_"pname ) ), dvarString( ui_primary_selected ) == "secondary" && dvarBool( "attach_allow_"groupArg"_"pname ) ) \
 		/*Disabled*/\
 		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, AI_FOCUS_ACTION(groupArg,pname), ;, when( !dvarBool( "attach_allow_"groupArg"_"pname ) ); ) \
 		CHOICE_DBUTTON_VIS( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,pname,3), when( !dvarBool( "attach_allow_"groupArg"_"pname ) ); ) \
 		
+	#define LOCAL_PISTOL_ATTACHMENT_ITEM( itemNum, groupArg ,p_numref, pname, paction, ptype, bitMask )\
+		/*Pistol attachment*/\
+		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,pname,3), LOCAL_PISTOL_ATTACHMENT_ACTION( pname, paction, groupArg ), \
+			AI_FOCUS_ACTION(groupArg,pname), ;, when( dvarBool( "attach_allow_"groupArg"_"pname ) ), dvarBool( "attach_allow_"groupArg"_"pname ) ) \
+		/*Disabled*/\
+		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, AI_FOCUS_ACTION(groupArg,pname), ;, when( !dvarBool( "attach_allow_"groupArg"_"pname ) ); ) \
+		CHOICE_DBUTTON_VIS( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,pname,3), when( !dvarBool( "attach_allow_"groupArg"_"pname ) ); ) \
+		
+
 	#undef  UI_FOCUSFIRST
 	#define UI_FOCUSFIRST "ui_attachment_highlighted"
-		
+
 	// primary and second primary attachment items
 	#define LOCAL_MASTER_ATTACHMENT_GROUP( suffix, pos, ptype, y_offset )\
 	menuDef { /* assault attachments*/ \
-		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_attachment_popup_assault"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+44+y_offset), ;, execnow "set "UI_FOCUSFIRST" "REF_ATTACHMENT_NONE"; set ui_inside_popup attachment";, 0 )\
+		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_attachment_popup_assault"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+44+y_offset), ;, execnow "set "UI_FOCUSFIRST" "REF_ATTACHMENT_NONE"; set ui_inside_popup attachment";, !dvarBool( ui_inside_popup_nested ) )\
 		onClose{execnow "set ui_inside_popup 0";} \
 		LOCAL_ATTACHMENT_INFO_WINDOW( "loadout_"ptype )\
 		LOCAL_ATTACHMENT_ITEM( 1, "assault", NUM_NONE, "none", ;, ptype, 0 )\
@@ -552,7 +565,7 @@
 		LOCAL_ATTACHMENT_ITEM( 5, "assault", NUM_ACOG, "acog", ;, ptype, ACOG_NEW_BITMASK )\
 	}\
 	menuDef { /* LMG attachments*/\
-		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_attachment_popup_heavygunner"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+44+y_offset), ;, execnow "set "UI_FOCUSFIRST" "REF_ATTACHMENT_NONE"; set ui_inside_popup attachment";, 0 )\
+		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_attachment_popup_heavygunner"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+44+y_offset), ;, execnow "set "UI_FOCUSFIRST" "REF_ATTACHMENT_NONE"; set ui_inside_popup attachment";, !dvarBool( ui_inside_popup_nested ) )\
 		onClose{execnow "set ui_inside_popup 0";} \
 		LOCAL_ATTACHMENT_INFO_WINDOW( "loadout_"ptype )\
 		LOCAL_ATTACHMENT_ITEM( 1, "heavygunner", NUM_NONE, "none", ;, ptype, 0 )\
@@ -561,7 +574,7 @@
 		LOCAL_ATTACHMENT_ITEM( 4, "heavygunner", NUM_ACOG, "acog", ;, ptype, ACOG_NEW_BITMASK )\
 	}\
 	menuDef	{ /* SMG attachments*/\
-		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_attachment_popup_specops"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+44+y_offset), ;, execnow "set "UI_FOCUSFIRST" "REF_ATTACHMENT_NONE"; set ui_inside_popup attachment";, 0 )\
+		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_attachment_popup_specops"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+44+y_offset), ;, execnow "set "UI_FOCUSFIRST" "REF_ATTACHMENT_NONE"; set ui_inside_popup attachment";, !dvarBool( ui_inside_popup_nested ) )\
 		onClose{execnow "set ui_inside_popup 0";} \
 		LOCAL_ATTACHMENT_INFO_WINDOW( "loadout_"ptype )\
 		LOCAL_ATTACHMENT_ITEM( 1, "specops", NUM_NONE, "none", ;, ptype, 0 )\
@@ -570,7 +583,7 @@
 		LOCAL_ATTACHMENT_ITEM( 4, "specops", NUM_ACOG, "acog", ;, ptype, ACOG_NEW_BITMASK )\
 	}\
 	menuDef { /* demolitions attachments*/\
-		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_attachment_popup_demolitions"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+44+y_offset), ;, execnow "set "UI_FOCUSFIRST" "REF_ATTACHMENT_NONE"; set ui_inside_popup attachment";, 0 )\
+		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_attachment_popup_demolitions"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+44+y_offset), ;, execnow "set "UI_FOCUSFIRST" "REF_ATTACHMENT_NONE"; set ui_inside_popup attachment";, !dvarBool( ui_inside_popup_nested ) )\
 		onClose{execnow "set ui_inside_popup 0";} \
 		LOCAL_ATTACHMENT_INFO_WINDOW( "loadout_"ptype )\
 		LOCAL_ATTACHMENT_ITEM( 1, "demolitions", NUM_NONE, "none", ;, ptype, 0 )\
@@ -578,7 +591,7 @@
 		LOCAL_ATTACHMENT_ITEM( 3, "demolitions", NUM_GRIP, "grip", ;, ptype, GRIP_NEW_BITMASK )\
 	}\
 	menuDef	{ /* sniper attachments*/\
-		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_attachment_popup_sniper"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+44+y_offset), ;, execnow "set "UI_FOCUSFIRST" "REF_ATTACHMENT_NONE"; set ui_inside_popup attachment";, 0 )\
+		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_attachment_popup_sniper"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+44+y_offset), ;, execnow "set "UI_FOCUSFIRST" "REF_ATTACHMENT_NONE"; set ui_inside_popup attachment";, !dvarBool( ui_inside_popup_nested ) )\
 		onClose{execnow "set ui_inside_popup 0";} \		
 		LOCAL_ATTACHMENT_INFO_WINDOW( "loadout_"ptype )\
 		LOCAL_ATTACHMENT_ITEM( 1, "sniper", NUM_NONE, "none", ;, ptype, 0 )\
@@ -601,8 +614,8 @@
 		LOCAL_ATTACHMENT_INFO_WINDOW( "loadout_secondary" )
 		//LOCAL_ATTACHMENT_ITEM( 1, CAC_SECONDARY_ATTACHMENT, "pistol", NUM_NONE, "none", ;, "secondary", "ui_secondary_weapon", 0 )
 		//LOCAL_ATTACHMENT_ITEM( 2, CAC_SECONDARY_ATTACHMENT, "pistol", NUM_SUPPRESSOR, "silencer", ;, "secondary", "ui_secondary_weapon", SILENCER_NEW_BITMASK )
-		LOCAL_ATTACHMENT_ITEM( 1, "pistol", NUM_NONE, "none", ;, "secondary", 0 )
-		LOCAL_ATTACHMENT_ITEM( 2, "pistol", NUM_SUPPRESSOR, "silencer", ;, "secondary", SILENCER_NEW_BITMASK )
+		LOCAL_PISTOL_ATTACHMENT_ITEM( 1, "pistol", NUM_NONE, "none", ;, "secondary", 0 )
+		LOCAL_PISTOL_ATTACHMENT_ITEM( 2, "pistol", NUM_SUPPRESSOR, "silencer", ;, "secondary", SILENCER_NEW_BITMASK )
 	}
 	
 	// primary and second primary attachment popup menus
