@@ -11,7 +11,7 @@
 //            Website: http://openwarfaremod.com/
 //******************************************************************************
 
-#define OPENWARFARE_VERSION "obelwarfare mod v5.626 (RU)"
+#define OPENWARFARE_VERSION "obelwarfare mod v5.606 (RU)"
 
 #include "ui/menudef.h"
 #include "ui_mp/common_macro.inc"
