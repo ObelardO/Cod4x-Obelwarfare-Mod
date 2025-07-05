@@ -307,9 +307,10 @@
 		scriptMenuResponse "set:loadout_primary:"weapRef;\
 		scriptMenuResponse "set:loadout_primary_attachment:"REF_ATTACHMENT_NONE;\
 		scriptMenuResponse "set:loadout_camo:"REF_CAMO_NONE;\
+		scriptMenuResponse "validate";\
 		UPDATE_PERK1;
 
-	#define LOCAL_SECONDART_WEAPON_SET( weapRef ) \
+	#define LOCAL_SECONDARY_WEAPON_SET( weapRef ) \
 		setdvar loadout_secondary weapRef;\
 		setdvar loadout_secondary_attachment REF_ATTACHMENT_NONE;\
 		scriptMenuResponse "set:loadout_secondary:"weapRef;\
@@ -324,7 +325,7 @@
 
 	#define LOCAL_PRIMARY_WEAPON_ACTION_OVERKILL( suffix, weapClass, weapRef ) \
 		play "mouse_click";\
-		LOCAL_SECONDART_WEAPON_SET(weapRef);\
+		LOCAL_SECONDARY_WEAPON_SET(weapRef);\
 		setdvar ui_inside_popup_nested 1;\
 		open "nocd_attachment_popup_"weapClass
 
@@ -337,7 +338,7 @@
 
 	#define LOCAL_PRIMARY_WEAPON_ACTION3_OVERKILL( suffix, weapClass, weapRef ) \
 		play "mouse_click"; \
-		LOCAL_SECONDART_WEAPON_SET(weapRef); \
+		LOCAL_SECONDARY_WEAPON_SET(weapRef); \
 		PREPROC_ATTACH_CLOSEALL
 
 	#define WI_FOCUS_ACTION( wClass, wRef ) \
@@ -352,8 +353,8 @@
 		setdvar ui_primary_equipped_overkill 1;
 	
 	#define CHOICE_BUTTON_FOCUS_VIS_ADV_HK( itemIndex, textArg, actionArg, onFocusArg, leaveFocusArg, visArg, vis ) \
-		CHOICE_BUTTON_FOCUS_VIS_ADV( itemIndex, textArg, actionArg, onFocusArg, leaveFocusArg, visArg, vis ) \
-		execKey itemIndex { actionArg }
+		CHOICE_BUTTON_FOCUS_VIS_ADV( itemIndex, textArg, actionArg, onFocusArg, leaveFocusArg, visArg, vis )
+		/*execKey itemIndex { actionArg }*/
 
 	#define LOCAL_PRIMARY_WEAPON_VISIBLE( wClass, wRef ) \
 		LOCAL_WEAPON_ALLOWED ( wClass, wRef ) && LOCAL_PRIMARY_WEAPON_ALLOWED_OVERKILL ( wRef )
@@ -407,6 +408,8 @@
 			WI_FOCUS_ACTION( wClass, wRef ), ;, when( \
 			LOCAL_SECONDARY_WEAPON_VISIBLE( wClass, wRef ) );, \
 			LOCAL_SECONDARY_WEAPON_VISIBLE( wClass, wRef ) )
+
+
 
 	#define LOCAL_WEAPON_CLASS( itemNum, ptext, plabel ) \
 		CHOICE_BUTTON_EX( itemNum, plabel, play "mouse_click"; execnow "set loadout_class "ptext"; set ui_weapon_class_selected "plabel; open "nocd_popup_cac_"ptext;, name ptext )
@@ -805,17 +808,18 @@
 	#define LOCAL_PERK_ITEM( itemNum, camoName, perkDvar, perkRef, highlight_dvar, paction )\
 		LOCAL_PERK_ITEM_VIS( itemNum, camoName, perkDvar, perkRef, highlight_dvar, paction, 1 )
 
-
 	#define PI_FOCUS_ACTION( perkRef ) \
 		execOnDvarStringValue "perk_allow_"perkRef 0 "set ui_perk_hl_unlocked 0";\
 		execOnDvarStringValue "perk_allow_"perkRef 1 "set ui_perk_hl_unlocked 1";\
 		exec "set ui_perk_highlighted "perkRef;
 
+	#define LOCAL_PERK_VISIBLE( perkRef, visArg ) \
+		dvarBool( "perk_" + dvarString( loadout_class ) + "_allow_"perkRef ) && dvarBool( "perk_allow_"perkRef ) && ( dvarString(loadout_grenade)==REF_SMOKE_X1 && perkRef==REF_SPECIALGRENADE_X3 )==0 && visArg
 		
 	#define LOCAL_PERK_ITEM_VIS( itemNum, camoName, perkDvar, perkRef, highlight_dvar, paction, visArg )\
 		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, camoName, LOCAL_PERK_ACTION( perkDvar, perkRef, paction );, PI_FOCUS_ACTION( perkRef ), ;, \
-		when( dvarBool( "perk_" + dvarString( loadout_class ) + "_allow_"perkRef ) && dvarBool( "perk_allow_"perkRef ) && ( dvarString(loadout_grenade)==REF_SMOKE_X1 && perkRef==REF_SPECIALGRENADE_X3 )==0 && visArg );, \
-			  dvarBool( "perk_" + dvarString( loadout_class ) + "_allow_"perkRef ) && dvarBool( "perk_allow_"perkRef ) && ( dvarString(loadout_grenade)==REF_SMOKE_X1 && perkRef==REF_SPECIALGRENADE_X3 )==0 && visArg ) \
+		when( LOCAL_PERK_VISIBLE( perkRef, visArg ) );, \
+			  LOCAL_PERK_VISIBLE( perkRef, visArg ) ) \
 		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;,PI_FOCUS_ACTION( perkRef ), ;, \
 		when( ( !dvarBool( "perk_" + dvarString( loadout_class ) + "_allow_"perkRef ) || !dvarBool( "perk_allow_"perkRef ) || ( dvarString(loadout_grenade)==REF_SMOKE_X1 && perkRef==REF_SPECIALGRENADE_X3 ) ) && visArg ); ) \
 		CHOICE_DBUTTON_VIS( itemNum, camoName, \
