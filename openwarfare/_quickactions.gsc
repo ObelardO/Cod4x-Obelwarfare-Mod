@@ -193,7 +193,7 @@ actionAttachDetach( whatToDo )
 {
 	// If what to do is not defined then we return if this functionality is active
 	if ( !isDefined( whatToDo ) )
-		return ( getdvarx( "scr_dynamic_attachments_enable", "int", 0 ) != 0 );
+		return ( getdvarx( "scr_enable_dynamic_attachments", "int", 0 ) != 0 );
 		
 	// We only try to attach/detach the attachment when whatToDo is set to true
 	if ( whatToDo ) {

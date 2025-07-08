@@ -16,51 +16,68 @@
 
 init()
 {
-	precacheMenu("dynamic_attachments");
-
 	// Get the main module's dvar
-	level.scr_dynamic_attachments_enable = getdvarx( "scr_dynamic_attachments_enable", "int", 0, 0, 3 );
+	level.scr_enable_dynamic_attachments = getdvarx( "scr_enable_dynamic_attachments", "int", 0, 0, 3 );
 
 	// If dynamic attachments is disabled there's nothing else to do here
-	if ( level.scr_dynamic_attachments_enable == 0 )
+	if ( level.scr_enable_dynamic_attachments == 0 )
 		return;
 
-	precacheString( &"OW_DYNATTACH_INSTALLING" );
-	precacheString( &"OW_DYNATTACH_INSTALLED" );
-	precacheString( &"OW_DYNATTACH_INSTALL_ERROR" );
-	precacheString( &"OW_DYNATTACH_REMOVED_ALL" );
+	if( level.scr_enable_dynamic_attachments == 0 || !level.rankedMatch || level.oldschool )
+        return;
 
-	precacheString( &"OW_DYNATTACH_MENU_INSTALL" );
-	precacheString( &"OW_DYNATTACH_MENU_1_SILENCER" );
-	precacheString( &"OW_DYNATTACH_MENU_2_REFLEX" );
-	precacheString( &"OW_DYNATTACH_MENU_3_ACOG" );
-	precacheString( &"OW_DYNATTACH_MENU_4_REMOVE" );
-	precacheString( &"OW_DYNATTACH_MENU_BACK" );
+    if( !isDefined( level.dynAttach ) )
+    {
+        level.dynAttach = spawnStruct();
+    }
 
-	precacheString( &"MPUI_SILENCER" );
-	precacheString( &"MPUI_RED_DOT_SIGHT" );
-	precacheString( &"MPUI_ACOG_SCOPE" );
+	if( !isDefined( level.dynAttach.initialized ) )
+    {
+		level.dynAttach.attachments = [];
+		level.dynAttach.attachments[0]["tag"] = "";
+		level.dynAttach.attachments[0]["weapons"] = "";
+		level.dynAttach.attachments[0]["name"] = "";
 
-	level.attachments = [];
-	level.attachments[0]["tag"] = "";
-	level.attachments[0]["weapons"] = "";
-	level.attachments[0]["name"] = "";
+		level.dynAttach.attachments[1]["tag"] = "_silencer_";
+		level.dynAttach.attachments[1]["weapons"] = "ak47_mp;ak74u_mp;beretta_mp;colt45_mp;g36c_mp;g3_mp;m14_mp;m16_mp;m4_mp;mp5_mp;p90_mp;skorpion_mp;usp_mp;uzi_mp";
+		level.dynAttach.attachments[1]["name"] = &"MPUI_SILENCER";
 
-	level.attachments[1]["tag"] = "_silencer_";
-	level.attachments[1]["weapons"] = "ak47_mp;ak74u_mp;beretta_mp;colt45_mp;g36c_mp;g3_mp;m14_mp;m16_mp;m4_mp;mp5_mp;p90_mp;skorpion_mp;usp_mp;uzi_mp";
-	level.attachments[1]["name"] = &"MPUI_SILENCER";
+		level.dynAttach.attachments[2]["tag"] = "_reflex_";
+		level.dynAttach.attachments[2]["weapons"] = "ak47_mp;ak74u_mp;g36c_mp;g3_mp;m1014_mp;m14_mp;m16_mp;m4_mp;m60e4_mp;mp5_mp;p90_mp;rpd_mp;saw_mp;skorpion_mp;uzi_mp;winchester1200_mp";
+		level.dynAttach.attachments[2]["name"] = &"MPUI_RED_DOT_SIGHT";
 
-	level.attachments[2]["tag"] = "_reflex_";
-	level.attachments[2]["weapons"] = "ak47_mp;ak74u_mp;g36c_mp;g3_mp;m1014_mp;m14_mp;m16_mp;m4_mp;m60e4_mp;mp5_mp;p90_mp;rpd_mp;saw_mp;skorpion_mp;uzi_mp;winchester1200_mp";
-	level.attachments[2]["name"] = &"MPUI_RED_DOT_SIGHT";
+		level.dynAttach.attachments[3]["tag"] = "_acog_";
+		level.dynAttach.attachments[3]["weapons"] = "ak47_mp;ak74u_mp;g36c_mp;g3_mp;m1014_mp;m14_mp;m16_mp;m4_mp;m60e4_mp;mp5_mp;p90_mp;rpd_mp;saw_mp;skorpion_mp;uzi_mp;winchester1200_mp";
+		level.dynAttach.attachments[3]["name"] = &"MPUI_ACOG_SCOPE";
 
-	level.attachments[3]["tag"] = "_acog_";
-	level.attachments[3]["weapons"] = "ak47_mp;ak74u_mp;g36c_mp;g3_mp;m1014_mp;m14_mp;m16_mp;m4_mp;m60e4_mp;mp5_mp;p90_mp;rpd_mp;saw_mp;skorpion_mp;uzi_mp;winchester1200_mp";
-	level.attachments[3]["name"] = &"MPUI_ACOG_SCOPE";
+		precacheString( &"OW_DYNATTACH_INSTALLING" );
+		precacheString( &"OW_DYNATTACH_INSTALLED" );
+		precacheString( &"OW_DYNATTACH_INSTALL_ERROR" );
+		precacheString( &"OW_DYNATTACH_REMOVED_ALL" );
+
+		precacheString( &"OW_DYNATTACH_MENU_INSTALL" );
+		precacheString( &"OW_DYNATTACH_MENU_1_SILENCER" );
+		precacheString( &"OW_DYNATTACH_MENU_2_REFLEX" );
+		precacheString( &"OW_DYNATTACH_MENU_3_ACOG" );
+		precacheString( &"OW_DYNATTACH_MENU_4_REMOVE" );
+		precacheString( &"OW_DYNATTACH_MENU_BACK" );
+
+		precacheString( &"MPUI_SILENCER" );
+		precacheString( &"MPUI_RED_DOT_SIGHT" );
+		precacheString( &"MPUI_ACOG_SCOPE" );
+
+		forceClientDvar( "cl_ow_das_enabled", level.scr_enable_dynamic_attachments );
+
+		level.dynAttach.menu = "dynamic_attachments";
+		
+		precacheMenu( level.dynAttach.menu );
+
+		level.dynAttach.initialized = true;
+	}
 
 	level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
 
-	forceClientDvar( "cl_ow_das_enabled", level.scr_dynamic_attachments_enable );
+	level thread waitPrematchOverThread();	
 }
 
 onPlayerConnected()
@@ -71,37 +88,36 @@ onPlayerConnected()
 
 onPlayerSpawned()
 {
-	self.attachmentAction = false;
+	self.dynAttachInProgress = false;
 }
 
 onPlayerKilled()
 {
-	if ( isDefined( self.attachmentAction ) && self.attachmentAction ) 
+	if ( isDefined( self.dynAttachInProgress ) && self.dynAttachInProgress ) 
 	{
-		self.attachmentAction = false;
+		self.dynAttachInProgress = false;
 		self updateSecondaryProgressBar( undefined, undefined, true, undefined );
 	}
 }
 
 
+waitPrematchOverThread()
+{
+	level.dynAttach.prematchOver = false;
+
+	level waittill( "prematch_over" );
+
+	level.dynAttach.prematchOver = true;
+}
+
+
 openDynamicAttachmentsMenu()
 {
-	// Don't open menu if system disabled or player is not alive
-	if ( level.scr_dynamic_attachments_enable == 0 || !isAlive( self ) ) return;
-
-	if ( self isSpectating() ) return ;
-
-	// || self isBotPlayer() ) return;
-
-	// Don't open menu if attachment is changing right now
-	//if ( !isDefined(self.attachmentAction) || self.attachmentAction ) return;
-
-	// Don't open menu if game perion is not valid
-	//if ( !checkGamePeriodValid() ) return;
+	if ( !isChangeAttacmentsAllowed() ) return;
 
 	self setupMenuDvars();
 
-	self openMenuNoMouse( "dynamic_attachments" );
+	self openMenuNoMouse( level.dynAttach.menu );
 }
 
 setupMenuDvars()
@@ -110,13 +126,13 @@ setupMenuDvars()
 	currentAttachment = getWeaponAttachment( currentWeapon );
 	currentBaseWeapon = getWeaponWithoutAttachments ( currentWeapon, currentAttachment );
 
-	//for ( i = 1; i <= level.scr_dynamic_attachments_enable; i++ )
-	for ( i = 1; i < level.attachments.size; i++ )
+	//for ( i = 1; i <= level.scr_enable_dynamic_attachments; i++ )
+	for ( i = 1; i < level.dynAttach.attachments.size; i++ )
 	{
-		checkAttachment = level.attachments[i]["tag"];
+		checkAttachment = level.dynAttach.attachments[i]["tag"];
 		mdvarName = "cl_ow_das" +checkAttachment+ "allowed";
 
-		if ( checkAttachment == currentAttachment || i > level.scr_dynamic_attachments_enable )
+		if ( checkAttachment == currentAttachment || i > level.scr_enable_dynamic_attachments )
 		{
 			self setClientDvar( mdvarName, "0" );
 			continue;
@@ -142,33 +158,14 @@ setupMenuDvars()
 	}
 }
 
-checkGamePeriodValid()
-{
-	if ( level.inReadyUpPeriod || level.inStrategyPeriod || level.inPrematchPeriod || level.inTimeoutPeriod || game["state"] == "postgame" )
-	{
-		return false;
-	}
-
-	return true;
-}
-
-checkTeamValid( player )
-{
-
-}
 
 installAttachment( newAttachment )
 {
+	if ( !isChangeAttacmentsAllowed() ) return;
+
 	self endon("disconnect");
 	self endon("death");
 	level endon("game_ended");
-
-	// Make sure this module is active
-	if ( level.scr_dynamic_attachments_enable == 0 || !isAlive(self) )
-		return;
-	
-	// Initiate attaching/detaching action. If there's already another action running we'll cancel the request
-	if ( self.attachmentAction ) return;
 
 	// Get weapon and attachment
 	currentWeapon = self getCurrentWeapon();
@@ -184,15 +181,15 @@ installAttachment( newAttachment )
 	{
 		attachmentDetected = false;
 
-		for ( i = 0; i <= level.scr_dynamic_attachments_enable; i++ )
+		for ( i = 0; i <= level.scr_enable_dynamic_attachments; i++ )
 		{
-			if (!attachmentDetected && level.attachments[i]["tag"] == attachment)
+			if (!attachmentDetected && level.dynAttach.attachments[i]["tag"] == attachment)
 				attachmentDetected = true;
 
-			if (attachmentDetected && level.attachments[i]["tag"] != attachment && isWeaponValidForAttachment(currentWeapon, baseWeapon, level.attachments[i]["tag"]))
+			if (attachmentDetected && level.dynAttach.attachments[i]["tag"] != attachment && isWeaponValidForAttachment(currentWeapon, baseWeapon, level.dynAttach.attachments[i]["tag"]))
 			{
-				newAttachment = level.attachments[i]["tag"];
-				newAttachmentName = level.attachments[i]["name"];
+				newAttachment = level.dynAttach.attachments[i]["tag"];
+				newAttachmentName = level.dynAttach.attachments[i]["name"];
 				break;
 			}
 		}
@@ -220,7 +217,7 @@ installAttachment( newAttachment )
 	// If new attacment can be installed
 	if (newAttachment != attachment)
 	{
-		self.attachmentAction = true;
+		self.dynAttachInProgress = true;
 
 		// Get the ammo info for the current weapon
 		totalAmmo = self getAmmoCount( currentWeapon );
@@ -231,12 +228,19 @@ installAttachment( newAttachment )
 		self stopPlayer( true );
 
 		// Wait for certain time to complete the requested action
-		//self playSound( "dyn_attach_change" );
 		self thread playSoundinSpace ( "dyn_attach_change", self.origin );
 
+		changeTimer = 0;
+
+		// If attachment installed, add 2 seconds for removing it
+		if ( attachment != "" ) changeTimer += 2;
+
+		// If new attachment will be installed, add 2 seconds
+		if ( newAttachment != "" ) changeTimer += 2;
+
 		// Wait and display progress
-		self thread displayProgressBar ( 4000 );
-		xWait (4);
+		self thread displayProgressBar ( changeTimer * 1000 );
+		wait (changeTimer);
 
 		// Take the current weapon from the player
 		self takeWeapon( currentWeapon );
@@ -269,9 +273,8 @@ installAttachment( newAttachment )
 		//self thread maps\mp\gametypes\_gameobjects::_enableWeapon();
 		self stopPlayer( false );
 
-		self.attachmentAction = false;		
+		self.dynAttachInProgress = false;		
 	}
-	
 }
 
 
@@ -282,13 +285,13 @@ getWeaponAttachment( currentWeapon )
 		return "";
 
 	// Check if the current weapon is valid for detachment
-	for ( i = 1; i <= level.scr_dynamic_attachments_enable; i++ )
+	for ( i = 1; i <= level.scr_enable_dynamic_attachments; i++ )
 	{
-		if ( isSubStr( currentWeapon, level.attachments[i]["tag"] ) )
+		if ( isSubStr( currentWeapon, level.dynAttach.attachments[i]["tag"] ) )
 		{
-			baseWeapon = getWeaponWithoutAttachments( currentWeapon, level.attachments[i]["tag"] );
+			baseWeapon = getWeaponWithoutAttachments( currentWeapon, level.dynAttach.attachments[i]["tag"] );
 
-			if ( isSubStr( level.attachments[i]["weapons"], baseWeapon ) ) return level.attachments[i]["tag"];
+			if ( isSubStr( level.dynAttach.attachments[i]["weapons"], baseWeapon ) ) return level.dynAttach.attachments[i]["tag"];
 		}
 	}
 
@@ -298,11 +301,11 @@ getWeaponAttachment( currentWeapon )
 
 getWeaponAttachmentName( attachment )
 {	
-	for ( i = 1; i <= level.scr_dynamic_attachments_enable; i++ )
+	for ( i = 1; i <= level.scr_enable_dynamic_attachments; i++ )
 	{
-		if ( level.attachments[i]["tag"] == attachment )
+		if ( level.dynAttach.attachments[i]["tag"] == attachment )
 		{
-			return level.attachments[i]["name"];
+			return level.dynAttach.attachments[i]["name"];
 		}
 	}
 
@@ -317,13 +320,14 @@ isWeaponValidForAttachment( currentWeapon, baseWeapon, attachment )
 		return false;
 
 	// Check if the current weapon is valid for the attachment that the player has
-	for ( i = 1; i <= level.scr_dynamic_attachments_enable; i++ )
+	for ( i = 1; i <= level.scr_enable_dynamic_attachments; i++ )
 	{
-		if (level.attachments[i]["tag"] == attachment && isSubStr( level.attachments[i]["weapons"], baseWeapon ) ) return true;
+		if (level.dynAttach.attachments[i]["tag"] == attachment && isSubStr( level.dynAttach.attachments[i]["weapons"], baseWeapon ) ) return true;
 	}
 
 	return false;	
 }
+
 
 getWeaponWithoutAttachments( currentWeapon, attachment )
 {
@@ -334,6 +338,7 @@ getWeaponWithoutAttachments( currentWeapon, attachment )
 
 	return currentWeapon;
 }
+
 
 stopPlayer( condition )
 {
@@ -352,6 +357,7 @@ stopPlayer( condition )
 		self thread maps\mp\gametypes\_gameobjects::_enableSprint();
 	}
 }
+
 
 displayProgressBar( totalTime )
 {
@@ -374,6 +380,7 @@ displayProgressBar( totalTime )
 	self updateSecondaryProgressBar( undefined, undefined, true, undefined );
 }
 
+
 playSoundinSpace( alias, origin )
 {
 	org = spawn( "script_origin", origin );
@@ -381,4 +388,20 @@ playSoundinSpace( alias, origin )
 	org playSound( alias  );
 	wait 5; // MP doesn't have "sounddone" notifies =(
 	org delete();
+}
+
+
+isChangeAttacmentsAllowed()
+{
+	if ( level.scr_enable_dynamic_attachments == 0 || !isAlive( self ) ) return false;
+
+	if ( self.dynAttachInProgress || self isSpectating() || isRoundPaused() ) return false;
+
+	return true;
+}
+
+
+isRoundPaused()
+{
+	return /*level.inReadyUpPeriod || level.inStrategyPeriod ||*/ level.inPrematchPeriod || level.inTimeoutPeriod /*|| level.inGracePeriod*/ || game["state"] == "postgame";
 }
