@@ -357,7 +357,7 @@ goto END
 
 :END
 echo.
-pause
+timeout 10
 goto FINAL
 
 :FINAL

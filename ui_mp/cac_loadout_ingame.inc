@@ -75,7 +75,7 @@
 	PREPROC_TEXT_DRAW_ALIGNED_EXP( -4 181 (LOADOUT_WIDTH+8) 20 LOADOUT_ALIGN, ORIGIN_LOADOUT, "@MPUI_PERKS_AND_INVENTORY", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_CENTER, CHOICE_TEXTCOLOR )
 	
 	// custom class name
-	PREPROC_TEXT_DRAW_ALIGNED_EXP( -4 -4 (LOADOUT_WIDTH+8) 20 LOADOUT_ALIGN, ORIGIN_LOADOUT, dvarString(CAC_CUSTOM_NAME), TEXTSIZE_DEFAULT, 0, 0, ITEM_ALIGN_MIDDLE_CENTER, CHOICE_TEXTCOLOR )
+	PREPROC_TEXT_DRAW_ALIGNED_EXP( -4 -4 (LOADOUT_WIDTH+8) 20 LOADOUT_ALIGN, ORIGIN_LOADOUT, dvarString( dvarString( loadout_class_name ) ), TEXTSIZE_DEFAULT, 0, 0, ITEM_ALIGN_MIDDLE_CENTER, CHOICE_TEXTCOLOR )
 
 // attributes box ======================
 
@@ -266,17 +266,17 @@
 //	LOCAL_GRENADE( "@"+tablelookup("mp/statstable.csv",0,STAT_CAC_SPECIAL_GRENADE,3), tablelookup( "mp/statstable.csv", 1, STAT_CAC_SPECIALTY_EQUIPMENT, 4 ) == "specialty_fraggrenade" )
 
 	// grenade icons ------------
-	PREPROC_SHADER_DRAW_ALIGNED( 0 (PERK_Y_OFFSET-5+(PERK_Y_SPACING*3)) 32 32 LOADOUT_ALIGN, ORIGIN_LOADOUT, "weapon_fraggrenade", 1 1 1 1, 0, 1, 1 1 1 1 visible when( 1 ) ) 
-	PREPROC_SHADER_DRAW_ALIGNED( 30 (PERK_Y_OFFSET-5+(PERK_Y_SPACING*3)) 32 32 LOADOUT_ALIGN, ORIGIN_LOADOUT, "weapon_smokegrenade", 1 1 1 1, 0, 1, 1 1 1 1 visible when( dvarString( loadout_grenade ) == "smoke_grenade" ) ) 
-	PREPROC_SHADER_DRAW_ALIGNED( 30 (PERK_Y_OFFSET-5+(PERK_Y_SPACING*3)) 32 32 LOADOUT_ALIGN, ORIGIN_LOADOUT, "weapon_flashbang", 1 1 1 1, 0, 1, 1 1 1 1 visible when( dvarString( loadout_grenade ) == "flash_grenade" ) ) 
-	PREPROC_SHADER_DRAW_ALIGNED( 30 (PERK_Y_OFFSET-5+(PERK_Y_SPACING*3)) 32 32 LOADOUT_ALIGN, ORIGIN_LOADOUT, "weapon_concgrenade", 1 1 1 1, 0, 1, 1 1 1 1 visible when( dvarString( loadout_grenade ) == "concussion_grenade" ) ) 
+	PREPROC_SHADER_DRAW_ALIGNED( -7 (PERK_Y_OFFSET-5+(PERK_Y_SPACING*3)) 32 32 LOADOUT_ALIGN, ORIGIN_LOADOUT, "weapon_fraggrenade", 1 1 1 1, 0, 1, 1 1 1 1 visible when( 1 ) ) 
+	PREPROC_SHADER_DRAW_ALIGNED( 45 (PERK_Y_OFFSET-5+(PERK_Y_SPACING*3)) 32 32 LOADOUT_ALIGN, ORIGIN_LOADOUT, "weapon_smokegrenade", 1 1 1 1, 0, 1, 1 1 1 1 visible when( dvarString( loadout_grenade ) == "smoke_grenade" ) ) 
+	PREPROC_SHADER_DRAW_ALIGNED( 45 (PERK_Y_OFFSET-5+(PERK_Y_SPACING*3)) 32 32 LOADOUT_ALIGN, ORIGIN_LOADOUT, "weapon_flashbang", 1 1 1 1, 0, 1, 1 1 1 1 visible when( dvarString( loadout_grenade ) == "flash_grenade" ) ) 
+	PREPROC_SHADER_DRAW_ALIGNED( 45 (PERK_Y_OFFSET-5+(PERK_Y_SPACING*3)) 32 32 LOADOUT_ALIGN, ORIGIN_LOADOUT, "weapon_concgrenade", 1 1 1 1, 0, 1, 1 1 1 1 visible when( dvarString( loadout_grenade ) == "concussion_grenade" ) ) 
 
 	// grenade counts ------------
-	PREPROC_TEXT_DRAW_ALIGNED_EXP( 0 (PERK_Y_OFFSET+(PERK_Y_SPACING*3)) (LOADOUT_WIDTH+8) 20 LOADOUT_ALIGN, ORIGIN_LOADOUT, dvarInt( loadout_frags ), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( dvarString( loadout_perk1 ) != "specialty_fraggrenade" ); )
-	PREPROC_TEXT_DRAW_ALIGNED_EXP( 0 (PERK_Y_OFFSET+(PERK_Y_SPACING*3)) (LOADOUT_WIDTH+8) 20 LOADOUT_ALIGN, ORIGIN_LOADOUT, dvarInt( loadout_frags ) + 2, TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( dvarString( loadout_perk1 ) == "specialty_fraggrenade" ); )
+	PREPROC_TEXT_DRAW_ALIGNED_EXP( 20 (PERK_Y_OFFSET+(PERK_Y_SPACING*3)) (LOADOUT_WIDTH+8) 20 LOADOUT_ALIGN, ORIGIN_LOADOUT, "x " + ( dvarInt( loadout_frags ) + 1 ), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( dvarString( loadout_perk1 ) != "specialty_fraggrenade" ); )
+	PREPROC_TEXT_DRAW_ALIGNED_EXP( 20 (PERK_Y_OFFSET+(PERK_Y_SPACING*3)) (LOADOUT_WIDTH+8) 20 LOADOUT_ALIGN, ORIGIN_LOADOUT, "x " + ( dvarInt( loadout_frags ) + 3 ), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( dvarString( loadout_perk1 ) == "specialty_fraggrenade" ); )
 
-	PREPROC_TEXT_DRAW_ALIGNED_EXP( 30 (PERK_Y_OFFSET+(PERK_Y_SPACING*3)) (LOADOUT_WIDTH+8) 20 LOADOUT_ALIGN, ORIGIN_LOADOUT, dvarInt( loadout_special ), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( dvarString( loadout_perk1 ) != "specialty_specialgrenade" ); )
-	PREPROC_TEXT_DRAW_ALIGNED_EXP( 30 (PERK_Y_OFFSET+(PERK_Y_SPACING*3)) (LOADOUT_WIDTH+8) 20 LOADOUT_ALIGN, ORIGIN_LOADOUT, dvarInt( loadout_special ) + 2, TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( dvarString( loadout_perk1 ) == "specialty_specialgrenade" ); )
+	PREPROC_TEXT_DRAW_ALIGNED_EXP( 70 (PERK_Y_OFFSET+(PERK_Y_SPACING*3)) (LOADOUT_WIDTH+8) 20 LOADOUT_ALIGN, ORIGIN_LOADOUT, "x " + ( dvarInt( loadout_special ) + 1 ), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( dvarString( loadout_perk1 ) != "specialty_specialgrenade" ); )
+	PREPROC_TEXT_DRAW_ALIGNED_EXP( 70 (PERK_Y_OFFSET+(PERK_Y_SPACING*3)) (LOADOUT_WIDTH+8) 20 LOADOUT_ALIGN, ORIGIN_LOADOUT, "x " + ( dvarInt( loadout_special ) + 3 ), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( dvarString( loadout_perk1 ) == "specialty_specialgrenade" ); )
 
 //	PREPROC_SHADER_DRAW_ALIGNED( 0 (PERK_Y_OFFSET-5+(PERK_Y_SPACING*3)) 32 32 LOADOUT_ALIGN, ORIGIN_LOADOUT, "weapon_fraggrenade", 1 1 1 1, 0, 1, 1 1 1 1 visible when( tablelookup( "mp/statstable.csv", 1, STAT_CAC_SPECIALTY_EQUIPMENT, 4 ) == "specialty_specialgrenade" ) ) 
 

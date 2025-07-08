@@ -11,7 +11,7 @@
 //            Website: http://openwarfaremod.com/
 //******************************************************************************
 
-#define OPENWARFARE_VERSION "obelwarfare mod v5.404 (RU)"
+#define OPENWARFARE_VERSION "obelwarfare mod v5.708 (RU)"
 
 #include "ui/menudef.h"
 #include "ui_mp/common_macro.inc"
@@ -24,7 +24,7 @@
 
 #define CHOICE_GROUP			"main"
 #define CHOICE_SEP_1			3
-#define CHOICE_SEP_2			7
+#define CHOICE_SEP_2			6
 #define CHOICE_SEP_3			9
 
 #define STYLE_PC	1

@@ -21,7 +21,7 @@
 {
 	menuDef
 	{
-		IMPROVED_POPUP_SETUP_ONOPEN( dynamic_attachments, 7, 4, 276, ;, setDvar cl_bypassMouseInput "1";, 0 )
+		IMPROVED_POPUP_SETUP_ONOPEN( dynamic_attachments, 7, 4, 272, ;, setDvar cl_bypassMouseInput "1";, 0 )
 		onClose{ setDvar cl_bypassMouseInput "0" }
 		
 		CHOICE_POPMENU_TITLE( "@OW_DYNATTACH_MENU_INSTALL" )

@@ -132,6 +132,7 @@ rawfile,maps/mp/_utility.gsc
 rawfile,maps/mp/gametypes/_battlechatter_mp.gsc
 rawfile,maps/mp/gametypes/_class.gsc
 rawfile,maps/mp/gametypes/_class_unranked.gsc
+rawfile,maps/mp/gametypes/_class_ingame.gsc
 rawfile,maps/mp/gametypes/_damagefeedback.gsc
 rawfile,maps/mp/gametypes/_finalkillcam.gsc
 rawfile,maps/mp/gametypes/_friendicons.gsc
@@ -366,6 +367,7 @@ rawfile,openwarfare/_specialpickups.gsc
 rawfile,openwarfare/_playercard.gsc
 
 
+
 menufile,ui_mp/connect.menu
 menufile,ui_mp/controls_multi.menu
 menufile,ui_mp/options_graphics_pc.menu
@@ -389,9 +391,12 @@ menufile,ui_mp/scriptmenus/serverinfo.menu
 menufile,ui_mp/scriptmenus/team_marinesopfor.menu
 menufile,ui_mp/scriptmenus/dynamic_attachments.menu
 
-
-rawfile,ui_mp/cac_ingame.inc
+#custom class editing on ranked mode
+menufile,ui_mp/scriptmenus/cac_ingame.menu
+rawfile,ui_mp/cac_ingame_new.inc
 rawfile,ui_mp/cac_loadout_ingame.inc
+rawfile,ui_mp/cac_ingame.inc
+
 rawfile,ui_mp/ow_cac_loadout.inc
 rawfile,ui_mp/tactical_map.inc
 rawfile,ui_mp/teamicon.inc
