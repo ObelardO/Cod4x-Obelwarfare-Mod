@@ -40,34 +40,18 @@ init()
         initClassInfo( 240, "5" );
 
         level.cacIngame.itemInfo = [];
-        initItemInfo( 1, "primary", weaponsTableRef, "weap_tg" );
-        initItemInfo( 2, "primary_attachment", attachmentTableRef, "atch_tg" );
-        initItemInfo( 3, "secondary", weaponsTableRef, "weap_tg" );
-        initItemInfo( 4, "secondary_attachment", attachmentTableRef, "atch_tg" );
-        initItemInfo( 5, "perk1", perksTableRef, "perk1_tg" ); // equipment
-        initItemInfo( 6, "perk2", perksTableRef, "perk2_tg" ); // weapon
-        initItemInfo( 7, "perk3", perksTableRef, "perk3_tg" ); // ability
-        initItemInfo( 8, "grenade", weaponsTableRef, "gren_tg" );
-        initItemInfo( 9, "camo", camoTableRef, "" );
+        initItemInfo( 1, "primary", weaponsTableRef );
+        initItemInfo( 2, "primary_attachment", attachmentTableRef );
+        initItemInfo( 3, "secondary", weaponsTableRef );
+        initItemInfo( 4, "secondary_attachment", attachmentTableRef );
+        initItemInfo( 5, "perk1", perksTableRef ); // equipment
+        initItemInfo( 6, "perk2", perksTableRef ); // weapon
+        initItemInfo( 7, "perk3", perksTableRef ); // ability
+        initItemInfo( 8, "grenade", weaponsTableRef );
+        initItemInfo( 9, "camo", camoTableRef );
 
         level.cacIngame.allowedItems = [];
-        //                                        /         overrides         \       
-        //                  Stat   Class Name     Attach    Weap tag   Attach tag
-        initAllowedWeapons( 20,    "assault",     "",       "",        "" );
-        initAllowedWeapons( 10,    "specops",     "",       "",        "" );
-        initAllowedWeapons( 80,    "heavygunner", "",       "",        "" );
-        initAllowedWeapons( 70,    "demolitions", "",       "",        "" );
-        initAllowedWeapons( 60,    "sniper",      "",       "",        "" );
-        initAllowedWeapons( 0,     "",            "pistol", "pist_tg", "pist_atch_tg" );
-        initAllowedWeapons( 100,   "",            "",       "gren_tg", "" );
-
-        //
-        initAllowedPerks( "" );
-        initAllowedPerks( "assault" );
-        initAllowedPerks( "specops" );
-        initAllowedPerks( "heavygunner" );
-        initAllowedPerks( "demolitions" );
-        initAllowedPerks( "sniper" );
+        initAllowedItems();
 
         level.cacIngame.initialized = true;
         level.cacIngame.menu = "cac_ingame";
@@ -90,7 +74,7 @@ initClassInfo( classStatOffset, customClassNumber )
 }
 
 
-initItemInfo( statOffset, dataType, tableSource, tag )
+initItemInfo( statOffset, dataType, tableSource )
 {
     index = level.cacIngame.itemInfo.size;
 
@@ -98,152 +82,6 @@ initItemInfo( statOffset, dataType, tableSource, tag )
     level.cacIngame.itemInfo[index].statOffset = statOffset;
     level.cacIngame.itemInfo[index].tableSource = tableSource;
     level.cacIngame.itemInfo[index].dvarName = "loadout_" + dataType;
-    level.cacIngame.itemInfo[index].tag = tag;
-}
-
-
-initAllowedWeapons( statOffset, className, overrideClassName, overrideWeapTag, overrideAttachTag )
-{
-    for( weapIndex = statOffset; weapIndex < statOffset + 10; weapIndex++ )
-    {
-        //---- WEAPONS ----
-
-        //Add allowed weapons
-        weaponName = tableLookup( "mp/statsTable.csv", 0, weapIndex, 4 );
-        if ( !isDefined( weaponName ) || weaponName == "" )
-            continue;
-
-        if ( className == "" )
-            dvarName = "weap_allow_" + weaponName;
-        else
-            dvarName = "weap_allow_" + className + "_" + weaponName;
-
-        if ( !isDefined( overrideWeapTag ) || overrideWeapTag == "" ) overrideWeapTag = "weap_tg";
-        
-
-        addAllowedItem( className, weaponName, dvarName, overrideWeapTag );
-
-        //initAllowedAttachments( className )
-
-        //---- NO ATTACHMENTS ----
-
-        if ( !isDefined( overrideClassName ) || overrideClassName == "" ) overrideClassName = className;
-
-        if ( !isDefined( overrideAttachTag ) || overrideAttachTag == "" ) overrideAttachTag = "atch_tg";
-
-        //Add allowed no attachments
-        if ( overrideClassName != "" )
-        {            
-            dvarName = "attach_allow_" + overrideClassName + "_none";
-            addAllowedItem( overrideClassName, "none", dvarName, overrideAttachTag );
-        }
-
-        //---- ATTACHMENTS ----
-
-        attachments = tableLookup( "mp/statsTable.csv", 0, weapIndex, 8 );
-        //Skip if no attachments data in table
-        if( !isdefined( attachments ) || attachments == "" ) continue;
-            
-        attachmentsNames = strTok( attachments, " " );
-        //Skip if something wrong with attachments data
-        if( !isDefined( attachmentsNames ) ) continue;
-            
-        //Only 1 attachment for this weapon
-        if ( attachmentsNames.size == 0 )
-        {
-            dvarName = "attach_allow_" + overrideClassName + "_" + attachments;
-            addAllowedItem( overrideClassName, attachments, dvarName, overrideAttachTag );
-        }
-        //Multiple attachment options
-        else
-        {
-            for( attachIndex = 0; attachIndex < attachmentsNames.size; attachIndex++ )
-            {
-                dvarName = "attach_allow_" + overrideClassName + "_" + attachmentsNames[attachIndex];
-                addAllowedItem( overrideClassName, attachmentsNames[attachIndex], dvarName, overrideAttachTag );
-            }
-        }
-    }
-}
-
-
-initAllowedPerks( className )
-{
-    for( perkIndex = 150; perkIndex < 190; perkIndex++ )
-    {
-        perkName = tableLookup( "mp/statsTable.csv", 0, perkIndex, 4 );
-        if ( !isDefined( perkName ) || perkName == "" )
-            continue;
-
-        perkGroup = tableLookup( "mp/statsTable.csv", 0, perkIndex, 8 );
-        if ( !isDefined( perkGroup ) || perkGroup == "" )
-            continue;
-
-        dvarName = undefined;
-
-        //Master Option
-        if ( className == "")
-        {
-            dvarName = "perk_allow_" + perkName;
-        }
-        else //Class depends perks
-        {
-            dvarName = "perk_" + className + "_allow_" + perkName;
-        }
-
-        addAllowedItem( className, perkName, dvarName, perkGroup + "_tg" );
-    }
-}
-
-
-addAllowedItem( className, itemName, dvarName, tag )
-{
-    //If not class name defined, use value for all classes (master option)
-    if ( !isDefined( className ) || className == "" ) className = "*all*";
-
-    itemIndex = level.cacIngame.allowedItems.size;
-    level.cacIngame.allowedItems[itemIndex] = spawnStruct();
-    level.cacIngame.allowedItems[itemIndex].dvarName = dvarName;
-    level.cacIngame.allowedItems[itemIndex].dvarValue = getdvarx( dvarName, "int", 1, 0, 2 );
-    level.cacIngame.allowedItems[itemIndex].className = className;
-    level.cacIngame.allowedItems[itemIndex].itemName = itemName;
-    level.cacIngame.allowedItems[itemIndex].tag = tag;
-}
-
-
-validateAllowedItem( itemName, tag, className )
-{
-    if ( !isDefined( tag ) || tag == "" ) return itemName;
-
-    firstAllowedItem = undefined;
-
-    for( allowIndex = 0; allowIndex < level.cacIngame.allowedItems.size; allowIndex++ )
-    {
-        allowedItem = level.cacIngame.allowedItems[allowIndex];
-
-        if ( allowedItem.dvarValue > 0 && allowedItem.className == className && allowedItem.tag == tag )
-        {
-            if ( !isDefined( firstAllowedItem ) )
-            {
-                firstAllowedItem = allowedItem;
-            }
-
-            if ( allowedItem.itemName == itemName )
-            {
-                //self iPrintLn( "[CAC Ingame] Allowed item: ref ^2" + itemName + "^7 dvar ^2" + allowedItem.dvarName + "^7 in class ^2" + className + "^7 with tag" + tag );
-                return itemName;
-            }
-        }
-    }
-
-    if ( isDefined ( firstAllowedItem ) ) 
-    {
-        //self iPrintLn( "[CAC Ingame]^1 Not allowed:^7 ref ^2" + itemName + "^7 in class ^2" + className + "^7 with tag ^2" + tag + "^7 changed to ^2" + firstAllowedItem.itemName );
-        return firstAllowedItem.itemName;
-    }
-
-    //self iPrintLn( "[CAC Ingame] Not stored: ^2" + itemName + "^7 in class ^2" + className + "^7 with tag ^2" + tag );
-    return itemName;
 }
 
 
@@ -285,7 +123,7 @@ onMenuResponseThread()
 	{
 		self waittill("menuresponse", menu, response);
 
-        self iPrintLn( "RAW RES: " + response );
+        //self iPrintLn( "RAW RES: " + response );
 
         if( menu == game["menu_changeclass"] && response != "back" )
         {
@@ -467,34 +305,192 @@ saveLoadoutData()
 }
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                             CLASS VALIDATION                                            //
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+initAllowedItems()
+{
+    initAllowedWeapons( 20,  "assault",     "" );
+    initAllowedWeapons( 10,  "specops",     "" );
+    initAllowedWeapons( 80,  "heavygunner", "" );
+    initAllowedWeapons( 70,  "demolitions", "" );
+    initAllowedWeapons( 60,  "sniper",      "" );
+    initAllowedWeapons( 0,   "",    "pistol" );
+    initAllowedWeapons( 101, "",    "grenade" );
+
+    //
+    initAllowedPerks( "" );
+    initAllowedPerks( "assault" );
+    initAllowedPerks( "specops" );
+    initAllowedPerks( "heavygunner" );
+    initAllowedPerks( "demolitions" );
+    initAllowedPerks( "sniper" );
+}
+
+
+initAllowedWeapons( statOffset, className, overrideClassName, overrideWeapTag, overrideAttachTag )
+{
+    weaponTag = "weap";
+    
+    for( weapIndex = statOffset; weapIndex < statOffset + 10; weapIndex++ )
+    {
+        //Add allowed weapons
+        weaponName = tableLookup( "mp/statsTable.csv", 0, weapIndex, 4 );
+        if ( !isDefined( weaponName ) || weaponName == "" )
+            continue;
+
+        if ( className == "" )
+            dvarName = "weap_allow_" + weaponName;
+        else
+            dvarName = "weap_allow_" + className + "_" + weaponName;
+
+        addAllowedItem( className + overrideClassName, weaponName, dvarName, weaponTag );
+    }
+
+    initAllowedAttachments( statOffset, className + overrideClassName );
+}
+
+
+initAllowedAttachments( statOffset, weaponClass )
+{
+    attachTag = "atch";
+
+    attachments = tableLookup( "mp/statsTable.csv", 0, statOffset, 8 );
+    //Skip if no attachments data in table
+    if( !isdefined( attachments ) || attachments == "" ) return;
+        
+    attachmentsNames = strTok( attachments, " " );
+    //Skip if something wrong with attachments data
+    if( !isDefined( attachmentsNames ) ) return;
+
+    //Add allowed none attachments
+    if ( weaponClass != "" )
+    {            
+        dvarName = "attach_allow_" + weaponClass + "_none";
+        addAllowedItem( weaponClass, "none", dvarName, attachTag );
+    }
+        
+    //Only 1 attachment for this weapon
+    if ( attachmentsNames.size == 0 )
+    {
+        dvarName = "attach_allow_" + weaponClass + "_" + attachments;
+        addAllowedItem( weaponClass, attachments, dvarName, attachTag );
+    }
+
+    //Multiple attachment options
+    else
+    {
+        for( attachIndex = 0; attachIndex < attachmentsNames.size; attachIndex++ )
+        {
+            dvarName = "attach_allow_" + weaponClass + "_" + attachmentsNames[attachIndex];
+            addAllowedItem( weaponClass, attachmentsNames[attachIndex], dvarName, attachTag );
+        }
+    }
+}
+
+
+initAllowedPerks( className )
+{
+    for( perkIndex = 150; perkIndex < 190; perkIndex++ )
+    {
+        perkName = tableLookup( "mp/statsTable.csv", 0, perkIndex, 4 );
+        if ( !isDefined( perkName ) || perkName == "" )
+            continue;
+
+        perkGroup = tableLookup( "mp/statsTable.csv", 0, perkIndex, 8 );
+        if ( !isDefined( perkGroup ) || perkGroup == "" )
+            continue;
+
+        dvarName = undefined;
+
+        //Master Option
+        if ( className == "")
+        {
+            dvarName = "perk_allow_" + perkName;
+        }
+        else //Class depends perks
+        {
+            dvarName = "perk_" + className + "_allow_" + perkName;
+        }
+
+        addAllowedItem( className, perkName, dvarName, perkGroup );
+    }
+}
+
+
+addAllowedItem( className, itemName, dvarName, tag )
+{
+    //If not class name defined, use value for all classes (master option)
+    if ( !isDefined( className ) || className == "" ) className = "*all*";
+
+    itemIndex = level.cacIngame.allowedItems.size;
+    level.cacIngame.allowedItems[itemIndex] = spawnStruct();
+    level.cacIngame.allowedItems[itemIndex].dvarName = dvarName;
+    level.cacIngame.allowedItems[itemIndex].dvarValue = getdvarx( dvarName, "int", 1, 0, 2 );
+    level.cacIngame.allowedItems[itemIndex].className = className;
+    level.cacIngame.allowedItems[itemIndex].itemName = itemName;
+    level.cacIngame.allowedItems[itemIndex].tag = tag;
+
+    //logPrint("[CAC Ingame] Init: class " + className + ", item " + itemName + ", tag " + tag + ", dvar " + dvarName + ", val " + level.cacIngame.allowedItems[itemIndex].dvarValue + "\n");
+}
+
+
+validateAllowedItem( itemName, tag, className )
+{
+    if ( !isDefined( tag ) || tag == "" ) return itemName;
+
+    firstAllowedItem = undefined;
+
+    for( allowIndex = 0; allowIndex < level.cacIngame.allowedItems.size; allowIndex++ )
+    {
+        allowedItem = level.cacIngame.allowedItems[allowIndex];
+
+        if ( allowedItem.dvarValue > 0 && allowedItem.className == className && allowedItem.tag == tag )
+        {
+            if ( !isDefined( firstAllowedItem ) )
+            {
+                firstAllowedItem = allowedItem;
+            }
+
+            if ( allowedItem.itemName == itemName )
+            {
+                //self iPrintLn( "[CAC Ingame] Allowed item: ref ^2" + itemName + "^7 dvar ^2" + allowedItem.dvarName + "^7 in class ^2" + className + "^7 with tag " + tag );
+                return itemName;
+            }
+        }
+    }
+
+    if ( isDefined ( firstAllowedItem ) ) 
+    {
+        //self iPrintLn( "[CAC Ingame]^1 Not allowed:^7 ref ^2" + itemName + "^7 in class ^2" + className + "^7 with tag ^2" + tag + "^7 changed to ^2" + firstAllowedItem.itemName );
+        return firstAllowedItem.itemName;
+    }
+
+    //self iPrintLn( "[CAC Ingame] Not stored: ^2" + itemName + "^7 in class ^2" + className + "^7 with tag ^2" + tag );
+    return itemName;
+}
+
+
 validateLoadoutData()
 {
     className = getPlayerClassName( self.cacIngame.loadoutDataRef["loadout_primary"] );
     //self iPrintLn( "[CAC Ingame] Validating: primary class ^2" + className);
 
-    validateLoadoutItem( className, "primary", "weap_tg" );
-    validateLoadoutItem( className, "primary_attachment", "atch_tg" );
+    validateLoadoutItem( className, "primary", "weap" );
+    validateLoadoutItem( className, "primary_attachment", "atch" );
 
-    validateLoadoutItem( className, "perk1", "perk1_tg" );
-    validateLoadoutItem( className, "perk2", "perk2_tg" );
-    validateLoadoutItem( className, "perk3", "perk3_tg" );
+    validateLoadoutItem( className, "perk1", "perk1" );
+    validateLoadoutItem( className, "perk2", "perk2" );
+    validateLoadoutItem( className, "perk3", "perk3" );
 
-    className2 = getPlayerClassName( self.cacIngame.loadoutDataRef["loadout_secondary"] );
-    //self iPrintLn( "[CAC Ingame] Validating: secondary class ^2" + className2);
+    validateLoadoutItem( "grenade", "grenade", "weap" );
 
-    if ( self.cacIngame.loadoutDataRef["loadout_perk2"] == "specialty_twoprimaries" )
-    {
-        validateLoadoutItem( className2, "secondary", "weap_tg" );
-        validateLoadoutItem( className2, "secondary_attachment", "atch_tg" );
-    }
-    else
-    {
-        validateLoadoutItem( "*all*", "secondary", "pist_tg" );
-        validateLoadoutItem( "*all*", "secondary_attachment", "pist_atch_tg" );
-    }
-
-    validateLoadoutItem( "*all*", "grenade", "gren_tg" );
+    validateLoadoutSecondaryWeapon();
+    validateLoadoutPerk1Special( "primary_attachment" );
+    validateLoadoutPerk1Special( "secondary_attachment" );
 }
+
 
 validateLoadoutItem( className, dataType, tag )
 {   
@@ -509,6 +505,35 @@ validateLoadoutItem( className, dataType, tag )
     self.cacIngame.loadoutDataRef[dvarName] = itemValueRef;
 
     self setClientDvar( dvarName, itemValueRef );
-
     //self iPrintLn( "[CAC Ingame] Validated: ^2" + dvarName + "^7 ref ^2" + itemValueRef + "^7 (from ^2" + itemValueRefRaw + "^7) in class ^2" + className + "^7 with tag ^2" + tag );
+}
+
+
+validateLoadoutSecondaryWeapon( className )
+{
+    className = getPlayerClassName( self.cacIngame.loadoutDataRef["loadout_secondary"] );
+    //self iPrintLn( "[CAC Ingame] Validating: secondary class ^2" + className);
+
+    if ( self.cacIngame.loadoutDataRef["loadout_perk2"] == "specialty_twoprimaries" )
+    {
+        validateLoadoutItem( className, "secondary", "weap" );
+        validateLoadoutItem( className, "secondary_attachment", "atch" );
+    }
+    else
+    {
+        validateLoadoutItem( "pistol", "secondary", "weap" );
+        validateLoadoutItem( "pistol", "secondary_attachment", "atch" );
+    }
+}
+
+
+validateLoadoutPerk1Special( dataType )
+{
+    dvarName = "loadout_" + dataType;
+
+    switch ( self.cacIngame.loadoutDataRef[dvarName] )
+    {
+        case "gl": case "grip":
+            self.cacIngame.loadoutDataRef["loadout_perk1"] = "specialty_null"; break;
+    }
 }
