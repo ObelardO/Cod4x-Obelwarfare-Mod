@@ -522,7 +522,7 @@
 	#define LOCAL_PISTOL_ATTACHMENT_ACTION( attachmentName, paction, groupArg ) \
 		setdvar loadout_secondary_attachment attachmentName; \
 		scriptMenuResponse "set:loadout_secondary_attachment:"attachmentName;\
-		REPROC_ATTACH_CLOSEALL
+		PREPROC_ATTACH_CLOSEALL
 
 	#define AI_FOCUS_ACTION( groupArg, weaponRef ) \
 		execOnDvarStringValue "attach_allow_"groupArg"_"weaponRef 0 "set ui_attachment_hl_unlocked 0";\
@@ -653,7 +653,9 @@
 			setdvar	loadout_secondary weaponRef; \
 			setdvar	loadout_secondary_attachment none; \
 			scriptMenuResponse "set:loadout_secondary:"weaponRef;\
-			uiScript openMenuOnDvar "selected_weapon_class" pistol "nocd_attachment_popup_pistol";
+			scriptMenuResponse "set:loadout_secondary_attachment:"REF_NONE;\
+			setdvar	ui_inside_popup_nested 1; \
+			open "nocd_attachment_popup_pistol";
 	
 	#define SI_FOCUS_ACTION( weaponRef ) \
 		execOnDvarStringValue "weap_allow_"weaponRef 0 "set ui_sidearm_hl_unlocked 0";\
