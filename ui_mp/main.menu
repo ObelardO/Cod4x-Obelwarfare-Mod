@@ -20,12 +20,12 @@
 #define LOGO_START_Y			-190
 
 #define CHOICE_X_START			0
-#define CHOICE_Y_START			140
+#define CHOICE_Y_START			156
 
 #define CHOICE_GROUP			"main"
-#define CHOICE_SEP_1			3
-#define CHOICE_SEP_2			6
-#define CHOICE_SEP_3			9
+#define CHOICE_SEP_1			2
+#define CHOICE_SEP_2			5
+#define CHOICE_SEP_3			8
 
 #define STYLE_PC	1
 #include "ui_mp/menustyle.inc"
@@ -130,30 +130,30 @@
 		CHOICE_BUTTON_VIS( 1, "@MENU_AUTO_UPDATE", open auconfirm;, when( dvarbool( cl_updateAvailable ) && !localvarBool( ui_hideBack ) ) )
 		//CHOICE_BUTTON_VIS( 2, "@MENU_JOIN_GAME", open join_game_popup;, when( !localvarBool( ui_hideBack ) ) )
 		CHOICE_BUTTON_VIS( 2, "@MENU_JOIN_GAME", open pc_join_unranked;, when( !localvarBool( ui_hideBack ) ) )
-		CHOICE_BUTTON_VIS( 3, "@MENU_START_NEW_SERVER", close self; open createserver;, when( !localvarBool( ui_hideBack ) ) )
+		//CHOICE_BUTTON_VIS( 3, "@MENU_START_NEW_SERVER", close self; open createserver;, when( !localvarBool( ui_hideBack ) ) )
 
 		CHOICE_SEPARATOR_VIS( CHOICE_SEP_1, when( !localvarBool( ui_hideBack ) ) )
 
-		CHOICE_BUTTON_VIS( 4, "@MENU_SELECT_PROFILE", setdvar ui_playerProfileAlreadyChosen 0; open player_profile;, when( !localvarBool( ui_hideBack ) ) )
+		CHOICE_BUTTON_VIS( 3, "@MENU_SELECT_PROFILE", setdvar ui_playerProfileAlreadyChosen 0; open player_profile;, when( !localvarBool( ui_hideBack ) ) )
 
-		CHOICE_BUTTON_FOCUS_VIS_ADV( 5, "@MPUI_CREATE_A_CLASS", SETUP_ACTION_CREATEACLASS, exec "set ui_hint_text @MPUI_DESC_CREATE_A_CLASS", CLEARUIHINT, when( !localvarBool( ui_hideBack ) && stat( 260 ) >= 1 ), !localvarBool( ui_hideBack ) && stat( 260 ) >= 1 )
-		CHOICE_BUTTON_FOCUS_VIS_NOHI( 5, "", ;, exec "set ui_hint_text @MPUI_DESC_CREATE_A_CLASS_LOCKED", CLEARUIHINT, when(!localvarBool( ui_hideBack ) && stat( 260 ) < 1 ) )
-		CHOICE_DBUTTON_VIS( 5, "@MPUI_CREATE_A_CLASS", when( !localvarBool( ui_hideBack ) && stat( 260 ) < 1 ) )
-		CHOICE_NEWICON_VIS( 5, "specialty_new", when( !localvarBool( ui_hideBack ) && ANY_NEW_CAC ) )
+		CHOICE_BUTTON_FOCUS_VIS_ADV( 4, "@MPUI_CREATE_A_CLASS", SETUP_ACTION_CREATEACLASS, exec "set ui_hint_text @MPUI_DESC_CREATE_A_CLASS", CLEARUIHINT, when( !localvarBool( ui_hideBack ) && stat( 260 ) >= 1 ), !localvarBool( ui_hideBack ) && stat( 260 ) >= 1 )
+		CHOICE_BUTTON_FOCUS_VIS_NOHI( 4, "", ;, exec "set ui_hint_text @MPUI_DESC_CREATE_A_CLASS_LOCKED", CLEARUIHINT, when(!localvarBool( ui_hideBack ) && stat( 260 ) < 1 ) )
+		CHOICE_DBUTTON_VIS( 4, "@MPUI_CREATE_A_CLASS", when( !localvarBool( ui_hideBack ) && stat( 260 ) < 1 ) )
+		CHOICE_NEWICON_VIS( 4, "specialty_new", when( !localvarBool( ui_hideBack ) && ANY_NEW_CAC ) )
 
 		//CHOICE_BUTTON_VIS( 5, "Create a Class", open pc_cac_popup;, when( !localvarBool( ui_hideBack ) && stat(260) ) )
-		CHOICE_BUTTON_VIS( 6, "@MENU_RANK_AND_CHALLENGES", open menu_challenges;, when( !localvarBool( ui_hideBack ) ) )
+		CHOICE_BUTTON_VIS( 5, "@MENU_RANK_AND_CHALLENGES", open menu_challenges;, when( !localvarBool( ui_hideBack ) ) )
 
 		CHOICE_SEPARATOR_VIS( CHOICE_SEP_2, when( !localvarBool( ui_hideBack ) ) )
 
-		CHOICE_BUTTON_VIS( 7, "@MENU_CONTROLS", open main_controls;, when( !localvarBool( ui_hideBack ) ) )
-		CHOICE_BUTTON_VIS( 8, "@MENU_OPTIONS", open main_options;, when( !localvarBool( ui_hideBack ) ) )
+		CHOICE_BUTTON_VIS( 6, "@MENU_CONTROLS", open main_controls;, when( !localvarBool( ui_hideBack ) ) )
+		CHOICE_BUTTON_VIS( 7, "@MENU_OPTIONS", open main_options;, when( !localvarBool( ui_hideBack ) ) )
 
 		CHOICE_SEPARATOR_VIS( CHOICE_SEP_3, when( !localvarBool( ui_hideBack ) ) )
 
-		CHOICE_BUTTON_VIS( 9, "@MENU_MODS", close self; open mods_menu;, when( !localvarBool( ui_hideBack ) ) )
+		CHOICE_BUTTON_VIS( 8, "@MENU_MODS", close self; open mods_menu;, when( !localvarBool( ui_hideBack ) ) )
 		//CHOICE_BUTTON_VIS( 10, "@MENU_SINGLE_PLAYER", open single_popmenu;, when( !localvarBool( ui_hideBack ) ) )
-		CHOICE_BUTTON_VIS( 10, "@MENU_QUIT", open quit_popmenu;, when( !localvarBool( ui_hideBack ) ) )
+		CHOICE_BUTTON_VIS( 9, "@MENU_QUIT", open quit_popmenu;, when( !localvarBool( ui_hideBack ) ) )
 
 		//CHOICE_FOOTNOTE_VIS( "@MENU_GAME_EXPERIENCE_MAY_CHANGE", 40, 420, when( !localvarBool( ui_hideBack ) ) )
 		//CHOICE_FOOTNOTE_VIS( OPENWARFARE_VERSION, 40, 420, when( !localvarBool( ui_hideBack ) ) )
