@@ -386,7 +386,7 @@ LANG_ENGLISH "Encryption keys"
 REFERENCE RE_OBJECTIVE_B
 LANG_ENGLISH "Spy list"
 
-REFERENCE RE_TAKEN
+wName RE_TAKEN
 LANG_ENGLISH "^3&&1^7 has taken the ^3&&2^7."
 
 REFERENCE RE_DROPPED
@@ -876,7 +876,7 @@ LANG_ENGLISH "Destroying Explosives"
 REFERENCE DESTROY_EXPLOSIVES
 LANG_ENGLISH "You can destroy the explosive by holding ^2[{+melee}]^7"
 
-
+	
 //******************************************************************************
 // openwarfare/_playerdvars.gsc
 //******************************************************************************
@@ -1203,6 +1203,59 @@ LANG_ENGLISH "Attachment installed: ^3&&1"
 REFERENCE DYNATTACH_REMOVED_ALL
 LANG_ENGLISH "All attachments removed."
 
+REFERENCE DYNATTACH_INSTALL_ERROR
+LANG_ENGLISH "^3&&1^7 cannot be installed on this weapon."
+
+REFERENCE DYNATTACH_MENU_INSTALL
+LANG_ENGLISH "Install attachment:"
+
+REFERENCE DYNATTACH_MENU_1_SILENCER
+LANG_ENGLISH "^31.^7 Silencer"
+
+REFERENCE DYNATTACH_MENU_2_REFLEX
+LANG_ENGLISH "^32.^7 Reflex sight"
+
+REFERENCE DYNATTACH_MENU_3_ACOG
+LANG_ENGLISH "^33.^7 ACOG scope"
+
+REFERENCE DYNATTACH_MENU_4_REMOVE
+LANG_ENGLISH "^34.^7 No attachment"
+
+REFERENCE DYNATTACH_MENU_BACK
+LANG_ENGLISH "^3Esc.^7 Cancel"
+
+
+//******************************************************************************
+// openwarfare/_playercard.gsc
+//******************************************************************************
+REFERENCE KILLCARD_VICTIM
+LANG_ENGLISH "Killed by:"
+
+REFERENCE KILLCARD_ATTACKER
+LANG_ENGLISH "You killed:"
+
+REFERENCE KILLCARD_UAV_INBOUND
+LANG_ENGLISH "Called in UAV"
+
+REFERENCE KILLCARD_AIRSTRIKE_INBOUN
+LANG_ENGLISH "Called in airstrike"
+
+REFERENCE KILLCARD_HELICOPTER_INBOUN
+LANG_ENGLISH "Called in helicopter"
+
+
+//******************************************************************************
+// maps\mp\gametypes\_finalkillcam.gsc
+//******************************************************************************
+REFERENCE FINALCAM_PLAYER_VS_PLAYER
+LANG_ENGLISH "&&1 VS. &&2"
+
+REFERENCE FINALCAM_MATCH_WIN
+LANG_ENGLISH "MATCH WINNER KILL"
+
+REFERENCE FINALCAM_ROUND_WIN
+LANG_ENGLISH "ROUND WINNER KILL"
+
 
 //******************************************************************************
 // ui_mp/connect.menu
@@ -1274,6 +1327,9 @@ LANG_ENGLISH " - Round #&&1"
 
 REFERENCE LB_NO_PLAYERS
 LANG_ENGLISH "Waiting for Players"
+
+REFERENCE KILLCAM_TITLE
+LANG_ENGLISH "KILLCAM"
 
 REFERENCE STATS_ACCURACY
 LANG_ENGLISH "Accuracy"

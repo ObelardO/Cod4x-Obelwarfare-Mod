@@ -7,12 +7,25 @@ init()
     level.killcam_style = 0;
     level.fk = false;
     level.showFinalKillcam = false;
-    level.waypoint = false;
-    
+
     level.doFK["axis"] = false;
     level.doFK["allies"] = false;
     
     level.slowmotstart = undefined;
+
+    /////////////////////////////////////////////////////////////////////////////////
+    //                                     HUD                                     //
+    /////////////////////////////////////////////////////////////////////////////////
+
+    game["strings"]["finalcam_pvp"] = &"OW_FINALCAM_PLAYER_VS_PLAYER";
+    game["strings"]["finalcam_round"] = &"OW_FINALCAM_ROUND_WIN";
+    game["strings"]["finalcam_match"] = &"OW_FINALCAM_MATCH_WIN";
+
+    preCacheString( game["strings"]["finalcam_pvp"] );
+    preCacheString( game["strings"]["finalcam_round"] );
+    preCacheString( game["strings"]["finalcam_match"] );
+
+    /////////////////////////////////////////////////////////////////////////////////
 
     for(;;)
     {
@@ -87,13 +100,13 @@ finalkillcam( attacker, attackerNum, deathtime, victim, weapon, killcamentity)
     else if (weapon == "claymore_mp")
     {
         camtime = 3.0;
-        camdist = 80;
+        camdist = 100;
     }
 
     else if (weapon == "frag_grenade_mp")
     {
         camtime = 4.0; // show long enough to see grenade thrown
-        camdist = 80;
+        camdist = 160;
     }
 
     predelay = getTime()/1000 - deathTime;
@@ -120,7 +133,7 @@ finalkillcam( attacker, attackerNum, deathtime, victim, weapon, killcamentity)
 	self.psoffsettime = 0;
     
     if(!isDefined(level.slowmostart))
-        level.slowmostart = killcamlength - 3;
+        level.slowmostart = killcamlength - 2;
 
     wait 0.05;
 
@@ -144,14 +157,14 @@ finalkillcam( attacker, attackerNum, deathtime, victim, weapon, killcamentity)
     
     if(!isDefined(self.top_fk_shader))
     {
-        self CreateFKMenu(victim , attacker);
+        self CreateFKHUD( victim, attacker );
     }
     else
     {
         self.fk_title.alpha = 1;
         self.fk_title_low.alpha = 1;
-        self.top_fk_shader.alpha = 0.5;
-        self.bottom_fk_shader.alpha = 0.5;
+        //self.top_fk_shader.alpha = 0.5;
+        //self.bottom_fk_shader.alpha = 0.5;
         //self.credits.alpha = 0;
     }
     
@@ -195,8 +208,8 @@ CleanFK()
 {
     self.fk_title.alpha = 0;
     self.fk_title_low.alpha = 0;
-    self.top_fk_shader.alpha = 0;
-    self.bottom_fk_shader.alpha = 0;
+    //self.top_fk_shader.alpha = 0;
+    //self.bottom_fk_shader.alpha = 0;
     //self.credits.alpha = 0;
     
     //self SetClientDvar("ui_ShowMenuOnly", "");
@@ -214,8 +227,9 @@ WaitEnd( killcamlength )
     self notify("end_killcam");
 }
 
-CreateFKMenu( victim , attacker)
+CreateFKHUD( victim, attacker )
 {
+    /*
     self.top_fk_shader = newClientHudElem(self);
     self.top_fk_shader.elemType = "shader";
     self.top_fk_shader.archived = false;
@@ -236,7 +250,8 @@ CreateFKMenu( victim , attacker)
     self.bottom_fk_shader.foreground = true;
     self.bottom_fk_shader.color	= (.15, .0, .0);
     self.bottom_fk_shader setShader("white",640,112);
-    
+    */
+
     self.fk_title = newClientHudElem(self);
     self.fk_title.archived = false;
     self.fk_title.y = 70;
@@ -246,7 +261,7 @@ CreateFKMenu( victim , attacker)
     self.fk_title.vertAlign = "top";
     self.fk_title.sort = 1; // force to draw after the bars
     self.fk_title.font = "objective";
-    self.fk_title.fontscale = 3.5;
+    self.fk_title.fontscale = 2;
     self.fk_title.foreground = true;
     self.fk_title.shadown = 1;
     
@@ -280,20 +295,20 @@ CreateFKMenu( victim , attacker)
 
     self.fk_title.alpha = 1;
     self.fk_title_low.alpha = 1;
-    self.top_fk_shader.alpha = 0.5;
-    self.bottom_fk_shader.alpha = 0.5;
+    //self.top_fk_shader.alpha = 0.5;
+    //self.bottom_fk_shader.alpha = 0.5;
 
     /*
     self.credits.alpha = 0;
     self.credits setText("^1Created by: ^2FzBr.^3d4rk");
     */
 
-    self.fk_title_low setText(attacker.name + " VS. " + victim.name);
+    self.fk_title_low setText( game["strings"]["finalcam_pvp"], attacker.name, victim.name );
     
     if( !level.killcam_style )
-        self.fk_title setText("MATCH WINNER KILL");
+        self.fk_title setText( game["strings"]["finalcam_match"] );
     else
-        self.fk_title setText("ROUND WINNER KILL");
+        self.fk_title setText( game["strings"]["finalcam_round"] );
 }
 
 onPlayerKilled( eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, killcamentity )
@@ -348,7 +363,6 @@ startFK( winner )
     }
     
     slowMotion();
-
 }
 
 slowMotion()

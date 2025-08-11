@@ -1251,6 +1251,19 @@ LANG_RUSSIAN "Вызвал вертолет"
 
 
 //******************************************************************************
+// maps\mp\gametypes\_finalkillcam.gsc
+//******************************************************************************
+REFERENCE FINALCAM_PLAYER_VS_PLAYER
+LANG_RUSSIAN "&&1 VS. &&2"
+
+REFERENCE FINALCAM_MATCH_WIN
+LANG_RUSSIAN "ПОБЕДА В МАТЧЕ"
+
+REFERENCE FINALCAM_ROUND_WIN
+LANG_RUSSIAN "ПОБЕДА В РАУНДЕ"
+
+
+//******************************************************************************
 // ui_mp/connect.menu
 //******************************************************************************
 REFERENCE BROUGHT2UBY
@@ -1321,6 +1334,9 @@ LANG_RUSSIAN " - Раунд #&&1"
 REFERENCE LB_NO_PLAYERS
 LANG_RUSSIAN "Ожидание Игроков"
 
+REFERENCE KILLCAM_TITLE
+LANG_RUSSIAN "ПОВТОР СМЕРТИ"
+
 REFERENCE STATS_ACCURACY
 LANG_RUSSIAN "Точность"
 
@@ -1365,6 +1381,8 @@ LANG_RUSSIAN "Максимум подряд"
 
 REFERENCE STATS_DISTANCE
 LANG_RUSSIAN "Пройдено"
+
+
 
 
 //******************************************************************************
