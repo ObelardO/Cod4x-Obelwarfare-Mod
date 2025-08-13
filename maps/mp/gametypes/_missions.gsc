@@ -156,7 +156,10 @@ processChallenge( baseName, progressInc )
 
 	if ( progress >= level.challengeInfo[refString]["maxval"] )
 	{
-		self thread challengeNotify( level.challengeInfo[refString]["name"], level.challengeInfo[refString]["desc"] );
+		//FIX configstrings overflow (temp)
+		//self thread challengeNotify( level.challengeInfo[refString]["name"], level.challengeInfo[refString]["desc"] );
+
+		self thread challengeNotify( &"MP_CHALLENGE_COMPLETED", level.challengeInfo[refString]["desc"] );
 
 		if ( level.challengeInfo[refString]["camo"] != "" )
 			self maps\mp\gametypes\_rank::unlockCamo( level.challengeInfo[refString]["camo"] );

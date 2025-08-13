@@ -365,6 +365,8 @@ rawfile,openwarfare/_weather.gsc
 rawfile,openwarfare/_ping.gsc
 rawfile,openwarfare/_specialpickups.gsc
 rawfile,openwarfare/_playercard.gsc
+rawfile,openwarfare/_testoverflow.gsc
+
 
 
 

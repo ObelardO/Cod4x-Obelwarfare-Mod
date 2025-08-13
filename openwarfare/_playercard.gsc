@@ -59,9 +59,14 @@ init()
 
         precacheString( &"OW_KILLCARD_ATTACKER" );
 	precacheString( &"OW_KILLCARD_VICTIM" );
+        precacheString( &"OW_KILLCARD_PLAYER_NAME" );
+	precacheString( &"OW_KILLCARD_PLAYER_RANK" );
 	precacheString( &"OW_KILLCARD_UAV_INBOUND" );
 	precacheString( &"OW_KILLCARD_AIRSTRIKE_INBOUN" );
 	precacheString( &"OW_KILLCARD_HELICOPTER_INBOUN" );
+
+
+        
 
 	level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
 }
@@ -84,23 +89,25 @@ onPlayerSpawned()
 {
 
         // Killed by / You Killed
-        if( !isDefined( self.playercardText ) ){
-	        self.playercardText = newClientHudElem( self );
-	        self.playercardText.x = 0; 
+        if( !isDefined( self.playercardText ) )
+        {
+                self.playercardText = newClientHudElem( self );
+                self.playercardText.x = 0; 
                 self.playercardText.y = -130;
-	        self.playercardText.alignX = "center";
-	        self.playercardText.alignY = "top";
-	        self.playercardText.horzAlign = "center";
-	        self.playercardText.vertAlign = "bottom";
-	        self.playercardText.fontScale = 1.6;
-	        self.playercardText.sort = -1;
-	        self.playercardText.glowAlpha = 0;
+                self.playercardText.alignX = "center";
+                self.playercardText.alignY = "top";
+                self.playercardText.horzAlign = "center";
+                self.playercardText.vertAlign = "bottom";
+                self.playercardText.fontScale = 1.6;
+                self.playercardText.sort = -1;
+                self.playercardText.glowAlpha = 0;
                 self.playercardText.alpha = 0;
-
+                self.playercardText.archived = false;
         }
 
         // Player Name
-        if( !isDefined( self.playercardName ) ){
+        if( !isDefined( self.playercardName ) )
+        {
 	        self.playercardName = newClientHudElem( self );
 	        self.playercardName.x = -20; 
                 self.playercardName.y = -100;
@@ -113,11 +120,12 @@ onPlayerSpawned()
 	        self.playercardName.glowAlpha = 0;
                 self.playercardName.alpha = 0;
                 self.playercardName.color = (1, 1, 1);
-
+                self.playercardName.archived = false;
         }
 
         // Player Rank Number
-        if( !isDefined( self.playercardRankNumber ) ){
+        if( !isDefined( self.playercardRankNumber ) )
+        {
 	        self.playercardRankNumber = newClientHudElem( self );
 	        self.playercardRankNumber.x = -89; 
                 self.playercardRankNumber.y = -100;
@@ -129,11 +137,12 @@ onPlayerSpawned()
 	        self.playercardRankNumber.sort = -1;
 	        self.playercardRankNumber.glowAlpha = 0;
                 self.playercardRankNumber.alpha = 0;
-
+                self.playercardRankNumber.archived = false;
         }
 
         // Background Image
-        if( !isDefined( self.playercardImage ) ) {
+        if( !isDefined( self.playercardImage ) )
+        {
 	        // Create the HUD element to display the playercard
 	        self.playercardImage = newClientHudElem( self );
 	        self.playercardImage.x = 0;
@@ -144,14 +153,17 @@ onPlayerSpawned()
 	        self.playercardImage.horzAlign = "center";
 	        self.playercardImage.vertAlign = "bottom";
                 self.playercardImage.alpha = 0;
+                self.playercardImage.archived = false;
         }
 
         // Rank Icon
-	if ( !isDefined( self.playercardRankIcon ) ) {
+	if ( !isDefined( self.playercardRankIcon ) )
+        {
 		self.playercardRankIcon = self createIcon( "white", 25, 25 );
 		self.playercardRankIcon setPoint( "CENTER", "BOTTOM", -111, -90 );
 		self.playercardRankIcon.sort = -1;
 		self.playercardRankIcon.alpha = 0;
+                self.playercardRankIcon.archived = false;
 	}
 
         // Team Icon
@@ -161,6 +173,7 @@ onPlayerSpawned()
 		        self.playercardTeamIcon setPoint( "CENTER", "BOTTOM", 105, -90 );
 		        self.playercardTeamIcon.sort = -1;
 		        self.playercardTeamIcon.alpha = 0;
+		        self.playercardTeamIcon.archived = false;
 	        }
         }
 
@@ -171,11 +184,12 @@ onPlayerSpawned()
 		        self.playercardKillWeapon setPoint( "CENTER", "BOTTOM", 80, -90 );
 		        self.playercardKillWeapon.sort = -1;
 		        self.playercardKillWeapon.alpha = 0;
+		        self.playercardKillWeapon.archived = false;
 	        }
         }
 
-        if( level.scr_playercards_hardpoints == 1 ) {
-
+        if( level.scr_playercards_hardpoints == 1 )
+        {
                 // Player Name
                 if( !isDefined( self.playercardNameHardpoint ) ){
 	                self.playercardNameHardpoint = newClientHudElem( self );
@@ -189,6 +203,7 @@ onPlayerSpawned()
 	                self.playercardNameHardpoint.sort = -1;
 	                self.playercardNameHardpoint.glowAlpha = 0;
                         self.playercardNameHardpoint.alpha = 0;
+                        self.playercardNameHardpoint.archived = false;
 
                 }
 
@@ -205,6 +220,7 @@ onPlayerSpawned()
 	                self.playercardRankNumberHardpoint.sort = -1;
 	                self.playercardRankNumberHardpoint.glowAlpha = 0;
                         self.playercardRankNumberHardpoint.alpha = 0;
+                        self.playercardRankNumberHardpoint.archived = false;
 
 
                 }
@@ -221,6 +237,7 @@ onPlayerSpawned()
 	                self.playercardImageHardpoint.horzAlign = "right";
 	                self.playercardImageHardpoint.vertAlign = "middle";
                         self.playercardImageHardpoint.alpha = 0;
+                        self.playercardImageHardpoint.archived = false;
 
 
                  }
@@ -231,6 +248,7 @@ onPlayerSpawned()
 		        self.playercardRankIconHardpoint setPoint( "MIDDLE", "RIGHT", -245, -140 );
 		        self.playercardRankIconHardpoint.sort = -1;
 		        self.playercardRankIconHardpoint.alpha = 0;
+		        self.playercardRankIconHardpoint.archived = false;
 
 
 	         }
@@ -248,6 +266,7 @@ onPlayerSpawned()
 	                self.playercardHardpointText.sort = -1;
 	                self.playercardHardpointText.glowAlpha = 0;
 		        self.playercardHardpointText.alpha = 0;
+		        self.playercardHardpointText.archived = false;
 
 
                 }
@@ -258,6 +277,7 @@ onPlayerSpawned()
 		        self.playercardKillWeaponHardpoint setPoint( "MIDDLE", "RIGHT", -40, -140 );
 		        self.playercardKillWeaponHardpoint.sort = -1;
 		        self.playercardKillWeaponHardpoint.alpha = 0;
+		        self.playercardKillWeaponHardpoint.archived = false;
 
 	        }
 
@@ -267,8 +287,10 @@ onPlayerSpawned()
                         self.playercardHardpointText.y = -12;
                         self.playercardRankIconHardpoint setPoint( "MIDDLE", "RIGHT", -245, -40 );
                         self.playercardImageHardpoint.y = -40;
-                        self.playercardRankNumberHardpoint.y = -40;
+                        /* DISABLED
+                        self.playercardRankNumberHardpoint.y = -40;*/
                         self.playercardNameHardpoint.y = -40;
+                        self.playercardNameHardpoint.archived = false;
                 }
 
         }
@@ -460,10 +482,12 @@ showKillCard( playercardVictim, playercardAttacker, weaponInfo )
         self.playercardText setText( playercardAttacker.text );
 	self.playercardText.color = playercardAttacker.textcolor;
 
-	self.playercardName setText( playercardVictim.name );
+	self.playercardName setText( &"OW_KILLCARD_PLAYER_NAME", playercardVictim.name );
 
-        self.playercardRankNumber setText( playercardVictim.rank );
+        /* DISABLED
+        self.playercardRankNumber setText( &"OW_KILLCARD_PLAYER_RANK", playercardVictim.rank );
         self.playercardRankNumber.color = ( 0.97, 0.96, 0.34 );
+        */
 
         if( level.scr_playercards == 1 ) {
                 self.playercardTeamIcon setShader( playercardVictim.team, 25, 25 );
@@ -473,7 +497,10 @@ showKillCard( playercardVictim, playercardAttacker, weaponInfo )
         self.playercardRankIcon.alpha = 1;
         self.playercardName.alpha = 1;
         self.playercardText.alpha = 1;
+
+        /* DISABLED
         self.playercardRankNumber.alpha = 1;
+        */
 
         if( level.scr_playercards == 1 ) {
                 self.playercardTeamIcon.alpha = 1;
@@ -491,7 +518,10 @@ showKillCard( playercardVictim, playercardAttacker, weaponInfo )
         self.playercardRankIcon moveOverTime( 0.40 );
         self.playercardName moveOverTime( 0.40 );
         self.playercardText moveOverTime( 0.40 );
+
+        /* DISABLED
         self.playercardRankNumber moveOverTime( 0.40 );
+        */
 
         if( level.scr_playercards == 1 ) {
                 self.playercardTeamIcon moveOverTime( 0.40 );
@@ -505,7 +535,10 @@ showKillCard( playercardVictim, playercardAttacker, weaponInfo )
         self.playercardRankIcon.y = 40;
         self.playercardName.y = 30;
         self.playercardText.y = 0;
+
+        /* DISABLED
         self.playercardRankNumber.y = 30;
+        */
 
         if( level.scr_playercards == 1 ) {
                 self.playercardTeamIcon.y = 40;
@@ -523,7 +556,10 @@ showKillCard( playercardVictim, playercardAttacker, weaponInfo )
         self.playercardRankIcon moveOverTime( 0.40 );
         self.playercardName moveOverTime( 0.40 );
         self.playercardText moveOverTime( 0.40 );
+
+        /* DISABLED
         self.playercardRankNumber moveOverTime( 0.40 );
+        */
 
         if( level.scr_playercards == 1 ) {
                 self.playercardTeamIcon moveOverTime( 0.40 );
@@ -537,7 +573,10 @@ showKillCard( playercardVictim, playercardAttacker, weaponInfo )
         self.playercardRankIcon.y = -90;
         self.playercardName.y = -100;
         self.playercardText.y = -130;
+
+        /* DISABLED
         self.playercardRankNumber.y = -100;
+        */
 
         if( level.scr_playercards == 1 ) {
                 self.playercardTeamIcon.y = -90;
@@ -551,7 +590,10 @@ showKillCard( playercardVictim, playercardAttacker, weaponInfo )
         self.playercardRankIcon.alpha = 0;
         self.playercardName.alpha = 0;
         self.playercardText.alpha = 0;
+
+        /* DISABLED
         self.playercardRankNumber.alpha = 0;
+        */
 
         if( level.scr_playercards == 1 ) {
                 self.playercardTeamIcon.alpha = 0;
@@ -658,9 +700,11 @@ showEnemyPlayercardHardpoint( playercardHp )
         self.playercardNameHardpoint.alpha = 1;
 
         // Rank Number
+        /* DISABLED
         self.playercardRankNumberHardpoint setText( playercardHp.rank );
         self.playercardRankNumberHardpoint.color = ( 0.97, 0.96, 0.34 );
         self.playercardRankNumberHardpoint.alpha = 1;
+        */
 
         // Background Image
         self.playercardImageHardpoint setShader( "playercard_emblem_" + playercardHp.image, 256, 40 );
@@ -701,14 +745,18 @@ showEnemyPlayercardHardpoint( playercardHp )
         wait( level.scr_playercards_hardpoints_time_visible );
 
         self.playercardNameHardpoint moveOverTime( 0.40 );
+        /* DISABLED
         self.playercardRankNumberHardpoint moveOverTime( 0.40 );
+        */
         self.playercardImageHardpoint moveOverTime( 0.40 );
         self.playercardRankIconHardpoint moveOverTime( 0.40 );
         self.playercardHardpointText moveOverTime( 0.40 );
         self.playercardKillWeaponHardpoint moveOverTime( 0.40 );
 
         self.playercardNameHardpoint.x = 70;
+        /* DISABLED
         self.playercardRankNumberHardpoint.x = 30;
+        */
         self.playercardImageHardpoint.x = 0;
         self.playercardRankIconHardpoint.x = 15;
         self.playercardHardpointText.x = 4;
@@ -719,7 +767,9 @@ showEnemyPlayercardHardpoint( playercardHp )
   
         // Make it disappear
         self.playercardNameHardpoint.alpha = 0;
+        /* DISABLED
         self.playercardRankNumberHardpoint.alpha = 0;
+        */
         self.playercardImageHardpoint.alpha = 0;
         self.playercardRankIconHardpoint.alpha = 0;
         self.playercardHardpointText.alpha = 0;
@@ -727,7 +777,9 @@ showEnemyPlayercardHardpoint( playercardHp )
 
         // Return Home
         self.playercardNameHardpoint moveOverTime( 0.40 );
+        /* DISABLED
         self.playercardRankNumberHardpoint moveOverTime( 0.40 );
+        */
         self.playercardImageHardpoint moveOverTime( 0.40 );
         self.playercardRankIconHardpoint moveOverTime( 0.40 );
         self.playercardHardpointText moveOverTime( 0.40 );
@@ -735,7 +787,9 @@ showEnemyPlayercardHardpoint( playercardHp )
 
         // Set back to original positions
         self.playercardNameHardpoint.x = -190;
+        /* DISABLED
         self.playercardRankNumberHardpoint.x = -230;
+        */
         self.playercardImageHardpoint.x = -260;
         self.playercardRankIconHardpoint.x = -245;
         self.playercardHardpointText.x = -256;
@@ -784,9 +838,11 @@ showFriendlyPlayercardHardpoint( playercardHp )
         self.playercardNameHardpoint.alpha = 1;
 
         // Rank Number
+        /* DISABLED
         self.playercardRankNumberHardpoint setText( playercardHp.rank );
         self.playercardRankNumberHardpoint.color = ( 0.97, 0.96, 0.34 );
         self.playercardRankNumberHardpoint.alpha = 1;
+        */
 
         // Background Image
         self.playercardImageHardpoint setShader( "playercard_emblem_" + playercardHp.image, 256, 40 );
@@ -827,14 +883,16 @@ showFriendlyPlayercardHardpoint( playercardHp )
         wait( level.scr_playercards_hardpoints_time_visible );
 
         self.playercardNameHardpoint moveOverTime( 0.40 );
-        self.playercardRankNumberHardpoint moveOverTime( 0.40 );
+        /* DISABLED
+        self.playercardRankNumberHardpoint moveOverTime( 0.40 );*/
         self.playercardImageHardpoint moveOverTime( 0.40 );
         self.playercardRankIconHardpoint moveOverTime( 0.40 );
         self.playercardHardpointText moveOverTime( 0.40 );
         self.playercardKillWeaponHardpoint moveOverTime( 0.40 );
 
         self.playercardNameHardpoint.x = 70;
-        self.playercardRankNumberHardpoint.x = 30;
+        /* DISABLED
+        self.playercardRankNumberHardpoint.x = 30;*/
         self.playercardImageHardpoint.x = 0;
         self.playercardRankIconHardpoint.x = 15;
         self.playercardHardpointText.x = 4;
@@ -845,7 +903,8 @@ showFriendlyPlayercardHardpoint( playercardHp )
   
         // Make it disappear
         self.playercardNameHardpoint.alpha = 0;
-        self.playercardRankNumberHardpoint.alpha = 0;
+        /* DISABLED
+        self.playercardRankNumberHardpoint.alpha = 0;*/
         self.playercardImageHardpoint.alpha = 0;
         self.playercardRankIconHardpoint.alpha = 0;
         self.playercardHardpointText.alpha = 0;
@@ -853,7 +912,8 @@ showFriendlyPlayercardHardpoint( playercardHp )
 
         // Return Home
         self.playercardNameHardpoint moveOverTime( 0.40 );
-        self.playercardRankNumberHardpoint moveOverTime( 0.40 );
+        /* DISABLED
+        self.playercardRankNumberHardpoint moveOverTime( 0.40 );*/
         self.playercardImageHardpoint moveOverTime( 0.40 );
         self.playercardRankIconHardpoint moveOverTime( 0.40 );
         self.playercardHardpointText moveOverTime( 0.40 );
@@ -861,7 +921,8 @@ showFriendlyPlayercardHardpoint( playercardHp )
 
         // Set back to original positions
         self.playercardNameHardpoint.x = -190;
-        self.playercardRankNumberHardpoint.x = -230;
+        /* DISABLED
+        self.playercardRankNumberHardpoint.x = -230;*/
         self.playercardImageHardpoint.x = -260;
         self.playercardRankIconHardpoint.x = -245;
         self.playercardHardpointText.x = -256;

@@ -95,6 +95,8 @@ init()
 	thread openwarfare\_ping::init();
 	thread openwarfare\_specialpickups::init();
 	thread openwarfare\_playercard::init();
+	//
+	//thread openwarfare\_testoverflow::init();
 }
 
 
