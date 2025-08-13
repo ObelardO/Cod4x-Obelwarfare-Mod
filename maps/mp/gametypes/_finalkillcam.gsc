@@ -155,7 +155,7 @@ finalkillcam( attacker, attackerNum, deathtime, victim, weapon, killcamentity)
 
     self setClientDvar ("cg_airstrikeKillCamDist", camdist );
     
-    if(!isDefined(self.top_fk_shader))
+    if( !isDefined( self.fk_title ) )
     {
         self CreateFKHUD( victim, attacker );
     }
@@ -163,16 +163,13 @@ finalkillcam( attacker, attackerNum, deathtime, victim, weapon, killcamentity)
     {
         self.fk_title.alpha = 1;
         self.fk_title_low.alpha = 1;
-        //self.top_fk_shader.alpha = 0.5;
-        //self.bottom_fk_shader.alpha = 0.5;
-        //self.credits.alpha = 0;
     }
     
-    self thread WaitEnd(killcamlength);
+    self thread WaitEnd( killcamlength );
     
     wait 0.05;
     
-    self waittill("end_killcam");
+    self waittill( "end_killcam" );
 
     self thread CleanFK();
     self thread EndFK();
@@ -208,11 +205,9 @@ CleanFK()
 {
     self.fk_title.alpha = 0;
     self.fk_title_low.alpha = 0;
-    //self.top_fk_shader.alpha = 0;
-    //self.bottom_fk_shader.alpha = 0;
-    //self.credits.alpha = 0;
-    
-    //self SetClientDvar("ui_ShowMenuOnly", "");
+
+    //if( isDefined( self.fk_title ) ) self.fk_title destroy(); 
+    //if( isDefined( self.fk_title_low ) ) self.fk_title_low destroy(); 
     
     visionSetNaked( "mpOutro", 1.0 );
 }
@@ -229,29 +224,6 @@ WaitEnd( killcamlength )
 
 CreateFKHUD( victim, attacker )
 {
-    /*
-    self.top_fk_shader = newClientHudElem(self);
-    self.top_fk_shader.elemType = "shader";
-    self.top_fk_shader.archived = false;
-    self.top_fk_shader.horzAlign = "fullscreen";
-    self.top_fk_shader.vertAlign = "fullscreen";
-    self.top_fk_shader.sort = 0;
-    self.top_fk_shader.foreground = true;
-    self.top_fk_shader.color	= (.15, .0, .0);
-    self.top_fk_shader setShader("white",640,112);
-    
-    self.bottom_fk_shader = newClientHudElem(self);
-    self.bottom_fk_shader.elemType = "shader";
-    self.bottom_fk_shader.y = 368;
-    self.bottom_fk_shader.archived = false;
-    self.bottom_fk_shader.horzAlign = "fullscreen";
-    self.bottom_fk_shader.vertAlign = "fullscreen";
-    self.bottom_fk_shader.sort = 0; 
-    self.bottom_fk_shader.foreground = true;
-    self.bottom_fk_shader.color	= (.15, .0, .0);
-    self.bottom_fk_shader setShader("white",640,112);
-    */
-
     self.fk_title = newClientHudElem(self);
     self.fk_title.archived = false;
     self.fk_title.y = 70;
@@ -278,30 +250,8 @@ CreateFKHUD( victim, attacker )
     self.fk_title_low.fontscale = 1.4;
     self.fk_title_low.foreground = true;
     
-    /*
-    self.credits = newClientHudElem(self);
-    self.credits.archived = false;
-    self.credits.x = 0;
-    self.credits.y = 0;
-    self.credits.alignX = "left";
-    self.credits.alignY = "bottom";
-    self.credits.horzAlign = "left";
-    self.credits.vertAlign = "bottom";
-    self.credits.sort = 1; // force to draw after the bars
-    self.credits.font = "default";
-    self.credits.fontscale = 1.4;
-    self.credits.foreground = true;
-    */
-
     self.fk_title.alpha = 1;
     self.fk_title_low.alpha = 1;
-    //self.top_fk_shader.alpha = 0.5;
-    //self.bottom_fk_shader.alpha = 0.5;
-
-    /*
-    self.credits.alpha = 0;
-    self.credits setText("^1Created by: ^2FzBr.^3d4rk");
-    */
 
     self.fk_title_low setText( game["strings"]["finalcam_pvp"], attacker.name, victim.name );
     
