@@ -1,3 +1,4 @@
 name=InGame Class Editor
 iwd=classes
 gsc=_ingameclass
+cfg=ingameclasseditor

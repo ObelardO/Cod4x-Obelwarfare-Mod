@@ -11,11 +11,18 @@
 
 #include openwarfare\_utils;
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                           INGAME CLASS EDITOR                                           //
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 init()
 {
-    level.scr_enable_cac_ingame_ranked = getdvarx( "scr_enable_cac_ingame_ranked", "int", 0, 0, 1 );
+    // Exit on unranked match
+    if ( !level.rankedMatch ) return;
 
-    if( level.scr_enable_cac_ingame_ranked == 0 || !level.rankedMatch || level.oldschool || level.console )
+    level.scr_ice_enabled = getdvarx( "scr_ice_enabled", "int", 0, 0, 1 );
+
+    if( level.scr_ice_enabled == 0 || !level.rankedMatch || level.oldschool || level.console )
         return;
 
     if( !isDefined( level.cacIngame ) )
