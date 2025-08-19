@@ -1,0 +1,3 @@
+name=Happy Birthday
+iwd=zevent_birth
+gsc=_happybirthday

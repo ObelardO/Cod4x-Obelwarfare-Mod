@@ -1,0 +1,3 @@
+name=Victory
+iwd=zevent_victory
+gsc=_victoryevent

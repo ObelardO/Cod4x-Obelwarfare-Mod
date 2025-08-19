@@ -1,0 +1,10 @@
+#xmodel,Elysium_SC5
+xmodel,Eo
+xmodel,Yuusha
+xmodel,Yuusha_2
+
+sound,specpicks,,all_mp
+
+fx,misc/ui_flagbase_pink
+
+rawfile,scripts/_springevent.gsc

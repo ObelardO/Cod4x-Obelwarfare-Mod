@@ -1,0 +1,3 @@
+name=Xmax
+iwd=zevent_xmas
+gsc=_xmasevent
