@@ -1,0 +1,17 @@
+rawfile,maps\mp\bots\waypoints\_custom_map.gsc
+
+rawfile,maps\mp\bots\_bot.gsc
+rawfile,maps\mp\bots\_bot_chat.gsc
+rawfile,maps\mp\bots\_bot_internal.gsc
+rawfile,maps\mp\bots\_bot_script.gsc
+rawfile,maps\mp\bots\_bot_utility.gsc
+rawfile,maps\mp\bots\_menu.gsc
+rawfile,maps\mp\bots\_wp_editor.gsc
+
+rawfile,maps\mp\gametypes\_callbacksetup.gsx
+
+rawfile,scripts\mp\bots.gsc
+rawfile,scripts\mp\bots_adapter_cod4x.gsc
+rawfile,scripts\mp\bots_chat.gsc
+rawfile,scripts\mp\bots_menu.gsc
+rawfile,scripts\mp\bots_wp_editor.gsc
