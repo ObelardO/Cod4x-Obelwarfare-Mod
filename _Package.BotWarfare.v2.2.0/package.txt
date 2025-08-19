@@ -1,4 +1,4 @@
 name=BotWarfare v2.2.0
 iwd=bots
 gsc=
-packgsc=false
+packgsc=true

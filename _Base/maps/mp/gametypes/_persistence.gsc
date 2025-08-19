@@ -18,7 +18,6 @@ init()
 	if ( !level.rankedMatch ) {
 		maps\mp\gametypes\_class_unranked::init();
 	} else {
-		maps\mp\gametypes\_class_ingame::init();
 		maps\mp\gametypes\_class::init();
 	}
 	

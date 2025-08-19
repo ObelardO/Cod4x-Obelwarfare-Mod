@@ -1,0 +1,9 @@
+#IngameClassEditor: locals
+localize,ow_ice
+
+#IngameClassEditor: scripts
+rawfile,scripts/_ingameclass.gsc
+
+#IngameClassEditor: menu files
+menufile,ui_mp/scriptmenus/cac_ingame.menu
+rawfile,ui_mp/cac_ingame_new.inc

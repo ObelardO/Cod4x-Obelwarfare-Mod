@@ -391,9 +391,6 @@ menufile,ui_mp/scriptmenus/serverinfo.menu
 menufile,ui_mp/scriptmenus/team_marinesopfor.menu
 menufile,ui_mp/scriptmenus/dynamic_attachments.menu
 
-#custom class editing on ranked mode
-menufile,ui_mp/scriptmenus/cac_ingame.menu
-rawfile,ui_mp/cac_ingame_new.inc
 rawfile,ui_mp/cac_loadout_ingame.inc
 rawfile,ui_mp/cac_ingame.inc
 

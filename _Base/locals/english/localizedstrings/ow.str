@@ -1393,12 +1393,6 @@ LANG_ENGLISH "Add Server to Favorites"
 REFERENCE SERVER_INFORMATION
 LANG_ENGLISH "Server Information"
 
-REFERENCE CAC_EQUIPPED
-LANG_ENGLISH "Already equipped."
-
-REFERENCE CAC_EDIT_INGAME
-LANG_ENGLISH "Edit class"
-
 
 //******************************************************************************
 // ui_mp/scriptmenus/eog_statistics.menu
