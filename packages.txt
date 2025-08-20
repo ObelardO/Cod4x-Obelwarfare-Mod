@@ -1,5 +1,6 @@
 IngameClassEditor
 BotWarfare.v2.2.0
+NightVisionEnhanced
 //Event.HappyBirthday
 //Event.Spring
 //Event.Victory

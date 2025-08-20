@@ -1,0 +1,11 @@
+#NightVisionEnhanced: scripts
+rawfile,scripts/_nightvisionenhanced.gsc
+
+#NightVisionEnhanced: images
+material,nightvision_overlay_goggles
+
+#NightVisionEnhanced: shocks
+rawfile,shock/nightvision.shock
+
+#NightVisionEnhanced: visions
+rawfile,vision/default_night.vision

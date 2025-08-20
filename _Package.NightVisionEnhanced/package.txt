@@ -1,0 +1,4 @@
+name=Night Vision Enhanced
+iwd=nightvis
+gsc=_nightvisionenhanced
+cfg=nightvisionenhanced

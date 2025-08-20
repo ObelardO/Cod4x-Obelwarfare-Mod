@@ -1,54 +1,53 @@
-//******************************************************************************
-//  _____                  _    _             __
-// |  _  |                | |  | |           / _|
-// | | | |_ __   ___ _ __ | |  | | __ _ _ __| |_ __ _ _ __ ___
-// | | | | '_ \ / _ \ '_ \| |/\| |/ _` | '__|  _/ _` | '__/ _ \
-// \ \_/ / |_) |  __/ | | \  /\  / (_| | |  | || (_| | | |  __/
-//  \___/| .__/ \___|_| |_|\/  \/ \__,_|_|  |_| \__,_|_|  \___|
-//       | |               We don't make the game you play.
-//       |_|                 We make the game you play BETTER.
-//
-//            Website: http://openwarfaremod.com/
-//******************************************************************************
+//**************************************************************//
+//  _____ _          _    _    _             __                 //
+// |  _  | |        | |  | |  | |           / _|                //
+// | | | | |__   ___| |  | |  | | __ _ _ __| |_ __ _ _ __ ___   //
+// | | | | '_ \ / _ \ |  | |/\| |/ _` | '__|  _/ _` | '__/ _ \  //
+// \ \_/ / |_) |  __/ |__\  /\  / (_| | |  | || (_| | | |  __/  //
+//  \___/|_.__/ \___|____/\/  \/ \__,_|_|  |_| \__,_|_|  \___|  //
+//                                                              //
+//            Website: http://cod4.obelardo.ru                  //
+//**************************************************************//
+
+#include common_scripts\utility;
 
 #include maps\mp\_utility;
 #include maps\mp\gametypes\_hud_util;
-#include common_scripts\utility;
 
 #include openwarfare\_utils;
 #include openwarfare\_eventmanager;
 
 init()
 {
-	level.scr_nvs_enabled = getDvarx( "scr_nvs_enabled", "int", 1, 0, 1 ) && getDvarx( "scr_enable_nightvision", "int", 1, 0, 1 );
+	level.scr_nve_enabled = getDvarx( "scr_nve_enabled", "int", 1, 0, 1 ) && getDvarx( "scr_enable_nightvision", "int", 1, 0, 1 );
 
 	// If night vision system is disabled then there's nothing else to do here
-	if ( level.scr_nvs_enabled == 0 )
+	if ( level.scr_nve_enabled == 0 )
 		return;
 
-	level.scr_nvs_grain_enabled = getDvarx( "scr_nvs_grain_enabled", "int", 1, 0, 1 );
-	level.scr_nvs_grain_power = getDvarx( "scr_nvs_grain_power", "float", 0.2, 0, 1 );
+	level.scr_nve_grain_enabled = getDvarx( "scr_nve_grain_enabled", "int", 1, 0, 1 );
+	level.scr_nve_grain_power = getDvarx( "scr_nve_grain_power", "float", 0.2, 0, 1 );
 
-	level.scr_nvs_shock_enabled = getDvarx( "scr_nvs_shock_enabled", "int", 1, 0, 1 );
-	level.scr_nvs_laser_enabled = getDvarx( "scr_nvs_laser_enabled", "int", 1, 0, 1 );
-	level.scr_nvs_light_enabled = getDvarx( "scr_nvs_light_enabled", "int", 1, 0, 1 );
+	level.scr_nve_shock_enabled = getDvarx( "scr_nve_shock_enabled", "int", 1, 0, 1 );
+	level.scr_nve_laser_enabled = getDvarx( "scr_nve_laser_enabled", "int", 1, 0, 1 );
+	level.scr_nve_light_enabled = getDvarx( "scr_nve_light_enabled", "int", 1, 0, 1 );
 
-	level.scr_nvs_thick_enabled = getDvarx( "scr_nvs_thick_enabled", "int", 1, 0, 1 );
-	level.scr_nvs_thick_power = getDvarx( "scr_nvs_thick_power", "float", 0.2, 0, 1 );
+	level.scr_nve_thick_enabled = getDvarx( "scr_nve_thick_enabled", "int", 1, 0, 1 );
+	level.scr_nve_thick_power = getDvarx( "scr_nve_thick_power", "float", 0.2, 0, 1 );
 
-	level.scr_nvs_fovscale_enabled = getDvarx( "scr_nvs_fovscale_enabled", "int", 1, 0, 1 );
-	level.scr_nvs_fovscale_power = getDvarx( "scr_nvs_fovscale_power", "float", 0.9, 0.5, 1 );
+	level.scr_nve_fovscale_enabled = getDvarx( "scr_nve_fovscale_enabled", "int", 1, 0, 1 );
+	level.scr_nve_fovscale_power = getDvarx( "scr_nve_fovscale_power", "float", 0.9, 0.5, 1 );
 
-	if ( !isDefined( game["nvs"] ) )
+	if ( !isDefined( game["env"] ) )
 	{
-		game["nvs"] = [];
-		game["nvs"]["light_fx"] = loadFx( "nv/light_white_big" );
+		game["env"] = [];
+		game["env"]["light_fx"] = loadFx( "nv/light_white_big" );
 
-		//if ( level.scr_nvs_grain_enabled )
-		game["nvs"]["grain_shader"] = preCacheShader( "ac130_overlay_grain" );
+		//if ( level.scr_nve_grain_enabled )
+		game["env"]["grain_shader"] = preCacheShader( "ac130_overlay_grain" );
 
-		//if ( level.scr_nvs_shock_enabled )
-		game["nvs"]["night_shock"] = PreCacheShellShock( "nightvision" );
+		//if ( level.scr_nve_shock_enabled )
+		game["env"]["night_shock"] = PreCacheShellShock( "nightvision" );
 	}
 
 	level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
@@ -70,7 +69,7 @@ onPlayerConnected()
 
 setupLaserEffect()
 {
-	if ( !level.scr_nvs_grain_enabled ) return;
+	if ( !level.scr_nve_grain_enabled ) return;
 
 	// Laser visual improvements
 	// TODO: Move it to config or csv
@@ -134,21 +133,21 @@ resetAllEffects()
 	self.nvon = false;
 
 	// Reset shellshock effect
-	if( level.scr_nvs_shock_enabled )
+	if( level.scr_nve_shock_enabled )
 	{
 		self notify( "nvs_stop_shock_thread" );
 		self stopShellShock();
 	}
 
 	// Reset laser effect
-	if( level.scr_nvs_laser_enabled )
+	if( level.scr_nve_laser_enabled )
 	{
 		self.laseron = false;
 		self setClientDvar( "cg_laserforceon", 0 );
 	}
 
 	// Reset FOV effect
-	if ( level.scr_nvs_fovscale_enabled )
+	if ( level.scr_nve_fovscale_enabled )
 	{
 		self setClientDvar( "cg_fovscale", 1 );
 	}
@@ -167,7 +166,7 @@ resetAllEffects()
 	}
 
 	// Reset thick effect
-	if( level.scr_nvs_thick_enabled )
+	if( level.scr_nve_thick_enabled )
 	{
 		self thread openwarfare\_speedcontrol::setModifierSpeed( "_night_vision", 0 );
 	}
@@ -187,28 +186,28 @@ switchVisionThread()
 		{
 			self.nvon = true;
 
-			if( level.scr_nvs_laser_enabled )
+			if( level.scr_nve_laser_enabled )
 			{
 				self.laseron = true;
 				self setClientDvar( "cg_laserforceon", 1 );
 			}
 
-			if( level.scr_nvs_fovscale_enabled )
+			if( level.scr_nve_fovscale_enabled )
 			{
-				self setClientDvar( "cg_fovscale", level.scr_nvs_fovscale_power );
+				self setClientDvar( "cg_fovscale", level.scr_nve_fovscale_power );
 			}
 			
-			if( level.scr_nvs_grain_enabled && isDefined( self.nvsGrainEffectHud ) )
+			if( level.scr_nve_grain_enabled && isDefined( self.nvsGrainEffectHud ) )
 			{
-				self.nvsGrainEffectHud.alpha = level.scr_nvs_grain_power;
+				self.nvsGrainEffectHud.alpha = level.scr_nve_grain_power;
 			}
 
-			if( level.scr_nvs_shock_enabled )
+			if( level.scr_nve_shock_enabled )
 			{
 				self thread updateShockThread();
 			}
 
-			if( level.scr_nvs_light_enabled && isDefined( self.nvsLightEffectEntity ) )
+			if( level.scr_nve_light_enabled && isDefined( self.nvsLightEffectEntity ) )
 			{
 				self.nvsLightEffectEntity.origin = self getEye() + ( 0, 0, 50 );
 				self.nvsLightEffectEntity linkto( self );
@@ -217,14 +216,14 @@ switchVisionThread()
 				if ( !self.nvsLightEffectFxPlayed )
 				{
 					wait 0.1;
-					playFxOnTag( game["nvs"]["light_fx"], self.nvsLightEffectEntity, "tag_origin" );
+					playFxOnTag( game["env"]["light_fx"], self.nvsLightEffectEntity, "tag_origin" );
 					self.nvsLightEffectFxPlayed = true;
 				}
 			}
 
-			if( level.scr_nvs_thick_enabled )
+			if( level.scr_nve_thick_enabled )
 			{
-				self thread openwarfare\_speedcontrol::setModifierSpeed( "_night_vision", level.scr_nvs_thick_power * 100 );
+				self thread openwarfare\_speedcontrol::setModifierSpeed( "_night_vision", level.scr_nve_thick_power * 100 );
 			}
 		}
 
@@ -247,7 +246,10 @@ updateShockThread()
 
 	for (;;)
 	{
-		duration = 10;
+		// Wait for player stunned by concussion grenade
+		while ( self IsPlayerStunned() ) wait 0.1;
+
+		duration = 1;
 		self shellshock( "nightvision", duration );
 		wait 0.1;
 		self allowSprint( true );
@@ -261,4 +263,9 @@ resetAll()
 	self notify( "nvs_stop_switch_thread" );
 	self resetAllEffects();
 	self removeLightEffect();
+}
+
+IsPlayerStunned()
+{
+	return ( isdefined( self.concussionendtime ) && self.concussionendtime > gettime() );
 }

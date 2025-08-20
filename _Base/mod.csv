@@ -117,11 +117,10 @@ rawfile,vision/ow_sunset1.vision
 rawfile,vision/ow_sunset2.vision
 rawfile,vision/ow_sunset3.vision
 rawfile,vision/ow_sunset4.vision
-rawfile,vision/default_night.vision
 rawfile,vision/default_day.vision
 
 
-rawfile,shock/nightvision.shock
+
 
 
 rawfile,maps/mp/_createfx.gsc
@@ -270,7 +269,6 @@ material,sponsor_logo2
 material,waypoint_extraction_zone
 material,weapon_knife
 material,animbg_blur_back
-material,nightvision_overlay_goggles
 material,waypoint_ping
 
 rawfile,mp/CoD2maps.arena
@@ -359,7 +357,6 @@ rawfile,openwarfare/_weaponlocationmodifier.gsc
 rawfile,openwarfare/_weaponrangemodifier.gsc
 rawfile,openwarfare/_weaponweightmodifier.gsc
 rawfile,openwarfare/_welcomerulesinfo.gsc
-rawfile,openwarfare/_nightvision.gsc
 rawfile,openwarfare/_greetings.gsc
 rawfile,openwarfare/_weather.gsc
 rawfile,openwarfare/_ping.gsc

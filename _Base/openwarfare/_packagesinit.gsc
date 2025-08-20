@@ -2,4 +2,5 @@
 init()
 {
 	thread scripts\_ingameclass::init();
+	thread scripts\_nightvisionenhanced::init();
 }
