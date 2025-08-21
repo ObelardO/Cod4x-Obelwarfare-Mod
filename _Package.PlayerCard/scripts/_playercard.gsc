@@ -1,18 +1,16 @@
-//**********************************************************************************
-//                                                                                  
-//        _   _       _        ___  ___      _        ___  ___          _             
-//       | | | |     | |       |  \/  |     | |       |  \/  |         | |            
-//       | |_| | ___ | |_   _  | .  . | ___ | |_   _  | .  . | ___   __| |___       
-//       |  _  |/ _ \| | | | | | |\/| |/ _ \| | | | | | |\/| |/ _ \ / _` / __|      
-//       | | | | (_) | | |_| | | |  | | (_) | | |_| | | |  | | (_) | (_| \__ \      
-//       \_| |_/\___/|_|\__, | \_|  |_/\___/|_|\__, | \_|  |_/\___/ \__,_|___/      
-//                       __/ |                  __/ |                               
-//                      |___/                  |___/                                
-//                                                                                  
-//                       Website: http://www.holymolymods.com                       
-//*********************************************************************************
-// Coded for Openwarfare Mod by [105]HolyMoly  Dec.15/2014
-// V.1.1
+//**************************************************************//
+//  _____ _          _    _    _             __                 //
+// |  _  | |        | |  | |  | |           / _|                //
+// | | | | |__   ___| |  | |  | | __ _ _ __| |_ __ _ _ __ ___   //
+// | | | | '_ \ / _ \ |  | |/\| |/ _` | '__|  _/ _` | '__/ _ \  //
+// \ \_/ / |_) |  __/ |__\  /\  / (_| | |  | || (_| | | |  __/  //
+//  \___/|_.__/ \___|____/\/  \/ \__,_|_|  |_| \__,_|_|  \___|  //
+//                                                              //
+//            Website: http://cod4.obelardo.ru                  //
+//**************************************************************//
+// Based on HolyMoly's Playercard mod                           //
+// http://www.holymolymods.com                                  //
+//**************************************************************//
 
 #include openwarfare\_eventmanager;
 #include openwarfare\_utils;
@@ -22,46 +20,45 @@
 
 init()
 {
-
 	// Get the main module's dvars
-	level.scr_playercards = getdvarx( "scr_playercards", "int", 3, 0, 3 );  
-	level.scr_playercards_hardpoints = getdvarx( "scr_playercards_hardpoints", "int", 1, 0, 1 );  
+	level.scr_card = getdvarx( "scr_card", "int", 3, 0, 3 );  
+	level.scr_card_hardpoints = getdvarx( "scr_card_hardpoints", "int", 1, 0, 1 );  
 
         // If not activated
-	if ( level.scr_playercards == 0 && level.scr_playercards_hardpoints == 0 )
+	if ( level.scr_card == 0 && level.scr_card_hardpoints == 0 )
 		return;
 
         // NO Center Obit
         setDvar( "ui_hud_show_center_obituary", "0" );
 
         // Dvars Playercards
-        level.scr_playercards_amount = getdvarx( "scr_playercards_amount", "int", 20, 1, 20 );
-        level.scr_playercards_time_visible = getdvarx( "scr_playercards_time_visible", "float", 1.5, 1.5, 5 );
+        level.scr_card_amount = getdvarx( "scr_card_amount", "int", 20, 1, 20 );
+        level.scr_card_time_visible = getdvarx( "scr_card_time_visible", "float", 1.5, 1.5, 5 );
 
         // Dvar Playercard Hardpoints
-	level.scr_playercards_hardpoints_enemy_display = getdvarx( "scr_playercards_hardpoints_enemy_display", "int", 1, 0, 1 ); 
-        level.scr_playercards_hardpoints_time_visible = getdvarx( "scr_playercards_hardpoints_time_visible", "float", 3.5, 1.5, 5 );   
+	level.scr_card_hardpoints_enemy_display = getdvarx( "scr_card_hardpoints_enemy_display", "int", 1, 0, 1 ); 
+        level.scr_card_hardpoints_time_visible = getdvarx( "scr_card_hardpoints_time_visible", "float", 3.5, 1.5, 5 );   
         
         // Precache playercards
-	for ( cards = 0; cards < level.scr_playercards_amount; cards++ ) {
+	for ( cards = 0; cards < level.scr_card_amount; cards++ ) {
 		precacheShader( "playercard_emblem_" + cards );
 	}
 
-        if( level.scr_playercards == 2 ) {
+        if( level.scr_card == 2 ) {
                 loadWeaponIcons();
         }
 
-        if( level.scr_playercards == 3 ) {
+        if( level.scr_card == 3 ) {
                 loadHudIcons();
         }
 
         loadHardpointShaders();
 
-        precacheString( &"OW_KILLCARD_ATTACKER" );
-	precacheString( &"OW_KILLCARD_VICTIM" );
-	precacheString( &"OW_KILLCARD_UAV_INBOUND" );
-	precacheString( &"OW_KILLCARD_AIRSTRIKE_INBOUN" );
-	precacheString( &"OW_KILLCARD_HELICOPTER_INBOUN" );
+        precacheString( &"OW_CARD_ATTACKER" );
+	precacheString( &"OW_CARD_VICTIM" );
+	precacheString( &"OW_CARD_UAV_INBOUND" );
+	precacheString( &"OW_CARD_AIRSTRIKE_INBOUN" );
+	precacheString( &"OW_CARD_HELICOPTER_INBOUN" );
 
 	level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
 }
@@ -70,10 +67,9 @@ onPlayerConnected()
 {
 
         if( !isDefined( self.playerCard ) ) {
-                self.playerCard = randomIntRange( 0, level.scr_playercards_amount );
+                self.playerCard = randomIntRange( 0, level.scr_card_amount );
                 self.showingPlayercard = false;
                 self.showingPlayercardHp = false;
-               
         }
 	
 	self thread addNewEvent( "onPlayerSpawned", ::onPlayerSpawned );
@@ -155,7 +151,7 @@ onPlayerSpawned()
 	}
 
         // Team Icon
-        if( level.scr_playercards == 1 ) {
+        if( level.scr_card == 1 ) {
 	        if ( !isDefined( self.playercardTeamIcon ) ) {
 		        self.playercardTeamIcon = self createIcon( "white", 25, 25 );
 		        self.playercardTeamIcon setPoint( "CENTER", "BOTTOM", 105, -90 );
@@ -165,7 +161,7 @@ onPlayerSpawned()
         }
 
         // Weapon Icon
-        if( level.scr_playercards >= 2 ) {
+        if( level.scr_card >= 2 ) {
 	        if ( !isDefined( self.playercardKillWeapon ) ) {
 		        self.playercardKillWeapon = self createIcon( "white", 25, 25 );
 		        self.playercardKillWeapon setPoint( "CENTER", "BOTTOM", 80, -90 );
@@ -174,7 +170,7 @@ onPlayerSpawned()
 	        }
         }
 
-        if( level.scr_playercards_hardpoints == 1 ) {
+        if( level.scr_card_hardpoints == 1 ) {
 
                 // Player Name
                 if( !isDefined( self.playercardNameHardpoint ) ){
@@ -275,7 +271,7 @@ onPlayerSpawned()
 
         self thread waitForKill();
 
-        if( level.scr_playercards_hardpoints == 1 ) {
+        if( level.scr_card_hardpoints == 1 ) {
                 self thread waitTillHardpointCalled();
         }
 
@@ -381,7 +377,7 @@ waitTillHardpointCalled()
                         }
 
                         for( i = 0; i < players.size; i++ ) {
-                                if( level.scr_playercards_hardpoints_enemy_display == 1 ) {
+                                if( level.scr_card_hardpoints_enemy_display == 1 ) {
                                         if( players[i].pers["team"] != self.pers["team"] ) {
                                                 if( players[i].sessionstate != "spectator" ) {
                                                         if( isDefined( players[i] ) )
@@ -397,7 +393,7 @@ waitTillHardpointCalled()
                         players = level.players;
                         for( i = 0; i < players.size; i++ ) {
  
-                                if( level.scr_playercards_hardpoints_enemy_display == 1 ) {
+                                if( level.scr_card_hardpoints_enemy_display == 1 ) {
                                         if( players[i] != self ) {
                                                 if( players[i].sessionstate != "spectator" ) {
                                                         if( isDefined( players[i] ) )
@@ -445,11 +441,11 @@ showKillCard( playercardVictim, playercardAttacker, weaponInfo )
         self.showingPlayercard = true;
 
         // Victim Threads
-        if( level.scr_playercards == 3 ) {
+        if( level.scr_card == 3 ) {
                 self thread showKillCardWeapon( weaponInfo );
         }
 
-        if( level.scr_playercards == 2 ) {
+        if( level.scr_card == 2 ) {
                 self thread showKillCardWeapon( weaponInfo );
         }
 
@@ -465,7 +461,7 @@ showKillCard( playercardVictim, playercardAttacker, weaponInfo )
         self.playercardRankNumber setText( playercardVictim.rank );
         self.playercardRankNumber.color = ( 0.97, 0.96, 0.34 );
 
-        if( level.scr_playercards == 1 ) {
+        if( level.scr_card == 1 ) {
                 self.playercardTeamIcon setShader( playercardVictim.team, 25, 25 );
         }
 
@@ -475,16 +471,16 @@ showKillCard( playercardVictim, playercardAttacker, weaponInfo )
         self.playercardText.alpha = 1;
         self.playercardRankNumber.alpha = 1;
 
-        if( level.scr_playercards == 1 ) {
+        if( level.scr_card == 1 ) {
                 self.playercardTeamIcon.alpha = 1;
         }
        
-        if( level.scr_playercards >= 2 ) {
+        if( level.scr_card >= 2 ) {
                 self.playercardKillWeapon.alpha = 1;
         }
 
         // Time shader visible
-        wait( level.scr_playercards_time_visible );
+        wait( level.scr_card_time_visible );
 
         // Move to bottom and set non-visible
         self.playercardImage moveOverTime( 0.40 );
@@ -493,11 +489,11 @@ showKillCard( playercardVictim, playercardAttacker, weaponInfo )
         self.playercardText moveOverTime( 0.40 );
         self.playercardRankNumber moveOverTime( 0.40 );
 
-        if( level.scr_playercards == 1 ) {
+        if( level.scr_card == 1 ) {
                 self.playercardTeamIcon moveOverTime( 0.40 );
         }
 
-        if( level.scr_playercards >= 2 ) {
+        if( level.scr_card >= 2 ) {
                 self.playercardKillWeapon moveOverTime( 0.40 );
         }
 
@@ -507,11 +503,11 @@ showKillCard( playercardVictim, playercardAttacker, weaponInfo )
         self.playercardText.y = 0;
         self.playercardRankNumber.y = 30;
 
-        if( level.scr_playercards == 1 ) {
+        if( level.scr_card == 1 ) {
                 self.playercardTeamIcon.y = 40;
         }
 
-        if( level.scr_playercards >= 2 ) {
+        if( level.scr_card >= 2 ) {
                 self.playercardKillWeapon.y = 40;
         }
      
@@ -525,11 +521,11 @@ showKillCard( playercardVictim, playercardAttacker, weaponInfo )
         self.playercardText moveOverTime( 0.40 );
         self.playercardRankNumber moveOverTime( 0.40 );
 
-        if( level.scr_playercards == 1 ) {
+        if( level.scr_card == 1 ) {
                 self.playercardTeamIcon moveOverTime( 0.40 );
         }
 
-        if( level.scr_playercards >= 2 ) {
+        if( level.scr_card >= 2 ) {
                 self.playercardKillWeapon moveOverTime( 0.40 );
         }
 
@@ -539,11 +535,11 @@ showKillCard( playercardVictim, playercardAttacker, weaponInfo )
         self.playercardText.y = -130;
         self.playercardRankNumber.y = -100;
 
-        if( level.scr_playercards == 1 ) {
+        if( level.scr_card == 1 ) {
                 self.playercardTeamIcon.y = -90;
         }
 
-        if( level.scr_playercards >= 2 ) {
+        if( level.scr_card >= 2 ) {
                 self.playercardKillWeapon.y = -90;
         }
 
@@ -553,11 +549,11 @@ showKillCard( playercardVictim, playercardAttacker, weaponInfo )
         self.playercardText.alpha = 0;
         self.playercardRankNumber.alpha = 0;
 
-        if( level.scr_playercards == 1 ) {
+        if( level.scr_card == 1 ) {
                 self.playercardTeamIcon.alpha = 0;
         }
 
-        if( level.scr_playercards >= 2 ) {
+        if( level.scr_card >= 2 ) {
                 self.playercardKillWeapon.alpha = 0;
         }
 
@@ -579,7 +575,7 @@ showKillCardWeapon( weaponInfo )
 
 
         // Weapon Image Size
-        if( level.scr_playercards == 2 ) {
+        if( level.scr_card == 2 ) {
 
                 imageSize = self getWeaponImageSize( weaponInfo.weapon );
 
@@ -601,7 +597,7 @@ showKillCardWeapon( weaponInfo )
        }
 
        // Icon Image Size
-        if( level.scr_playercards == 3 ) {
+        if( level.scr_card == 3 ) {
 
                 iconSize = self getHudIconSize( weaponInfo.weapon );
 
@@ -684,11 +680,11 @@ showEnemyPlayercardHardpoint( playercardHp )
         self.playercardHardpointText.alpha = 1;
 
         // Weapon Icon
-        if( level.scr_playercards <= 2 ) {
+        if( level.scr_card <= 2 ) {
                 self.playercardKillWeaponHardpoint setShader( "killstreak_award_" + playercardHp.hardpoint, 40, 40 );  // 1:1
         }
 
-        if( level.scr_playercards == 3 ) {
+        if( level.scr_card == 3 ) {
                 self.playercardKillWeaponHardpoint setShader( self getHudIconImage( playercardHp.hardpoint ), 56, 14 );  // 4:1
         }
 
@@ -698,7 +694,7 @@ showEnemyPlayercardHardpoint( playercardHp )
         // iprintln( self.name + " displayed " + self.playercardHardpointText.color );
 
         // Time Visable
-        wait( level.scr_playercards_hardpoints_time_visible );
+        wait( level.scr_card_hardpoints_time_visible );
 
         self.playercardNameHardpoint moveOverTime( 0.40 );
         self.playercardRankNumberHardpoint moveOverTime( 0.40 );
@@ -810,11 +806,11 @@ showFriendlyPlayercardHardpoint( playercardHp )
         self.playercardHardpointText.alpha = 1;
 
         // Weapon Icon
-        if( level.scr_playercards <= 2 ) {
+        if( level.scr_card <= 2 ) {
                 self.playercardKillWeaponHardpoint setShader( "killstreak_award_" + playercardHp.hardpoint, 40, 40 );  // 1:1
         }
 
-        if( level.scr_playercards == 3 ) {
+        if( level.scr_card == 3 ) {
                 self.playercardKillWeaponHardpoint setShader( self getHudIconImage( playercardHp.hardpoint ), 56, 14 );  // 4:1
         }
 
@@ -824,7 +820,7 @@ showFriendlyPlayercardHardpoint( playercardHp )
         // iprintln( self.name + " displayed " + self.playercardHardpointText.color );
 
         // Time Visable
-        wait( level.scr_playercards_hardpoints_time_visible );
+        wait( level.scr_card_hardpoints_time_visible );
 
         self.playercardNameHardpoint moveOverTime( 0.40 );
         self.playercardRankNumberHardpoint moveOverTime( 0.40 );

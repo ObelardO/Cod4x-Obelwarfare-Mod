@@ -1,0 +1,36 @@
+#PlayerCard: locals
+localize,ow_card
+
+#PlayerCard: scripts
+rawfile,scripts/_playercard.gsc
+
+#PlayerCard: materials
+material,killstreak_award_airstrike_mp
+material,killstreak_award_helicopter_mp
+material,killstreak_award_predator_mp
+material,killstreak_award_radar_mp
+material,death_barrel
+material,death_auto
+material,death_skull
+material,death_radar
+material,death_headshot
+material,playercard_emblem_0
+material,playercard_emblem_1
+material,playercard_emblem_2
+material,playercard_emblem_3
+material,playercard_emblem_4
+material,playercard_emblem_5
+material,playercard_emblem_6
+material,playercard_emblem_7
+material,playercard_emblem_8
+material,playercard_emblem_9
+material,playercard_emblem_10
+material,playercard_emblem_11
+material,playercard_emblem_12
+material,playercard_emblem_13
+material,playercard_emblem_14
+material,playercard_emblem_15
+material,playercard_emblem_16
+material,playercard_emblem_17
+material,playercard_emblem_18
+material,playercard_emblem_19

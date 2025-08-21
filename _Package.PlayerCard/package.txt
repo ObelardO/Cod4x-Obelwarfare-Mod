@@ -1,0 +1,4 @@
+name=Player Card
+iwd=card
+gsc=_playercard
+cfg=playercard

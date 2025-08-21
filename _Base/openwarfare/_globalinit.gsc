@@ -91,7 +91,6 @@ init()
 	thread openwarfare\_welcomerulesinfo::init();
 	thread openwarfare\_greetings::init();
 	thread openwarfare\_ping::init();
-	thread openwarfare\_playercard::init();
 
 	openwarfare\_packagesinit::init();
 }

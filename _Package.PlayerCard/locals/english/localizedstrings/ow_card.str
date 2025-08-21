@@ -1,0 +1,17 @@
+//******************************************************************************
+// scripts/_playercard.gsc
+//******************************************************************************
+REFERENCE VICTIM
+LANG_ENGLISH "Killed by:"
+
+REFERENCE ATTACKER
+LANG_ENGLISH "You killed:"
+
+REFERENCE UAV_INBOUND
+LANG_ENGLISH "Called in UAV"
+
+REFERENCE AIRSTRIKE_INBOUN
+LANG_ENGLISH "Called in airstrike"
+
+REFERENCE HELICOPTER_INBOUN
+LANG_ENGLISH "Called in helicopter"
