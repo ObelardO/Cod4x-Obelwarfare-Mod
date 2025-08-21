@@ -1,8 +1,10 @@
 #NightVisionEnhanced: scripts
 rawfile,scripts/_nightvisionenhanced.gsc
 
-#NightVisionEnhanced: images
+#NightVisionEnhanced: materials
 material,nightvision_overlay_goggles
+material,ac130_overlay_grain
+material,ac130_overlay_25mm
 
 #NightVisionEnhanced: shocks
 rawfile,shock/nightvision.shock
