@@ -4,4 +4,4 @@ NightVisionEnhanced
 //Event.HappyBirthday
 //Event.Spring
 //Event.Victory
-//Event.Xmas
+Event.Xmas

@@ -1,4 +1,4 @@
-#Xmas mats
+#Xmas Event: mats
 material,holiday_light_snowflake
 material,giftbox_5
 material,giftbox_4
@@ -19,7 +19,7 @@ material,tree_xmas_pine
 material,icicles_01
 material,snowman
 
-#xmas models
+#Xmas Event: models
 xmodel,giftbox_5
 xmodel,giftbox_4
 xmodel,giftbox_3
@@ -32,5 +32,5 @@ xmodel,xmas_tree
 xmodel,candy_cane
 xmodel,dead_pine_snow
 
-#xmas scripts
+#Xmas Event: scripts
 rawfile,scripts\_xmasevent.gsc

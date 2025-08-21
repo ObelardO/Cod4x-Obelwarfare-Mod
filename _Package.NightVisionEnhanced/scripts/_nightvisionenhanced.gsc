@@ -38,16 +38,16 @@ init()
 	level.scr_nve_fovscale_enabled = getDvarx( "scr_nve_fovscale_enabled", "int", 1, 0, 1 );
 	level.scr_nve_fovscale_power = getDvarx( "scr_nve_fovscale_power", "float", 0.9, 0.5, 1 );
 
-	if ( !isDefined( game["env"] ) )
+	if ( !isDefined( game["nve"] ) )
 	{
-		game["env"] = [];
-		game["env"]["light_fx"] = loadFx( "nv/light_white_big" );
+		game["nve"] = [];
+		game["nve"]["light_fx"] = loadFx( "nv/light_white_big" );
 
 		//if ( level.scr_nve_grain_enabled )
-		game["env"]["grain_shader"] = preCacheShader( "ac130_overlay_grain" );
+		game["nve"]["grain_shader"] = preCacheShader( "ac130_overlay_grain" );
 
 		//if ( level.scr_nve_shock_enabled )
-		game["env"]["night_shock"] = PreCacheShellShock( "nightvision" );
+		game["nve"]["night_shock"] = PreCacheShellShock( "nightvision" );
 	}
 
 	level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
@@ -135,7 +135,7 @@ resetAllEffects()
 	// Reset shellshock effect
 	if( level.scr_nve_shock_enabled )
 	{
-		self notify( "nvs_stop_shock_thread" );
+		self notify( "nve_stop_shock_thread" );
 		self stopShellShock();
 	}
 
@@ -175,7 +175,7 @@ resetAllEffects()
 
 switchVisionThread()
 {
-	self endon( "nvs_stop_switch_thread" );
+	self endon( "nve_stop_switch_thread" );
 	self endon( "disconnect" );
 
 	for(;;)
@@ -216,7 +216,7 @@ switchVisionThread()
 				if ( !self.nvsLightEffectFxPlayed )
 				{
 					wait 0.1;
-					playFxOnTag( game["env"]["light_fx"], self.nvsLightEffectEntity, "tag_origin" );
+					playFxOnTag( game["nve"]["light_fx"], self.nvsLightEffectEntity, "tag_origin" );
 					self.nvsLightEffectFxPlayed = true;
 				}
 			}
@@ -241,7 +241,7 @@ switchVisionThread()
 
 updateShockThread()
 {
-	self endon( "nvs_stop_shock_thread" );
+	self endon( "nve_stop_shock_thread" );
 	self endon( "disconnect" );
 
 	for (;;)
@@ -260,7 +260,7 @@ updateShockThread()
 
 resetAll()
 {
-	self notify( "nvs_stop_switch_thread" );
+	self notify( "nve_stop_switch_thread" );
 	self resetAllEffects();
 	self removeLightEffect();
 }
