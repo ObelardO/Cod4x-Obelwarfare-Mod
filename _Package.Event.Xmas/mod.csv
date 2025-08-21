@@ -34,3 +34,11 @@ xmodel,dead_pine_snow
 
 #Xmas Event: scripts
 rawfile,scripts\_xmasevent.gsc
+
+#Xmas Event: fx
+fx,weather/snow_light_mp_bloc
+fx,weather/snow_light
+fx,weather/snow_wind
+fx,dust/dust_spiral_runner
+fx,dust/dust_wind_fast
+fx,dust/dust_wind_slow_yel_loop

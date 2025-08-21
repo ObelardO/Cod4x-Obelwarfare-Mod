@@ -9,3 +9,6 @@ rawfile,shock/nightvision.shock
 
 #NightVisionEnhanced: visions
 rawfile,vision/default_night.vision
+
+#NightVisionEnhanced: fx
+fx,nv/light_white_big
