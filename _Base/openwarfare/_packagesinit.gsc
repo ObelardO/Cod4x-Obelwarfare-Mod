@@ -3,5 +3,5 @@ init()
 {
 	thread scripts\_ingameclass::init();
 	thread scripts\_nightvisionenhanced::init();
-	thread scripts\_xmasevent::init();
+	thread scripts\_playercard::init();
 }
