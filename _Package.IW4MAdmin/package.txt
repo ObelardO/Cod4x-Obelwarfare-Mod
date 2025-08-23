@@ -1,0 +1,4 @@
+name=IW4MAdmin
+iwd=iw4m
+gsc=_iw4anticheat
+packgsc=false

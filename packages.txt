@@ -2,6 +2,7 @@ IngameClassEditor
 BotWarfare.v2.2.0
 NightVisionEnhanced
 PlayerCard
+IW4MAdmin
 //Event.HappyBirthday
 //Event.Spring
 //Event.Victory
