@@ -28,10 +28,7 @@ init()
     if( !isDefined( level.cacIngame ) )
     {
         level.cacIngame = spawnStruct();
-    }
-    
-    if( !isDefined( level.cacIngame.initialized ) )
-    {
+
         perksTableRef = "perks_table";
         weaponsTableRef = "weapons_table";
         attachmentTableRef = "attachment_table";
@@ -58,9 +55,7 @@ init()
         level.cacIngame.allowedItems = [];
         initAllowedItems();
 
-        level.cacIngame.initialized = true;
         level.cacIngame.menu = "cac_ingame";
-
         precacheMenu( level.cacIngame.menu );
     }
 
@@ -100,6 +95,8 @@ onPlayerConnecting()
         player.cacIngame.loadoutDataRef = [];
         player.cacIngame.classInfoIndex = 0;
         player.cacIngame.stockResponse = "";
+
+        player openAllClasses();
 
         player thread onMenuResponseThread();
 	}
@@ -309,6 +306,23 @@ saveLoadoutData()
     }
 }
 
+
+openAllClasses()
+{
+	//If the first custom class is unlocked then in order
+	//to display all of the classes in the class selection
+	//menu without having to exit game and edit them
+	//then we need to unlock them on initialization of the menu
+	//so players can edit and then select from any custom class.
+	if ( self getStat( 210 ) < 1 )
+		self setStat( 210, 1 );
+	if ( self getStat( 220 ) < 1 )
+		self setStat( 220, 1 );
+	if ( self getStat( 230 ) < 1 )
+		self setStat( 230, 1 );	
+	if ( self getStat( 240 ) < 1 )
+		self setStat( 240, 1 );		
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                             CLASS VALIDATION                                            //
