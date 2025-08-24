@@ -240,7 +240,7 @@ challengeNotify( challengeName, challengeDesc )
 {
 	notifyData = spawnStruct();
 	notifyData.titleText = &"MP_CHALLENGE_COMPLETED";
-	notifyData.notifyText = challengeName;
+//	notifyData.notifyText = challengeName;
 //	notifyData.notifyText2 = challengeDesc;
 	notifyData.sound = "mp_challenge_complete";
 	

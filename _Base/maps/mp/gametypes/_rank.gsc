@@ -398,11 +398,14 @@ giveRankXP( type, value, powerrank )
 		case "defuse":
 
 		case "pickup":
+
+			/*
 			if ( level.numLives >= 1 && ( level.rankedMatch || level.scr_server_rank_type == 2 ) )
 			{
 				multiplier = max(1,int( 10/level.numLives ));
 				value = int(value * multiplier);
 			}
+			*/
 			break;
 	}
 	
