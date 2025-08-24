@@ -1226,25 +1226,6 @@ LANG_ENGLISH "^3Esc.^7 Cancel"
 
 
 //******************************************************************************
-// openwarfare/_playercard.gsc
-//******************************************************************************
-REFERENCE KILLCARD_VICTIM
-LANG_ENGLISH "Killed by:"
-
-REFERENCE KILLCARD_ATTACKER
-LANG_ENGLISH "You killed:"
-
-REFERENCE KILLCARD_UAV_INBOUND
-LANG_ENGLISH "Called in UAV"
-
-REFERENCE KILLCARD_AIRSTRIKE_INBOUN
-LANG_ENGLISH "Called in airstrike"
-
-REFERENCE KILLCARD_HELICOPTER_INBOUN
-LANG_ENGLISH "Called in helicopter"
-
-
-//******************************************************************************
 // maps\mp\gametypes\_finalkillcam.gsc
 //******************************************************************************
 REFERENCE FINALCAM_PLAYER_VS_PLAYER

@@ -1232,25 +1232,6 @@ LANG_RUSSIAN "^3Esc.^7 Отмена"
 
 
 //******************************************************************************
-// openwarfare/_playercard.gsc
-//******************************************************************************
-REFERENCE KILLCARD_VICTIM
-LANG_RUSSIAN "Вас убил:"
-
-REFERENCE KILLCARD_ATTACKER
-LANG_RUSSIAN "Вы убили:"
-
-REFERENCE KILLCARD_UAV_INBOUND
-LANG_RUSSIAN "Вызвал беспилотный разведчик"
-
-REFERENCE KILLCARD_AIRSTRIKE_INBOUN
-LANG_RUSSIAN "Вызвал авиаудар"
-
-REFERENCE KILLCARD_HELICOPTER_INBOUN
-LANG_RUSSIAN "Вызвал вертолет"
-
-
-//******************************************************************************
 // maps\mp\gametypes\_finalkillcam.gsc
 //******************************************************************************
 REFERENCE FINALCAM_PLAYER_VS_PLAYER
