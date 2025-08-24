@@ -1,0 +1,67 @@
+//******************************************************************************
+// scripts/_splashicons.gsc
+//******************************************************************************
+REFERENCE HEADSHOT
+LANG_RUSSIAN "В голову!"
+
+REFERENCE ASSISTEDSUICIDE
+LANG_RUSSIAN "Сам себе убийца"
+
+REFERENCE LONGSHOT
+LANG_RUSSIAN "Дальнойбой"
+
+REFERENCE AVENGER
+LANG_RUSSIAN "Мститель"
+
+REFERENCE DEFENDER
+LANG_RUSSIAN "Прикрытие"
+
+REFERENCE POSTHUMOUS
+LANG_RUSSIAN "С того света"
+
+REFERENCE REVENGE
+LANG_RUSSIAN "В рассчете"
+
+REFERENCE DOUBLEKILL
+LANG_RUSSIAN "Двойное убийство"
+
+REFERENCE TRIPLEKILL
+LANG_RUSSIAN "Тройное убийство"
+
+REFERENCE MULTIKILL
+LANG_RUSSIAN "Серийный убийца"
+
+REFERENCE FIRSTBLOOD
+LANG_RUSSIAN "Первая кровь"
+
+REFERENCE BUZZKILL
+LANG_RUSSIAN "Обломщик"
+
+REFERENCE COMEBACK
+LANG_RUSSIAN "Снова в строю"
+
+REFERENCE KNIFETHROW
+LANG_RUSSIAN "Нож в спину"
+
+REFERENCE ONE_SHOT_KILL
+LANG_RUSSIAN "Одна пуля"
+
+REFERENCE KING_SLAYER
+LANG_RUSSIAN "Охотник"
+
+REFERENCE PUNCTURE
+LANG_RUSSIAN "Рентген"
+
+REFERENCE BLOODTHIRSTY
+LANG_RUSSIAN "Мясник"
+
+REFERENCE NEARDEATH
+LANG_RUSSIAN "На грани"
+
+REFERENCE POINTBLANK
+LANG_RUSSIAN "Впритык"
+
+REFERENCE MERCILESS
+LANG_RUSSIAN "Легенда"
+
+ENDMARKER

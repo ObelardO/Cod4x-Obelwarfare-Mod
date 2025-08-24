@@ -1,0 +1,4 @@
+name=Splash Icons
+iwd=splashes
+gsc=_splashicons
+cfg=splashicons
