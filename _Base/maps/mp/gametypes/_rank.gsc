@@ -1017,7 +1017,7 @@ buildChallegeInfo()
 			level.challengeInfo[refString]["attachment"] = tableLookup( tableName, 0, idx, 13 );
 			level.challengeInfo[refString]["group"] = tableLookup( tableName, 0, idx, 14 );
 
-			precacheString( level.challengeInfo[refString]["name"] );
+			//precacheString( level.challengeInfo[refString]["name"] );
 
 			if ( !int( level.challengeInfo[refString]["stateid"] ) )
 			{
