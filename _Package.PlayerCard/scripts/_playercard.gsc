@@ -309,7 +309,7 @@ waitForKill()
         playercardVictim.card = self.playerCard;
         playercardVictim.icon = self maps\mp\gametypes\_rank::getRankInfoIcon( self.pers["rank"], self.pers["prestige"] );
         playercardVictim.team = game["icons"][self.team];
-        playercardVictim.text = &"OW_KILLCARD_VICTIM";
+        playercardVictim.text = &"OW_CARD_VICTIM";
         playercardVictim.textcolor = ( 0.98, 0.67, 0.67 );
 
         //Attacker Info
@@ -319,7 +319,7 @@ waitForKill()
         playercardAttacker.card = attacker.playerCard;
         playercardAttacker.icon = attacker maps\mp\gametypes\_rank::getRankInfoIcon( attacker.pers["rank"], attacker.pers["prestige"] );
         playercardAttacker.team = game["icons"][attacker.team];
-        playercardAttacker.text = &"OW_KILLCARD_ATTACKER";
+        playercardAttacker.text = &"OW_CARD_ATTACKER";
         playercardAttacker.textcolor = ( 0.73, 0.97, 0.71 );
 
         //Weapon Info
@@ -794,13 +794,13 @@ showFriendlyPlayercardHardpoint( playercardHp )
 
         // Hardpoint Text Message...................... Add your extra Hp's here
         if( playercardHp.hardpoint == "radar_mp" ) 
-                self.playercardHardpointText setText( &"OW_KILLCARD_UAV_INBOUND" );
+                self.playercardHardpointText setText( &"OW_CARD_UAV_INBOUND" );
 
         if( playercardHp.hardpoint == "airstrike_mp" ) 
-                self.playercardHardpointText setText( &"OW_KILLCARD_AIRSTRIKE_INBOUN" );
+                self.playercardHardpointText setText( &"OW_CARD_AIRSTRIKE_INBOUN" );
 
         if( playercardHp.hardpoint == "helicopter_mp" ) 
-                self.playercardHardpointText setText( &"OW_KILLCARD_AIRSTRIKE_INBOUN" );
+                self.playercardHardpointText setText( &"OW_CARD_AIRSTRIKE_INBOUN" );
         
         self.playercardHardpointText.color = ( 0.73, 0.97, 0.71 ); // Green
         self.playercardHardpointText.alpha = 1;
