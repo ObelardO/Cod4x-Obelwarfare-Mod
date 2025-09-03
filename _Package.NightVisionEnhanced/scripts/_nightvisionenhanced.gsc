@@ -44,10 +44,12 @@ init()
 		game["nve"]["light_fx"] = loadFx( "nv/light_white_big" );
 
 		//if ( level.scr_nve_grain_enabled )
-		game["nve"]["grain_shader"] = preCacheShader( "ac130_overlay_grain" );
+		game["nve"]["grain_shader"] = "ac130_overlay_grain";
+		preCacheShader( game["nve"]["grain_shader"] );
 
 		//if ( level.scr_nve_shock_enabled )
-		game["nve"]["night_shock"] = PreCacheShellShock( "nightvision" );
+		game["nve"]["night_shock"] = "nightvision";
+		PreCacheShellShock( game["nve"]["night_shock"] );
 	}
 
 	level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
