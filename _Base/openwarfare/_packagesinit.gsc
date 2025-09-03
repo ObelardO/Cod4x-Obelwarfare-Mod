@@ -4,4 +4,6 @@ init()
 	thread scripts\_ingameclass::init();
 	thread scripts\_nightvisionenhanced::init();
 	thread scripts\_playercard::init();
+	thread scripts\_splashicons::init();
+	thread scripts\_iw4anticheat::init();
 }
