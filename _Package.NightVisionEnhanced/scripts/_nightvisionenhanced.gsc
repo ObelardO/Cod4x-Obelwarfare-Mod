@@ -94,9 +94,9 @@ setupGrainEffect()
 	self.nvsGrainEffectHud.alignY = "top";
 	self.nvsGrainEffectHud.horzAlign = "fullscreen";
 	self.nvsGrainEffectHud.vertAlign = "fullscreen";
-	self.nvsGrainEffectHud setshader( "ac130_overlay_grain", 640, 480 );
+	self.nvsGrainEffectHud setshader( game["nve"]["grain_shader"], 640, 480 );
 	self.nvsGrainEffectHud.alpha = 0.0;
-	self.nvsGrainEffectHud.sort = -1000;
+	self.nvsGrainEffectHud.sort = 0;
 }
 
 setupLightEffect()
@@ -250,7 +250,7 @@ updateShockThread()
 		while ( self IsPlayerStunned() ) wait 0.1;
 
 		duration = 1;
-		self shellshock( "nightvision", duration );
+		self shellshock( game["nve"]["night_shock"], duration );
 		wait 0.1;
 		self allowSprint( true );
 		wait duration;
