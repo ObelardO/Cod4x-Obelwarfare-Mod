@@ -1,9 +1,9 @@
-1,headshot_splash,SPLASHES_HEADSHOT,SPLASHES_HEADSHOT_DESC,splashicon0,2,0.75,0.25,0.25,1,oldschool_return,dummy,splash
-2,assistedsuicide,SPLASHES_ASSISTEDSUICIDE,SPLASHES_ASSISTEDSUICIDE_DESC,,2,0.75,0.25,0.25,1,oldschool_return,,splash
+1,headshot_splash,SPLASHES_HEADSHOT,SPLASHES_HEADSHOT_DESC,splashicon10,2,0.75,0.25,0.25,1,oldschool_return,dummy,splash
+2,assistedsuicide,SPLASHES_ASSISTEDSUICIDE,SPLASHES_ASSISTEDSUICIDE_DESC,splashicon18,2,0.75,0.25,0.25,1,oldschool_return,,splash
 3,longshot,SPLASHES_LONGSHOT,SPLASHES_LONGSHOT_DESC,splashicon1,2,0.75,0.25,0.25,1,oldschool_return,,splash
 4,avenger,SPLASHES_AVENGER,SPLASHES_AVENGER_DESC,splashicon2,2,0.75,0.25,0.25,1,oldschool_return,,splash
-5,defender,SPLASHES_DEFENDER,SPLASHES_DEFENDER_DESC,,2,0.75,0.25,0.25,1,oldschool_return,,splash
-6,posthumous,SPLASHES_POSTHUMOUS,SPLASHES_POSTHUMOUS_DESC,,2,0.75,0.25,0.25,1,oldschool_return,,splash
+5,defender,SPLASHES_DEFENDER,SPLASHES_DEFENDER_DESC,splashicon17,2,0.75,0.25,0.25,1,oldschool_return,,splash
+6,posthumous,SPLASHES_POSTHUMOUS,SPLASHES_POSTHUMOUS_DESC,splashicon19,2,0.75,0.25,0.25,1,oldschool_return,,splash
 7,revenge,SPLASHES_REVENGE,SPLASHES_REVENGE_DESC,splashicon3,2,0.75,0.25,0.25,1,oldschool_return,,splash
 8,doublekill,SPLASHES_DOUBLEKILL,SPLASHES_DOUBLEKILL_DESC,splashicon4,2,0.75,0.25,0.25,1,oldschool_return,,splash
 9,triplekill,SPLASHES_TRIPLEKILL,SPLASHES_TRIPLEKILL_DESC,splashicon5,2,0.75,0.25,0.25,1,oldschool_return,,splash
@@ -15,7 +15,7 @@
 15,callout_3xkill,SPLASHES_TRIPLEKILL,SPLASHES_TRIPLEKILL,,4,1,1,1,1,null,,playercard_splash
 16,callout_3xpluskill,SPLASHES_MULTIKILL,SPLASHES_MULTIKILL,,4,1,1,1,1,null,,playercard_splash
 17,callout_firstblood,SPLASHES_FIRSTBLOOD,SPLASHES_FIRSTBLOOD,,4,1,1,1,1,null,,playercard_splash
-18,one_shot_kill,SPLASHES_ONE_SHOT_KILL,SPLASHES_ONE_SHOT_KILL_DESC,splashicon10,2,0.75,0.25,0.25,1,oldschool_return,,splash
+18,one_shot_kill,SPLASHES_ONE_SHOT_KILL,SPLASHES_ONE_SHOT_KILL_DESC,splashicon0,2,0.75,0.25,0.25,1,oldschool_return,,splash
 19,king_slayer,SPLASHES_KING_SLAYER,SPLASHES_KING_SLAYER_DESC,splashicon11,2,0.75,0.25,0.25,1,oldschool_return,,splash
 20,puncture,SPLASHES_PUNCTURE,SPLASHES_PUNCTURE_DESC,splashicon12,2,0.75,0.25,0.25,1,oldschool_return,,splash
 21,bloodthirsty,SPLASHES_BLOODTHIRSTY,SPLASHES_BLOODTHIRSTY_DESC,splashicon13,2,0.75,0.25,0.25,1,killingspree,,splash

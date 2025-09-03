@@ -8,9 +8,9 @@ TODO :- thread Like This
  }
  
 */ 
+#include common_scripts\utility;
 #include maps\mp\_utility;
 #include maps\mp\gametypes\_hud_util;
-
 #include openwarfare\_utils;
 
 init() 
@@ -54,181 +54,227 @@ init()
 	precacheShader("splashicon25");
 
 	level.numKills = 0;
-
 	level thread onPlayerConnect();
+	level thread waitForBomb();
 }
+
 onPlayerConnect() 
 {
 	for (;;) 
 	{
 		level waittill("connected", player);
 		player thread onPlayerSpawned();
+		
+		player thread waitForDamage();
 		player thread waitForKill();
+
+		//player.lastwallbang = undefined;
 		player.lastKilledBy = undefined;
-		if (!isdefined(player.pers["cur_kill_streak"]))
-			player.pers["cur_kill_streak"] = 0;
-		if (!isdefined(player.pers["cur_death_streak"]))
-			player.pers["cur_death_streak"] = 0;
-		player.lastwallbang = undefined;
+		player.lastKilledPlayer = undefined;
+
 		player.recentKillCount = 0;
-		player.lastKillTime = 0;
-
+		
+		player.pers["cur_kill_streak"] = 0;
+		player.pers["cur_death_streak"] = 0;
 	}
-
 }
+
 onPlayerSpawned() {
 	self endon("disconnect");
 	level endon("game_ended");
-	for (;;) {
+	for (;;) 
+	{
 		self waittill("spawned");
-		self thread countDeathStreak();
-		self thread countKillStreak();
-		self.firstTimeDamaged = [];
-		self.damaged = undefined;
 
+		self.firstDamagedTime = undefined;
+		self.lastAttackedTime = undefined;
+		self.lastAttackedPoint = undefined;
+		self.lastAttackedBy = undefined;
+
+		self.lastKillTime = 0;
 	}
-
-}
-countDeathStreak() {
-	self endon("disconnect");
-	self endon("joined_spectators");
-	if (!isdefined(self.pers["cur_death_streak"]))
-		self.pers["cur_death_streak"] = 0;
-	before = self.deaths;
-	for (;;) {
-		current = self.deaths;
-		while (current == self.deaths)
-			wait 0.05;
-		self.pers["cur_death_streak"] = self.deaths - before;
-
-	}
-
-}
-countKillStreak() {
-	self endon("disconnect");
-	self endon("joined_spectators");
-	if (!isdefined(self.pers["cur_kill_streak"]))
-		self.pers["cur_kill_streak"] = 0;
-	before = self.kills;
-	for (;;) {
-		current = self.kills;
-		while (current == self.kills)
-			wait 0.05;
-		self.pers["cur_kill_streak"] = self.kills - before;
-
-	}
-
 }
 
 
 waitForKill()
 {
 	self endon("disconnect");
+	level endon( "game_ended" );
 
 	for (;;) 
 	{
-		// Wait for the player to die
 		self waittill( "player_killed", eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, fDistance );
 
 		if (isDefined(attacker) && isplayer(attacker)) //Original
 		{   
-			attacker thread killedPlayer(self, sWeapon, sMeansOfDeath, iDamage);   
+			attacker thread onPlayerKilled(self, sWeapon, sMeansOfDeath, iDamage, sHitLoc);   
+		}
+		
+		if (isDefined(self.lastAttackedTime) && (sMeansOfDeath == "MOD_SUICIDE" || sMeansOfDeath == "MOD_FALLING" || sMeansOfDeath == "MOD_TRIGGER_HURT"))
+		{
+			if (isPlayer(self.lastAttackedBy) && isAlive(self.lastAttackedBy) && (getTime() - self.lastAttackedTime) < 10000)
+			{
+				self.lastAttackedBy thread assistedSuicide();
+			}
 		}
 	}
 }
 
 
-killedPlayer(victim, weapon, meansOfDeath, damage) 
+waitForDamage()
 {
+	self endon("disconnect");
+	level endon( "game_ended" );
 
-	/*if (victim.team == self.team)
-		return;
-	victimGuid = victim.guid;
-	myGuid = self.guid;
-	curTime = getTime();
-	*/
-	
-	attacker=self;
-	if( attacker == victim || !isPlayer( attacker ) )
-		return;
-	
-	victimGuid = victim.guid;
-	myGuid = self.guid;
-	curTime = getTime();
-	
-	self thread updateRecentKills();
-	self.lastKillTime = getTime();
-	self.lastKilledPlayer = victim;
+	for (;;)
+	{
+		self waittill("damage_taken", eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime );
 
-	self.modifiers = [];
+		if (isDefined(eAttacker) && isplayer(eAttacker) && eAttacker != self) 
+		{
+			if (!isDefined(self.firstDamagedTime)) self.firstDamagedTime = getTime();
+
+			self.lastAttackedTime = getTime();
+			self.lastAttackedPoint = vPoint;
+			self.lastAttackedBy = eAttacker;
+		}
+	}
+}
+
+
+waitForBomb()
+{
+	level endon( "game_ended" );
+
+	//level.splashesBombPlanted = false;
+	level.splashesBombPlantedBy = undefined;
+
+    for(;;)
+    {
+        level waittill("bomb_planted", player, site);
+        
+        //level.splashesBombPlanted = true;
+        level.splashesBombPlantedBy = player;// .pers["team"];
+
+		level waittill_any("bomb_defused", "bomb_exploded", "round_end");
+
+		//level.splashesBombPlanted = false;
+		level.splashesBombPlantedBy = undefined;
+    }
+}
+
+
+onPlayerKilled(victim, weapon, meansOfDeath, damage, hitloc) 
+{
+	curTime = getTime();
+	attacker = self;
+
+	if( attacker == victim)
+		return;
+
+	victim.lastKilledBy = attacker;
+	
+	attacker.lastKillTime = curTime;
+	attacker.lastKilledPlayer = victim;
 
 	level.numKills++;
 
-	if (weapon == "none")
-		return false;
+	if (!isAlive(attacker))
+		return;
 
-	//if (isdefined(self.lastwallbang) && self.lastwallbang == getTime())
-	//self wallbang();
 
-	if (isDefined(victim.damaged) && victim.damaged == getTime()) {
-		//	weaponClass = getWeaponClass( weapon );
+	attacker thread updateRecentKills();
+	
 
-		if (meansOfDeath != "MOD_MELEE" && meansOfDeath != "MOD_HEAD_SHOT" && (meansOfDeath == "MOD_RIFLE_BULLET" || meansOfDeath == "MOD_PISTOL_BULLET") && (damage > 200))
-			//self thread splashNotifyDelayed( "one_shot_kill" );
-			self oneshotkill();
+	attacker.pers["cur_death_streak"] = 0;
+	attacker.pers["cur_kill_streak"]++;
+	
+	if (attacker.pers["cur_death_streak"] >= 3)
+		attacker comeBack();
+
+
+	//if (isDefined(victim.pers["cur_kill_streak"]) && victim.pers["cur_kill_streak"] >= max(3, int(level.aliveCount[level.otherTeam[victim.team]] / 2)))
+	if (isDefined(victim.pers["cur_kill_streak"]) && victim.pers["cur_kill_streak"] >= 3)
+		attacker buzzKill();
+
+	victim.pers["cur_death_streak"]++;
+	victim.pers["cur_kill_streak"] = 0;
+
+
+	if (isDefined(victim.firstDamagedTime) && victim.firstDamagedTime == curTime) {
+		if (meansOfDeath != "MOD_MELEE" && meansOfDeath != "MOD_HEAD_SHOT" && (meansOfDeath == "MOD_RIFLE_BULLET" || meansOfDeath == "MOD_PISTOL_BULLET"))
+			attacker oneshotkill();
 	}
 
-	if (meansOfDeath == "MOD_" && isWallBang(self, victim))
 
-	if (level.numKills == 1)
-		self firstBlood();
+	if (isDefined(victim.lastAttackedTime) && victim.lastAttackedTime == curTime && isWallBang (attacker, victim, victim.lastAttackedPoint) && (meansOfDeath == "MOD_RIFLE_BULLET" || meansOfDeath == "MOD_PISTOL_BULLET" || meansOfDeath == "MOD_HEAD_SHOT") )
+	{	
+		attacker wallbang();
+	}
 
-	if (self.pers["cur_death_streak"] > 3)
-		self comeBack();
 
 	if (meansOfDeath == "MOD_HEAD_SHOT")
-		self headShot();
+		attacker headShot();
 
-	if (!isAlive(self) && self.deathtime + 800 < getTime())
+
+	if (level.numKills == 1)
+		attacker firstBlood();
+
+	/*
+	if (isAlive(self) && self.deathtime + 800 < getTime())
 		self postDeathKill();
+	*/
+	
 
-	if (isAlive(self) && self.health < 10)
-		self neardeathkill();
+	if (attacker.health < 10)
+		attacker neardeathkill();
 
-	if (level.teamBased && curTime - victim.lastKillTime < 500) {
-		if (victim.lastkilledplayer != self)
-			self avengedPlayer();
+
+	if (level.teamBased && isDefined(victim.lastKilledPlayer) && victim.lastKilledPlayer != attacker && (curTime - victim.lastAttackedTime) < 10000 )
+	{
+		attacker avengedPlayer();
 	}
+
 
 	if (isDefined(victim.attackerPosition))
 		attackerPosition = victim.attackerPosition;
 	else
-		attackerPosition = self.origin;
+		attackerPosition = attacker.origin;
 
-	if (isAlive(self) && (meansOfDeath == "MOD_RIFLE_BULLET" || meansOfDeath == "MOD_PISTOL_BULLET" || meansOfDeath == "MOD_HEAD_SHOT") && distance(attackerPosition, victim.origin) > 1536 && !isDefined(self.assistedSuicide))
-		self longshot();
+	killDistance = distance(attackerPosition, victim.origin) * 0.0254;
 
-	if (isAlive(self) && (meansOfDeath == "MOD_RIFLE_BULLET" || meansOfDeath == "MOD_PISTOL_BULLET" || meansOfDeath == "MOD_HEAD_SHOT") && isWallBang (self, victim))
-		self wallbang();
+	if (!isDefined(self.assistedSuicide) && (meansOfDeath == "MOD_RIFLE_BULLET" || meansOfDeath == "MOD_PISTOL_BULLET" || meansOfDeath == "MOD_HEAD_SHOT") )
+	{
+		if (killDistance > 80)
+			attacker longshot();
 
-	if (isDefined(victim.pers["cur_kill_streak"]) && victim.pers["cur_kill_streak"] >= max(3, int(level.aliveCount[level.otherTeam[victim.team]] / 2)))
-		self buzzKill();
+		if (killDistance < 2)
+			attacker thread splashNotifyDelayed("pointblank");
+	}
 
-	if (isDefined(self.pers["cur_kill_streak"]) && self.pers["cur_kill_streak"] == 3)
-		self kingslayer();
-	if (isDefined(self.pers["cur_kill_streak"]) && self.pers["cur_kill_streak"] == 5)
-		self bloodthirsty();
-	if (isDefined(self.pers["cur_kill_streak"]) && self.pers["cur_kill_streak"] == 10)
-		self merceless();
 
-	if (isdefined(self.lastKilledBy) && self.lastKilledBy == victim && level.players.size > 3)
-		self revenge();
+	if ( isDefined(attacker.pers["cur_kill_streak"] ) )
+	{
+		if (attacker.pers["cur_kill_streak"] == 3)
+			attacker kingslayer();
+		else if (attacker.pers["cur_kill_streak"] == 5)
+			attacker bloodthirsty();
+		else if (attacker.pers["cur_kill_streak"] == 10)
+			attacker merceless();
+	}
 
-	// Если тип смерти считается "самоубийством"
-	if (meansOfDeath == "MOD_SUICIDE" || meansOfDeath == "MOD_FALLING" || meansOfDeath == "MOD_TRIGGER_HURT")
-		self assistedSuicide();
 
-	victim.lastKilledBy = self;
+	if (isdefined(attacker.lastKilledBy) && attacker.lastKilledBy == victim)// && level.players.size > 2)
+	{
+		attacker.lastKilledBy = undefined;
+		attacker revenge();
+	}
+
+
+	if (isDefined(level.splashesBombPlantedBy) && level.splashesBombPlantedBy.pers["team"] == attacker.pers["team"])
+	{
+		attacker thread splashNotifyDelayed("defender");
+	}
 }
 
 wallbang() {
@@ -314,6 +360,8 @@ multiKill(killCount)
 {
 	assert(killCount > 1);
 
+	self iPrintLn("MULTI KILL " + killCount);
+
 	if (killCount == 2) 
 	{
 		self thread splashNotifyDelayed("doublekill");
@@ -353,16 +401,20 @@ updateRecentKills() {
 	self notify("updateRecentKills");
 	self endon("updateRecentKills");
 	self.recentKillCount++;
-	wait(1.0);
+	wait(1.5);
 	if (self.recentKillCount > 1)
 		self multiKill(self.recentKillCount);
 	self.recentKillCount = 0;
 
 }
 
-isWallBang(attacker, victim) {
-	return bulletTracePassed(attacker getEye(), victim getEye(), true, attacker);
+
+isWallBang(attacker, victim, hitPoint)
+{
+    //return !SightTracePassed(attacker getEye(), victim getTagOrigin("j_spineupper"), false, attacker);
+    return !SightTracePassed(attacker getEye(), hitPoint, false, attacker);
 }
+
 
 merceless() {
 	self thread splashNotifyDelayed("merciless");
@@ -446,7 +498,7 @@ splashNotify(splash) {
 
 		splashNotify[0] = addTextHud(self, 0, -90, 0, "center", "middle", 1.4);//-110
 		//splashNotify[0].font = "default";
-		splashNotify[0].font = "hudSmall";
+		splashNotify[0].font = "default";
 		splashNotify[0].horzAlign = "center";
 		splashNotify[0].vertAlign = "middle";
 		//splashNotify[0]setText(getTitleText(splash.name));
