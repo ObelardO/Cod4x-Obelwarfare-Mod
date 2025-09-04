@@ -98,9 +98,9 @@ onPlayerSpawned()
         // Player Name
         if( !isDefined( self.playercardName ) ){
 	        self.playercardName = newClientHudElem( self );
-	        self.playercardName.x = -20; 
+	        self.playercardName.x = -80; 
                 self.playercardName.y = -100;
-	        self.playercardName.alignX = "center";
+	        self.playercardName.alignX = "left";
 	        self.playercardName.alignY = "top";
 	        self.playercardName.horzAlign = "center";
 	        self.playercardName.vertAlign = "bottom";
@@ -112,6 +112,7 @@ onPlayerSpawned()
 
         }
 
+        /*
         // Player Rank Number
         if( !isDefined( self.playercardRankNumber ) ){
 	        self.playercardRankNumber = newClientHudElem( self );
@@ -127,6 +128,7 @@ onPlayerSpawned()
                 self.playercardRankNumber.alpha = 0;
 
         }
+        */
 
         // Background Image
         if( !isDefined( self.playercardImage ) ) {
@@ -145,7 +147,7 @@ onPlayerSpawned()
         // Rank Icon
 	if ( !isDefined( self.playercardRankIcon ) ) {
 		self.playercardRankIcon = self createIcon( "white", 25, 25 );
-		self.playercardRankIcon setPoint( "CENTER", "BOTTOM", -111, -90 );
+		self.playercardRankIcon setPoint( "CENTER", "BOTTOM", -100, -90 );
 		self.playercardRankIcon.sort = -1;
 		self.playercardRankIcon.alpha = 0;
 	}
@@ -188,6 +190,7 @@ onPlayerSpawned()
 
                 }
 
+                /*
                 // Player Rank Number
                 if( !isDefined( self.playercardRankNumberHardpoint ) ){
 	                self.playercardRankNumberHardpoint = newClientHudElem( self );
@@ -204,6 +207,7 @@ onPlayerSpawned()
 
 
                 }
+                */
 
                 // Background Image
                 if( !isDefined( self.playercardImageHardpoint ) ) {
@@ -244,8 +248,6 @@ onPlayerSpawned()
 	                self.playercardHardpointText.sort = -1;
 	                self.playercardHardpointText.glowAlpha = 0;
 		        self.playercardHardpointText.alpha = 0;
-
-
                 }
 
                 // Weapon Icon
@@ -263,7 +265,7 @@ onPlayerSpawned()
                         self.playercardHardpointText.y = -12;
                         self.playercardRankIconHardpoint setPoint( "MIDDLE", "RIGHT", -245, -40 );
                         self.playercardImageHardpoint.y = -40;
-                        self.playercardRankNumberHardpoint.y = -40;
+                        //self.playercardRankNumberHardpoint.y = -40;
                         self.playercardNameHardpoint.y = -40;
                 }
 
@@ -311,6 +313,7 @@ waitForKill()
         playercardVictim.team = game["icons"][self.team];
         playercardVictim.text = &"OW_CARD_VICTIM";
         playercardVictim.textcolor = ( 0.98, 0.67, 0.67 );
+        playercardVictim.player = self;
 
         //Attacker Info
         playercardAttacker = spawnstruct();
@@ -321,6 +324,7 @@ waitForKill()
         playercardAttacker.team = game["icons"][attacker.team];
         playercardAttacker.text = &"OW_CARD_ATTACKER";
         playercardAttacker.textcolor = ( 0.73, 0.97, 0.71 );
+        playercardAttacker.player = attacker;
 
         //Weapon Info
         weaponInfo = spawnstruct();
@@ -351,6 +355,7 @@ waitTillHardpointCalled()
 
                 // Set up info
                 playercardHp = spawnstruct();
+                playercardHp.player = self;
                 playercardHp.name = self.name;
                 playercardHp.rank = self.pers["rank"] + 1;
                 playercardHp.image = self.playerCard;
@@ -450,16 +455,17 @@ showKillCard( playercardVictim, playercardAttacker, weaponInfo )
         }
 
         // Set shader and make visable
-        self.playercardImage setShader( "playercard_emblem_" + playercardVictim.card, 300, 50 );
+        self.playercardImage setShader( "playercard_emblem_" + playercardVictim.card, 240, 40 );
         self.playercardRankIcon setShader( playercardVictim.icon, 25, 25 );
 
         self.playercardText setText( playercardAttacker.text );
 	self.playercardText.color = playercardAttacker.textcolor;
 
-	self.playercardName setText( playercardVictim.name );
+	//self.playercardName setText( playercardVictim.name );
+	self.playercardName setPlayerNameString( playercardVictim.player );
 
-        self.playercardRankNumber setText( playercardVictim.rank );
-        self.playercardRankNumber.color = ( 0.97, 0.96, 0.34 );
+        //self.playercardRankNumber setText( playercardVictim.rank );
+        //self.playercardRankNumber.color = ( 0.97, 0.96, 0.34 );
 
         if( level.scr_card == 1 ) {
                 self.playercardTeamIcon setShader( playercardVictim.team, 25, 25 );
@@ -469,7 +475,7 @@ showKillCard( playercardVictim, playercardAttacker, weaponInfo )
         self.playercardRankIcon.alpha = 1;
         self.playercardName.alpha = 1;
         self.playercardText.alpha = 1;
-        self.playercardRankNumber.alpha = 1;
+        //self.playercardRankNumber.alpha = 1;
 
         if( level.scr_card == 1 ) {
                 self.playercardTeamIcon.alpha = 1;
@@ -487,7 +493,7 @@ showKillCard( playercardVictim, playercardAttacker, weaponInfo )
         self.playercardRankIcon moveOverTime( 0.40 );
         self.playercardName moveOverTime( 0.40 );
         self.playercardText moveOverTime( 0.40 );
-        self.playercardRankNumber moveOverTime( 0.40 );
+        //self.playercardRankNumber moveOverTime( 0.40 );
 
         if( level.scr_card == 1 ) {
                 self.playercardTeamIcon moveOverTime( 0.40 );
@@ -501,7 +507,7 @@ showKillCard( playercardVictim, playercardAttacker, weaponInfo )
         self.playercardRankIcon.y = 40;
         self.playercardName.y = 30;
         self.playercardText.y = 0;
-        self.playercardRankNumber.y = 30;
+        //self.playercardRankNumber.y = 30;
 
         if( level.scr_card == 1 ) {
                 self.playercardTeamIcon.y = 40;
@@ -519,7 +525,7 @@ showKillCard( playercardVictim, playercardAttacker, weaponInfo )
         self.playercardRankIcon moveOverTime( 0.40 );
         self.playercardName moveOverTime( 0.40 );
         self.playercardText moveOverTime( 0.40 );
-        self.playercardRankNumber moveOverTime( 0.40 );
+        //self.playercardRankNumber moveOverTime( 0.40 );
 
         if( level.scr_card == 1 ) {
                 self.playercardTeamIcon moveOverTime( 0.40 );
@@ -533,7 +539,7 @@ showKillCard( playercardVictim, playercardAttacker, weaponInfo )
         self.playercardRankIcon.y = -90;
         self.playercardName.y = -100;
         self.playercardText.y = -130;
-        self.playercardRankNumber.y = -100;
+        //self.playercardRankNumber.y = -100;
 
         if( level.scr_card == 1 ) {
                 self.playercardTeamIcon.y = -90;
@@ -547,7 +553,7 @@ showKillCard( playercardVictim, playercardAttacker, weaponInfo )
         self.playercardRankIcon.alpha = 0;
         self.playercardName.alpha = 0;
         self.playercardText.alpha = 0;
-        self.playercardRankNumber.alpha = 0;
+        //self.playercardRankNumber.alpha = 0;
 
         if( level.scr_card == 1 ) {
                 self.playercardTeamIcon.alpha = 0;
@@ -649,14 +655,15 @@ showEnemyPlayercardHardpoint( playercardHp )
         self.showingPlayercardHp = true;
 
         // Name
-        self.playercardNameHardpoint setText( playercardHp.name );
+        //self.playercardNameHardpoint setText( playercardHp.name );
+        self.playercardNameHardpoint setPlayerNameString( playercardHp.player );
         self.playercardNameHardpoint.color = ( 1, 1, 1 );
         self.playercardNameHardpoint.alpha = 1;
 
         // Rank Number
-        self.playercardRankNumberHardpoint setText( playercardHp.rank );
-        self.playercardRankNumberHardpoint.color = ( 0.97, 0.96, 0.34 );
-        self.playercardRankNumberHardpoint.alpha = 1;
+        //self.playercardRankNumberHardpoint setText( playercardHp.rank );
+        //self.playercardRankNumberHardpoint.color = ( 0.97, 0.96, 0.34 );
+        //self.playercardRankNumberHardpoint.alpha = 1;
 
         // Background Image
         self.playercardImageHardpoint setShader( "playercard_emblem_" + playercardHp.image, 256, 40 );
@@ -697,14 +704,14 @@ showEnemyPlayercardHardpoint( playercardHp )
         wait( level.scr_card_hardpoints_time_visible );
 
         self.playercardNameHardpoint moveOverTime( 0.40 );
-        self.playercardRankNumberHardpoint moveOverTime( 0.40 );
+        //self.playercardRankNumberHardpoint moveOverTime( 0.40 );
         self.playercardImageHardpoint moveOverTime( 0.40 );
         self.playercardRankIconHardpoint moveOverTime( 0.40 );
         self.playercardHardpointText moveOverTime( 0.40 );
         self.playercardKillWeaponHardpoint moveOverTime( 0.40 );
 
         self.playercardNameHardpoint.x = 70;
-        self.playercardRankNumberHardpoint.x = 30;
+        //self.playercardRankNumberHardpoint.x = 30;
         self.playercardImageHardpoint.x = 0;
         self.playercardRankIconHardpoint.x = 15;
         self.playercardHardpointText.x = 4;
@@ -715,7 +722,7 @@ showEnemyPlayercardHardpoint( playercardHp )
   
         // Make it disappear
         self.playercardNameHardpoint.alpha = 0;
-        self.playercardRankNumberHardpoint.alpha = 0;
+        //self.playercardRankNumberHardpoint.alpha = 0;
         self.playercardImageHardpoint.alpha = 0;
         self.playercardRankIconHardpoint.alpha = 0;
         self.playercardHardpointText.alpha = 0;
@@ -723,7 +730,7 @@ showEnemyPlayercardHardpoint( playercardHp )
 
         // Return Home
         self.playercardNameHardpoint moveOverTime( 0.40 );
-        self.playercardRankNumberHardpoint moveOverTime( 0.40 );
+        //self.playercardRankNumberHardpoint moveOverTime( 0.40 );
         self.playercardImageHardpoint moveOverTime( 0.40 );
         self.playercardRankIconHardpoint moveOverTime( 0.40 );
         self.playercardHardpointText moveOverTime( 0.40 );
@@ -731,7 +738,7 @@ showEnemyPlayercardHardpoint( playercardHp )
 
         // Set back to original positions
         self.playercardNameHardpoint.x = -190;
-        self.playercardRankNumberHardpoint.x = -230;
+        //self.playercardRankNumberHardpoint.x = -230;
         self.playercardImageHardpoint.x = -260;
         self.playercardRankIconHardpoint.x = -245;
         self.playercardHardpointText.x = -256;
@@ -775,17 +782,18 @@ showFriendlyPlayercardHardpoint( playercardHp )
         self.showingPlayercardHp = true;
 
         // Name
-        self.playercardNameHardpoint setText( playercardHp.name );
+        //self.playercardNameHardpoint setText( playercardHp.name );
+        self.playercardNameHardpoint setPlayerNameString( playercardHp.player );
         self.playercardNameHardpoint.color = ( 1, 1, 1 );
         self.playercardNameHardpoint.alpha = 1;
 
         // Rank Number
-        self.playercardRankNumberHardpoint setText( playercardHp.rank );
-        self.playercardRankNumberHardpoint.color = ( 0.97, 0.96, 0.34 );
-        self.playercardRankNumberHardpoint.alpha = 1;
+        //self.playercardRankNumberHardpoint setText( playercardHp.rank );
+        //self.playercardRankNumberHardpoint.color = ( 0.97, 0.96, 0.34 );
+        //self.playercardRankNumberHardpoint.alpha = 1;
 
         // Background Image
-        self.playercardImageHardpoint setShader( "playercard_emblem_" + playercardHp.image, 256, 40 );
+        self.playercardImageHardpoint setShader( "playercard_emblem_" + playercardHp.image, 240, 40 );
         self.playercardImageHardpoint.alpha = 1;
 
         // Rank Icon
@@ -823,14 +831,14 @@ showFriendlyPlayercardHardpoint( playercardHp )
         wait( level.scr_card_hardpoints_time_visible );
 
         self.playercardNameHardpoint moveOverTime( 0.40 );
-        self.playercardRankNumberHardpoint moveOverTime( 0.40 );
+        //self.playercardRankNumberHardpoint moveOverTime( 0.40 );
         self.playercardImageHardpoint moveOverTime( 0.40 );
         self.playercardRankIconHardpoint moveOverTime( 0.40 );
         self.playercardHardpointText moveOverTime( 0.40 );
         self.playercardKillWeaponHardpoint moveOverTime( 0.40 );
 
         self.playercardNameHardpoint.x = 70;
-        self.playercardRankNumberHardpoint.x = 30;
+        //self.playercardRankNumberHardpoint.x = 30;
         self.playercardImageHardpoint.x = 0;
         self.playercardRankIconHardpoint.x = 15;
         self.playercardHardpointText.x = 4;
@@ -841,7 +849,7 @@ showFriendlyPlayercardHardpoint( playercardHp )
   
         // Make it disappear
         self.playercardNameHardpoint.alpha = 0;
-        self.playercardRankNumberHardpoint.alpha = 0;
+        //self.playercardRankNumberHardpoint.alpha = 0;
         self.playercardImageHardpoint.alpha = 0;
         self.playercardRankIconHardpoint.alpha = 0;
         self.playercardHardpointText.alpha = 0;
@@ -849,7 +857,7 @@ showFriendlyPlayercardHardpoint( playercardHp )
 
         // Return Home
         self.playercardNameHardpoint moveOverTime( 0.40 );
-        self.playercardRankNumberHardpoint moveOverTime( 0.40 );
+        //self.playercardRankNumberHardpoint moveOverTime( 0.40 );
         self.playercardImageHardpoint moveOverTime( 0.40 );
         self.playercardRankIconHardpoint moveOverTime( 0.40 );
         self.playercardHardpointText moveOverTime( 0.40 );
@@ -857,7 +865,7 @@ showFriendlyPlayercardHardpoint( playercardHp )
 
         // Set back to original positions
         self.playercardNameHardpoint.x = -190;
-        self.playercardRankNumberHardpoint.x = -230;
+        //self.playercardRankNumberHardpoint.x = -230;
         self.playercardImageHardpoint.x = -260;
         self.playercardRankIconHardpoint.x = -245;
         self.playercardHardpointText.x = -256;
