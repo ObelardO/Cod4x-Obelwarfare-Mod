@@ -162,7 +162,7 @@ onPlayerConnected()
 	self thread addNewEvent( "onPlayerSpawned", ::onPlayerSpawned );
 
 	// Check if this player is a marshal or a clan member
-	if ( level.scr_scoreboard_marshal_guids != "" && isSubstr( level.scr_scoreboard_marshal_guids, ""+self getGUID() ) ) {
+	if ( level.scr_scoreboard_marshal_guids != "" && self getGUID() != "" && isSubstr( level.scr_scoreboard_marshal_guids, ""+self getGUID() ) ) {
 		self thread showSpecialScoreboardIcon( "hud_status_marshal", true );
 		
 	} else if ( level.scr_scoreboard_clan_tags.size > 0 && self isPlayerClanMember( level.scr_scoreboard_clan_tags ) ) {
@@ -290,6 +290,8 @@ completeForceClientDvarsArray()
 
 setForcedClientVariables()
 {
+	self endon("disconnect");
+
 	for ( i = 0; i < level.forcedVariablesCycles; i++ ) {
 		// Calculate first element for this cycle
 		firstElement = 12 * i;

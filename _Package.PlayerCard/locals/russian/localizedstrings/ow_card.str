@@ -2,18 +2,18 @@
 // scripts/_playercard.gsc
 //******************************************************************************
 REFERENCE VICTIM
-LANG_RUSSIAN "Р’Р°СЃ СѓР±РёР»:"
+LANG_RUSSIAN "Вас убил:"
 
 REFERENCE ATTACKER
-LANG_RUSSIAN "Р’С‹ СѓР±РёР»Рё:"
+LANG_RUSSIAN "Вы убили:"
 
 REFERENCE UAV_INBOUND
-LANG_RUSSIAN "Р’С‹Р·РІР°Р» Р±РµСЃРїРёР»РѕС‚РЅС‹Р№ СЂР°Р·РІРµРґС‡РёРє"
+LANG_RUSSIAN "Вызвал беспилотный разведчик"
 
 REFERENCE AIRSTRIKE_INBOUN
-LANG_RUSSIAN "Р’С‹Р·РІР°Р» Р°РІРёР°СѓРґР°СЂ"
+LANG_RUSSIAN "Вызвал авиаудар"
 
 REFERENCE HELICOPTER_INBOUN
-LANG_RUSSIAN "Р’С‹Р·РІР°Р» РІРµСЂС‚РѕР»РµС‚"
+LANG_RUSSIAN "Вызвал вертолет"
 
 ENDMARKER

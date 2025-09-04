@@ -178,7 +178,7 @@ onMenuResponseThread()
             continue;
         }
 
-        if ( response == "validate" && menu == level.cacIngame.menu )
+        if( response == "validate" && menu == level.cacIngame.menu )
         {
             validateLoadoutData();
         }
