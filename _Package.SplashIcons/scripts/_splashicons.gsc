@@ -60,9 +60,8 @@ init()
 	precacheShader("splashicon25");
 
 	level.numKills = 0;
-	level.splashesBombPlantedBy = undefined;
+
 	level thread levelPlayerConnectionWatcher();
-	//level thread levelBompPlantingWatcher();
 }
 
 
@@ -72,14 +71,15 @@ levelPlayerConnectionWatcher()
 	{
 		level waittill( "connected", player );
 
+		player.recentKillCount = 0;
+
 		player.lastKilledPlayer = undefined;
 		player.lastKilledBy = undefined;
-		player.recentKillCount = 0;
+		player.lastKillTime = undefined;
 		
 		player.pers["cur_death_streak"] = 0;
 		player.pers["cur_kill_streak"] = 0;
 
-		player thread playerBompPlantingWatcher();
 		player thread playerSpawningWatcher();
 		player thread playerDamageWatcher();
 		player thread playerKillWatcher();
@@ -97,11 +97,12 @@ playerSpawningWatcher() {
 
 		self.firstDamagedTime = undefined;
 
-		self.lastAttackedPoint = undefined;
-		self.lastAttackedTime = undefined;
-		self.lastAttackedBy = undefined;
+		self.lastDamagedPoint = undefined;
+		self.lastDamagedTime = undefined;
+		self.lastDamagedBy = undefined;
 
-		self.lastKillTime = 0;
+		self.lastAttackedPlayer = undefined;
+		self.lastAttackedTime = undefined;
 	}
 }
 
@@ -144,31 +145,14 @@ playerDamageWatcher()
 				self.firstDamagedTime = getTime();
 			}
 
-			self.lastAttackedTime = getTime();
-			self.lastAttackedPoint = vPoint;
-			self.lastAttackedBy = eAttacker;
+			self.lastDamagedTime = getTime();
+			self.lastDamagedPoint = vPoint;
+			self.lastDamagedBy = eAttacker;
+
+			eAttacker.lastAttackedPlayer = self;
+			eAttacker.lastAttackedTime = getTime();
 		}
 	}
-}
-
-
-playerBompPlantingWatcher()
-{
-	level endon( "game_ended" );
-	self endon( "disconnect" );
-
-    for( ;; )
-    {
-        self waittill( "bomb_planted", player, site );
-        level.splashesBombPlantedBy = player;
-
-		iPrintLn("BOMB PLANTED");
-
-		level waittill( "bomb_defused" );
-		level.splashesBombPlantedBy = undefined;
-
-		iPrintLn("BOMB ^1NOT^7 PLANTED");
-    }
 }
 
 
@@ -219,8 +203,8 @@ onPlayerKilled( victim, weapon, meansOfDeath, damage, hitloc )
 	}
 
 
-	if( isDefined( victim.lastAttackedTime ) && victim.lastAttackedTime == curTime && ( meansOfDeath == "MOD_RIFLE_BULLET" || meansOfDeath == "MOD_PISTOL_BULLET" || meansOfDeath == "MOD_HEAD_SHOT" ) &&
-		isWallBang ( attacker, victim, victim.lastAttackedPoint ) )
+	if( isDefined( victim.lastDamagedTime ) && victim.lastDamagedTime == curTime && ( meansOfDeath == "MOD_RIFLE_BULLET" || meansOfDeath == "MOD_PISTOL_BULLET" || meansOfDeath == "MOD_HEAD_SHOT" ) &&
+		isWallBang ( attacker, victim, victim.lastDamagedPoint ) )
 	{	
 		attacker thread splashNotifyDelayed( "puncture" );
 	}
@@ -250,9 +234,22 @@ onPlayerKilled( victim, weapon, meansOfDeath, damage, hitloc )
 	}
 
 
-	if( level.teamBased && isDefined( victim.lastKilledPlayer ) && victim.lastKilledPlayer != attacker && ( curTime - victim.lastAttackedTime ) < 10000 )
+	if( level.teamBased && isDefined( victim.lastKilledPlayer ) && victim.lastKilledPlayer != attacker && ( curTime - victim.lastKillTime ) < 10000 )
 	{
 		attacker thread splashNotifyDelayed( "avenger" );
+	}
+
+
+	if( level.teamBased && isDefined( victim.lastAttackedPlayer ) && isAlive( victim.lastAttackedPlayer ) && victim.lastAttackedPlayer != attacker && ( curTime - victim.lastAttackedTime ) < 5000 )
+	{ 
+		attacker thread splashNotifyDelayed( "defender" );
+	}
+
+
+	if( isdefined( attacker.lastKilledBy ) && attacker.lastKilledBy == victim )// && level.players.size > 2)
+	{
+		attacker.lastKilledBy = undefined;
+		attacker thread splashNotifyDelayed( "revenge" );
 	}
 
 
@@ -291,27 +288,14 @@ onPlayerKilled( victim, weapon, meansOfDeath, damage, hitloc )
 				break;
 		}
 	}
-
-
-	if( isdefined( attacker.lastKilledBy ) && attacker.lastKilledBy == victim )// && level.players.size > 2)
-	{
-		attacker.lastKilledBy = undefined;
-		attacker thread splashNotifyDelayed( "revenge" );
-	}
-
-
-	if( isDefined( level.splashesBombPlantedBy ) && level.splashesBombPlantedBy.pers["team"] == attacker.pers["team"] )
-	{ 
-		attacker thread splashNotifyDelayed( "defender" );
-	}
 }
 
 
 onPlayerSuicide() 
 {
-	if( isDefined( self.lastAttackedTime ) && isPlayer( self.lastAttackedBy ) && isAlive( self.lastAttackedBy ) && ( getTime() - self.lastAttackedTime ) < 10000 )
+	if( isDefined( self.lastDamagedTime ) && isPlayer( self.lastDamagedBy ) && isAlive( self.lastDamagedBy ) && ( getTime() - self.lastDamagedTime ) < 10000 )
 	{
-		self.lastAttackedBy thread splashNotifyDelayed("assistedsuicide");
+		self.lastDamagedBy thread splashNotifyDelayed("assistedsuicide");
 	}
 }
 
@@ -423,7 +407,7 @@ getSplashSound( splash )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-splashNotify(splash)
+splashNotify( splash )
 {
 	self endon( "disconnect" );
 
@@ -463,7 +447,7 @@ splashNotify(splash)
 		splashNotify[0].vertAlign = "middle";
 		splashNotify[0] setText( getSplashTitle( splash.name ) );
 		splashNotify[0].glowcolor = ( 0.3, 2.0, 0.3 );
-		splashNotify[0].glowalpha = 1;//getSplashColorRGBA(splash.name,8);
+		splashNotify[0].glowalpha = 0.5;//getSplashColorRGBA(splash.name,8);
 		splashNotify[0].sort = 1001;
 		//splashNotify[0] maps\mp\gametypes\_hud::fontPulseInit();
 		splashNotify[0].hideWhenInMenu = true;
