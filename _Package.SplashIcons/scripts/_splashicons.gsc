@@ -12,7 +12,6 @@
 // https://github.com/kesaraweerasooriya/Splash-Icons-Cod4      //
 //**************************************************************//
 
-#include common_scripts\utility;
 #include maps\mp\_utility;
 #include maps\mp\gametypes\_hud_util;
 #include openwarfare\_utils;
@@ -87,7 +86,8 @@ levelPlayerConnectionWatcher()
 }
 
 
-playerSpawningWatcher() {
+playerSpawningWatcher()
+{
 	self endon( "disconnect" );
 	level endon( "game_ended" );
 
@@ -446,7 +446,7 @@ splashNotify( splash )
 		splashNotify[0].horzAlign = "center";
 		splashNotify[0].vertAlign = "middle";
 		splashNotify[0] setText( getSplashTitle( splash.name ) );
-		splashNotify[0].glowcolor = ( 0.3, 2.0, 0.3 );
+		splashNotify[0].glowcolor = ( 0.15, 1.0, 0.15 );
 		splashNotify[0].glowalpha = 0.5;//getSplashColorRGBA(splash.name,8);
 		splashNotify[0].sort = 1001;
 		//splashNotify[0] maps\mp\gametypes\_hud::fontPulseInit();
@@ -509,7 +509,8 @@ destroySplash( splashNotify )
 }
 
 
-fontPulse( player ) {
+fontPulse( player )
+{
 	self notify( "fontPulse" );
 	self endon( "fontPulse" );
 
