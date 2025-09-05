@@ -7,7 +7,7 @@
 7,revenge,SPLASHES_REVENGE,SPLASHES_REVENGE_DESC,splashicon3,2,0.75,0.25,0.25,1,oldschool_return,,splash
 8,doublekill,SPLASHES_DOUBLEKILL,SPLASHES_DOUBLEKILL_DESC,splashicon4,2,0.75,0.25,0.25,1,oldschool_return,,splash
 9,triplekill,SPLASHES_TRIPLEKILL,SPLASHES_TRIPLEKILL_DESC,splashicon5,2,0.75,0.25,0.25,1,oldschool_return,,splash
-10,multikill,SPLASHES_MULTIKILL,SPLASHES_MULTIKILL_DESC,splashicon6,2,0.75,0.25,0.25,1,ultrakill,,splash
+10,multikill,SPLASHES_MULTIKILL,SPLASHES_MULTIKILL_DESC,splashicon6,2,0.75,0.25,0.25,1,oldschool_return,,splash
 11,firstblood,SPLASHES_FIRSTBLOOD,SPLASHES_FIRSTBLOOD_DESC,splashicon7,2,0.75,0.25,0.25,1,oldschool_return,,splash
 12,buzzkill,SPLASHES_BUZZKILL,SPLASHES_BUZZKILL_DESC,splashicon8,2,0.75,0.25,0.25,1,oldschool_return,,splash
 13,comeback,SPLASHES_COMEBACK,SPLASHES_COMEBACK_DESC,splashicon9,2,0.75,0.25,0.25,1,oldschool_return,,splash

@@ -77,8 +77,7 @@ levelPlayerConnectionWatcher()
 		player.lastKillTime = undefined;
 		
 		player.pers["cur_death_streak"] = 0;
-		player.pers["cur_kill_streak"] = 0;
-
+		
 		player thread playerSpawningWatcher();
 		player thread playerDamageWatcher();
 		player thread playerKillWatcher();
@@ -103,6 +102,8 @@ playerSpawningWatcher()
 
 		self.lastAttackedPlayer = undefined;
 		self.lastAttackedTime = undefined;
+
+		self.pers["cur_kill_streak"] = 0;
 	}
 }
 
@@ -359,9 +360,10 @@ onPlayerMultikill( killCount )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-isWallBang(attacker, victim, hitPoint)
+isWallBang( attacker, victim, hitPoint )
 {
     return !SightTracePassed( attacker getEye(), hitPoint, false, attacker );
+    //return !bulletTracePassed( attacker getEye(), hitPoint, false, attacker );
 }
 
 
