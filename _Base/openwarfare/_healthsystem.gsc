@@ -171,7 +171,7 @@ onPlayerSpawned()
 	{
 		self.hud_healthsystem_icon = newClientHudElem( self );
 		self.hud_healthsystem_icon.x = 0;
-		self.hud_healthsystem_icon.y = 142;
+		self.hud_healthsystem_icon.y = 120;
 		self.hud_healthsystem_icon.alignX = "center";
 		self.hud_healthsystem_icon.alignY = "middle";
 		self.hud_healthsystem_icon.horzAlign = "center_safearea";
@@ -463,7 +463,7 @@ onPlayerDamaged()
 		self waittill("damage_taken", eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime );
 
 		// Make sure the player was damaged but it was not from falling
-		if ( iDamage > 0 && sMeansOfDeath != "MOD_FALLING" ) 
+		if ( iDamage > 0 && sMeansOfDeath != "MOD_FALLING" && sMeansOfDeath != "MOD_GRENADE_SPLASH" && sMeansOfDeath != "MOD_TRIGGER_HURT" ) 
 		{
 			// Quickly start a new thread so we can monitor for more damage taken
 			if ( level.scr_healthsystem_bleeding_start_percentage > 0 )
