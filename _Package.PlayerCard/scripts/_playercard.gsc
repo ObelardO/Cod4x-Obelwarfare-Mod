@@ -41,17 +41,78 @@ init()
 	level.scr_card_hardpoints_enemy_display = getdvarx( "scr_card_hardpoints_enemy_display", "int", 1, 0, 1 ); 
         level.scr_card_hardpoints_time_visible = getdvarx( "scr_card_hardpoints_time_visible", "float", 3.5, 1.5, 5 );   
         
+        if( !isDefined( level.playerCard ) )
+        {
+                level.playerCard = spawnStruct();
+
+                if( level.scr_card > 1 )
+                {
+                        imageColumn = 4;
+                        sizeColumn = 5;
+                        /*
+                        if( level.scr_card == 2 )
+                        {
+                                imageColumn = 4;
+                                sizeColumn = 5;
+                        }
+                        */
+
+                        if( level.scr_card == 3 )
+                        {
+                                imageColumn = 2;
+                                sizeColumn = 3;
+                        }
+
+                        level.playerCard.weaponInfo = [];
+
+                        weaponsCount = int ( tableLookup( "mp/cardtable.csv", 1, "none", 0 ) );
+
+                        print ( "Playercard: Found " + weaponsCount + " weapons in mp/cardtable.csv" );
+
+                        for( i = 1; i <= weaponsCount; i++ )
+                        {
+                                weaponName = tableLookup( "mp/cardtable.csv", 0, i, 1 );
+                                weaponSize = int( tableLookup( "mp/cardtable.csv", 0, i, sizeColumn ) );
+
+                                if( !isDefined ( weaponName ) || weaponName == "" ) continue;
+
+                                level.playerCard.weaponInfo[weaponName] = spawnStruct();
+                                level.playerCard.weaponInfo[weaponName].hudImage = tableLookup( "mp/cardtable.csv", 0, i, imageColumn );;
+                                //level.playerCard.weaponInfo[weaponName].size = weaponSize;
+                        
+                                precacheShader( level.playerCard.weaponInfo[weaponName].hudImage );
+
+                                if( level.scr_card == 2 )
+                                {
+                                        if ( weaponSize <= 2 ) level.playerCard.weaponInfo[weaponName].hudSize = ( 34, 34, 90 );
+                                        if ( weaponSize == 3 ) level.playerCard.weaponInfo[weaponName].hudSize = ( 80, 40, 80 );
+                                        if ( weaponSize == 4 ) level.playerCard.weaponInfo[weaponName].hudSize = ( 64, 64, 80 );
+                                }
+
+                                if( level.scr_card == 3 )
+                                {
+                                        if ( weaponSize <= 2 ) level.playerCard.weaponInfo[weaponName].hudSize = ( 34, 34, 90 );
+                                        if ( weaponSize == 3 ) level.playerCard.weaponInfo[weaponName].hudSize = ( 72, 18, 80 );
+                                        if ( weaponSize == 4 ) level.playerCard.weaponInfo[weaponName].hudSize = ( 72, 36, 80 );
+                                }
+                        }
+                }
+
+        }
+
         // Precache playercards
 	for( cards = 0; cards < level.scr_card_amount; cards++ )
         {
 		precacheShader( "playercard_emblem_" + cards );
 	}
 
+        /*
         if( level.scr_card == 2 )
                 loadWeaponIcons();
 
         if( level.scr_card == 3 )
                 loadHudIcons();
+        */
 
         loadHardpointShaders();
 
@@ -249,7 +310,7 @@ onPlayerSpawned()
 
 waitForKill()
 {
-	self endon("disconnect");
+	self endon( "disconnect" );
 
 	// Wait for the player to die
 	self waittill( "player_killed", eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, fDistance );
@@ -289,10 +350,7 @@ waitForKill()
         playercardAttacker.player = attacker;
 
         //Weapon Info
-        weaponInfo = spawnstruct();
-        weaponInfo.weapon = sWeapon;
-        weaponInfo.weaponIcon = attacker getWeaponImage( sWeapon );
-        weaponInfo.hudIcon = attacker getHudIconImage( sWeapon );
+        weaponInfo = getWeaponInfo( sWeapon );
 
         // Victim Thread
         if( isDefined( self ) && isPlayer( self ) )
@@ -301,6 +359,19 @@ waitForKill()
         // Attacker Thread
         if( isDefined( attacker ) )
                 attacker thread showKillCard( playercardVictim, playercardAttacker, weaponInfo );
+}
+
+
+getWeaponInfo( weaponName )
+{
+        if ( isDefined ( weaponName ) && weaponName != "" )
+        {
+                weaponPrefix = strTok( weaponName, "_" );
+
+                return level.playerCard.weaponInfo[ weaponPrefix[0] ];
+        }
+                
+        return undefined;
 }
 
 
@@ -323,12 +394,14 @@ waitTillHardpointCalled()
                 playercardHp.icon = self maps\mp\gametypes\_rank::getRankInfoIcon( self.pers["rank"], self.pers["prestige"] );
                 playercardHp.hardpoint = hardpointName;
                 
+                weaponInfo = getWeaponInfo( playercardHp.hardpoint );
+
                 players = level.players;
                 for( i = 0; i < players.size; i++ )
                 {
                         if( isDefined( players[i] ) && isPlayer ( players[i] ) && isAlive ( players[i] ) )
                         {
-                                players[i] thread showPlayercardHardpoint( playercardHp );
+                                players[i] thread showPlayercardHardpoint( playercardHp, weaponInfo );
                         }
                 }
 
@@ -357,16 +430,14 @@ showKillCard( playercardVictim, playercardAttacker, weaponInfo )
 
         self.showingPlayercard = true;
 
-        // Victim Threads
-        if( level.scr_card == 3 )
-                self thread showKillCardWeapon( weaponInfo );
-
-        if( level.scr_card == 2 )
-                self thread showKillCardWeapon( weaponInfo );
+        if( level.scr_card > 1 )
+                self showKillCardWeapon( weaponInfo );
 
         // Set shader and make visable
         self.playercardImage setShader( "playercard_emblem_" + playercardVictim.card, 240, 40 );
         self.playercardRankIcon setShader( playercardVictim.icon, 25, 25 );
+
+        self iPrintLn("playercard_emblem_" + playercardVictim.card );
 
         self.playercardText setText( playercardAttacker.text );
 	self.playercardText.color = playercardAttacker.textcolor;
@@ -460,56 +531,19 @@ showKillCard( playercardVictim, playercardAttacker, weaponInfo )
 
 showKillCardWeapon( weaponInfo )
 {
-	self endon( "disconnect" );
-
-        // Weapon Image Size
-        if( level.scr_card == 2 )
+        if( !isDefined ( weaponInfo ) )
         {
-                imageSize = self getWeaponImageSize( weaponInfo.weapon );
-
-	        if ( imageSize <= 2 ) {
-		        self.playercardKillWeapon setShader( weaponInfo.weaponIcon, 34, 34 );
-                        self.playercardKillWeapon.x = 90;
-                }
-
-	        if ( imageSize == 3 ) {
-		        self.playercardKillWeapon setShader( weaponInfo.weaponIcon, 80, 40 );
-                        self.playercardKillWeapon.x = 80;
-                }
-
-	        if ( imageSize == 4 ) {
-		        self.playercardKillWeapon setShader( weaponInfo.weaponIcon, 64, 64 );
-                        self.playercardKillWeapon.x = 80;
-                }
-
-       }
-
-        // Icon Image Size
-        if( level.scr_card == 3 )
-        {
-                iconSize = self getHudIconSize( weaponInfo.weapon );
-
-	        if ( iconSize <= 2 ) {
-		        self.playercardKillWeapon setShader( weaponInfo.hudIcon, 34, 34 );
-                        self.playercardKillWeapon.x = 90;
-                }
-
-	        if ( iconSize == 3 ) {
-		        self.playercardKillWeapon setShader( weaponInfo.hudIcon, 72, 18 );
-                        self.playercardKillWeapon.x = 80;
-                }
-
-	        if ( iconSize == 4 ) {
-		        self.playercardKillWeapon setShader( weaponInfo.hudIcon, 72, 36 );
-                        self.playercardKillWeapon.x = 80;
-                }
+                return;
         }
+
+        self.playercardKillWeapon setShader( weaponInfo.hudImage, int( weaponInfo.hudSize[0] ), int( weaponInfo.hudSize[1] ) );
+        self.playercardKillWeapon.x = int( weaponInfo.hudSize[2] );
 }
 
 
-showPlayercardHardpoint( playercardHp )
+showPlayercardHardpoint( playercardHp, weaponInfo )
 {
-	self endon("disconnect");
+	self endon( "disconnect" );
 
         // Wait if already showing a card
         while( isDefined( self.showingPlayercardHp ) && self.showingPlayercardHp == true )
@@ -567,8 +601,8 @@ showPlayercardHardpoint( playercardHp )
         if( level.scr_card <= 2 )
                 self.playercardKillWeaponHardpoint setShader( "killstreak_award_" + playercardHp.hardpoint, 40, 40 );  // 1:1
 
-        if( level.scr_card == 3 )
-                self.playercardKillWeaponHardpoint setShader( self getHudIconImage( playercardHp.hardpoint ), 56, 14 );  // 4:1
+        if( level.scr_card == 3 && isDefined ( weaponInfo ) )
+                self.playercardKillWeaponHardpoint setShader( weaponInfo.hudImage, 56, 14 );  // 4:1
 
         self.playercardKillWeaponHardpoint.alpha = 1;
 
@@ -617,6 +651,7 @@ showPlayercardHardpoint( playercardHp )
         self.showingPlayercardHp = false;
 }
 
+/*
 
 getWeaponImage( weapon )
 {
@@ -1395,7 +1430,7 @@ loadHudIcons()
 	precacheShader( "killiconimpact" );
 	precacheShader( "killicondied" );
 }
-
+*/
 
 loadHardpointShaders()
 {

@@ -4,6 +4,9 @@ localize,ow_card
 #PlayerCard: scripts
 rawfile,scripts/_playercard.gsc
 
+#PlayerCard: tables,
+stringtable,mp/cardtable.csv
+
 #PlayerCard: materials
 material,killstreak_award_airstrike_mp
 material,killstreak_award_helicopter_mp
