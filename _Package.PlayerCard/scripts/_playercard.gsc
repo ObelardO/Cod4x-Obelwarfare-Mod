@@ -34,95 +34,94 @@ init()
         setDvar( "ui_hud_show_center_obituary", "0" );
 
         // Dvars Playercards
-        level.scr_card_amount = getdvarx( "scr_card_amount", "int", 20, 1, 20 );
         level.scr_card_time_visible = getdvarx( "scr_card_time_visible", "float", 1.5, 1.5, 5 );
+        level.scr_card_amount = getdvarx( "scr_card_amount", "int", 20, 1, 20 );
 
         // Dvar Playercard Hardpoints
+        level.scr_card_hardpoints_time_visible = getdvarx( "scr_card_hardpoints_time_visible", "float", 3.5, 1.5, 5 ); 
 	level.scr_card_hardpoints_enemy_display = getdvarx( "scr_card_hardpoints_enemy_display", "int", 1, 0, 1 ); 
-        level.scr_card_hardpoints_time_visible = getdvarx( "scr_card_hardpoints_time_visible", "float", 3.5, 1.5, 5 );   
+          
         
         if( !isDefined( level.playerCard ) )
         {
                 level.playerCard = spawnStruct();
 
-                if( level.scr_card > 1 )
-                {
-                        imageColumn = 4;
-                        sizeColumn = 5;
-                        /*
-                        if( level.scr_card == 2 )
-                        {
-                                imageColumn = 4;
-                                sizeColumn = 5;
-                        }
-                        */
+                if( level.scr_card > 1 ) initWeaponInfo();
 
-                        if( level.scr_card == 3 )
-                        {
-                                imageColumn = 2;
-                                sizeColumn = 3;
-                        }
-
-                        level.playerCard.weaponInfo = [];
-
-                        weaponsCount = int ( tableLookup( "mp/cardtable.csv", 1, "none", 0 ) );
-
-                        print ( "Playercard: Found " + weaponsCount + " weapons in mp/cardtable.csv" );
-
-                        for( i = 1; i <= weaponsCount; i++ )
-                        {
-                                weaponName = tableLookup( "mp/cardtable.csv", 0, i, 1 );
-                                weaponSize = int( tableLookup( "mp/cardtable.csv", 0, i, sizeColumn ) );
-
-                                if( !isDefined ( weaponName ) || weaponName == "" ) continue;
-
-                                level.playerCard.weaponInfo[weaponName] = spawnStruct();
-                                level.playerCard.weaponInfo[weaponName].hudImage = tableLookup( "mp/cardtable.csv", 0, i, imageColumn );;
-                                //level.playerCard.weaponInfo[weaponName].size = weaponSize;
-                        
-                                precacheShader( level.playerCard.weaponInfo[weaponName].hudImage );
-
-                                if( level.scr_card == 2 )
-                                {
-                                        if ( weaponSize <= 2 ) level.playerCard.weaponInfo[weaponName].hudSize = ( 34, 34, 90 );
-                                        if ( weaponSize == 3 ) level.playerCard.weaponInfo[weaponName].hudSize = ( 80, 40, 80 );
-                                        if ( weaponSize == 4 ) level.playerCard.weaponInfo[weaponName].hudSize = ( 64, 64, 80 );
-                                }
-
-                                if( level.scr_card == 3 )
-                                {
-                                        if ( weaponSize <= 2 ) level.playerCard.weaponInfo[weaponName].hudSize = ( 34, 34, 90 );
-                                        if ( weaponSize == 3 ) level.playerCard.weaponInfo[weaponName].hudSize = ( 72, 18, 80 );
-                                        if ( weaponSize == 4 ) level.playerCard.weaponInfo[weaponName].hudSize = ( 72, 36, 80 );
-                                }
-                        }
-                }
-
+                initHudShaders();
         }
 
-        // Precache playercards
-	for( cards = 0; cards < level.scr_card_amount; cards++ )
-        {
-		precacheShader( "playercard_emblem_" + cards );
-	}
-
-        /*
-        if( level.scr_card == 2 )
-                loadWeaponIcons();
-
-        if( level.scr_card == 3 )
-                loadHudIcons();
-        */
-
-        loadHardpointShaders();
-
+        precacheString( &"OW_CARD_HELICOPTER_INBOUN" );
+        precacheString( &"OW_CARD_AIRSTRIKE_INBOUN" );
+        precacheString( &"OW_CARD_UAV_INBOUND" );
         precacheString( &"OW_CARD_ATTACKER" );
 	precacheString( &"OW_CARD_VICTIM" );
-	precacheString( &"OW_CARD_UAV_INBOUND" );
-	precacheString( &"OW_CARD_AIRSTRIKE_INBOUN" );
-	precacheString( &"OW_CARD_HELICOPTER_INBOUN" );
-
+	
 	level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
+}
+
+
+initWeaponInfo()
+{
+        imageColumn = 4;
+        sizeColumn = 5;
+
+        if( level.scr_card == 3 )
+        {
+                imageColumn = 2;
+                sizeColumn = 3;
+        }
+
+        level.playerCard.weaponInfo = [];
+
+        weaponsCount = int ( tableLookup( "mp/cardtable.csv", 1, "none", 0 ) );
+
+        print ( "Playercard: Found " + weaponsCount + " weapons in mp/cardtable.csv" );
+
+        for( i = 1; i <= weaponsCount; i++ )
+        {
+                weaponName = tableLookup( "mp/cardtable.csv", 0, i, 1 );
+                weaponSize = int( tableLookup( "mp/cardtable.csv", 0, i, sizeColumn ) );
+
+                if( !isDefined ( weaponName ) || weaponName == "" ) continue;
+
+                level.playerCard.weaponInfo[weaponName] = spawnStruct();
+                level.playerCard.weaponInfo[weaponName].hudImage = tableLookup( "mp/cardtable.csv", 0, i, imageColumn );;
+
+                precacheShader( level.playerCard.weaponInfo[weaponName].hudImage );
+
+                if( level.scr_card == 2 )
+                {
+                        if ( weaponSize <= 2 ) level.playerCard.weaponInfo[weaponName].hudSize = ( 34, 34, 90 );
+                        if ( weaponSize == 3 ) level.playerCard.weaponInfo[weaponName].hudSize = ( 80, 40, 80 );
+                        if ( weaponSize == 4 ) level.playerCard.weaponInfo[weaponName].hudSize = ( 64, 64, 80 );
+                }
+
+                if( level.scr_card == 3 )
+                {
+                        if ( weaponSize <= 2 ) level.playerCard.weaponInfo[weaponName].hudSize = ( 34, 34, 90 );
+                        if ( weaponSize == 3 ) level.playerCard.weaponInfo[weaponName].hudSize = ( 72, 18, 80 );
+                        if ( weaponSize == 4 ) level.playerCard.weaponInfo[weaponName].hudSize = ( 72, 36, 80 );
+                }
+        }
+
+}
+
+initHudShaders()
+{
+        for( cards = 0; cards < level.scr_card_amount; cards++ )
+        {
+                precacheShader( "playercard_emblem_" + cards );
+        }
+
+        // Hardpoint Images
+	precacheShader( "killstreak_award_airstrike_mp" );
+	precacheShader( "killstreak_award_helicopter_mp" );
+	precacheShader( "killstreak_award_radar_mp" );
+
+	precacheShader( "death_radar" );
+	precacheShader( "death_airstrike" );
+	precacheShader( "death_helicopter" );
 }
 
 
@@ -130,9 +129,10 @@ onPlayerConnected()
 {
         if( !isDefined( self.playerCard ) ) 
         {
-                self.playerCard = randomIntRange( 0, level.scr_card_amount );
-                self.showingPlayercard = false;
-                self.showingPlayercardHp = false;
+                self.playerCard = spawnStruct();
+                self.playerCard.number = randomIntRange( 0, level.scr_card_amount );
+                self.playerCard.isShowingKill = false;
+                self.playerCard.isShowingHardPoint = false;
         }
 	
 	self thread addNewEvent( "onPlayerSpawned", ::onPlayerSpawned );
@@ -142,162 +142,145 @@ onPlayerConnected()
 onPlayerSpawned()
 {
         // Killed by / You Killed
-        if( !isDefined( self.playercardText ) )
+        if( !isDefined( self.playercard.hudTitle ) )
         {
-	        self.playercardText = newClientHudElem( self );
-	        self.playercardText.x = 0; 
-                self.playercardText.y = -100;
-	        self.playercardText.alignX = "center";
-	        self.playercardText.alignY = "top";
-	        self.playercardText.horzAlign = "center";
-	        self.playercardText.vertAlign = "bottom";
-	        self.playercardText.fontScale = 1.6;
-	        self.playercardText.sort = -1;
-	        self.playercardText.glowAlpha = 0;
-                self.playercardText.alpha = 0;
-                self.playercardText.archived = false;
+	        self.playercard.hudTitle = newClientHudElem( self );
+	        self.playercard.hudTitle.x = 0; 
+                self.playercard.hudTitle.y = -100;
+	        self.playercard.hudTitle.alignX = "center";
+	        self.playercard.hudTitle.alignY = "top";
+	        self.playercard.hudTitle.horzAlign = "center";
+	        self.playercard.hudTitle.vertAlign = "bottom";
+	        self.playercard.hudTitle.fontScale = 1.6;
+	        self.playercard.hudTitle.sort = -1;
+	        self.playercard.hudTitle.glowAlpha = 0;
+                self.playercard.hudTitle.alpha = 0;
+                self.playercard.hudTitle.archived = false;
         }
 
         // Player Name
-        if( !isDefined( self.playercardName ) )
+        if( !isDefined( self.playercard.hudName ) )
         {
-	        self.playercardName = newClientHudElem( self );
-	        self.playercardName.x = -80; 
-                self.playercardName.y = -70;
-	        self.playercardName.alignX = "left";
-	        self.playercardName.alignY = "top";
-	        self.playercardName.horzAlign = "center";
-	        self.playercardName.vertAlign = "bottom";
-	        self.playercardName.fontScale = 1.4;
-	        self.playercardName.sort = -1;
-	        self.playercardName.glowAlpha = 0;
-                self.playercardName.alpha = 0;
-                self.playercardName.color = (1, 1, 1);
-                self.playercardName.archived = false;
+	        self.playercard.hudName = newClientHudElem( self );
+	        self.playercard.hudName.x = -80; 
+                self.playercard.hudName.y = -70;
+	        self.playercard.hudName.alignX = "left";
+	        self.playercard.hudName.alignY = "top";
+	        self.playercard.hudName.horzAlign = "center";
+	        self.playercard.hudName.vertAlign = "bottom";
+	        self.playercard.hudName.fontScale = 1.4;
+	        self.playercard.hudName.sort = -1;
+	        self.playercard.hudName.glowAlpha = 0;
+                self.playercard.hudName.alpha = 0;
+                self.playercard.hudName.color = (1, 1, 1);
+                self.playercard.hudName.archived = false;
         }
 
         // Background Image
-        if( !isDefined( self.playercardImage ) )
+        if( !isDefined( self.playercard.hudImage ) )
         {
 	        // Create the HUD element to display the playercard
-	        self.playercardImage = newClientHudElem( self );
-	        self.playercardImage.x = 0;
-	        self.playercardImage.y = -80;	
-	        self.playercardImage.sort = -2;
-                self.playercardImage.alignX = "center";
-	        self.playercardImage.alignY = "top";
-	        self.playercardImage.horzAlign = "center";
-	        self.playercardImage.vertAlign = "bottom";
-                self.playercardImage.alpha = 0;
-                self.playercardImage.archived = false;
+	        self.playercard.hudImage = newClientHudElem( self );
+	        self.playercard.hudImage.x = 0;
+	        self.playercard.hudImage.y = -80;	
+	        self.playercard.hudImage.sort = -2;
+                self.playercard.hudImage.alignX = "center";
+	        self.playercard.hudImage.alignY = "top";
+	        self.playercard.hudImage.horzAlign = "center";
+	        self.playercard.hudImage.vertAlign = "bottom";
+                self.playercard.hudImage.alpha = 0;
+                self.playercard.hudImage.archived = false;
         }
 
         // Rank Icon
-	if ( !isDefined( self.playercardRankIcon ) )
+	if( !isDefined( self.playercard.hudRankIcon ) )
         {
-		self.playercardRankIcon = self createIcon( "white", 25, 25 );
-		self.playercardRankIcon setPoint( "CENTER", "BOTTOM", -100, -60 );
-		self.playercardRankIcon.sort = -1;
-		self.playercardRankIcon.alpha = 0;
-		self.playercardRankIcon.archived = false;
+		self.playercard.hudRankIcon = self createIcon( "white", 25, 25 );
+		self.playercard.hudRankIcon setPoint( "CENTER", "BOTTOM", -100, -60 );
+		self.playercard.hudRankIcon.sort = -1;
+		self.playercard.hudRankIcon.alpha = 0;
+		self.playercard.hudRankIcon.archived = false;
 	}
 
-        // Team Icon
-        if( level.scr_card == 1 )
+        if( !isDefined( self.playercard.hudWeapIcon ) )
         {
-	        if ( !isDefined( self.playercardTeamIcon ) )
-                {
-		        self.playercardTeamIcon = self createIcon( "white", 25, 25 );
-		        self.playercardTeamIcon setPoint( "CENTER", "BOTTOM", 105, -60 );
-		        self.playercardTeamIcon.sort = -1;
-		        self.playercardTeamIcon.alpha = 0;
-		        self.playercardTeamIcon.archived = false;
-	        }
+                self.playercard.hudWeapIcon = self createIcon( "white", 25, 25 );
+                self.playercard.hudWeapIcon setPoint( "CENTER", "BOTTOM", 105, -60 );
+                self.playercard.hudWeapIcon.sort = -1;
+                self.playercard.hudWeapIcon.alpha = 0;
+                self.playercard.hudWeapIcon.archived = false;
         }
-
-        // Weapon Icon
-        if( level.scr_card >= 2 )
+        
+        if( level.scr_card_hardpoints == 1 )
         {
-	        if ( !isDefined( self.playercardKillWeapon ) )
-                {
-		        self.playercardKillWeapon = self createIcon( "white", 25, 25 );
-		        self.playercardKillWeapon setPoint( "CENTER", "BOTTOM", 80, -60 );
-		        self.playercardKillWeapon.sort = -1;
-		        self.playercardKillWeapon.alpha = 0;
-		        self.playercardKillWeapon.archived = false;
-	        }
-        }
-
-        if( level.scr_card_hardpoints == 1 ) {
-
                 // Player Name
-                if( !isDefined( self.playercardNameHardpoint ) )
+                if( !isDefined( self.playercard.hudNameHp ) )
                 {
-	                self.playercardNameHardpoint = newClientHudElem( self );
-	                self.playercardNameHardpoint.x = -208; 
-                        self.playercardNameHardpoint.y = -180;
-	                self.playercardNameHardpoint.alignX = "left";
-	                self.playercardNameHardpoint.alignY = "middle";
-	                self.playercardNameHardpoint.horzAlign = "right";
-	                self.playercardNameHardpoint.vertAlign = "middle";
-	                self.playercardNameHardpoint.fontScale = 1.4;
-	                self.playercardNameHardpoint.sort = -1;
-	                self.playercardNameHardpoint.glowAlpha = 0;
-                        self.playercardNameHardpoint.alpha = 0;
-                        self.playercardNameHardpoint.archived = false;
+	                self.playercard.hudNameHp = newClientHudElem( self );
+	                self.playercard.hudNameHp.x = -208; 
+                        self.playercard.hudNameHp.y = -180;
+	                self.playercard.hudNameHp.alignX = "left";
+	                self.playercard.hudNameHp.alignY = "middle";
+	                self.playercard.hudNameHp.horzAlign = "right";
+	                self.playercard.hudNameHp.vertAlign = "middle";
+	                self.playercard.hudNameHp.fontScale = 1.4;
+	                self.playercard.hudNameHp.sort = -1;
+	                self.playercard.hudNameHp.glowAlpha = 0;
+                        self.playercard.hudNameHp.alpha = 0;
+                        self.playercard.hudNameHp.archived = false;
                 }
 
                 // Background Image
-                if( !isDefined( self.playercardImageHardpoint ) )
+                if( !isDefined( self.playercard.hudImageHp ) )
                 {
 	                // Create the HUD element to display the playercard
-	                self.playercardImageHardpoint = newClientHudElem( self );
-	                self.playercardImageHardpoint.x = -250;
-	                self.playercardImageHardpoint.y = -180;
-	                self.playercardImageHardpoint.sort = -2;
-                        self.playercardImageHardpoint.alignX = "left";
-	                self.playercardImageHardpoint.alignY = "middle";
-	                self.playercardImageHardpoint.horzAlign = "right";
-	                self.playercardImageHardpoint.vertAlign = "middle";
-                        self.playercardImageHardpoint.alpha = 0;
-                        self.playercardImageHardpoint.archived = false;
+	                self.playercard.hudImageHp = newClientHudElem( self );
+	                self.playercard.hudImageHp.x = -250;
+	                self.playercard.hudImageHp.y = -180;
+	                self.playercard.hudImageHp.sort = -2;
+                        self.playercard.hudImageHp.alignX = "left";
+	                self.playercard.hudImageHp.alignY = "middle";
+	                self.playercard.hudImageHp.horzAlign = "right";
+	                self.playercard.hudImageHp.vertAlign = "middle";
+                        self.playercard.hudImageHp.alpha = 0;
+                        self.playercard.hudImageHp.archived = false;
                 }
 
                 // Rank Icon
-	        if( !isDefined( self.playercardRankIconHardpoint ) )
+	        if( !isDefined( self.playercard.hudRankIconHp ) )
                 {
-		        self.playercardRankIconHardpoint = self createIcon( "white", 25, 25 );
-		        self.playercardRankIconHardpoint setPoint( "MIDDLE", "RIGHT", -227, -180 );
-		        self.playercardRankIconHardpoint.sort = -1;
-		        self.playercardRankIconHardpoint.alpha = 0;
-		        self.playercardRankIconHardpoint.archived = false;
+		        self.playercard.hudRankIconHp = self createIcon( "white", 25, 25 );
+		        self.playercard.hudRankIconHp setPoint( "MIDDLE", "RIGHT", -227, -180 );
+		        self.playercard.hudRankIconHp.sort = -1;
+		        self.playercard.hudRankIconHp.alpha = 0;
+		        self.playercard.hudRankIconHp.archived = false;
 	        }
 
                 // Hardpoint Text
-                if( !isDefined( self.playercardHardpointText ) )
+                if( !isDefined( self.playercard.hudTitleHp ) )
                 {
-	                self.playercardHardpointText = newClientHudElem( self );
-	                self.playercardHardpointText.x = -246; 
-                        self.playercardHardpointText.y = -152;
-	                self.playercardHardpointText.alignX = "left";
-	                self.playercardHardpointText.alignY = "middle";
-	                self.playercardHardpointText.horzAlign = "right";
-	                self.playercardHardpointText.vertAlign = "middle";
-	                self.playercardHardpointText.fontScale = 1.4;
-	                self.playercardHardpointText.sort = -1;
-	                self.playercardHardpointText.glowAlpha = 0;
-		        self.playercardHardpointText.alpha = 0;
-		        self.playercardHardpointText.archived = false;
+	                self.playercard.hudTitleHp = newClientHudElem( self );
+	                self.playercard.hudTitleHp.x = -246; 
+                        self.playercard.hudTitleHp.y = -152;
+	                self.playercard.hudTitleHp.alignX = "left";
+	                self.playercard.hudTitleHp.alignY = "middle";
+	                self.playercard.hudTitleHp.horzAlign = "right";
+	                self.playercard.hudTitleHp.vertAlign = "middle";
+	                self.playercard.hudTitleHp.fontScale = 1.4;
+	                self.playercard.hudTitleHp.sort = -1;
+	                self.playercard.hudTitleHp.glowAlpha = 0;
+		        self.playercard.hudTitleHp.alpha = 0;
+		        self.playercard.hudTitleHp.archived = false;
                 }
 
                 // Weapon Icon
-                if( !isDefined( self.playercardKillWeaponHardpoint ) )
+                if( !isDefined( self.playercard.hudWeapIconHp ) )
                 {
-		        self.playercardKillWeaponHardpoint = self createIcon( "white", 25, 25 );
-		        self.playercardKillWeaponHardpoint setPoint( "MIDDLE", "RIGHT", -50, -180 );
-		        self.playercardKillWeaponHardpoint.sort = -1;
-		        self.playercardKillWeaponHardpoint.alpha = 0;
-		        self.playercardKillWeaponHardpoint.archived = false;
+		        self.playercard.hudWeapIconHp = self createIcon( "white", 25, 25 );
+		        self.playercard.hudWeapIconHp setPoint( "MIDDLE", "RIGHT", -50, -180 );
+		        self.playercard.hudWeapIconHp.sort = -1;
+		        self.playercard.hudWeapIconHp.alpha = 0;
+		        self.playercard.hudWeapIconHp.archived = false;
 	        }
         }
 
@@ -331,7 +314,7 @@ waitForKill()
         playercardVictim = spawnstruct();
         playercardVictim.name = self.name;
         playercardVictim.rank = self.pers["rank"] + 1;
-        playercardVictim.card = self.playerCard;
+        playercardVictim.card = self.playerCard.number;
         playercardVictim.icon = self maps\mp\gametypes\_rank::getRankInfoIcon( self.pers["rank"], self.pers["prestige"] );
         playercardVictim.team = game["icons"][self.team];
         playercardVictim.text = &"OW_CARD_VICTIM";
@@ -342,7 +325,7 @@ waitForKill()
         playercardAttacker = spawnstruct();
         playercardAttacker.name = attacker.name;
         playercardAttacker.rank = attacker.pers["rank"] + 1;
-        playercardAttacker.card = attacker.playerCard;
+        playercardAttacker.card = attacker.playerCard.number;
         playercardAttacker.icon = attacker maps\mp\gametypes\_rank::getRankInfoIcon( attacker.pers["rank"], attacker.pers["prestige"] );
         playercardAttacker.team = game["icons"][attacker.team];
         playercardAttacker.text = &"OW_CARD_ATTACKER";
@@ -375,6 +358,100 @@ getWeaponInfo( weaponName )
 }
 
 
+showKillCard( playercardVictim, playercardAttacker, weaponInfo )
+{
+	self endon( "disconnect" );
+
+        // Wait if already showing a card
+        while( isDefined( self.playerCard.isShowingKill ) && self.playerCard.isShowingKill == true )
+        {
+                wait( 0.2 );
+        }
+
+        // Self Spectating
+        if( self.sessionstate == "spectator" )
+                return;
+
+        // Game ended or Intermission
+        if( level.gameEnded || level.intermission )
+                return;
+
+        self.playerCard.isShowingKill = true;
+
+        if( level.scr_card == 1 )
+                self.playercard.hudWeapIcon setShader( playercardVictim.team, 25, 25 );
+        else
+                self showKillCardWeapon( weaponInfo );
+
+        self.playercard.hudRankIcon setShader( playercardVictim.icon, 25, 25 );
+        self.playercard.hudTitle setText( playercardAttacker.text );
+	self.playercard.hudTitle.color = playercardAttacker.textcolor;
+        self.playercard.hudImage setShader( "playercard_emblem_" + playercardVictim.card, 240, 40 );
+	self.playercard.hudName setPlayerNameString( playercardVictim.player );
+
+        self.playercard.hudWeapIcon.alpha = 1;
+        self.playercard.hudRankIcon.alpha = 1;
+        self.playercard.hudTitle.alpha = 1;
+        self.playercard.hudImage.alpha = 0.9;
+        self.playercard.hudName.alpha = 1;
+        
+        // Time shader visible
+        wait( level.scr_card_time_visible );
+
+        // Move to bottom and set non-visible
+        self.playercard.hudWeapIcon moveOverTime( 0.40 );
+        self.playercard.hudRankIcon moveOverTime( 0.40 );
+        self.playercard.hudTitle moveOverTime( 0.40 );
+        self.playercard.hudImage moveOverTime( 0.40 );
+        self.playercard.hudName moveOverTime( 0.40 );
+        
+        self.playercard.hudWeapIcon.y = 40;
+        self.playercard.hudRankIcon.y = 40;
+        self.playercard.hudTitle.y = 0;
+        self.playercard.hudImage.y = 20;
+        self.playercard.hudName.y = 30;
+
+        // Time wait to move to bottom
+        wait( 0.4 );
+
+        // Move back to start position.
+        self.playercard.hudWeapIcon moveOverTime( 0.40 );
+        self.playercard.hudRankIcon moveOverTime( 0.40 );
+        self.playercard.hudTitle moveOverTime( 0.40 );
+        self.playercard.hudImage moveOverTime( 0.40 );
+        self.playercard.hudName moveOverTime( 0.40 );
+        
+        self.playercard.hudWeapIcon.y = -60;
+        self.playercard.hudRankIcon.y = -60;
+        self.playercard.hudTitle.y = -100;
+        self.playercard.hudImage.y = -80;
+        self.playercard.hudName.y = -70;
+
+        self.playercard.hudWeapIcon.alpha = 0;
+        self.playercard.hudRankIcon.alpha = 0;
+        self.playercard.hudTitle.alpha = 0;
+        self.playercard.hudImage.alpha = 0;
+        self.playercard.hudName.alpha = 0;
+        
+        // Time wait to move back
+        wait( 0.4 );
+
+        self.playerCard.isShowingKill = false;
+}
+
+
+showKillCardWeapon( weaponInfo )
+{
+        if( !isDefined ( weaponInfo ) )
+        {
+                return;
+        }
+
+        self.playercard.hudWeapIcon setShader( weaponInfo.hudImage, int( weaponInfo.hudSize[0] ), int( weaponInfo.hudSize[1] ) );
+        self.playercard.hudWeapIcon.x = int( weaponInfo.hudSize[2] );
+}
+
+
 waitTillHardpointCalled()
 {
 	self endon ( "death" );
@@ -390,15 +467,26 @@ waitTillHardpointCalled()
                 playercardHp.name = self.name;
                 playercardHp.rank = self.pers["rank"] + 1;
                 playercardHp.team = self.pers["team"];
-                playercardHp.image = self.playerCard;
+                playercardHp.image = self.playerCard.number;
                 playercardHp.icon = self maps\mp\gametypes\_rank::getRankInfoIcon( self.pers["rank"], self.pers["prestige"] );
                 playercardHp.hardpoint = hardpointName;
+                playercardHp.textcolor = ( 0.73, 0.97, 0.71 );
                 
                 weaponInfo = getWeaponInfo( playercardHp.hardpoint );
 
                 players = level.players;
                 for( i = 0; i < players.size; i++ )
                 {
+                        samePlayer = players[i] == self;
+                        sameTeam = players[i].pers["team"] == self.pers["team"];
+
+                        if ( !sameTeam || !samePlayer )
+                        {
+                                if( level.teamBased && level.scr_card_hardpoints_enemy_display == 0 ) continue;
+
+                                playercardHp.textcolor = ( 0.98, 0.67, 0.67 ); // Red
+                        }
+
                         if( isDefined( players[i] ) && isPlayer ( players[i] ) && isAlive ( players[i] ) )
                         {
                                 players[i] thread showPlayercardHardpoint( playercardHp, weaponInfo );
@@ -410,143 +498,12 @@ waitTillHardpointCalled()
 }
 
 
-showKillCard( playercardVictim, playercardAttacker, weaponInfo )
-{
-	self endon( "disconnect" );
-
-        // Wait if already showing a card
-        while( isDefined( self.showingPlayercard ) && self.showingPlayercard == true )
-        {
-                wait( 0.2 );
-        }
-
-        // Self Spectating
-        if( self.sessionstate == "spectator" )
-                return;
-
-        // Game ended or Intermission
-        if( level.gameEnded || level.intermission )
-                return;
-
-        self.showingPlayercard = true;
-
-        if( level.scr_card > 1 )
-                self showKillCardWeapon( weaponInfo );
-
-        // Set shader and make visable
-        self.playercardImage setShader( "playercard_emblem_" + playercardVictim.card, 240, 40 );
-        self.playercardRankIcon setShader( playercardVictim.icon, 25, 25 );
-
-        self iPrintLn("playercard_emblem_" + playercardVictim.card );
-
-        self.playercardText setText( playercardAttacker.text );
-	self.playercardText.color = playercardAttacker.textcolor;
-
-	self.playercardName setPlayerNameString( playercardVictim.player );
-
-        if( level.scr_card == 1 )
-                self.playercardTeamIcon setShader( playercardVictim.team, 25, 25 );
-
-        self.playercardImage.alpha = 0.9;
-        self.playercardRankIcon.alpha = 1;
-        self.playercardName.alpha = 1;
-        self.playercardText.alpha = 1;
-
-        if( level.scr_card == 1 )
-                self.playercardTeamIcon.alpha = 1;
-       
-        if( level.scr_card >= 2 )
-                self.playercardKillWeapon.alpha = 1;
-
-        // Time shader visible
-        wait( level.scr_card_time_visible );
-
-        // Move to bottom and set non-visible
-        self.playercardImage moveOverTime( 0.40 );
-        self.playercardRankIcon moveOverTime( 0.40 );
-        self.playercardName moveOverTime( 0.40 );
-        self.playercardText moveOverTime( 0.40 );
-        //self.playercardRankNumber moveOverTime( 0.40 );
-
-        if( level.scr_card == 1 )
-                self.playercardTeamIcon moveOverTime( 0.40 );
-
-        if( level.scr_card >= 2 )
-                self.playercardKillWeapon moveOverTime( 0.40 );
-
-        self.playercardImage.y = 20;
-        self.playercardRankIcon.y = 40;
-        self.playercardName.y = 30;
-        self.playercardText.y = 0;
-
-        if( level.scr_card == 1 )
-                self.playercardTeamIcon.y = 40;
-
-        if( level.scr_card >= 2 )
-                self.playercardKillWeapon.y = 40;
-     
-        // Time wait to move to bottom
-        wait( 0.4 );
-
-        // Move back to start position.
-        self.playercardImage moveOverTime( 0.40 );
-        self.playercardRankIcon moveOverTime( 0.40 );
-        self.playercardName moveOverTime( 0.40 );
-        self.playercardText moveOverTime( 0.40 );
-
-        if( level.scr_card == 1 )
-                self.playercardTeamIcon moveOverTime( 0.40 );
-
-        if( level.scr_card >= 2 )
-                self.playercardKillWeapon moveOverTime( 0.40 );
-
-        self.playercardImage.y = -80;
-        self.playercardRankIcon.y = -60;
-        self.playercardName.y = -70;
-        self.playercardText.y = -100;
-
-        if( level.scr_card == 1 )
-                self.playercardTeamIcon.y = -60;
-
-        if( level.scr_card >= 2 )
-                self.playercardKillWeapon.y = -60;
-
-        self.playercardImage.alpha = 0;
-        self.playercardRankIcon.alpha = 0;
-        self.playercardName.alpha = 0;
-        self.playercardText.alpha = 0;
-
-        if( level.scr_card == 1 )
-                self.playercardTeamIcon.alpha = 0;
-
-        if( level.scr_card >= 2 )
-                self.playercardKillWeapon.alpha = 0;
-
-        // Time wait to move back
-        wait( 0.4 );
-
-        self.showingPlayercard = false;
-}
-
-
-showKillCardWeapon( weaponInfo )
-{
-        if( !isDefined ( weaponInfo ) )
-        {
-                return;
-        }
-
-        self.playercardKillWeapon setShader( weaponInfo.hudImage, int( weaponInfo.hudSize[0] ), int( weaponInfo.hudSize[1] ) );
-        self.playercardKillWeapon.x = int( weaponInfo.hudSize[2] );
-}
-
-
 showPlayercardHardpoint( playercardHp, weaponInfo )
 {
 	self endon( "disconnect" );
 
         // Wait if already showing a card
-        while( isDefined( self.showingPlayercardHp ) && self.showingPlayercardHp == true )
+        while( isDefined( self.playerCard.isShowingHardPoint ) && self.playerCard.isShowingHardPoint == true )
         {
                 wait( 0.2 );
         }
@@ -558,888 +515,85 @@ showPlayercardHardpoint( playercardHp, weaponInfo )
         // Game ended or Intermission
         if( level.gameEnded || level.intermission )
                 return;
-
-        if ( ( level.teamBased && self.pers["team"] == playercardHp.team ) || self == playercardHp.player )
-        {
-                self.playercardHardpointText.color = ( 0.73, 0.97, 0.71 ); // Green
-        }
-        else
-        {
-                if ( level.scr_card_hardpoints_enemy_display == 0 ) return;
                 
-                self.playercardHardpointText.color = ( 0.98, 0.67, 0.67 ); // Red        
-        }
-
-        self.showingPlayercardHp = true;
-
-        // Name
-        self.playercardNameHardpoint setPlayerNameString( playercardHp.player );
-        self.playercardNameHardpoint.color = ( 1, 1, 1 );
-        self.playercardNameHardpoint.alpha = 1;
-
-        // Background Image
-        self.playercardImageHardpoint setShader( "playercard_emblem_" + playercardHp.image, 240, 40 );
-        self.playercardImageHardpoint.alpha = 0.8;
-
-        // Rank Icon
-        self.playercardRankIconHardpoint setShader( playercardHp.icon, 25, 25 );
-        self.playercardRankIconHardpoint.alpha = 1;
-
-        // Hardpoint Text Message...................... Add your extra Hp's here
-        if( playercardHp.hardpoint == "radar_mp" ) 
-                self.playercardHardpointText setText( &"OW_CARD_UAV_INBOUND" );
-
-        if( playercardHp.hardpoint == "airstrike_mp" ) 
-                self.playercardHardpointText setText( &"OW_CARD_AIRSTRIKE_INBOUN" );
-
-        if( playercardHp.hardpoint == "helicopter_mp" ) 
-                self.playercardHardpointText setText( &"OW_CARD_AIRSTRIKE_INBOUN" );
-        
-        self.playercardHardpointText.alpha = 1;
+        self.playerCard.isShowingHardPoint = true;
 
         // Weapon Icon
         if( level.scr_card <= 2 )
-                self.playercardKillWeaponHardpoint setShader( "killstreak_award_" + playercardHp.hardpoint, 40, 40 );  // 1:1
+                self.playercard.hudWeapIconHp setShader( "killstreak_award_" + playercardHp.hardpoint, 40, 40 );  // 1:1
 
         if( level.scr_card == 3 && isDefined ( weaponInfo ) )
-                self.playercardKillWeaponHardpoint setShader( weaponInfo.hudImage, 56, 14 );  // 4:1
+                self.playercard.hudWeapIconHp setShader( weaponInfo.hudImage, 56, 14 );  // 4:1
 
-        self.playercardKillWeaponHardpoint.alpha = 1;
+        // Rank Icon
+        self.playercard.hudRankIconHp setShader( playercardHp.icon, 25, 25 );
+
+        // Hardpoint Text Message...................... Add your extra Hp's here
+        if( playercardHp.hardpoint == "radar_mp" ) 
+                self.playercard.hudTitleHp setText( &"OW_CARD_UAV_INBOUND" );
+
+        if( playercardHp.hardpoint == "airstrike_mp" ) 
+                self.playercard.hudTitleHp setText( &"OW_CARD_AIRSTRIKE_INBOUN" );
+
+        if( playercardHp.hardpoint == "helicopter_mp" ) 
+                self.playercard.hudTitleHp setText( &"OW_CARD_AIRSTRIKE_INBOUN" );
+
+        self.playercard.hudTitleHp.color = playercardHp.textcolor;
+
+        // Background Image
+        self.playercard.hudImageHp setShader( "playercard_emblem_" + playercardHp.image, 240, 40 );
+        
+        // Name
+        self.playercard.hudNameHp setPlayerNameString( playercardHp.player );
+        self.playercard.hudNameHp.color = ( 1, 1, 1 );
+                
+        self.playercard.hudWeapIconHp.alpha = 1;
+        self.playercard.hudRankIconHp.alpha = 1;
+        self.playercard.hudTitleHp.alpha = 1;
+        self.playercard.hudImageHp.alpha = 0.8;
+        self.playercard.hudNameHp.alpha = 1;
 
         // Time Visable
         wait( level.scr_card_hardpoints_time_visible );
 
-        self.playercardNameHardpoint moveOverTime( 0.40 );
-        self.playercardImageHardpoint moveOverTime( 0.40 );
-        self.playercardRankIconHardpoint moveOverTime( 0.40 );
-        self.playercardHardpointText moveOverTime( 0.40 );
-        self.playercardKillWeaponHardpoint moveOverTime( 0.40 );
+        self.playercard.hudWeapIconHp moveOverTime( 0.40 );
+        self.playercard.hudRankIconHp moveOverTime( 0.40 );
+        self.playercard.hudTitleHp moveOverTime( 0.40 );
+        self.playercard.hudImageHp moveOverTime( 0.40 );
+        self.playercard.hudNameHp moveOverTime( 0.40 );
 
-        self.playercardNameHardpoint.x = 70;
-        self.playercardImageHardpoint.x = 0;
-        self.playercardRankIconHardpoint.x = 15;
-        self.playercardHardpointText.x = 4;
-        self.playercardKillWeaponHardpoint.x = 220;
+        self.playercard.hudWeapIconHp.x = 220;
+        self.playercard.hudRankIconHp.x = 15;
+        self.playercard.hudTitleHp.x = 4;
+        self.playercard.hudImageHp.x = 0;
+        self.playercard.hudNameHp.x = 70;
      
         // Time wait to move to right
         wait( 0.4 );
   
         // Make it disappear
-        self.playercardNameHardpoint.alpha = 0;
-        self.playercardImageHardpoint.alpha = 0;
-        self.playercardRankIconHardpoint.alpha = 0;
-        self.playercardHardpointText.alpha = 0;
-        self.playercardKillWeaponHardpoint.alpha = 0;
+        self.playercard.hudWeapIconHp.alpha = 0;
+        self.playercard.hudRankIconHp.alpha = 0;
+        self.playercard.hudTitleHp.alpha = 0;
+        self.playercard.hudImageHp.alpha = 0;
+        self.playercard.hudNameHp.alpha = 0;
 
         // Return Home
-        self.playercardNameHardpoint moveOverTime( 0.40 );
-        self.playercardImageHardpoint moveOverTime( 0.40 );
-        self.playercardRankIconHardpoint moveOverTime( 0.40 );
-        self.playercardHardpointText moveOverTime( 0.40 );
-        self.playercardKillWeaponHardpoint moveOverTime( 0.40 );
+        self.playercard.hudWeapIconHp moveOverTime( 0.40 );
+        self.playercard.hudRankIconHp moveOverTime( 0.40 );
+        self.playercard.hudTitleHp moveOverTime( 0.40 );
+        self.playercard.hudImageHp moveOverTime( 0.40 );
+        self.playercard.hudNameHp moveOverTime( 0.40 );
 
         // Set back to original positions
-        self.playercardNameHardpoint.x = -208;
-        self.playercardImageHardpoint.x = -250;
-        self.playercardRankIconHardpoint.x = -227;
-        self.playercardHardpointText.x = -246;
-        self.playercardKillWeaponHardpoint.x = -50;
+        self.playercard.hudWeapIconHp.x = -50;
+        self.playercard.hudRankIconHp.x = -227;
+        self.playercard.hudTitleHp.x = -246;
+        self.playercard.hudImageHp.x = -250;
+        self.playercard.hudNameHp.x = -208;
 
         // Time wait to move back
         wait( 0.4 );
 
-        self.showingPlayercardHp = false;
-}
-
-/*
-
-getWeaponImage( weapon )
-{
-
-  	image = "";       
-
-	// Handguns
-	if ( isSubStr( weapon, "beretta_" ) ) {  // 128 x 128
-                image = "weapon_m9beretta";
-                return image;
-
-        } else if ( isSubStr( weapon, "colt45_" ) ) { // 128 x 128
-                image = "weapon_colt_45";
-                return image;
-
-        } else if ( isSubStr( weapon, "usp_" ) ) { // 128 x 128
-                image = "weapon_usp_45";
-                return image;
-	
-        } else if ( isSubStr( weapon, "deserteagle_" ) ) { // 128 x 128
-                image = "weapon_desert_eagle";
-                return image;
-
-        } else if ( isSubStr( weapon, "deserteaglegold_" ) ) { // 128 x 128
-                image = "weapon_desert_eagle_gold";
-                return image;
-
-        // Assault
-        } else if ( isSubStr( weapon, "m16_" ) ) { // 256 x 128
-                image = "weapon_m16a4";
-                return image;
-
-        } else if ( isSubStr( weapon, "ak47_" ) ) { // 256 x 128
-                image = "weapon_ak47";
-                return image;
-
-        } else if ( isSubStr( weapon, "m4_" ) ) { // 256 x 128
-                image = "weapon_m4carbine";
-                return image;
-
-        } else if ( isSubStr( weapon, "g3_" ) ) { // 256 x 128
-                image = "weapon_g3";
-                return image;
-
-        } else if ( isSubStr( weapon, "g36c_" ) ) { // 256 x 128
-                image = "weapon_g36c";
-                return image;
-
-        } else if ( isSubStr( weapon, "m14_" ) ) { // 256 x 128
-                image = "weapon_m14";
-                return image;
-
-        } else if ( isSubStr( weapon, "mp44_" ) ) { // 256 x 128
-                image = "weapon_mp44";
-                return image;
-
-        // Spec Ops
-        } else if ( isSubStr( weapon, "mp5_" ) ) {  // 256 x 128
-                image = "weapon_mp5";
-                return image;
-
-        } else if ( isSubStr( weapon, "skorpion_" ) ) { // 256 x 128
-                image = "weapon_skorpion";
-                return image;
-
-        } else if ( isSubStr( weapon, "uzi_" ) ) { // 256 x 128
-                image = "weapon_mini_uzi";
-                return image;
-
-        } else if ( isSubStr( weapon, "ak74u_" ) ) { // 256 x 128
-                image = "weapon_aks74u";
-                return image;
-
-        } else if ( isSubStr( weapon, "p90_" ) ) { // 256 x 128
-                image = "weapon_p90";
-                return image;
-
-        // Demoliition
-        } else if ( isSubStr( weapon, "m1014_" ) ) { // 256 x 128
-                image = "weapon_benelli_m4";
-                return image;
-
-        } else if ( isSubStr( weapon, "winchester1200_" ) ) { // 256 x 128
-                image = "weapon_winchester1200";
-                return image;
-     
-        // Heavy Gunner
-        } else if ( isSubStr( weapon, "saw_" ) ) { // 256 x 128
-                image = "weapon_m249saw";
-                return image;
-
-        } else if ( isSubStr( weapon, "rpd_" ) ) { // 256 x 128
-                image = "weapon_rpd";
-                return image;
-
-        } else if ( isSubStr( weapon, "m60e4_" ) ) { // 256 x 128
-                image = "weapon_m60e4";
-                return image;
-
-        // Sniper
-        } else if ( isSubStr( weapon, "dragunov_" ) ) { // 256 x 128
-                image = "weapon_dragunovsvd";
-                return image;
-
-        } else if ( isSubStr( weapon, "m40a3_" ) ) { // 258 x 128
-                image = "weapon_m40a3";
-                return image;
-
-        } else if ( isSubStr( weapon, "barrett_" ) ) { // 256 x 128
-                image = "weapon_barrett50cal";
-                return image;
-
-        } else if ( isSubStr( weapon, "remington700_" ) ) { // 256 x 128
-                image = "weapon_remington700";
-                return image;
-
-        } else if ( isSubStr( weapon, "m21_" ) ) { // 256 x 128
-                image = "weapon_m14_scoped";
-                return image;
-
-        // Hardpoint
-        } else if ( isSubStr( weapon, "artillery_" ) ) { // 128 x 128
-                image = "killstreak_award_airstrike_mp";
-                return image;
-
-        } else if ( isSubStr( weapon, "airstrike_" ) ) { // 128 x 128
-                image = "killstreak_award_airstrike_mp";
-                return image;
-
-        } else if ( isSubStr( weapon, "helicopter_" ) || isSubStr( weapon, "cobra_" ) || isSubStr( weapon, "hind_" ) ) { // 128 x 128
-                image = "killstreak_award_helicopter_mp";
-                return image;
-
-        // Other
-        } else if ( isSubStr( weapon, "frag_grenade_" ) ) { // 128 x 128
-                image = "weapon_fraggrenade";
-                return image;
-
-        } else if ( isSubStr( weapon, "c4_" ) ) { // 128 x 128
-                image = "weapon_c4";
-                return image;
-
-        } else if ( isSubStr( weapon, "claymore_" ) ) { // 128 x 128
-                image = "weapon_claymore";
-                return image;
-
-        } else if ( isSubStr( weapon, "rpg_" ) ) { // 256 x 128
-                image = "weapon_rpg7";
-                return image;
-
-        } else if ( isSubStr( weapon, "knife_" ) ) { // 256 x 256
-                image = "weapon_knife";	
-                return image;
-
-        } else if ( weapon == "explodable_barrel" ) { // 64 x 64
-                image = "death_barrel";	
-                return image;
-
-        } else if ( weapon == "destructible_car" ) { // 64 x 64
-                image = "death_auto";	
-                return image;
-
-        } else if ( weapon == "none" ) { // 64 x 64
-                image = "death_skull";	
-                return image;
-
-        // Default
-        } else {
-
-                image = "death_skull";	
-                return image;
-        }
-	
-}
-
-
-getHudIconImage( weapon )
-{
-
-  	image = "";       
-
-	// Handguns
-	if ( isSubStr( weapon, "beretta_" ) ) { // 128 x 64
-                image = "hud_icon_m9beretta";
-                return image;
-
-        } else if ( isSubStr( weapon, "colt45_" ) ) { // 128 x 64
-                image = "hud_icon_colt_45";
-                return image;
-
-        } else if ( isSubStr( weapon, "usp_" ) ) { // 64 x 64
-                image = "hud_icon_usp_45";
-                return image;
-	
-        } else if ( isSubStr( weapon, "deserteagle_" ) ) { // 128 x 64
-                image = "hud_icon_desert_eagle";
-                return image;
-
-        } else if ( isSubStr( weapon, "deserteaglegold_" ) ) { // 128 x 64
-                image = "hud_icon_desert_eagle";
-                return image;
-
-        // Assault
-        } else if ( isSubStr( weapon, "m16_" ) ) { // 128 x 32
-                image = "hud_icon_m16a4";
-                return image;
-
-        } else if ( isSubStr( weapon, "ak47_" ) ) { // 128 x 32
-                image = "hud_icon_ak47";
-                return image;
-
-        } else if ( isSubStr( weapon, "m4_" ) ) { // 128 x 64
-                image = "hud_icon_m4carbine";
-                return image;
-
-        } else if ( isSubStr( weapon, "g3_" ) ) { // 128 x 32
-                image = "hud_icon_g3";
-                return image;
-
-        } else if ( isSubStr( weapon, "g36c_" ) ) { // 128 x 64
-                image = "hud_icon_g36c";
-                return image;
-
-        } else if ( isSubStr( weapon, "m14_" ) ) { // 128 x 32
-                image = "hud_icon_m14";
-                return image;
-
-        } else if ( isSubStr( weapon, "mp44_" ) ) { // 128 x 64
-                image = "hud_icon_mp44";
-                return image;
-
-        // Spec Ops
-        } else if ( isSubStr( weapon, "mp5_" ) ) {  // 128 x 64
-                image = "hud_icon_mp5";
-                return image;
-
-        } else if ( isSubStr( weapon, "skorpion_" ) ) { // 64 x 64
-                image = "hud_icon_skorpian";
-                return image;
-
-        } else if ( isSubStr( weapon, "uzi_" ) ) { // 64 x 64
-                image = "hud_icon_mini_uzi";
-                return image;
-
-        } else if ( isSubStr( weapon, "ak74u_" ) ) { // 128 x 64
-                image = "hud_icon_ak74u";
-                return image;
-
-        } else if ( isSubStr( weapon, "p90_" ) ) { // 128 x 64
-                image = "hud_icon_p90";
-                return image;
-
-        // Demoliition
-        } else if ( isSubStr( weapon, "m1014_" ) ) { // 128 x 32
-                image = "hud_icon_benelli_m4";
-                return image;
-
-        } else if ( isSubStr( weapon, "winchester1200_" ) ) { // 128 x 32
-                image = "hud_icon_winchester_1200";
-                return image;
-     
-        // Heavy Gunner
-        } else if ( isSubStr( weapon, "saw_" ) ) { // 128 x 64
-                image = "hud_icon_m249saw";
-                return image;
-
-        } else if ( isSubStr( weapon, "rpd_" ) ) { // 128 x 64
-                image = "hud_icon_rpd";
-                return image;
-
-        } else if ( isSubStr( weapon, "m60e4_" ) ) { // 128 x 32
-                image = "hud_icon_m60e4";
-                return image;
-
-        // Sniper
-        } else if ( isSubStr( weapon, "dragunov_" ) ) { // 128 x 32
-                image = "hud_icon_dragunov";
-                return image;
-
-        } else if ( isSubStr( weapon, "m40a3_" ) ) { // 128 x 32
-                image = "hud_icon_m40a3";
-                return image;
-
-        } else if ( isSubStr( weapon, "barrett_" ) ) { // 128 x 64
-                image = "hud_icon_barrett50cal";
-                return image;
-
-        } else if ( isSubStr( weapon, "remington700_" ) ) { // 128 x 32
-                image = "hud_icon_remington700";
-                return image;
-
-        } else if ( isSubStr( weapon, "m21_" ) ) { // 128 x 32
-                image = "hud_icon_m14_scoped";
-                return image;
-
-        // Hardpoint
-        } else if ( isSubStr( weapon, "radar_" ) ) { // 128 x 128
-                image = "death_radar";
-                return image;
-
-        } else if ( isSubStr( weapon, "airstrike_" ) ) { // 128 x 32
-                image = "death_airstrike";
-                return image;
-
-        } else if ( isSubStr( weapon, "artillery_" ) ) { // 128 x 32
-                image = "death_airstrike";
-                return image;
-
-        } else if ( isSubStr( weapon, "helicopter_" ) || isSubStr( weapon, "cobra_" ) || isSubStr( weapon, "hind_" ) ) { // 128 x 32
-                image = "death_helicopter";
-                return image;
-
-        // Other
-        } else if ( isSubStr( weapon, "frag_grenade_" ) ) { // 64 x 64
-                image = "hud_us_grenade";
-                return image;
-
-        } else if ( isSubStr( weapon, "c4_" ) ) { // 64 x 64
-                image = "hud_icon_c4";
-                return image;
-
-        } else if ( isSubStr( weapon, "claymore_" ) ) { // 32 x 32
-                image = "hud_icon_claymore";
-                return image;
-
-        } else if ( isSubStr( weapon, "rpg_" ) ) { // 128 x 32
-                image = "hud_icon_rpg";
-                return image;
-
-        } else if ( isSubStr( weapon, "knife_" ) ) { // 64 x 64
-                image = "killiconmelee";	
-                return image;
-
-        } else if ( weapon == "explodable_barrel" ) { // 32 x 32
-                image = "killiconcrush";	
-                return image;
-
-        } else if ( weapon == "destructible_car" ) { // 64 x 64
-                image = "death_car";	
-                return image;
-
-        } else if ( weapon == "none" ) { // 32 x 32
-                image = "killicondied";	
-                return image;
-
-        // Default
-        } else {
-
-                image = "killicondied";	
-                return image;
-        }
-	
-}
-
-
-getHudIconSize( weapon )
-{
-  	size = "";       
-
-	// Handguns
-	if ( isSubStr( weapon, "beretta_" ) ) { // 128 x 64
-                size = 4;
-                return size;
-
-        } else if ( isSubStr( weapon, "colt45_" ) ) { // 128 x 64
-                size = 4;
-                return size;
-
-        } else if ( isSubStr( weapon, "usp_" ) ) { // 64 x 64
-                size = 2;
-                return size;
-	
-        } else if ( isSubStr( weapon, "deserteagle_" ) ) { // 128 x 64
-                size = 4;
-                return size;
-
-        } else if ( isSubStr( weapon, "deserteaglegold_" ) ) { // 128 x 64
-                size = 4;
-                return size;
-
-        // Assault
-        } else if ( isSubStr( weapon, "m16_" ) ) { // 128 x 32
-                size = 3;
-                return size;
-
-        } else if ( isSubStr( weapon, "ak47_" ) ) { // 128 x 32
-                size = 3;
-                return size;
-
-        } else if ( isSubStr( weapon, "m4_" ) ) { // 128 x 64
-                size = 4;
-                return size;
-
-        } else if ( isSubStr( weapon, "g3_" ) ) { // 128 x 32
-                size = 3;
-                return size;
-
-        } else if ( isSubStr( weapon, "g36c_" ) ) { // 128 x 64
-                size = 4;
-                return size;
-
-        } else if ( isSubStr( weapon, "m14_" ) ) { // 128 x 32
-                size = 3;
-                return size;
-
-        } else if ( isSubStr( weapon, "mp44_" ) ) { // 128 x 64
-                size = 4;
-                return size;
-
-        // Spec Ops
-        } else if ( isSubStr( weapon, "mp5_" ) ) {  // 128 x 64
-                size = 4;
-                return size;
-
-        } else if ( isSubStr( weapon, "skorpion_" ) ) { // 64 x 64
-                size = 2;
-                return size;
-
-        } else if ( isSubStr( weapon, "uzi_" ) ) { // 64 x 64
-                size = 2;
-                return size;
-
-        } else if ( isSubStr( weapon, "ak74u_" ) ) { // 128 x 64
-                size = 4;
-                return size;
-
-        } else if ( isSubStr( weapon, "p90_" ) ) { // 128 x 64
-                size = 4;
-                return size;
-
-        // Demoliition
-        } else if ( isSubStr( weapon, "m1014_" ) ) { // 128 x 32
-                size = 3;
-                return size;
-
-        } else if ( isSubStr( weapon, "winchester1200_" ) ) { // 128 x 32
-                size = 3;
-                return size;
-     
-        // Heavy Gunner
-        } else if ( isSubStr( weapon, "saw_" ) ) { // 128 x 64
-                size = 4;
-                return size;
-
-        } else if ( isSubStr( weapon, "rpd_" ) ) { // 128 x 64
-                size = 4;
-                return size;
-
-        } else if ( isSubStr( weapon, "m60e4_" ) ) { // 128 x 32
-                size = 3;
-                return size;
-
-        // Sniper
-        } else if ( isSubStr( weapon, "dragunov_" ) ) { // 128 x 32
-                size = 3;
-                return size;
-
-        } else if ( isSubStr( weapon, "m40a3_" ) ) { // 128 x 32
-                size = 3;
-                return size;
-
-        } else if ( isSubStr( weapon, "barrett_" ) ) { // 128 x 64
-                size = 4;
-                return size;
-
-        } else if ( isSubStr( weapon, "remington700_" ) ) { // 128 x 32
-                size = 3;
-                return size;
-
-        } else if ( isSubStr( weapon, "m21_" ) ) { // 128 x 32
-                size = 3;
-                return size;
-
-        // Hardpoint
-        } else if ( isSubStr( weapon, "radar_" ) ) { // 128 x 128
-                size = 3;
-                return size;
-
-        } else if ( isSubStr( weapon, "artillery_" ) ) { // 128 x 32
-                size = 3;
-                return size;
-
-        } else if ( isSubStr( weapon, "helicopter_" ) || isSubStr( weapon, "cobra_" ) || isSubStr( weapon, "hind_" ) ) { // 128 x 32
-                size = 3;
-                return size;
-
-        // Other
-        } else if ( isSubStr( weapon, "frag_grenade_" ) ) { // 64 x 64
-                size = 2;
-                return size;
-
-        } else if ( isSubStr( weapon, "c4_" ) ) { // 64 x 64
-                size = 2;
-                return size;
-
-        } else if ( isSubStr( weapon, "claymore_" ) ) { // 32 x 32
-                size = 1;
-                return size;
-
-        } else if ( isSubStr( weapon, "rpg_" ) ) { // 128 x 32
-                size = 3;
-                return size;
-
-        } else if ( isSubStr( weapon, "knife_" ) ) { // 64 x 64
-                size = 2;	
-                return size;
-
-        } else if ( weapon == "explodable_barrel" ) { // 32 x 32
-                size = 1;	
-                return size;
-
-        } else if ( weapon == "destructible_car" ) { // 64 x 64
-                size = 2;	
-                return size;
-
-        } else if ( weapon == "none" ) { // 32 x 32
-                size = 1;	
-                return size;
-
-        // Default
-        } else {
-
-                size = 1;	
-                return size;
-        }
-	
-}
-
-
-getWeaponImageSize( weapon )
-{
-
-  	size = "";       
-
-	// Handguns
-	if ( isSubStr( weapon, "beretta_" ) ) {  // 128 x 128
-                size = 2;
-                return size;
-
-        } else if ( isSubStr( weapon, "colt45_" ) ) { // 128 x 128
-                size = 2;
-                return size;
-
-        } else if ( isSubStr( weapon, "usp_" ) ) { // 128 x 128
-                size = 2;
-                return size;
-	
-        } else if ( isSubStr( weapon, "deserteagle_" ) ) { // 128 x 128
-                size = 2;
-                return size;
-
-        } else if ( isSubStr( weapon, "deserteaglegold_" ) ) { // 128 x 128
-                size = 2;
-                return size;
-
-        // Assault
-        } else if ( isSubStr( weapon, "m16_" ) ) { // 256 x 128
-                size = 3;
-                return size;
-
-        } else if ( isSubStr( weapon, "ak47_" ) ) { // 256 x 128
-                size = 3;
-                return size;
-
-        } else if ( isSubStr( weapon, "m4_" ) ) { // 256 x 128
-                size = 3;
-                return size;
-
-        } else if ( isSubStr( weapon, "g3_" ) ) { // 256 x 128
-                size = 3;
-                return size;
-
-        } else if ( isSubStr( weapon, "g36c_" ) ) { // 256 x 128
-                size = 3;
-                return size;
-
-        } else if ( isSubStr( weapon, "m14_" ) ) { // 256 x 128
-                size = 3;
-                return size;
-
-        } else if ( isSubStr( weapon, "mp44_" ) ) { // 256 x 128
-                size = 3;
-                return size;
-
-        // Spec Ops
-        } else if ( isSubStr( weapon, "mp5_" ) ) {  // 256 x 128
-                size = 3;
-                return size;
-
-        } else if ( isSubStr( weapon, "skorpion_" ) ) { // 256 x 128
-                size = 3;
-                return size;
-
-        } else if ( isSubStr( weapon, "uzi_" ) ) { // 256 x 128
-                size = 3;
-                return size;
-
-        } else if ( isSubStr( weapon, "ak74u_" ) ) { // 256 x 128
-                size = 3;
-                return size;
-
-        } else if ( isSubStr( weapon, "p90_" ) ) { // 256 x 128
-                size = 3;
-                return size;
-
-        // Demoliition
-        } else if ( isSubStr( weapon, "m1014_" ) ) { // 256 x 128
-                size = 3;
-                return size;
-
-        } else if ( isSubStr( weapon, "winchester1200_" ) ) { // 256 x 128
-                size = 3;
-                return size;
-     
-        // Heavy Gunner
-        } else if ( isSubStr( weapon, "saw_" ) ) { // 256 x 128
-                size = 3;
-                return size;
-
-        } else if ( isSubStr( weapon, "rpd_" ) ) { // 256 x 128
-                size = 3;
-                return size;
-
-        } else if ( isSubStr( weapon, "m60e4_" ) ) { // 256 x 128
-                size = 3;
-                return size;
-
-        // Sniper
-        } else if ( isSubStr( weapon, "dragunov_" ) ) { // 256 x 128
-                size = 3;
-                return size;
-
-        } else if ( isSubStr( weapon, "m40a3_" ) ) { // 258 x 128
-                size = 3;
-                return size;
-
-        } else if ( isSubStr( weapon, "barrett_" ) ) { // 256 x 128
-                size = 3;
-                return size;
-
-        } else if ( isSubStr( weapon, "remington700_" ) ) { // 256 x 128
-                size = 3;
-                return size;
-
-        } else if ( isSubStr( weapon, "m21_" ) ) { // 256 x 128
-                size = 3;
-                return size;
-
-        // Hardpoint
-        } else if ( isSubStr( weapon, "artillery_" ) ) { // 128 x 128
-                size = 2;
-                return size;
-
-        } else if ( isSubStr( weapon, "helicopter_" ) || isSubStr( weapon, "cobra_" ) || isSubStr( weapon, "hind_" ) ) { // 128 x 128
-                size = 2;
-                return size;
-
-        // Other
-        } else if ( isSubStr( weapon, "frag_grenade_" ) ) { // 128 x 128
-                size = 2;
-                return size;
-
-        } else if ( isSubStr( weapon, "c4_" ) ) { // 128 x 128
-                size = 2;
-                return size;
-
-        } else if ( isSubStr( weapon, "claymore_" ) ) { // 128 x 128
-                size = 2;
-                return size;
-
-        } else if ( isSubStr( weapon, "rpg_" ) ) { // 256 x 128
-                size = 3;
-                return size;
-
-        } else if ( isSubStr( weapon, "knife_" ) ) { // 256 x 256
-                size = 4;	
-                return size;
-
-        } else if ( weapon == "explodable_barrel" ) { // 64 x 64
-                size = 1;	
-                return size;
-
-        } else if ( weapon == "destructible_car" ) { // 64 x 64
-                size = 1;	
-                return size;
-
-        } else if ( weapon == "none" ) { // 64 x 64
-                size = 1;	
-                return size;
-
-        // Default
-        } else {
-
-                size = 1;	
-                return size;
-        }
-	
-}
-
-
-loadWeaponIcons()
-{
-	precacheShader( "weapon_m9beretta" );
-	precacheShader( "weapon_colt_45" );
-	precacheShader( "weapon_usp_45" );
-	precacheShader( "weapon_desert_eagle" );
-	precacheShader( "weapon_desert_eagle_gold" );
-	precacheShader( "weapon_m16a4" );
-	precacheShader( "weapon_ak47" );
-	precacheShader( "weapon_m4carbine" );
-	precacheShader( "weapon_g3" );
-	precacheShader( "weapon_g36c" );
-	precacheShader( "weapon_m14" );
-	precacheShader( "weapon_mp44" );
-	precacheShader( "weapon_mp5" );
-	precacheShader( "weapon_skorpion" );
-	precacheShader( "weapon_mini_uzi" );
-	precacheShader( "weapon_aks74u" );
-	precacheShader( "weapon_p90" );
-	precacheShader( "weapon_benelli_m4" );
-	precacheShader( "weapon_winchester1200" );
-	precacheShader( "weapon_m249saw" );
-	precacheShader( "weapon_rpd" );
-	precacheShader( "weapon_m60e4" );
-	precacheShader( "weapon_dragunovsvd" );
-	precacheShader( "weapon_m40a3" );
-	precacheShader( "weapon_barrett50cal" );
-	precacheShader( "weapon_remington700" );
-	precacheShader( "weapon_m14_scoped" );
-	precacheShader( "weapon_fraggrenade" );
-	precacheShader( "weapon_c4" );
-	precacheShader( "weapon_claymore" );
-	precacheShader( "weapon_rpg7" );
-	precacheShader( "weapon_knife" );
-	precacheShader( "death_auto" );
-	precacheShader( "death_barrel" );
-	precacheShader( "death_skull" );
-}
-
-
-loadHudIcons()
-{
-	precacheShader( "hud_icon_m9beretta" );
-	precacheShader( "hud_icon_colt_45" );
-	precacheShader( "hud_icon_usp_45" );
-	precacheShader( "hud_icon_desert_eagle" );
-	precacheShader( "hud_icon_m16a4" );
-	precacheShader( "hud_icon_ak47" );
-	precacheShader( "hud_icon_m4carbine" );
-	precacheShader( "hud_icon_g3" );
-	precacheShader( "hud_icon_g36c" );
-	precacheShader( "hud_icon_m14" );
-	precacheShader( "hud_icon_mp44" );
-	precacheShader( "hud_icon_mp5" );
-	precacheShader( "hud_icon_skorpian" );
-	precacheShader( "hud_icon_mini_uzi" );
-	precacheShader( "hud_icon_ak74u" );
-	precacheShader( "hud_icon_p90" );
-	precacheShader( "hud_icon_benelli_m4" );
-	precacheShader( "hud_icon_winchester_1200" );
-	precacheShader( "hud_icon_m249saw" );
-	precacheShader( "hud_icon_rpd" );
-	precacheShader( "hud_icon_m60e4" );
-	precacheShader( "hud_icon_dragunov" );
-	precacheShader( "hud_icon_m40a3" );
-	precacheShader( "hud_icon_barrett50cal" );
-	precacheShader( "hud_icon_remington700" );
-	precacheShader( "hud_icon_m14_scoped" );
-	precacheShader( "hud_us_grenade" );
-	precacheShader( "hud_icon_c4" );
-	precacheShader( "hud_icon_claymore" );
-	precacheShader( "hud_icon_rpg" );
-	precacheShader( "killiconmelee" );
-	precacheShader( "killiconcrush" );
-	precacheShader( "death_car" );
-	precacheShader( "killiconimpact" );
-	precacheShader( "killicondied" );
-}
-*/
-
-loadHardpointShaders()
-{
-        // Hardpoint Images
-	precacheShader( "killstreak_award_airstrike_mp" );
-	precacheShader( "killstreak_award_helicopter_mp" );
-	precacheShader( "killstreak_award_radar_mp" );
-
-	precacheShader( "death_radar" );
-	precacheShader( "death_airstrike" );
-	precacheShader( "death_helicopter" );
+        self.playerCard.isShowingHardPoint = false;
 }
