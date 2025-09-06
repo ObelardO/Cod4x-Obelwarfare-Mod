@@ -1,3 +1,4 @@
+number,id,loc string name,loc string description,image,time,R,G,B,A,sound,NA,type
 1,headshot,SPLASHES_HEADSHOT,SPLASHES_HEADSHOT_DESC,splashicon10,2,0.75,0.25,0.25,1,oldschool_return,dummy,splash
 2,assistedsuicide,SPLASHES_ASSISTEDSUICIDE,SPLASHES_ASSISTEDSUICIDE_DESC,splashicon18,2,0.75,0.25,0.25,1,oldschool_return,,splash
 3,longshot,SPLASHES_LONGSHOT,SPLASHES_LONGSHOT_DESC,splashicon1,2,0.75,0.25,0.25,1,oldschool_return,,splash

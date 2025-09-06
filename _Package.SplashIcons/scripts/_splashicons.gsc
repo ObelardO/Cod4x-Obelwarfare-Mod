@@ -382,25 +382,25 @@ splashNotifyDelayed( splash )
 
 getSplashTitle( splash )
 {
-	return tableLookupIString( "mp/splashTable.csv", 1, splash, 2 );
+	return tableLookupIString( "mp/splashtable.csv", 1, splash, 2 );
 }
 
 
 getSplashDescription( splash )
 {
-	return tableLookupIString( "mp/splashTable.csv", 1, splash, 3 );
+	return tableLookupIString( "mp/splashtable.csv", 1, splash, 3 );
 }
 
 
 getSplashMaterial( splash )
 {
-	return tableLookup( "mp/splashTable.csv", 1, splash, 4 );
+	return tableLookup( "mp/splashtable.csv", 1, splash, 4 );
 }
 
 
 getSplashSound( splash )
 {
-	return tableLookup( "mp/splashTable.csv", 1, splash, 10 );
+	return tableLookup( "mp/splashtable.csv", 1, splash, 10 );
 }
 
 
@@ -418,7 +418,7 @@ splashNotify( splash )
 	if( level.gameEnded )
 		return;
 
-	if( tableLookup( "mp/splashTable.csv", 1, splash.name, 0 ) != "")
+	if( tableLookup( "mp/splashtable.csv", 1, splash.name, 0 ) != "")
 	{
 		if( isDefined( self.splashinprogress ) && self.splashinprogress )
 		{
