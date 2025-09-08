@@ -3,6 +3,7 @@ localize,ow_card
 
 #PlayerCard: scripts
 rawfile,scripts/_playercard.gsc
+rawfile,scripts/_playercardPers.gsc
 
 #PlayerCard: tables,
 stringtable,mp/cardtable.csv
@@ -39,3 +40,4 @@ material,playercard_emblem_16
 material,playercard_emblem_17
 material,playercard_emblem_18
 material,playercard_emblem_19
+material,playercard_emblem_redcat

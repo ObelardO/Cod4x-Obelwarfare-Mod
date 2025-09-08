@@ -36,12 +36,13 @@ init()
         // Dvars Playercards
         level.scr_card_time_visible = getdvarx( "scr_card_time_visible", "float", 1.5, 1.5, 5 );
         level.scr_card_amount = getdvarx( "scr_card_amount", "int", 20, 1, 20 );
+        level.scr_card_pers_enabled = getdvarx( "scr_card_pers_enabled", "int", 0, 0, 1 );  
+        // 
 
         // Dvar Playercard Hardpoints
         level.scr_card_hardpoints_time_visible = getdvarx( "scr_card_hardpoints_time_visible", "float", 3.5, 1.5, 5 ); 
 	level.scr_card_hardpoints_enemy_display = getdvarx( "scr_card_hardpoints_enemy_display", "int", 1, 0, 1 ); 
-          
-        
+
         if( !isDefined( level.playerCard ) )
         {
                 level.playerCard = spawnStruct();
@@ -50,6 +51,9 @@ init()
 
                 initHudShaders();
         }
+
+        if( level.scr_card_pers_enabled ) //Optional
+                scripts\_playercardPers::initCardsInfo();
 
         precacheString( &"OW_CARD_HELICOPTER_INBOUN" );
         precacheString( &"OW_CARD_AIRSTRIKE_INBOUN" );
@@ -75,8 +79,6 @@ initWeaponInfo()
         level.playerCard.weaponInfo = [];
 
         weaponsCount = int ( tableLookup( "mp/cardtable.csv", 1, "none", 0 ) );
-
-        print ( "Playercard: Found " + weaponsCount + " weapons in mp/cardtable.csv" );
 
         for( i = 1; i <= weaponsCount; i++ )
         {
@@ -104,7 +106,6 @@ initWeaponInfo()
                         if ( weaponSize == 4 ) level.playerCard.weaponInfo[weaponName].hudSize = ( 72, 36, 80 );
                 }
         }
-
 }
 
 initHudShaders()
@@ -130,9 +131,12 @@ onPlayerConnected()
         if( !isDefined( self.playerCard ) ) 
         {
                 self.playerCard = spawnStruct();
-                self.playerCard.number = randomIntRange( 0, level.scr_card_amount );
+                self.playerCard.cardName = randomIntRange( 0, level.scr_card_amount );
                 self.playerCard.isShowingKill = false;
                 self.playerCard.isShowingHardPoint = false;
+
+                if( level.scr_card_pers_enabled ) //Optional
+                        self scripts\_playercardPers::setPlayerCard();
         }
 	
 	self thread addNewEvent( "onPlayerSpawned", ::onPlayerSpawned );
@@ -314,7 +318,7 @@ waitForKill()
         playercardVictim = spawnstruct();
         playercardVictim.name = self.name;
         playercardVictim.rank = self.pers["rank"] + 1;
-        playercardVictim.card = self.playerCard.number;
+        playercardVictim.card = self.playerCard.cardName;
         playercardVictim.icon = self maps\mp\gametypes\_rank::getRankInfoIcon( self.pers["rank"], self.pers["prestige"] );
         playercardVictim.team = game["icons"][self.team];
         playercardVictim.text = &"OW_CARD_VICTIM";
@@ -325,7 +329,7 @@ waitForKill()
         playercardAttacker = spawnstruct();
         playercardAttacker.name = attacker.name;
         playercardAttacker.rank = attacker.pers["rank"] + 1;
-        playercardAttacker.card = attacker.playerCard.number;
+        playercardAttacker.card = attacker.playerCard.cardName;
         playercardAttacker.icon = attacker maps\mp\gametypes\_rank::getRankInfoIcon( attacker.pers["rank"], attacker.pers["prestige"] );
         playercardAttacker.team = game["icons"][attacker.team];
         playercardAttacker.text = &"OW_CARD_ATTACKER";
@@ -467,7 +471,7 @@ waitTillHardpointCalled()
                 playercardHp.name = self.name;
                 playercardHp.rank = self.pers["rank"] + 1;
                 playercardHp.team = self.pers["team"];
-                playercardHp.image = self.playerCard.number;
+                playercardHp.image = self.playerCard.cardName;
                 playercardHp.icon = self maps\mp\gametypes\_rank::getRankInfoIcon( self.pers["rank"], self.pers["prestige"] );
                 playercardHp.hardpoint = hardpointName;
                 playercardHp.textcolor = ( 0.73, 0.97, 0.71 );
