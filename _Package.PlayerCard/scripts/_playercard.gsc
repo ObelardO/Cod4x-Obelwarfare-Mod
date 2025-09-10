@@ -104,6 +104,7 @@ initWeaponInfo()
                         if ( weaponSize <= 2 ) level.playerCard.weaponInfo[weaponName].hudSize = ( 34, 34, 96 );
                         if ( weaponSize == 3 ) level.playerCard.weaponInfo[weaponName].hudSize = ( 72, 18, 96 );
                         if ( weaponSize == 4 ) level.playerCard.weaponInfo[weaponName].hudSize = ( 72, 36, 96 );
+                        if ( weaponSize == 5 ) level.playerCard.weaponInfo[weaponName].hudSize = ( 40, 40, 96 );
                 }
         }
 }

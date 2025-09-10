@@ -57,8 +57,6 @@ setPlayerCard()
     if( isDefined( level.playerCardPers[guid] ) )
     {
         self.playerCard.cardName = level.playerCardPers[guid];
-
-        self iPrintLn( "^3You have personalized card: " + self.playerCard.cardName );
     }
 }
 
