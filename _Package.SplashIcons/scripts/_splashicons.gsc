@@ -52,11 +52,13 @@ init()
 	precacheShader("splashicon18");
 	precacheShader("splashicon19");
 	precacheShader("splashicon20");
+	/*Reserved
 	precacheShader("splashicon21");
 	precacheShader("splashicon22");
 	precacheShader("splashicon23");
 	precacheShader("splashicon24");
 	precacheShader("splashicon25");
+	*/
 
 	level.numKills = 0;
 
@@ -334,10 +336,10 @@ onPlayerMultikill( killCount )
 		case 3:
 			self thread splashNotifyDelayed("triplekill");
 			break;
-		/*
 		case 4:
-			self thread splashNotifyDelayed("multikill");
+			self thread splashNotifyDelayed("quadrokill");
 			break;
+		/*
 		case 5:
 			self thread splashNotifyDelayed("megakill");
 			break;
