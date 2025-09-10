@@ -4,3 +4,5 @@ Obelwarfare.sln
 .vscode/settings.json
 obelwarfare.code-workspace
 Release
+AssetsSources/images/playercard_emblem_spaceman.dds
+AssetsSources/images/playercard_emblem_yard.dds
