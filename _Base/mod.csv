@@ -6,7 +6,7 @@
 #  \___/| .__/ \___|_| |_|\/  \/ \__,_|_|  |_| \__,_|_|  \___|
 #       | |               We don't make the game you play.
 #       |_|                 We make the game you play BETTER.
-# 
+#
 #            Website: http://openwarfaremod.com/
 
 ignore,mod_ignore
@@ -203,7 +203,6 @@ fx,greed/ui_pickup_red
 #fx,props/american_smoke_grenade_mp
 
 
-material,compass_ping
 material,allies_custom_logo
 material,axis_custom_logo
 material,bandaging
@@ -260,7 +259,6 @@ material,sponsor_logo2
 material,waypoint_extraction_zone
 material,weapon_knife
 material,animbg_blur_back
-material,waypoint_ping
 
 rawfile,mp/CoD2maps.arena
 stringtable,mp/propsTable.csv
@@ -349,7 +347,6 @@ rawfile,openwarfare/_weaponrangemodifier.gsc
 rawfile,openwarfare/_weaponweightmodifier.gsc
 rawfile,openwarfare/_welcomerulesinfo.gsc
 rawfile,openwarfare/_greetings.gsc
-rawfile,openwarfare/_ping.gsc
 rawfile,openwarfare/_packagesinit.gsc
 
 

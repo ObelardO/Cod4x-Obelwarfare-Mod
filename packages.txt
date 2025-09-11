@@ -1,6 +1,7 @@
 IngameClassEditor
 BotWarfare.v2.2.0
 NightVisionEnhanced
+PingMarker
 PlayerCard
 SplashIcons
 IW4MAdmin

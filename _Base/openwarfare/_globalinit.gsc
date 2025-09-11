@@ -17,7 +17,7 @@ init()
 	initGametypesAndMaps();
 
 	// Do not thread these initializations
-	openwarfare\_eventmanager::eventManagerInit();
+	openwarfare\_eventmanager::initEventManager();
 	openwarfare\_maprotationcs::init();
 	openwarfare\_visualmover::init();
 
@@ -90,7 +90,6 @@ init()
 	thread openwarfare\_weaponweightmodifier::init();
 	thread openwarfare\_welcomerulesinfo::init();
 	thread openwarfare\_greetings::init();
-	thread openwarfare\_ping::init();
 
 	openwarfare\_packagesinit::init();
 }

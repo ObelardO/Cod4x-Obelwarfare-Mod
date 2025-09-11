@@ -1,0 +1,4 @@
+name=Ping Marker
+iwd=marker
+gsc=_pingmarker
+cfg=

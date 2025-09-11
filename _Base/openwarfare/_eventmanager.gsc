@@ -11,7 +11,7 @@
 //            Website: http://openwarfaremod.com/
 //******************************************************************************
 
-eventManagerInit()
+initEventManager()
 {
 	level.eventManager = [];
 	
@@ -25,6 +25,7 @@ eventManagerInit()
 	level.eventManager["onPlayerKilled"] = [];
 	level.eventManager["onJoinedTeam"] = [];
 	level.eventManager["onJoinedSpectators"] = [];
+	level.eventManager["onMenuResponse"] = [];
 	
 	// Start the level based threads
 	level thread eventManagerOnPlayerConnecting();
@@ -58,6 +59,7 @@ eventManagerOnPlayerConnected()
 		level.eventManager["onPlayerKilled"][entityNumber] = [];
 		level.eventManager["onJoinedTeam"][entityNumber] = [];
 		level.eventManager["onJoinedSpectators"][entityNumber] = [];	
+		level.eventManager["onMenuResponse"][entityNumber] = [];
 		
 		// Run the "onConnected" functions
 		for ( event=0; event < level.eventManager["onPlayerConnected"].size; event++ ) {
@@ -70,6 +72,7 @@ eventManagerOnPlayerConnected()
 		player thread eventManagerOnPlayerKilled( entityNumber );
 		player thread eventManagerOnJoinedTeam( entityNumber );
 		player thread eventManagerOnJoinedSpectators( entityNumber );
+		player thread eventManagerOnPlayerMenuResponse( entityNumber );
 	}	
 }
 
@@ -144,6 +147,22 @@ eventManagerOnJoinedSpectators( entityNumber )
 		// Run the "onJoinedSpectators" functions
 		for ( event=0; event < level.eventManager["onJoinedSpectators"][entityNumber].size; event++ ) {
 			self thread [[level.eventManager["onJoinedSpectators"][entityNumber][event]]]();
+		}	
+	}
+}
+
+
+eventManagerOnPlayerMenuResponse( entityNumber )
+{
+	self endon("disconnect");
+	
+	for (;;)
+	{
+		self waittill( "menuresponse", menu, response);
+
+		// Run the "onMenuResponse" functions
+		for ( event=0; event < level.eventManager["onMenuResponse"][entityNumber].size; event++ ) {
+			self thread [[level.eventManager["onMenuResponse"][entityNumber][event]]]( menu, response );
 		}	
 	}
 }

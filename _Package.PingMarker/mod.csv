@@ -1,0 +1,6 @@
+#Ping Marker: images
+material,compass_ping
+material,waypoint_ping
+
+#Ping Marker: images
+rawfile,scripts/_splashicons.gsc

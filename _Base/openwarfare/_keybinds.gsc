@@ -132,10 +132,6 @@ onMenuResponse()
 					}
 					break;		
 					
-				case "ping":
-					self thread openwarfare\_ping::pingRightNow();
-					break;
-
 				default:
 					break;
 			}
