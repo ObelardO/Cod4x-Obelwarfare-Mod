@@ -6,7 +6,7 @@
 #  \___/| .__/ \___|_| |_|\/  \/ \__,_|_|  |_| \__,_|_|  \___|
 #       | |               We don't make the game you play.
 #       |_|                 We make the game you play BETTER.
-#
+"# "
 #            Website: http://openwarfaremod.com/
 
 ignore,mod_ignore
@@ -380,6 +380,8 @@ rawfile,ui_mp/cac_ingame.inc
 rawfile,ui_mp/ow_cac_loadout.inc
 rawfile,ui_mp/tactical_map.inc
 rawfile,ui_mp/teamicon.inc
+
+rawfile,ui_mp/controls_multi_slot42.inc
 
 sound,daycycle,,all_mp
 sound,freezetag,,all_mp

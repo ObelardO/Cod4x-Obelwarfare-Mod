@@ -688,7 +688,7 @@ LANG_RUSSIAN "Голосовать"
 // openwarfare/_anticamping.gsc
 //******************************************************************************
 REFERENCE MOVE_NEW_POSITION
-LANG_RUSSIAN "Боец, меняй дислокацию!!"
+LANG_RUSSIAN "Боец, меняй дислокацию!!!"
 
 
 //******************************************************************************
@@ -793,7 +793,7 @@ LANG_RUSSIAN "&&1"
 // openwarfare/_healthsystem.gsc
 //******************************************************************************
 REFERENCE BLEEDING_NOBANDAGES
-LANG_RUSSIAN "У вас нет бинтов чтобы замотать раны."
+LANG_RUSSIAN "У вас нет бинтов чтобы перевязать раны."
 
 REFERENCE MEDIC_BANDAGE_SUCCESS
 LANG_RUSSIAN "Перевязка удалась."
@@ -1301,9 +1301,6 @@ LANG_RUSSIAN "Удалить"
 
 REFERENCE STATS_TOGGLE
 LANG_RUSSIAN "Вкл. Статистику"
-
-REFERENCE PING
-LANG_RUSSIAN "Уст. указатель"
 
 
 //******************************************************************************

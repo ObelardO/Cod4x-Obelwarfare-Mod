@@ -1,0 +1,1 @@
+CHOICE_BIND( 42, "@MARKER_SETTINGS_TEXT", "openScriptMenu modkeybind ping", ; )

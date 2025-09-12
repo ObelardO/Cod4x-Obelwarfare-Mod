@@ -1,6 +1,12 @@
+#Ping Marker: locals
+localize,marker
+
 #Ping Marker: images
 material,compass_ping
 material,waypoint_ping
 
-#Ping Marker: images
+#Ping Marker: scripts
 rawfile,scripts/_splashicons.gsc
+
+#Ping Marker: menus
+ui_mp/controls_multi_slot42.inc
