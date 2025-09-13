@@ -173,12 +173,12 @@ killcam(
 		if ( level.splitscreen )
 		{
 			self.kc_skiptext.y = 34;
-			self.kc_skiptext.fontscale = 1.6;
+			self.kc_skiptext.fontscale = 1.4;
 		}
 		else
 		{
 			self.kc_skiptext.y = 60;
-			self.kc_skiptext.fontscale = 2;
+			self.kc_skiptext.fontscale = 1.4;
 		}
 	}
 	if ( respawn )
@@ -192,11 +192,11 @@ killcam(
 	{
 		if ( !isdefined( self.kc_timer ) )
 		{
-			self.kc_timer = createFontString( "objective", 2.0 );
+			self.kc_timer = createFontString( "objective", 1.6 );
 			if ( level.console )
-				self.kc_timer setPoint( "BOTTOM", undefined, 0, -80 );
+				self.kc_timer setPoint( "TOP", undefined, 0, 80 );
 			else
-				self.kc_timer setPoint( "BOTTOM", undefined, 0, -60 );
+				self.kc_timer setPoint( "TOP", undefined, 0, 75 );
 			self.kc_timer.archived = false;
 			self.kc_timer.foreground = true;
 			/*

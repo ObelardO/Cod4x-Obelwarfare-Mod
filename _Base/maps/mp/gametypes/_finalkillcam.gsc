@@ -110,11 +110,10 @@ finalkillcam( attacker, attackerNum, deathtime, victim, weapon, killcamentity)
     }
 
     predelay = getTime()/1000 - deathTime;
-    postdelay = 1;
+    postdelay = 3;
     killcamlength = camtime + postdelay;
     killcamoffset = camtime + predelay;
     
-    //TODO Break FK HERE if we're not looking back in time far enough to even see the death
 
     visionSetNaked( getdvar("mapname") );
     
@@ -137,7 +136,6 @@ finalkillcam( attacker, attackerNum, deathtime, victim, weapon, killcamentity)
 
     wait 0.05;
 
-    //TODO move this break UP
     if ( self.archivetime <= predelay ) // if we're not looking back in time far enough to even see the death, cancel
 	{
 		self.sessionstate = "dead";
@@ -226,25 +224,25 @@ CreateFKHUD( victim, attacker )
 {
     self.fk_title = newClientHudElem(self);
     self.fk_title.archived = false;
-    self.fk_title.y = 70;
+    self.fk_title.y = 60;
     self.fk_title.alignX = "center";
     self.fk_title.alignY = "middle";
     self.fk_title.horzAlign = "center";
     self.fk_title.vertAlign = "top";
     self.fk_title.sort = 1; // force to draw after the bars
     self.fk_title.font = "objective";
-    self.fk_title.fontscale = 2;
+    self.fk_title.fontscale = 1.75;
     self.fk_title.foreground = true;
     self.fk_title.shadown = 1;
     
     self.fk_title_low = newClientHudElem(self);
     self.fk_title_low.archived = false;
     self.fk_title_low.x = 0;
-    self.fk_title_low.y = -85;
+    self.fk_title_low.y = 80;
     self.fk_title_low.alignX = "center";
-    self.fk_title_low.alignY = "bottom";
+    self.fk_title_low.alignY = "top";
     self.fk_title_low.horzAlign = "center_safearea";
-    self.fk_title_low.vertAlign = "bottom";
+    self.fk_title_low.vertAlign = "top";
     self.fk_title_low.sort = 1; // force to draw after the bars
     self.fk_title_low.font = "objective";
     self.fk_title_low.fontscale = 1.4;
@@ -322,11 +320,11 @@ slowMotion()
     
     wait level.slowmostart;
     
-    SetDvar("timescale", ".4");
+    SetDvar("timescale", ".25");
     for(i=0;i<level.players.size;i++)
-        level.players[i] setclientdvar("timescale", ".4");
+        level.players[i] setclientdvar("timescale", ".25");
     
-    wait 1.2;
+    wait 1.5;
     
     SetDvar("timescale", "1");
     for(i=0;i<level.players.size;i++)

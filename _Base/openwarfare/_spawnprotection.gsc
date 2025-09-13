@@ -62,7 +62,7 @@ onPlayerSpawned()
 	// Create the hud element for the new connected player
 	self.hud_shield_icon = newClientHudElem( self );
 	self.hud_shield_icon.x = 0;
-	self.hud_shield_icon.y = 142;
+	self.hud_shield_icon.y = 120;
 	self.hud_shield_icon.alignX = "center";
 	self.hud_shield_icon.alignY = "middle";
 	self.hud_shield_icon.horzAlign = "center_safearea";
