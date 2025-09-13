@@ -134,7 +134,9 @@ onPlayerConnected()
                 self.playerCard = spawnStruct();
                 self.playerCard.cardName = randomIntRange( 0, level.scr_card_amount );
                 self.playerCard.isShowingKill = false;
+                self.playerCard.isMoving = false;
                 self.playerCard.isShowingHardPoint = false;
+                self.playerCard.isMovingHardPoint = false;
 
                 if( level.scr_card_pers_enabled ) //Optional
                         self scripts\_playercardPers::setPlayerCard();
@@ -157,10 +159,11 @@ onPlayerSpawned()
 	        self.playercard.hudTitle.horzAlign = "center";
 	        self.playercard.hudTitle.vertAlign = "bottom";
 	        self.playercard.hudTitle.fontScale = 1.6;
-	        self.playercard.hudTitle.sort = -1;
+	        self.playercard.hudTitle.sort = 1002;
 	        self.playercard.hudTitle.glowAlpha = 0;
                 self.playercard.hudTitle.alpha = 0;
-                self.playercard.hudTitle.archived = false;
+                self.playercard.hudTitle.archived = true;
+                self.playercard.hudTitle.foreground = true;
         }
 
         // Player Name
@@ -174,11 +177,12 @@ onPlayerSpawned()
 	        self.playercard.hudName.horzAlign = "center";
 	        self.playercard.hudName.vertAlign = "bottom";
 	        self.playercard.hudName.fontScale = 1.4;
-	        self.playercard.hudName.sort = -1;
+	        self.playercard.hudName.sort = 1002;
 	        self.playercard.hudName.glowAlpha = 0;
                 self.playercard.hudName.alpha = 0;
                 self.playercard.hudName.color = (1, 1, 1);
-                self.playercard.hudName.archived = false;
+                self.playercard.hudName.archived = true;
+                self.playercard.hudName.foreground = true;
         }
 
         // Background Image
@@ -188,13 +192,14 @@ onPlayerSpawned()
 	        self.playercard.hudImage = newClientHudElem( self );
 	        self.playercard.hudImage.x = 0;
 	        self.playercard.hudImage.y = -80;	
-	        self.playercard.hudImage.sort = -2;
+	        self.playercard.hudImage.sort = 1001;
                 self.playercard.hudImage.alignX = "center";
 	        self.playercard.hudImage.alignY = "top";
 	        self.playercard.hudImage.horzAlign = "center";
 	        self.playercard.hudImage.vertAlign = "bottom";
                 self.playercard.hudImage.alpha = 0;
-                self.playercard.hudImage.archived = false;
+                self.playercard.hudImage.archived = true;
+                self.playercard.hudImage.foreground = true;
         }
 
         // Rank Icon
@@ -202,18 +207,20 @@ onPlayerSpawned()
         {
 		self.playercard.hudRankIcon = self createIcon( "white", 25, 25 );
 		self.playercard.hudRankIcon setPoint( "CENTER", "BOTTOM", -80, -47 );
-		self.playercard.hudRankIcon.sort = -1;
+		self.playercard.hudRankIcon.sort = 1002;
 		self.playercard.hudRankIcon.alpha = 0;
-		self.playercard.hudRankIcon.archived = false;
+		self.playercard.hudRankIcon.archived = true;
+		self.playercard.hudRankIcon.foreground = true;
 	}
 
         if( !isDefined( self.playercard.hudWeapIcon ) )
         {
                 self.playercard.hudWeapIcon = self createIcon( "white", 25, 25 );
                 self.playercard.hudWeapIcon setPoint( "RIGHT", "BOTTOM", 96, -47 );
-                self.playercard.hudWeapIcon.sort = -1;
+                self.playercard.hudWeapIcon.sort = 1002;
                 self.playercard.hudWeapIcon.alpha = 0;
-                self.playercard.hudWeapIcon.archived = false;
+                self.playercard.hudWeapIcon.archived = true;
+                self.playercard.hudWeapIcon.foreground = true;
         }
         
         if( level.scr_card_hardpoints == 1 )
@@ -232,7 +239,8 @@ onPlayerSpawned()
 	                self.playercard.hudNameHp.sort = -1;
 	                self.playercard.hudNameHp.glowAlpha = 0;
                         self.playercard.hudNameHp.alpha = 0;
-                        self.playercard.hudNameHp.archived = false;
+                        self.playercard.hudNameHp.archived = true;
+                        self.playercard.hudNameHp.foreground = true;
                 }
 
                 // Background Image
@@ -248,7 +256,8 @@ onPlayerSpawned()
 	                self.playercard.hudImageHp.horzAlign = "right";
 	                self.playercard.hudImageHp.vertAlign = "top";
                         self.playercard.hudImageHp.alpha = 0;
-                        self.playercard.hudImageHp.archived = false;
+                        self.playercard.hudImageHp.archived = true;
+                        self.playercard.hudImageHp.foreground = true;
                 }
 
                 // Rank Icon
@@ -258,7 +267,8 @@ onPlayerSpawned()
 		        self.playercard.hudRankIconHp setPoint( "CENTER", "TOP RIGHT", -192, 70 );
 		        self.playercard.hudRankIconHp.sort = -1;
 		        self.playercard.hudRankIconHp.alpha = 0;
-		        self.playercard.hudRankIconHp.archived = false;
+		        self.playercard.hudRankIconHp.archived = true;
+		        self.playercard.hudRankIconHp.foreground = true;
 	        }
 
                 // Hardpoint Text
@@ -275,7 +285,8 @@ onPlayerSpawned()
 	                self.playercard.hudTitleHp.sort = -1;
 	                self.playercard.hudTitleHp.glowAlpha = 0;
 		        self.playercard.hudTitleHp.alpha = 0;
-		        self.playercard.hudTitleHp.archived = false;
+		        self.playercard.hudTitleHp.archived = true;
+		        self.playercard.hudTitleHp.foreground = true;
                 }
 
                 // Weapon Icon
@@ -285,7 +296,8 @@ onPlayerSpawned()
 		        self.playercard.hudWeapIconHp setPoint( "RIGHT", "TOP RIGHT", -13, 70 );
 		        self.playercard.hudWeapIconHp.sort = -1;
 		        self.playercard.hudWeapIconHp.alpha = 0;
-		        self.playercard.hudWeapIconHp.archived = false;
+		        self.playercard.hudWeapIconHp.archived = true;
+		        self.playercard.hudWeapIconHp.foreground = true;
 	        }
         }
 
@@ -368,9 +380,15 @@ showKillCard( playercardVictim, playercardAttacker, weaponInfo )
 	self endon( "disconnect" );
 
         // Wait if already showing a card
-        while( isDefined( self.playerCard.isShowingKill ) && self.playerCard.isShowingKill == true )
+        //while( isDefined( self.playerCard.isShowingKill ) && self.playerCard.isShowingKill == true )
+        //{
+        //        wait( 0.2 );
+        //}
+
+        // Wait if already showing a card
+        while( self.playerCard.isMoving )
         {
-                wait( 0.2 );
+                wait( 0.02 );
         }
 
         // Self Spectating
@@ -380,6 +398,8 @@ showKillCard( playercardVictim, playercardAttacker, weaponInfo )
         // Game ended or Intermission
         if( level.gameEnded || level.intermission )
                 return;
+
+        //self resetKillCard();
 
         self.playerCard.isShowingKill = true;
 
@@ -403,6 +423,8 @@ showKillCard( playercardVictim, playercardAttacker, weaponInfo )
         // Time shader visible
         wait( level.scr_card_time_visible );
 
+        self.playerCard.isMoving = true; 
+
         // Move to bottom and set non-visible
         self.playercard.hudWeapIcon moveOverTime( 0.40 );
         self.playercard.hudRankIcon moveOverTime( 0.40 );
@@ -419,12 +441,24 @@ showKillCard( playercardVictim, playercardAttacker, weaponInfo )
         // Time wait to move to bottom
         wait( 0.4 );
 
+        self resetKillCard();
+        
+        // Time wait to move back
+        //wait( 0.05 );
+
+        self.playerCard.isMoving = false;
+
+        self.playerCard.isShowingKill = false;
+}
+
+resetKillCard()
+{
         // Move back to start position.
-        self.playercard.hudWeapIcon moveOverTime( 0.40 );
-        self.playercard.hudRankIcon moveOverTime( 0.40 );
-        self.playercard.hudTitle moveOverTime( 0.40 );
-        self.playercard.hudImage moveOverTime( 0.40 );
-        self.playercard.hudName moveOverTime( 0.40 );
+        //self.playercard.hudWeapIcon moveOverTime( 0.05 );
+        //self.playercard.hudRankIcon moveOverTime( 0.05 );
+        //self.playercard.hudTitle moveOverTime( 0.05 );
+        //self.playercard.hudImage moveOverTime( 0.05 );
+        //self.playercard.hudName moveOverTime( 0.05 );
         
         self.playercard.hudWeapIcon.y = -47;
         self.playercard.hudRankIcon.y = -47;
@@ -437,11 +471,6 @@ showKillCard( playercardVictim, playercardAttacker, weaponInfo )
         self.playercard.hudTitle.alpha = 0;
         self.playercard.hudImage.alpha = 0;
         self.playercard.hudName.alpha = 0;
-        
-        // Time wait to move back
-        wait( 0.4 );
-
-        self.playerCard.isShowingKill = false;
 }
 
 
@@ -511,9 +540,15 @@ showPlayercardHardpoint( playercardHp, weaponInfo )
 	self endon( "disconnect" );
 
         // Wait if already showing a card
-        while( isDefined( self.playerCard.isShowingHardPoint ) && self.playerCard.isShowingHardPoint == true )
+        //while( isDefined( self.playerCard.isShowingHardPoint ) && self.playerCard.isShowingHardPoint == true )
+        //{
+        //        wait( 0.2 );
+        //}
+
+        // Wait if already showing a card
+        while( self.playerCard.isMovingHardPoint )
         {
-                wait( 0.2 );
+                wait( 0.02 );
         }
 
         // Self Spectating
@@ -565,6 +600,8 @@ showPlayercardHardpoint( playercardHp, weaponInfo )
         // Time Visable
         wait( level.scr_card_hardpoints_time_visible );
 
+        self.playercard.isMovingHardPoint = true;
+
         self.playercard.hudWeapIconHp moveOverTime( 0.40 );
         self.playercard.hudRankIconHp moveOverTime( 0.40 );
         self.playercard.hudTitleHp moveOverTime( 0.40 );
@@ -603,6 +640,8 @@ showPlayercardHardpoint( playercardHp, weaponInfo )
 
         // Time wait to move back
         wait( 0.4 );
+
+        self.playercard.isMovingHardPoint = false;
 
         self.playerCard.isShowingHardPoint = false;
 }
