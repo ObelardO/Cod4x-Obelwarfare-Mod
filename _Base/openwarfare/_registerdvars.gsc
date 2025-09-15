@@ -95,7 +95,7 @@ init()
 	setdvar( "ui_hud_show_hardpoints", ui_hud_show_hardpoints );
 	makeDvarServerInfo( "ui_hud_show_hardpoints" );
 
-	ui_hud_show_scores = getdvarx( "scr_hud_show_scores", "int", ( level.hardcoreMode == 0 ), 0, 1 );
+	ui_hud_show_scores = getdvarx( "scr_hud_show_scores", "int", ( level.hardcoreMode == 0 ), 0, 2 );
 	setdvar( "ui_hud_show_scores", ui_hud_show_scores );
 	makeDvarServerInfo( "ui_hud_show_scores" );
 

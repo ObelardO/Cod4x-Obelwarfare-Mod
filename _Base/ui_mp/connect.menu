@@ -41,12 +41,32 @@
 		background		"$levelBriefing"
 		rect			FULLSCREEN_WIDE
 
+		// gradient_top
+		itemDef
+		{
+			style			WINDOW_STYLE_SHADER
+			rect			0 0 854 75 HORIZONTAL_ALIGN_FULLSCREEN 0
+			background		"gradient_top"
+			visible			1
+			decoration
+		}
+
+		// gradient_bottom
+		itemDef
+		{
+			style			WINDOW_STYLE_SHADER
+			rect			0 405 854 75 HORIZONTAL_ALIGN_FULLSCREEN 0
+			background		"gradient_bottom"
+			visible			1
+			decoration
+		}
+
 		// load progress bar background
 		itemDef
 		{
-			rect			-256 -28 512 4 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_BOTTOM
+			rect			-256 -29 512 6 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_BOTTOM
 			origin			WIDESCREEN_OFFSET
-			forecolor		0.1 0.1 0.1 0.7
+			forecolor		0 0 0 0.9
 			style			WINDOW_STYLE_SHADER
 			background		"loadingmap"
 			visible 		1
@@ -129,17 +149,18 @@
 			textscale		TEXTSIZE_SMALL
 			decoration
 		}
-		
+		*/
 		itemDef
 		{
-			rect			-300 50 200 100 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_CENTER
+			rect			50 50 200 100 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_TOP
+			origin			WIDESCREEN_OFFSET
 			forecolor		1 1 1 1
 			style			WINDOW_STYLE_SHADER
 			background		"openwarfare"
 			visible 		1
 			decoration
 		}
-		*/
+		
 		#include "ui/safearea.menu"
 	}
 }

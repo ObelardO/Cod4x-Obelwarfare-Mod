@@ -350,7 +350,7 @@ rawfile,openwarfare/_greetings.gsc
 rawfile,openwarfare/_packagesinit.gsc
 
 
-
+menufile,ui_mp/choices_setup_teams.menu
 menufile,ui_mp/connect.menu
 menufile,ui_mp/controls_multi.menu
 menufile,ui_mp/options_graphics_pc.menu
@@ -382,6 +382,17 @@ rawfile,ui_mp/tactical_map.inc
 rawfile,ui_mp/teamicon.inc
 
 rawfile,ui_mp/controls_multi_slot42.inc
+
+rawfile,ui_mp/hud_visualgide.inc
+rawfile,ui_mp/hud_hints.inc
+rawfile,ui_mp/hud_stance.inc
+rawfile,ui_mp/hud_compass.inc
+rawfile,ui_mp/hud_stats.inc
+rawfile,ui_mp/hud_scorebar.inc
+rawfile,ui_mp/hud_weaponinfo.inc
+rawfile,ui_mp/hud_locselector.inc
+rawfile,ui_mp/hud_inventory.inc
+rawfile,ui_mp/hud_broadcast.inc
 
 sound,daycycle,,all_mp
 sound,freezetag,,all_mp
