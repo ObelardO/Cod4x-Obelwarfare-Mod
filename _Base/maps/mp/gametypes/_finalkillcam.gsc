@@ -132,7 +132,7 @@ finalkillcam( attacker, attackerNum, deathtime, victim, weapon, killcamentity)
 	self.psoffsettime = 0;
     
     if(!isDefined(level.slowmostart))
-        level.slowmostart = killcamlength - 2;
+        level.slowmostart = killcamlength - 4;
 
     wait 0.05;
 
@@ -324,7 +324,7 @@ slowMotion()
     for(i=0;i<level.players.size;i++)
         level.players[i] setclientdvar("timescale", ".25");
     
-    wait 1.5;
+    wait 2;
     
     SetDvar("timescale", "1");
     for(i=0;i<level.players.size;i++)
