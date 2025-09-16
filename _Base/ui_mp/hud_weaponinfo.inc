@@ -14,7 +14,7 @@ menuDef
     itemDef
     {
         name			"clipGraphic"
-        rect			(WEAPINFO_X - 30) (WEAPINFO_Y + 32 -6) 1 1
+        rect			(WEAPINFO_X - 30 - 16 -9 +4) (WEAPINFO_Y + 32 -6 -37 - 1а) 1 1
         forecolor		1 1 1 HUD_ALPHA
         ownerdraw		CG_PLAYER_WEAPON_AMMO_CLIP_GRAPHIC
         visible			when ( dvarint( ui_hud_hardcore ) == 0 || dvarint( ui_hud_show_inventory ) == 2 );
@@ -24,10 +24,11 @@ menuDef
     itemDef
     {
         name			"ammoStock"
-        rect			(WEAPINFO_X - 30) (WEAPINFO_Y + 34) 1 1
-        textscale		TEXTSIZE_SMALL
+        rect			(WEAPINFO_X - 30 - 8 -2 -9 +4) (WEAPINFO_Y + 34 - 40) 1 1
+        textscale		(TEXTSIZE_SMALL * 1.2)
         textstyle		ITEM_TEXTSTYLE_SHADOWED
         textfont		UI_FONT_OBJECTIVE
+        textalign	    ITEM_ALIGN_RIGHT
         forecolor		1 1 1 HUD_FOREGROUND_ALPHA
         ownerdraw		CG_PLAYER_WEAPON_AMMO_STOCK
         visible			when ( dvarint( ui_hud_hardcore ) == 0 || dvarint( ui_hud_show_inventory ) == 2 );
@@ -37,7 +38,7 @@ menuDef
     itemDef
     {
         name			"offhandFragIcon"
-        rect			(WEAPINFO_X -36) (WEAPINFO_Y -5) 24 24
+        rect			(WEAPINFO_X -36) (WEAPINFO_Y) 20 20
         forecolor		1 1 1 HUD_ALPHA
         ownerdraw		CG_OFFHAND_WEAPON_ICON_FRAG
         background		"hud_us_grenade" // default texture
@@ -48,7 +49,7 @@ menuDef
     itemDef
     {
         name			"offhandSmokeIcon"
-        rect			(WEAPINFO_X -66) (WEAPINFO_Y -5) 24 24
+        rect			(WEAPINFO_X -66) (WEAPINFO_Y) 20 20
         forecolor		1 1 1 HUD_ALPHA
         ownerdraw		CG_OFFHAND_WEAPON_ICON_SMOKEFLASH
         background		"hud_us_smokegrenade" // default texture
@@ -60,7 +61,7 @@ menuDef
     {
         name			"bandagesIcon"
         style			WINDOW_STYLE_SHADER
-        rect			(WEAPINFO_X -96) (WEAPINFO_Y -5) 24 24
+        rect			(WEAPINFO_X -96) (WEAPINFO_Y) 20 20
         forecolor		1 1 1 HUD_ALPHA
         background "hud_us_bandages" // default texture
         visible			when ( dvarint( ui_bandages ) == 1 && ( dvarint( ui_hud_hardcore ) == 0 || dvarint( ui_hud_show_inventory ) > 0 ) );
@@ -70,8 +71,8 @@ menuDef
     itemDef
     {
         name			"offHandFragAmmo"
-        rect			(WEAPINFO_X -14) (WEAPINFO_Y +20) 25 25
-        textscale		TEXTSIZE_SMALL
+        rect			(WEAPINFO_X -14 -2) (WEAPINFO_Y +20 +3) 25 25
+        textscale		(TEXTSIZE_SMALL * 0.6)
         textstyle		ITEM_TEXTSTYLE_SHADOWED
         textfont		UI_FONT_OBJECTIVE
         forecolor		1 1 1 HUD_FOREGROUND_ALPHA
@@ -83,8 +84,8 @@ menuDef
     itemDef
     {
         name			"offHandSmokeAmmo"
-        rect			(WEAPINFO_X -45) (WEAPINFO_Y +20) 25 25
-        textscale		TEXTSIZE_SMALL
+        rect			(WEAPINFO_X -45 -2) (WEAPINFO_Y +20 +3) 25 25
+        textscale		(TEXTSIZE_SMALL * 0.6)
         textstyle		ITEM_TEXTSTYLE_SHADOWED
         textfont		UI_FONT_OBJECTIVE
         forecolor		1 1 1 HUD_FOREGROUND_ALPHA
@@ -96,8 +97,8 @@ menuDef
     itemDef
     {
         name			"bandagesQty"
-        rect			(WEAPINFO_X -76) (WEAPINFO_Y +20) 25 25
-        textscale		TEXTSIZE_SMALL
+        rect			(WEAPINFO_X -76 -2) (WEAPINFO_Y +20 +3) 25 25
+        textscale		(TEXTSIZE_SMALL * 0.6)
         textstyle		ITEM_TEXTSTYLE_SHADOWED
         textfont		UI_FONT_OBJECTIVE
         forecolor		1 1 1 HUD_FOREGROUND_ALPHA
@@ -106,17 +107,17 @@ menuDef
         decoration
     }
 
-//		itemDef
-//		{
-//			name			"weapname"
-//			rect			(WEAPINFO_X - 40) (WEAPINFO_Y + 20) 1 1
-//			textstyle		ITEM_TEXTSTYLE_SHADOWED
-//			textscale		TEXTSIZE_SMALL
-//			textfont		UI_FONT_OBJECTIVE
-//			forecolor		1 1 1 HUD_FOREGROUND_ALPHA
-//			ownerdraw		CG_PLAYER_WEAPON_NAME
-//			visible when ( dvarBool( hiDef ) == 1 );
-//			visible 		when ( dvarint( ui_hud_hardcore ) == 0 );
-//			decoration
-//		}
+    itemDef
+    {
+        name			"weapname"
+        rect			(WEAPINFO_X - 30 - 16 + 26 + 1 -9 +4) (WEAPINFO_Y + 32 -6 -37 -7 +4 -1) 1 1
+        textstyle		ITEM_TEXTSTYLE_SHADOWED
+        textscale		(TEXTSIZE_SMALL * 0.4)
+        textfont		UI_FONT_OBJECTIVE
+        textalign	    ITEM_ALIGN_RIGHT
+        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
+        ownerdraw		CG_PLAYER_WEAPON_NAME
+        visible         when ( dvarint( ui_hud_hardcore ) == 0 || dvarint( ui_hud_show_inventory ) == 2 );
+        decoration
+    }
 }
