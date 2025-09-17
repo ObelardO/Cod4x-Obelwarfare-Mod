@@ -136,6 +136,23 @@
 	// Remote Talking Status
 	menuDef
 	{
+    	name			"spectators"
+		rect			0 100 640 380 HORIZONTAL_ALIGN_FULLSCREEN VERTICAL_ALIGN_FULLSCREEN
+    	fullScreen		0
+    	visible			1
+
+
+		itemDef
+		{
+			rect 0 100 640 380
+			ownerdraw CG_SPECTATORS
+			textscale 2
+		}
+	}
+
+	// Remote Talking Status
+	menuDef
+	{
     	name			"talkers"
 		rect			3 120 24 24 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_TOP
     	fullScreen		0

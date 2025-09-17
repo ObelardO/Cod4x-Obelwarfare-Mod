@@ -14,7 +14,7 @@ menuDef
     itemDef
     {
         name			"clipGraphic"
-        rect			(WEAPINFO_X - 30 - 16 -9 +4) (WEAPINFO_Y + 32 -6 -37 - 1а) 1 1
+        rect			(WEAPINFO_X -51) (WEAPINFO_Y -12) 1 1
         forecolor		1 1 1 HUD_ALPHA
         ownerdraw		CG_PLAYER_WEAPON_AMMO_CLIP_GRAPHIC
         visible			when ( dvarint( ui_hud_hardcore ) == 0 || dvarint( ui_hud_show_inventory ) == 2 );
@@ -24,7 +24,7 @@ menuDef
     itemDef
     {
         name			"ammoStock"
-        rect			(WEAPINFO_X - 30 - 8 -2 -9 +4) (WEAPINFO_Y + 34 - 40) 1 1
+        rect			(WEAPINFO_X -45) (WEAPINFO_Y -6) 1 1
         textscale		(TEXTSIZE_SMALL * 1.2)
         textstyle		ITEM_TEXTSTYLE_SHADOWED
         textfont		UI_FONT_OBJECTIVE
@@ -46,6 +46,19 @@ menuDef
         decoration
     }
 
+    itemDef 
+    {
+        rect		(WEAPINFO_X -36 +10) (WEAPINFO_Y + 30) 1 1
+        exp text	( KeyBinding( "+frag" ) );
+        forecolor	1 1 0 HUD_ALPHA
+        textfont	UI_FONT_OBJECTIVE
+        textscale	0.18
+        textalign	ITEM_ALIGN_CENTER
+        textstyle	ITEM_TEXTSTYLE_SHADOWED
+        visible 	when ( dvarint( ui_hud_hardcore ) == 0 || dvarint( ui_hud_show_inventory ) > 0 );
+        decoration 
+    }
+
     itemDef
     {
         name			"offhandSmokeIcon"
@@ -55,6 +68,19 @@ menuDef
         background		"hud_us_smokegrenade" // default texture
         visible			when ( dvarint( ui_hud_hardcore ) == 0 || dvarint( ui_hud_show_inventory ) > 0 );
         decoration
+    }
+
+    itemDef 
+    {
+        rect		(WEAPINFO_X -66 +10) (WEAPINFO_Y + 30) 1 1
+        exp text	( KeyBinding( "+smoke" ) );
+        forecolor	1 1 0 HUD_ALPHA
+        textfont	UI_FONT_OBJECTIVE
+        textscale	0.18
+        textalign	ITEM_ALIGN_CENTER
+        textstyle	ITEM_TEXTSTYLE_SHADOWED
+        visible 	when ( dvarint( ui_hud_hardcore ) == 0 || dvarint( ui_hud_show_inventory ) > 0 );
+        decoration 
     }
     
     itemDef
@@ -67,11 +93,24 @@ menuDef
         visible			when ( dvarint( ui_bandages ) == 1 && ( dvarint( ui_hud_hardcore ) == 0 || dvarint( ui_hud_show_inventory ) > 0 ) );
         decoration
     }
+
+    itemDef 
+    {
+        rect		(WEAPINFO_X -96 +10) (WEAPINFO_Y + 30) 1 1
+        exp text	( KeyBinding( "openScriptMenu modkeybind bandage" ) );
+        forecolor	1 1 0 HUD_ALPHA
+        textfont	UI_FONT_OBJECTIVE
+        textscale	0.18
+        textalign	ITEM_ALIGN_CENTER
+        textstyle	ITEM_TEXTSTYLE_SHADOWED
+        visible 	when ( dvarint( ui_hud_hardcore ) == 0 || dvarint( ui_hud_show_inventory ) > 0 );
+        decoration 
+    }
             
     itemDef
     {
         name			"offHandFragAmmo"
-        rect			(WEAPINFO_X -14 -2) (WEAPINFO_Y +20 +3) 25 25
+        rect			(WEAPINFO_X -16) (WEAPINFO_Y +23) 25 25
         textscale		(TEXTSIZE_SMALL * 0.6)
         textstyle		ITEM_TEXTSTYLE_SHADOWED
         textfont		UI_FONT_OBJECTIVE
@@ -84,7 +123,7 @@ menuDef
     itemDef
     {
         name			"offHandSmokeAmmo"
-        rect			(WEAPINFO_X -45 -2) (WEAPINFO_Y +20 +3) 25 25
+        rect			(WEAPINFO_X -47) (WEAPINFO_Y +23) 25 25
         textscale		(TEXTSIZE_SMALL * 0.6)
         textstyle		ITEM_TEXTSTYLE_SHADOWED
         textfont		UI_FONT_OBJECTIVE
@@ -97,7 +136,7 @@ menuDef
     itemDef
     {
         name			"bandagesQty"
-        rect			(WEAPINFO_X -76 -2) (WEAPINFO_Y +20 +3) 25 25
+        rect			(WEAPINFO_X -78) (WEAPINFO_Y +23) 25 25
         textscale		(TEXTSIZE_SMALL * 0.6)
         textstyle		ITEM_TEXTSTYLE_SHADOWED
         textfont		UI_FONT_OBJECTIVE
@@ -110,7 +149,7 @@ menuDef
     itemDef
     {
         name			"weapname"
-        rect			(WEAPINFO_X - 30 - 16 + 26 + 1 -9 +4) (WEAPINFO_Y + 32 -6 -37 -7 +4 -1) 1 1
+        rect			(WEAPINFO_X -24) (WEAPINFO_Y -15) 1 1
         textstyle		ITEM_TEXTSTYLE_SHADOWED
         textscale		(TEXTSIZE_SMALL * 0.4)
         textfont		UI_FONT_OBJECTIVE

@@ -1,6 +1,6 @@
-#define	DPAD_BASE_SIZE		24
-#define	DPAD_BASE_SIZE_HALF	12
-#define DPAD_ICON_Y			3//3
+#define	DPAD_BASE_SIZE		36
+#define	DPAD_BASE_SIZE_HALF	18
+#define DPAD_ICON_Y			-12//3
 #define DPAD_LABEL_Y		36//44
 #define DPAD_ICON_SPACING	30
 

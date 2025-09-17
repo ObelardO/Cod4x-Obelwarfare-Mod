@@ -32,7 +32,7 @@ number,weapon,hud icon,hud icon size,image,image size
 31,helicopter,killstreak_award_helicopter_mp,5,killstreak_award_helicopter_mp,2
 32,frag,hud_us_grenade,2,weapon_fraggrenade,2
 33,c4,hud_icon_c4,2,weapon_c4,2
-34,claymore,hud_icon_claymore,1,weapon_claymore,2
+34,claymore,hud_icon_claymore,2,weapon_claymore,2
 35,rpg,hud_icon_rpg,3,weapon_rpg7,3
 36,knife,killiconmelee,2,weapon_knife,4
 37,explodable,death_barrel,1,death_barrel,1
