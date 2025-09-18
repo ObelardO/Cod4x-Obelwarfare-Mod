@@ -2,7 +2,7 @@
 menuDef
 {
     name			"MantleHint"
-    rect			0 70 20 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+    rect			0 145 20 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
     fullScreen		0
     visible			when( ( dvarInt( ui_hud_hardcore ) == 0 && dvarInt( ui_hud_show_mantle_hint ) == 1 ) || dvarInt( ui_hud_show_mantle_hint ) == 2 )
 

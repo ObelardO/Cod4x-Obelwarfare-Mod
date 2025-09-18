@@ -171,7 +171,7 @@ onPlayerSpawned()
 	{
 		self.hud_healthsystem_icon = newClientHudElem( self );
 		self.hud_healthsystem_icon.x = 0;
-		self.hud_healthsystem_icon.y = 120;
+		self.hud_healthsystem_icon.y = 140;
 		self.hud_healthsystem_icon.alignX = "center";
 		self.hud_healthsystem_icon.alignY = "middle";
 		self.hud_healthsystem_icon.horzAlign = "center_safearea";
