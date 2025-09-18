@@ -153,7 +153,7 @@ onPlayerSpawned()
         {
 	        self.playercard.hudTitle = newClientHudElem( self );
 	        self.playercard.hudTitle.x = 0; 
-                self.playercard.hudTitle.y = -100;
+                self.playercard.hudTitle.y = -100 +15;
 	        self.playercard.hudTitle.alignX = "center";
 	        self.playercard.hudTitle.alignY = "top";
 	        self.playercard.hudTitle.horzAlign = "center";
@@ -171,7 +171,7 @@ onPlayerSpawned()
         {
 	        self.playercard.hudName = newClientHudElem( self );
 	        self.playercard.hudName.x = -97; 
-                self.playercard.hudName.y = -77;
+                self.playercard.hudName.y = -77 +15;
 	        self.playercard.hudName.alignX = "left";
 	        self.playercard.hudName.alignY = "top";
 	        self.playercard.hudName.horzAlign = "center";
@@ -191,7 +191,7 @@ onPlayerSpawned()
 	        // Create the HUD element to display the playercard
 	        self.playercard.hudImage = newClientHudElem( self );
 	        self.playercard.hudImage.x = 0;
-	        self.playercard.hudImage.y = -80;	
+	        self.playercard.hudImage.y = -80 +15;	
 	        self.playercard.hudImage.sort = 1001;
                 self.playercard.hudImage.alignX = "center";
 	        self.playercard.hudImage.alignY = "top";
@@ -206,7 +206,7 @@ onPlayerSpawned()
 	if( !isDefined( self.playercard.hudRankIcon ) )
         {
 		self.playercard.hudRankIcon = self createIcon( "white", 25, 25 );
-		self.playercard.hudRankIcon setPoint( "CENTER", "BOTTOM", -80, -47 );
+		self.playercard.hudRankIcon setPoint( "CENTER", "BOTTOM", -80, -47 +15 );
 		self.playercard.hudRankIcon.sort = 1002;
 		self.playercard.hudRankIcon.alpha = 0;
 		self.playercard.hudRankIcon.archived = true;
@@ -216,7 +216,7 @@ onPlayerSpawned()
         if( !isDefined( self.playercard.hudWeapIcon ) )
         {
                 self.playercard.hudWeapIcon = self createIcon( "white", 25, 25 );
-                self.playercard.hudWeapIcon setPoint( "RIGHT", "BOTTOM", 96, -47 );
+                self.playercard.hudWeapIcon setPoint( "RIGHT", "BOTTOM", 96, -47 +15 );
                 self.playercard.hudWeapIcon.sort = 1002;
                 self.playercard.hudWeapIcon.alpha = 0;
                 self.playercard.hudWeapIcon.archived = true;
@@ -460,11 +460,11 @@ resetKillCard()
         //self.playercard.hudImage moveOverTime( 0.05 );
         //self.playercard.hudName moveOverTime( 0.05 );
         
-        self.playercard.hudWeapIcon.y = -47;
-        self.playercard.hudRankIcon.y = -47;
-        self.playercard.hudTitle.y = -100;
-        self.playercard.hudImage.y = -80;
-        self.playercard.hudName.y = -77;
+        self.playercard.hudWeapIcon.y = -47 +15;
+        self.playercard.hudRankIcon.y = -47 +15;
+        self.playercard.hudTitle.y = -100 +15;
+        self.playercard.hudImage.y = -80 +15;
+        self.playercard.hudName.y = -77 +15;
 
         self.playercard.hudWeapIcon.alpha = 0;
         self.playercard.hudRankIcon.alpha = 0;

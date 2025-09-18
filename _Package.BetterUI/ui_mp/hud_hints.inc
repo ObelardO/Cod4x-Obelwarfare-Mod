@@ -22,7 +22,7 @@ menuDef
 menuDef
 {
     name			"Cursorhints"
-    rect			0 70 20 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+    rect			0 110 20 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
     fullScreen		0
     visible			when( !ui_active() )
 

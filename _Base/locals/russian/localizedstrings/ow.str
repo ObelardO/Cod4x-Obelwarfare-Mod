@@ -751,16 +751,19 @@ LANG_RUSSIAN "исходное значение: ^3&&1^7. Новое значение: ^3&&2^7."
 // openwarfare/_disarmexplosives.gsc
 //******************************************************************************
 REFERENCE EXPLOSIVE_DISARMED
-LANG_RUSSIAN "Взрывчатка обезврежена."
+LANG_RUSSIAN "Взрывчатка обезврежена"
 
 REFERENCE EXPLOSIVE_DISARMING
-LANG_RUSSIAN "обезвреживание взрывчатки."
+LANG_RUSSIAN "Обезвреживание..."
 
 REFERENCE EXPLOSIVE_RETRIEVED
-LANG_RUSSIAN "Взрывчатка подобрана."
+LANG_RUSSIAN "Взрывчатка обезврежена"
 
 REFERENCE EXPLOSIVE_RETRIEVING
-LANG_RUSSIAN "Подбор взрывчатки"
+LANG_RUSSIAN "Обезвреживание..."
+
+REFERENCE EXPLOSIVE_HINT
+LANG_RUSSIAN "Удерживайте ^3[{+activate}]^7 чтобы обезвредить"
 
 
 //******************************************************************************
@@ -881,7 +884,11 @@ REFERENCE DESTROYING_EXPLOSIVES
 LANG_RUSSIAN "Уничтожение бомбы"
 
 REFERENCE DESTROY_EXPLOSIVES
-LANG_RUSSIAN "Удерживайте ^3[{+melee}]^7, чтобы уничтожить бомбу!"
+LANG_RUSSIAN "Удерживайте ^3[{+melee}]^7 чтобы уничтожить бомбу"
+
+REFERENCE DROP_EXPLOSIVES
+LANG_RUSSIAN "Нажмите ^3[{openScriptMenu modkeybind objectdrop}]^7 чтобы бросить бомбу"
+
 
 //******************************************************************************
 // openwarfare/_playerdvars.gsc

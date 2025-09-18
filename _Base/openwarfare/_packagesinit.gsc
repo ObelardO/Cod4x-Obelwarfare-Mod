@@ -7,4 +7,5 @@ init()
 	thread scripts\_playercard::init();
 	thread scripts\_splashicons::init();
 	thread scripts\_iw4anticheat::init();
+	thread scripts\_better_ui::init();
 }

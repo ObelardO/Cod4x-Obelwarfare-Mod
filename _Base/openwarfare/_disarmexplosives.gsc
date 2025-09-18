@@ -31,6 +31,7 @@ init()
 
 	precacheString( &"OW_EXPLOSIVE_DISARMING" );
 	precacheString( &"OW_EXPLOSIVE_RETRIEVING" );
+	preCacheString( &"OW_EXPLOSIVE_HINT");
 
 	level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
 }
@@ -102,15 +103,16 @@ explosiveMonitor()
 
 	if ( isDefined( self ) ) {
 		// Create a trigger_radius around the explosive
-		self.triggerRadius = spawn( "trigger_radius", self.origin + ( 0, 0, -40 ), 0, 35, 80 );
+		self.trigger = spawn( "trigger_radius", self.origin + ( 0, 0, -40 ), 0, 35, 80 );
 		self thread deleteTriggerOnDeath();
-
+		self thread triggerHint( self.trigger, &"OW_EXPLOSIVE_HINT" );
+		
 		for (;;)
 		{
 			wait (0.05);
 
 			// Wait until a player has entered my radius
-			self.triggerRadius waittill("trigger", player);
+			self.trigger waittill("trigger", player);
 
 			// A player is within my radius, let's see what's done
 			if ( !isDefined( player.checkDisarming ) || !player.checkDisarming ) {
@@ -120,10 +122,30 @@ explosiveMonitor()
 	}
 }
 
+triggerHint( trigger, hintText )
+{
+	self endon( "death" );
+	level endon( "game_ended" );
+
+	for (;;)
+	{
+		wait( 0.05 );
+
+		self.trigger waittill("trigger", player);
+
+		player iPrintLnBold( hintText );
+
+		while ( player isTouching( self.trigger ) )
+		{
+			wait( 0.05 );
+		}
+	}
+}
+
 // self is explosive's trigger
 deleteTriggerOnDeath()
 {
-	triggerRadius = self.triggerRadius;
+	triggerRadius = self.trigger;
 	
 	// Wait for destruction of the explosive
 	self waittill("death");
@@ -180,11 +202,11 @@ checkForDisarming( explosiveEnt )
 	explosiveDisarmed = false;
 
 	// Loop as long as the player is within the explosive's radius
-	while ( !explosiveDisarmed && isDefined( explosiveEnt.triggerRadius ) && self isTouching( explosiveEnt.triggerRadius ) ) {
+	while ( !explosiveDisarmed && isDefined( explosiveEnt.trigger ) && self isTouching( explosiveEnt.trigger ) ) {
 		// Just a wait so the thread doesn't kill the game
 		wait (0.05);
 
-		while ( !explosiveDisarmed && isDefined( explosiveEnt.triggerRadius ) && self isTouching( explosiveEnt.triggerRadius ) && ( self useButtonPressed() || level.inTimeoutPeriod ) && isDefined( explosiveEnt ) && self IsLookingAt( explosiveEnt )  && ( !isDefined( self.isPlanting ) || !self.isPlanting ) && ( !isDefined( self.isDefusing ) || !self.isDefusing ) ) {
+		while ( !explosiveDisarmed && isDefined( explosiveEnt.trigger ) && self isTouching( explosiveEnt.trigger ) && ( self useButtonPressed() || level.inTimeoutPeriod ) && isDefined( explosiveEnt ) && self IsLookingAt( explosiveEnt )  && ( !isDefined( self.isPlanting ) || !self.isPlanting ) && ( !isDefined( self.isDefusing ) || !self.isDefusing ) ) {
 			// Disable the player's weapons when the player starts disarming
 			if ( startedTime == 0 ) {
 				startedTime = openwarfare\_timer::getTimePassed();

@@ -54,7 +54,7 @@ onPlayerSpawned()
 	numLives.sort = 1001;
 	numLives.foreground = false;
 	numLives.hidewheninmenu = true;
-	numLives.archived = true;
+	numLives.archived = false;
 	numLives maps\mp\gametypes\_hud::fontPulseInit();
 	
 	// Check which string we should show

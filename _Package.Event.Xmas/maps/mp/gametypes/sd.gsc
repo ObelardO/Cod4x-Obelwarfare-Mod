@@ -187,6 +187,8 @@ onPrecacheGameType()
 	precacheString( &"MP_CANT_PLANT_WITHOUT_BOMB" );
 	precacheString( &"MP_PLANTING_EXPLOSIVE" );
 	precacheString( &"MP_DEFUSING_EXPLOSIVE" );
+	precacheString( &"OW_DROP_EXPLOSIVES" );
+	precacheString( &"OW_DESTROY_EXPLOSIVES" );
 
 	precacheModel( "prop_suitcase_bomb" );
 }
@@ -861,6 +863,7 @@ onPickup( player )
 		if ( level.scr_sd_allow_defender_explosivedestroy == 1 )
 		{
 			player iprintlnbold( &"OW_DESTROY_EXPLOSIVES" );
+			player iprintlnbold( &"OW_DROP_EXPLOSIVES" );
 		}
 	}
  	 

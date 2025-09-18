@@ -850,31 +850,34 @@ LANG_ENGLISH "This is your last life!"
 // openwarfare/_objpoints.gsc
 //******************************************************************************
 REFERENCE QUICK_DEFUSE_1
-LANG_ENGLISH "^1Quick Defuse: ^7Cycle through the wires by pressing ^2[{+toggleads_throw}]^7"
+LANG_ENGLISH "^7Press ^3[{+toggleads_throw}]^7 to quick Defuse"
  	 
 REFERENCE QUICK_DEFUSE_2
-LANG_ENGLISH "Press ^2[{+attack}]^7 to select the wire to cut"
+LANG_ENGLISH "Press ^3[{+attack}]^7 to select the wire to cut"
  	 
 REFERENCE RED_WIRE
-LANG_ENGLISH "^1Red Wire"
+LANG_ENGLISH "^1Red^7 Wire"
  	 
 REFERENCE GREEN_WIRE
-LANG_ENGLISH "^2Green Wire"
+LANG_ENGLISH "^2Green^7 Wire"
  	 
 REFERENCE YELLOW_WIRE
-LANG_ENGLISH "^3Yellow Wire"
+LANG_ENGLISH "^3Yellow^7 Wire"
  	 
 REFERENCE BLUE_WIRE
-LANG_ENGLISH "^4Blue Wire"
+LANG_ENGLISH "^4Blue^7 Wire"
  	 
 REFERENCE EXPLOSIVES_DESTROYED
-LANG_ENGLISH "Explosives Destroyed!"
+LANG_ENGLISH "Explosive destroyed!"
  	 
 REFERENCE DESTROYING_EXPLOSIVES
-LANG_ENGLISH "Destroying Explosives"
+LANG_ENGLISH "Destroying explosive..."
  	 
 REFERENCE DESTROY_EXPLOSIVES
-LANG_ENGLISH "You can destroy the explosive by holding ^2[{+melee}]^7"
+LANG_ENGLISH "Hold ^3[{+melee}]^7 to destroy an explosive"
+
+REFERENCE DROP_EXPLOSIVES
+LANG_ENGLISH "Press ^3[{openScriptMenu modkeybind objectdrop}]^7 to drop explosive"
 
 	
 //******************************************************************************

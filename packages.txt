@@ -5,6 +5,8 @@ PingMarker
 PlayerCard
 SplashIcons
 IW4MAdmin
+BetterUI
+//TrashRemover // Not worked (1000 xmodels limit)
 //Event.HappyBirthday
 //Event.Spring
 //Event.Victory
