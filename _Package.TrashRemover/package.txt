@@ -1,0 +1,4 @@
+name=Trash Remover
+iwd=trash
+gsc=
+cfg=
