@@ -10,6 +10,7 @@ rawfile,ui_mp/hud_weaponinfo.inc
 rawfile,ui_mp/hud_locselector.inc
 rawfile,ui_mp/hud_inventory.inc
 rawfile,ui_mp/hud_broadcast.inc
+rawfile,ui_mp/hud_teamstatus.inc
 
 #Better UI: Scripts
 rawfile,scripts/_better_ui.gsc

@@ -20,7 +20,7 @@ init()
     scr_hud_fade_enabled = getdvarx( "scr_hud_fade_enabled", "int", 1, 0, 1 );
     scr_hud_fade_time = getdvarx( "scr_hud_fade_time", "float", 1.7, 0, 10 );
     
-	if ( scr_hud_fade_enabled ) 
+	if( scr_hud_fade_enabled ) 
     {
         hudFadeTime = scr_hud_fade_time;
 
@@ -37,4 +37,76 @@ init()
 
     // Apply other player dvars
     openwarfare\_playerdvars::completeForceClientDvarsArray();
+
+    // Team status
+    scr_hud_teamstat_enabled = getdvarx( "scr_hud_teamstat_enabled", "int", 1, 0, 1 );
+
+    if( scr_hud_teamstat_enabled )
+    {
+        makeDvarServerInfo( "ui_hud_teamstat_count_allies", 0 );
+        makeDvarServerInfo( "ui_hud_teamstat_count_axis", 0 );
+        makeDvarServerInfo( "ui_hud_teamstat_visible", 0 );
+        makeDvarServerInfo( "ui_hud_teamstat_teambased", level.teamBased );
+    
+        level thread prematchOverWatcher();
+        level thread gameOverWatcher();
+
+        level thread teamCountsWatcher( "allies" );
+        level thread teamCountsWatcher( "axis" );
+    }
+    else
+    {
+        makeDvarServerInfo( "ui_hud_teamstat_visible", 0 );
+    }
+}
+
+
+prematchOverWatcher()
+{
+    self waittill( "prematch_over" );
+
+    //wait( 1.0 );
+
+    setdvar( "ui_hud_teamstat_visible", 1 );
+}
+
+
+gameOverWatcher()
+{
+    self waittill( "game_ended" );
+
+    //wait( 1.0 );
+
+    setdvar( "ui_hud_teamstat_visible", 0 );
+}
+
+
+teamCountsWatcher( team )
+{
+    self endon( "game_ended" );
+
+    previousCount = -1;
+
+    for( ;; )
+	{
+		wait( 0.1 );
+
+        currentCount = 0;
+
+        for( i = 0; i < level.players.size; i++ )
+		{
+			player = level.players[i];
+
+            if( player.team == team && isAlive( player ) && ( level.gametype != "ftag" || !player.freezeTag["frozen"] ))
+            {
+                currentCount++;
+            }
+        }
+
+        if( currentCount != previousCount )
+        {
+            setdvar( "ui_hud_teamstat_count_" + team, currentCount );
+            previousCount = currentCount;
+        }
+    }
 }
