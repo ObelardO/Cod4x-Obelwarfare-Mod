@@ -43,11 +43,18 @@ init()
 
     if( scr_hud_teamstat_enabled )
     {
-        makeDvarServerInfo( "ui_hud_teamstat_count_allies", 0 );
-        makeDvarServerInfo( "ui_hud_teamstat_count_axis", 0 );
-        makeDvarServerInfo( "ui_hud_teamstat_visible", 0 );
-        makeDvarServerInfo( "ui_hud_teamstat_teambased", level.teamBased );
-    
+        setDvar( "ui_hud_teamstat_count_allies", 0 );
+        makeDvarServerInfo( "ui_hud_teamstat_count_allies" );
+
+        setDvar( "ui_hud_teamstat_count_axis", 0 );
+        makeDvarServerInfo( "ui_hud_teamstat_count_axis" );
+        
+        setDvar( "ui_hud_teamstat_visible", 0 );
+        makeDvarServerInfo( "ui_hud_teamstat_visible" );
+        
+        setDvar( "ui_hud_teamstat_teambased", int( level.teamBased ) );
+        makeDvarServerInfo( "ui_hud_teamstat_teambased" );
+        
         level thread prematchOverWatcher();
         level thread gameOverWatcher();
 
@@ -56,7 +63,9 @@ init()
     }
     else
     {
-        makeDvarServerInfo( "ui_hud_teamstat_visible", 0 );
+        setDvar( "ui_hud_teamstat_visible", 0 );
+        makeDvarServerInfo( "ui_hud_teamstat_visible" );
+    
     }
 }
 
@@ -68,6 +77,10 @@ prematchOverWatcher()
     //wait( 1.0 );
 
     setdvar( "ui_hud_teamstat_visible", 1 );
+
+    //setdvar( "ui_hud_teamstat_teambased", int( level.teamBased ) );
+
+    iPrintLnBold( "TEAMSTAT " +  (int ( level.teamBased )) );
 }
 
 

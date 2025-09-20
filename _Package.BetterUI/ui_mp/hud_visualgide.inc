@@ -420,7 +420,7 @@ menuDef
         forecolor 0.1 0.1 0.1 0.3
         background "white"
         ownerdraw CG_PLAYER_BAR_HEALTH_BACK
-        visible when( !dvarInt( "wideScreen" ) && !flashbanged() && !ui_active() && team( name ) != "TEAM_SPECTATOR" );
+        visible when( !dvarInt( "wideScreen" ) && !flashbanged() && !isIntermission() && !ui_active() && team( name ) != "TEAM_SPECTATOR" );
         decoration
     }
     itemDef
@@ -430,7 +430,7 @@ menuDef
         forecolor 0.7 0.7 0.7 0.3
         background "white"
         ownerdraw CG_PLAYER_BAR_HEALTH
-        visible when( !dvarInt( "wideScreen" ) && !flashbanged() && !ui_active() && team( name ) != "TEAM_SPECTATOR" );
+        visible when( !dvarInt( "wideScreen" ) && !flashbanged() && !isIntermission() && !ui_active() && team( name ) != "TEAM_SPECTATOR" );
         decoration
     }
     itemDef
@@ -440,7 +440,7 @@ menuDef
         forecolor 1.0 1.0 1.0 0.3
         background "hud_healthbar_heart"
         ownerdraw CG_PLAYER_BAR_HEALTH_BACK
-        visible when( !dvarInt( "wideScreen" ) && !flashbanged() && !ui_active() && team( name ) != "TEAM_SPECTATOR" );
+        visible when( !dvarInt( "wideScreen" ) && !flashbanged() && !isIntermission() && !ui_active() && team( name ) != "TEAM_SPECTATOR" );
         decoration
     }
 
@@ -452,7 +452,7 @@ menuDef
         forecolor 0.1 0.1 0.1 0.3
         background "white"
         ownerdraw CG_PLAYER_BAR_HEALTH_BACK
-        visible when( dvarInt( "wideScreen" ) && !flashbanged() && !ui_active() && team( name ) != "TEAM_SPECTATOR" );
+        visible when( dvarInt( "wideScreen" ) && !flashbanged() && !isIntermission() && !ui_active() && team( name ) != "TEAM_SPECTATOR" );
         decoration
     }
     itemDef
@@ -462,7 +462,7 @@ menuDef
         forecolor 0.7 0.7 0.7 0.3
         background "white"
         ownerdraw CG_PLAYER_BAR_HEALTH
-        visible when( dvarInt( "wideScreen" ) && !flashbanged() && !ui_active() && team( name ) != "TEAM_SPECTATOR" );
+        visible when( dvarInt( "wideScreen" ) && !flashbanged() && !isIntermission() && !ui_active() && team( name ) != "TEAM_SPECTATOR" );
         decoration
     }
     itemDef
@@ -472,7 +472,7 @@ menuDef
         forecolor 1.0 1.0 1.0 0.3
         background "hud_healthbar_heart"
         ownerdraw CG_PLAYER_BAR_HEALTH_BACK
-        visible when( dvarInt( "wideScreen" ) && !flashbanged() && !ui_active() && team( name ) != "TEAM_SPECTATOR" );
+        visible when( dvarInt( "wideScreen" ) && !flashbanged() && !isIntermission() && !ui_active() && team( name ) != "TEAM_SPECTATOR" );
         decoration
     }
 }
