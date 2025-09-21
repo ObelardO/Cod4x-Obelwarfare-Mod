@@ -65,7 +65,6 @@ init()
     {
         setDvar( "ui_hud_teamstat_visible", 0 );
         makeDvarServerInfo( "ui_hud_teamstat_visible" );
-    
     }
 }
 
@@ -74,21 +73,13 @@ prematchOverWatcher()
 {
     self waittill( "prematch_over" );
 
-    //wait( 1.0 );
-
     setdvar( "ui_hud_teamstat_visible", 1 );
-
-    //setdvar( "ui_hud_teamstat_teambased", int( level.teamBased ) );
-
-    iPrintLnBold( "TEAMSTAT " +  (int ( level.teamBased )) );
 }
 
 
 gameOverWatcher()
 {
     self waittill( "game_ended" );
-
-    //wait( 1.0 );
 
     setdvar( "ui_hud_teamstat_visible", 0 );
 }

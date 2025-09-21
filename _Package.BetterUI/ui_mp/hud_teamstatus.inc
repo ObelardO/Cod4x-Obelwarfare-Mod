@@ -8,7 +8,6 @@
 #define TEAMSTAT_TEAMCOUNT_ALLIES   dvarint( ui_hud_teamstat_count_allies )
 #define TEAMSTAT_TEAMCOUNT_AXIS     dvarint( ui_hud_teamstat_count_axis )
 
-
 #define TEAMSTAT_IS_AXIS            int( team( name ) == "TEAM_AXIS" )
 #define TEAMSTAT_IS_ALLIES          int( team( name ) == "TEAM_ALLIES" )
 #define TEAMSTAT_IS_TEAMBASED       dvarInt( ui_hud_teamstat_teambased ) > 0 
@@ -18,6 +17,60 @@
 #define TEAMSTAT_POS_Y_AXIS         ( TEAMSTAT_IS_TEAMBASED && TEAMSTAT_IS_LOSING_AXIS ) * TEAMSTAT_SPACING + TEAMSTAT_OFFSET_Y
 #define TEAMSTAT_POS_Y_ALLIES       ( TEAMSTAT_IS_TEAMBASED && TEAMSTAT_IS_LOSING_ALLIES ) * TEAMSTAT_SPACING + TEAMSTAT_OFFSET_Y
 #define TEAMSTAT_POS_X              TEAMSTAT_OFFSET_X
+
+#define TEAMSTAT_HUD( yOffset, icon, visibleFlag, score, highlightFlag, count ) \
+    itemDef \
+    { \
+        style			WINDOW_STYLE_SHADER \
+        rect			TEAMSTAT_POS_X TEAMSTAT_OFFSET_Y TEAMSTAT_SIZE TEAMSTAT_SIZE HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP \
+        exp             rect Y( yOffset ) \
+        origin          (-TEAMSTAT_SIZE+1) 0 \
+        exp				material( icon ); \
+        visible			when ( visibleFlag ); \
+        forecolor		1 1 1 HUD_FOREGROUND_ALPHA \
+        decoration \
+    } \
+    itemDef \ 
+    { \
+        rect		( TEAMSTAT_POS_X - TEAMSTAT_SIZE ) TEAMSTAT_OFFSET_Y 1 TEAMSTAT_SIZE HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP \
+        exp         rect Y( yOffset ) \
+        origin		-6 0 \
+        exp         text( score ); \
+        textfont	UI_FONT_OBJECTIVE \
+        textscale	0.3 \
+        textalign	ITEM_ALIGN_MIDDLE_RIGHT \
+        textstyle	ITEM_TEXTSTYLE_SHADOWEDMORE \
+        visible 	when( visibleFlag ); \
+        exp         forecolor A( 0.6 + 0.4 * highlightFlag ) \
+        decoration \
+    } \
+    itemDef \
+    { \
+        name			"teamCount" \
+        rect			TEAMSTAT_POS_X TEAMSTAT_OFFSET_Y 1 1 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP \
+        exp             rect Y( yOffset + TEAMSTAT_SIZE ) \
+        textscale		( TEXTSIZE_SMALL * 0.6 ) \
+        textstyle		ITEM_TEXTSTYLE_SHADOWED \
+        textfont		UI_FONT_OBJECTIVE \
+        forecolor		1 1 1 1 \
+        exp				text( count ); \
+        visible			when( visibleFlag ); \
+        decoration \
+    } \
+    itemDef \
+    { \
+        name			"teamCountLast" \
+        rect			TEAMSTAT_POS_X TEAMSTAT_OFFSET_Y 1 1 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP \
+        exp             rect Y( yOffset + TEAMSTAT_SIZE ) \
+        textscale		(TEXTSIZE_SMALL * 0.6) \
+        textstyle		ITEM_TEXTSTYLE_SHADOWED \
+        textfont		UI_FONT_OBJECTIVE \
+        forecolor		1 0 0 1 \
+        exp				text( count ); \
+        exp             forecolor A( 1 - ( float ( milliseconds() % 1000 ) / 1000 ) ); \
+        visible			when( visibleFlag && count <= 1 ); \
+        decoration \
+    }
 
 menuDef
 {
@@ -33,111 +86,6 @@ menuDef
         textscale 4
     }
 
-    itemDef
-    {
-        style			WINDOW_STYLE_SHADER
-        rect			TEAMSTAT_POS_X TEAMSTAT_OFFSET_Y TEAMSTAT_SIZE TEAMSTAT_SIZE HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP
-        exp             rect Y(TEAMSTAT_POS_Y_ALLIES)
-        origin          (-TEAMSTAT_SIZE+1) 0
-        exp				material( dvarString( g_TeamIcon_Allies ) );
-        visible			when (TEAMSTAT_SHOULD_DISPLAY);
-        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
-        decoration
-    }
-    itemDef 
-    {
-        rect		(TEAMSTAT_POS_X - TEAMSTAT_SIZE) TEAMSTAT_OFFSET_Y 1 TEAMSTAT_SIZE HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP
-        exp         rect Y(TEAMSTAT_POS_Y_ALLIES + 20)
-        origin		-6 0
-        exp text	( marinesfield( score ) );
-        textfont	UI_FONT_OBJECTIVE
-        textscale	0.3
-        textalign	ITEM_ALIGN_RIGHT
-        textstyle	ITEM_TEXTSTYLE_SHADOWEDMORE
-        visible 	when( TEAMSTAT_SHOULD_DISPLAY );
-        exp forecolor A( 0.6 + 0.4 * TEAMSTAT_IS_ALLIES )
-        decoration 
-    }
-    itemDef
-    {
-        name			"teamCountAllies"
-        rect			TEAMSTAT_POS_X TEAMSTAT_OFFSET_Y 1 1 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP
-        exp             rect Y(TEAMSTAT_POS_Y_ALLIES + TEAMSTAT_SIZE)
-        textscale		(TEXTSIZE_SMALL * 0.6)
-        textstyle		ITEM_TEXTSTYLE_SHADOWED
-        textfont		UI_FONT_OBJECTIVE
-        forecolor		1 1 1 1
-        exp				text( TEAMSTAT_TEAMCOUNT_ALLIES );
-        visible			when( TEAMSTAT_SHOULD_DISPLAY );
-        decoration
-    }
-    itemDef
-    {
-        name			"teamCountAlliesLast"
-        rect			TEAMSTAT_POS_X TEAMSTAT_OFFSET_Y 1 1 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP
-        exp             rect Y(TEAMSTAT_POS_Y_ALLIES + TEAMSTAT_SIZE)
-        textscale		(TEXTSIZE_SMALL * 0.6)
-        textstyle		ITEM_TEXTSTYLE_SHADOWED
-        textfont		UI_FONT_OBJECTIVE
-        forecolor		1 0 0 1
-        exp				text( TEAMSTAT_TEAMCOUNT_ALLIES );
-        exp             forecolor A( 1 - (float(milliseconds() % 1000) / 1000) );
-        visible			when( TEAMSTAT_SHOULD_DISPLAY && TEAMSTAT_TEAMCOUNT_ALLIES <= 1 );
-        decoration
-    }
-
-
-    itemDef
-    {
-        style			WINDOW_STYLE_SHADER
-        rect			TEAMSTAT_POS_X TEAMSTAT_OFFSET_Y TEAMSTAT_SIZE TEAMSTAT_SIZE HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP
-        exp             rect Y(TEAMSTAT_POS_Y_AXIS)
-        origin          (-TEAMSTAT_SIZE+1) 0
-        exp				material( dvarString( g_TeamIcon_Axis ) );
-        visible			when (TEAMSTAT_SHOULD_DISPLAY);
-        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
-        decoration
-    }
-    itemDef 
-    {
-        rect		(TEAMSTAT_POS_X - TEAMSTAT_SIZE) TEAMSTAT_OFFSET_Y 1 TEAMSTAT_SIZE HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP
-        exp         rect Y(TEAMSTAT_POS_Y_AXIS + 20)
-        origin		-6 0
-        exp text	( opforfield( score ) );
-        textfont	UI_FONT_OBJECTIVE
-        textscale	0.3
-        textalign	ITEM_ALIGN_RIGHT
-        textstyle	ITEM_TEXTSTYLE_SHADOWEDMORE
-        visible 	when (TEAMSTAT_SHOULD_DISPLAY);
-        exp forecolor A( 0.6 + 0.4 * TEAMSTAT_IS_AXIS )
-        decoration 
-    }
-    itemDef
-    {
-        name			"teamCountAxis"
-        rect			TEAMSTAT_POS_X TEAMSTAT_OFFSET_Y 1 1 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP
-        exp             rect Y(TEAMSTAT_POS_Y_AXIS + TEAMSTAT_SIZE)
-        textscale		(TEXTSIZE_SMALL * 0.6)
-        textstyle		ITEM_TEXTSTYLE_SHADOWED
-        textfont		UI_FONT_OBJECTIVE
-        forecolor		1 1 1 1
-        exp             text( TEAMSTAT_TEAMCOUNT_AXIS );
-        visible			when( TEAMSTAT_SHOULD_DISPLAY );
-
-        decoration
-    }
-    itemDef
-    {
-        name			"teamCountAxisLast"
-        rect			TEAMSTAT_POS_X TEAMSTAT_OFFSET_Y 1 1 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP
-        exp             rect Y(TEAMSTAT_POS_Y_AXIS + TEAMSTAT_SIZE)
-        textscale		(TEXTSIZE_SMALL * 0.6)
-        textstyle		ITEM_TEXTSTYLE_SHADOWED
-        textfont		UI_FONT_OBJECTIVE
-        forecolor		1 0 0 1
-        exp             text( TEAMSTAT_TEAMCOUNT_AXIS );
-        exp             forecolor A( 1 - (float(milliseconds() % 1000) / 1000) );
-        visible			when( TEAMSTAT_SHOULD_DISPLAY && TEAMSTAT_TEAMCOUNT_AXIS <= 1 );
-        decoration
-    }
+    TEAMSTAT_HUD( TEAMSTAT_POS_Y_ALLIES, dvarString( g_TeamIcon_Allies ), TEAMSTAT_SHOULD_DISPLAY, marinesfield( score ), TEAMSTAT_IS_ALLIES, TEAMSTAT_TEAMCOUNT_ALLIES )
+    TEAMSTAT_HUD( TEAMSTAT_POS_Y_AXIS, dvarString( g_TeamIcon_Axis ), TEAMSTAT_SHOULD_DISPLAY, opforfield( score ), TEAMSTAT_IS_AXIS, TEAMSTAT_TEAMCOUNT_AXIS )
 }
