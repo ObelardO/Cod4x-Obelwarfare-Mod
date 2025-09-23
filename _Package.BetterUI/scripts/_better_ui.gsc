@@ -52,7 +52,7 @@ init()
         setDvar( "ui_hud_teamstat_visible", 0 );
         makeDvarServerInfo( "ui_hud_teamstat_visible" );
         
-        setDvar( "ui_hud_teamstat_teambased", int( level.teamBased ) );
+        setDvar( "ui_hud_teamstat_teambased", int( level.teamBased && level.gametype != "bel" ) );
         makeDvarServerInfo( "ui_hud_teamstat_teambased" );
         
         level thread prematchOverWatcher();

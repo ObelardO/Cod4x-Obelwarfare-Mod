@@ -1,7 +1,7 @@
 #Ping Marker: locals
 localize,marker
 
-#Ping Marker: images
+#Ping Marker: materials
 material,compass_ping
 material,waypoint_ping
 
