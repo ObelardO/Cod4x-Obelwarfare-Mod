@@ -310,7 +310,9 @@ onPlayerSpawned()
 
 waitForKill()
 {
-	self endon( "disconnect" );
+	self endon ( "death" );
+	self endon ( "disconnect" );
+        level endon( "game_ended" );
 
 	// Wait for the player to die
 	self waittill( "player_killed", eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, fDistance );
@@ -399,8 +401,6 @@ showKillCard( playercardVictim, playercardAttacker, weaponInfo )
         if( level.gameEnded || level.intermission )
                 return;
 
-        //self resetKillCard();
-
         self.playerCard.isShowingKill = true;
 
         if( level.scr_card == 1 )
@@ -441,18 +441,6 @@ showKillCard( playercardVictim, playercardAttacker, weaponInfo )
         // Time wait to move to bottom
         wait( 0.4 );
 
-        self resetKillCard();
-        
-        // Time wait to move back
-        //wait( 0.05 );
-
-        self.playerCard.isMoving = false;
-
-        self.playerCard.isShowingKill = false;
-}
-
-resetKillCard()
-{
         // Move back to start position.
         //self.playercard.hudWeapIcon moveOverTime( 0.05 );
         //self.playercard.hudRankIcon moveOverTime( 0.05 );
@@ -471,6 +459,13 @@ resetKillCard()
         self.playercard.hudTitle.alpha = 0;
         self.playercard.hudImage.alpha = 0;
         self.playercard.hudName.alpha = 0;
+        
+        // Time wait to move back
+        //wait( 0.05 );
+
+        self.playerCard.isMoving = false;
+
+        self.playerCard.isShowingKill = false;
 }
 
 

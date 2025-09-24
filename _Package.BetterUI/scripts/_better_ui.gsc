@@ -43,23 +43,32 @@ init()
 
     if( scr_hud_teamstat_enabled )
     {
+        teamBased = level.teamBased && level.gametype != "bel";
+
+        setDvar( "ui_hud_teamstat_visible", 0 );
+        makeDvarServerInfo( "ui_hud_teamstat_visible" );
+        
+        setDvar( "ui_hud_teamstat_teambased", int( teamBased ) );
+        makeDvarServerInfo( "ui_hud_teamstat_teambased" );
+        
         setDvar( "ui_hud_teamstat_count_allies", 0 );
         makeDvarServerInfo( "ui_hud_teamstat_count_allies" );
 
         setDvar( "ui_hud_teamstat_count_axis", 0 );
         makeDvarServerInfo( "ui_hud_teamstat_count_axis" );
-        
-        setDvar( "ui_hud_teamstat_visible", 0 );
-        makeDvarServerInfo( "ui_hud_teamstat_visible" );
-        
-        setDvar( "ui_hud_teamstat_teambased", int( level.teamBased && level.gametype != "bel" ) );
-        makeDvarServerInfo( "ui_hud_teamstat_teambased" );
-        
+
         level thread prematchOverWatcher();
         level thread gameOverWatcher();
 
-        level thread teamCountsWatcher( "allies" );
-        level thread teamCountsWatcher( "axis" );
+        if ( teamBased )
+        {
+            level thread teamCountsWatcher( "allies" );
+            level thread teamCountsWatcher( "axis" );
+        }
+        else
+        {
+            level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
+        }
     }
     else
     {
@@ -67,6 +76,8 @@ init()
         makeDvarServerInfo( "ui_hud_teamstat_visible" );
     }
 }
+
+
 
 
 prematchOverWatcher()
@@ -114,3 +125,67 @@ teamCountsWatcher( team )
         }
     }
 }
+
+
+onPlayerConnected()
+{
+    self thread addNewEvent( "onPlayerSpawned", ::onPlayerSpawned );
+}
+
+onPlayerSpawned()
+{
+	self endon( "death" );
+    self endon( "disconnect" );
+    self endon( "joined_spectators" );
+    level endon( "game_ended" );
+
+    //while( isPlayer( self ) && isAlive( self ) )
+    while( 1 )
+    {
+        playerScoreRank = 0;
+
+        for( i = 0; i < level.players.size; i++ )
+        {
+            otherPlayer = level.players[i];
+
+            if( self != otherPlayer && isDefined ( otherPlayer ) && isAlive( otherPlayer ) && getBestPlayer( self, otherPlayer ) == otherPlayer )
+            {
+                playerScoreRank--;
+            }
+        }
+
+        self setClientDvar( "ui_hud_teamstat_player_rank", int( playerScoreRank * -1 + 1 ) );
+        self iPrintLn( "Your score rank is: " + ( playerScoreRank * -1 + 1 ) );
+
+        wait( 1 );
+    }
+}
+
+
+getBestPlayer( playerA, playerB )
+{
+    if( !isDefined( playerA.pers ) ) return playerB;
+    if( !isDefined( playerB.pers ) ) return playerA;
+
+    if( playerA.pers["score"] > playerB.pers["score"] ) return playerA;
+    if( playerA.pers["score"] < playerB.pers["score"] ) return playerB;
+
+    playerAkdr = playerA.pers["kills"];
+    if( playerA.pers["deaths"] > 0 ) playerAkdr = float( playerA.pers["kills"] / playerA.pers["deaths"] );
+    
+    playerBkdr = playerB.pers["kills"];
+    if( playerB.pers["deaths"] > 0 ) playerBkdr = float( playerB.pers["kills"] / playerB.pers["deaths"] );
+    
+    if( playerAkdr > playerBkdr ) return playerA;
+    if( playerAkdr < playerBkdr ) return playerB;
+
+    return playerA;
+}
+
+//  12   7      1.714
+//  10   5      2
+//  11   5      2.2
+//
+//  12   8      1.5
+//  10   6      1.6666
+//  11   6      1.8233
