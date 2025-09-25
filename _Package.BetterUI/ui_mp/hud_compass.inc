@@ -5,7 +5,7 @@
 
 #define RECT_COMPASS	0 0 COMPASS_SIZE_MP COMPASS_SIZE_MP HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_TOP
 #undef MINIMAP_ORIGIN
-#define MINIMAP_ORIGIN 	6 6 //2 2
+#define MINIMAP_ORIGIN 	18 12 //2 2
 
 // Compass
 menuDef
@@ -20,7 +20,7 @@ menuDef
         name			"minimapBG"
         rect			(MINIMAP_X_MP - 14) (MINIMAP_Y_MP - 6) COMPASS_SIZE_MP COMPASS_SIZE_MP
         origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 1
+        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
         background		"minimap_background"
         ownerdraw		CG_PLAYER_COMPASS_BACK
         visible when ( (dvarint( ui_hud_hardcore ) == 0 || dvarint( ui_hud_hardcore_show_minimap ) == 1 || ALLIES_HAVE_UAV || AXIS_HAVE_UAV || CLIENT_HAS_UAV || dvarInt( g_compassShowEnemies ) ) && !selecting_location() );
@@ -31,7 +31,7 @@ menuDef
         name			"minimapTickerBorder"
         rect			MINIMAP_X_MP (MINIMAP_Y_MP - 15) MINIMAP_W_MP 14
         origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 1
+        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
         background		"minimap_tickertape_background"
         ownerdraw		CG_PLAYER_COMPASS_BACK
         visible when ( (dvarint( ui_hud_hardcore ) == 0 || dvarint( ui_hud_hardcore_show_compass ) == 1 || dvarint( ui_hud_hardcore_show_minimap ) == 1 || ALLIES_HAVE_UAV || AXIS_HAVE_UAV || CLIENT_HAS_UAV || dvarInt( g_compassShowEnemies ) ) && !selecting_location() );
@@ -43,7 +43,7 @@ menuDef
         name			"minimapTicker"
         rect			MINIMAP_X_MP (MINIMAP_Y_MP - 12) MINIMAP_W_MP 9
         origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 1
+        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
         background		"minimap_tickertape_mp"
         ownerdraw		CG_PLAYER_COMPASS_TICKERTAPE_NO_OBJ
         visible when ( (dvarint( ui_hud_hardcore ) == 0 || dvarint( ui_hud_hardcore_show_compass ) == 1 || dvarint( ui_hud_hardcore_show_minimap ) == 1 || ALLIES_HAVE_UAV || AXIS_HAVE_UAV || CLIENT_HAS_UAV || dvarInt( g_compassShowEnemies ) ) && !dvarint( compass_objectives ) && !selecting_location() );
@@ -55,7 +55,7 @@ menuDef
         name			"minimapTicker"
         rect			MINIMAP_X_MP (MINIMAP_Y_MP - 12) MINIMAP_W_MP 9
         origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 1
+        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
         background		"minimap_tickertape_mp"
         ownerdraw		CG_PLAYER_COMPASS_TICKERTAPE
         textscale		0.25
@@ -68,7 +68,7 @@ menuDef
         name			"mini_map"
         rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
         origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 1
+        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
         background		"compass_map_default"
         ownerdraw		CG_PLAYER_COMPASS_MAP
         visible when ( (dvarint( ui_hud_hardcore ) == 0 || dvarint( ui_hud_hardcore_show_minimap ) == 1 || ALLIES_HAVE_UAV || AXIS_HAVE_UAV || CLIENT_HAS_UAV || dvarInt( g_compassShowEnemies ) ) && !selecting_location() );
@@ -80,7 +80,7 @@ menuDef
         name			"compasspointers"
         rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
         origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 1
+        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
         background		"objective_line"
         ownerdraw		CG_PLAYER_COMPASS_POINTERS
         visible when ( (dvarint( ui_hud_hardcore ) == 0 || dvarint( ui_hud_hardcore_show_minimap ) == 1 || ALLIES_HAVE_UAV || AXIS_HAVE_UAV || CLIENT_HAS_UAV || dvarInt( g_compassShowEnemies ) ) && !selecting_location() && dvarint( ui_hud_showobjicons ) > 0 );
@@ -92,7 +92,7 @@ menuDef
         name			"compassfriendlies"
         rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
         origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 1
+        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
         ownerdraw		CG_PLAYER_COMPASS_FRIENDS
         visible when ( (dvarint( ui_hud_hardcore ) == 0 || dvarint( ui_hud_hardcore_show_minimap ) == 1 || ALLIES_HAVE_UAV || AXIS_HAVE_UAV || CLIENT_HAS_UAV || dvarInt( g_compassShowEnemies ) ) && !selecting_location() );
     }
@@ -102,7 +102,7 @@ menuDef
         name			"compassenemies"
         rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
         origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 1
+        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
         ownerdraw		CG_PLAYER_COMPASS_ENEMIES
         visible when ( ( ( ( dvarint( ui_hud_hardcore ) == 0 || dvarint( ui_hud_hardcore_show_minimap ) == 1 ) && dvarint( ui_minimap_show_enemies_firing ) == 1 ) || ALLIES_HAVE_UAV || AXIS_HAVE_UAV || CLIENT_HAS_UAV || dvarInt( g_compassShowEnemies ) ) && !selecting_location() );
     }
@@ -112,7 +112,7 @@ menuDef
         name			"compasshelicopters"
         rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
         origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 1
+        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
         ownerdraw		CG_PLAYER_COMPASS_HELICOPTERS
         visible when ( (dvarint( ui_hud_hardcore ) == 0 || dvarint( ui_hud_hardcore_show_minimap ) == 1 || ALLIES_HAVE_UAV || AXIS_HAVE_UAV || CLIENT_HAS_UAV || dvarInt( g_compassShowEnemies ) ) && !selecting_location() && dvarint( ui_hud_show_hardpoints ) == 1 );
     }
@@ -122,7 +122,7 @@ menuDef
         name			"compassplanes"
         rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
         origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 1
+        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
         ownerdraw		CG_PLAYER_COMPASS_PLANES
         visible when ( (dvarint( ui_hud_hardcore ) == 0 || dvarint( ui_hud_hardcore_show_minimap ) == 1 || ALLIES_HAVE_UAV || AXIS_HAVE_UAV || CLIENT_HAS_UAV || dvarInt( g_compassShowEnemies ) ) && !selecting_location() && dvarint( ui_hud_show_hardpoints ) == 1 );
     }
