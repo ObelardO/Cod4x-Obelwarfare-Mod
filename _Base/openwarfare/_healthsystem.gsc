@@ -101,6 +101,10 @@ init()
   precacheModel( "health_obj" );
   precacheModel( "hp_medium" );
 
+  preCacheString( &"OW_STATUS_BLEEDING" );
+  preCacheString( &"OW_STATUS_HEALING" );
+  preCacheString( &"OW_STATUS_BANDAGE" );
+
   level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
 }
 
@@ -167,18 +171,26 @@ onPlayerSpawned()
 			self.isHealing = false;
 	}   
       
-	if ( ( level.scr_healthsystem_healing_icon || level.scr_healthsystem_bleeding_icon ) && !isDefined( self.hud_healthsystem_icon ) ) 
+	if ( ( level.scr_healthsystem_healing_icon || level.scr_healthsystem_bleeding_icon ) ) 
 	{
-		self.hud_healthsystem_icon = newClientHudElem( self );
-		self.hud_healthsystem_icon.x = 0;
-		self.hud_healthsystem_icon.y = 140;
-		self.hud_healthsystem_icon.alignX = "center";
-		self.hud_healthsystem_icon.alignY = "middle";
-		self.hud_healthsystem_icon.horzAlign = "center_safearea";
-		self.hud_healthsystem_icon.vertAlign = "center_safearea";
-		self.hud_healthsystem_icon.alpha = 0;
-		self.hud_healthsystem_icon.archived = true;
-		self.hud_healthsystem_icon.hideWhenInMenu = true;
+		if( !isDefined( self.hud_healthsystem_icon ) )
+		{
+			self.hud_healthsystem_icon = createIcon( "bleeding", 32, 32 );
+			self.hud_healthsystem_icon setPoint( "BOTTOM RIGHT", undefined, -20, -133 );
+			self.hud_healthsystem_icon.alpha = 0;
+			self.hud_healthsystem_icon.archived = true;
+			self.hud_healthsystem_icon.hideWhenInMenu = true;
+		}
+
+		if( !isDefined( self.hud_healthsystem_text ) )
+		{
+			self.hud_healthsystem_text = createFontString( "default", 1.4 );
+			self.hud_healthsystem_text setParent( self.hud_healthsystem_icon );
+			self.hud_healthsystem_text setPoint( "RIGHT", "LEFT", -5, 0 );
+			self.hud_healthsystem_text.alpha = 0;
+			self.hud_healthsystem_text.archived = false;
+			self.hud_healthsystem_text.foreground = true;
+		}
 	}
   
 	if ( level.scr_healthsystem_bandage_self || level.scr_healthsystem_medic_enable || level.scr_healthsystem_healthpacks_enable )
@@ -202,6 +214,9 @@ onPlayerDeath()
 	
 	if ( isDefined( self.hud_healthsystem_icon ) )
 		self.hud_healthsystem_icon destroy();
+
+	if ( isDefined( self.hud_healthsystem_text ) )
+		self.hud_healthsystem_text destroy();
 	
 	if (level.scr_healthsystem_show_healthbar )
 		self setClientdvar( "cg_drawhealth", 0 );
@@ -753,7 +768,7 @@ healSelf()
   
 		if ( level.scr_healthsystem_healing_icon && isDefined( self.hud_healthsystem_icon ) )
 		{
-		self setHealingStatus( "bandaging" );
+		self setHealingStatus( "healing" );
 		self showHealingStatus( true );
 		}                
     
@@ -901,9 +916,9 @@ healTeammate( teammate )
     
 		if ( level.scr_healthsystem_healing_icon && isDefined( self.hud_healthsystem_icon) )
 		{
-			self setHealingStatus( "bandaging" );
+			self setHealingStatus( "healing" );
 			self showHealingStatus( true );  
-			teammate setHealingStatus( "bandaging" );
+			teammate setHealingStatus( "healing" );
 			teammate showHealingStatus( true );          
 		}
     
@@ -1036,17 +1051,35 @@ getMaxHealth()
 showHealingStatus( condition )
 {
 	if ( condition )
+	{
 		self.hud_healthsystem_icon.alpha = 1;
+		self.hud_healthsystem_text.alpha = 1;
+	}
 	else
+	{
 		self.hud_healthsystem_icon.alpha = 0;
+		self.hud_healthsystem_text.alpha = 0;
+	}
+		
 }  
 
 setHealingStatus( status )
 {
 	if ( status == "bandaging" )
+	{
 		self.hud_healthsystem_icon setShader( "bandaging", 32, 32);
+		self.hud_healthsystem_text setText( &"OW_STATUS_BANDAGE" );
+	}
+	else if ( status == "healing" )
+	{
+		self.hud_healthsystem_icon setShader( "bandaging", 32, 32);
+		self.hud_healthsystem_text setText( &"OW_STATUS_HEALING" );
+	}
 	else
+	{
 		self.hud_healthsystem_icon setShader( "bleeding", 32, 32);
+		self.hud_healthsystem_text setText( &"OW_STATUS_BLEEDING" );
+	}
 }  
 
 removeBandage()

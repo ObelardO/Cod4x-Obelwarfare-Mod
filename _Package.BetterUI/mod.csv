@@ -18,3 +18,4 @@ rawfile,scripts/_better_ui.gsc
 #Better UI: Materials
 material,hud_match_cup
 material,hud_match_cup_gold
+material,hud_suitcase_bomb_item

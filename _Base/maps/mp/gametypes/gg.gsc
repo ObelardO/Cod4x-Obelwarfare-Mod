@@ -454,18 +454,18 @@ showGunGameInfo()
 		weaponIcon = self createIcon( game["gunGameWeapons"][ game["gunGameLevels"][ self.gunGame["level"] ]["weapon"] ], 100, 50 );
 	}	
 	
-	weaponIcon setPoint( "CENTER", "CENTER", 220, 140 );
-	weaponIcon.archived = true;
+	weaponIcon setPoint( "RIGHT", "RIGHT BOTTOM", -22, -110 );
+	weaponIcon.archived = false;
 	weaponIcon.hideWhenInMenu = true;
 	weaponIcon.sort = -3;
 	weaponIcon.alpha = 0.75;
 	
 	// Create the levels left
-	levelsLeft = self createFontString( "objective", 1.8 );
-	levelsLeft.archived = true;
+	levelsLeft = self createFontString( "objective", 1.4 );
+	levelsLeft.archived = false;
 	levelsLeft.hideWhenInMenu = true;
-	levelsLeft setPoint( "CENTER", "CENTER", 250, 140 );
-	levelsLeft.alignX = "left";
+	levelsLeft setPoint( "RIGHT", "RIGHT BOTTOM", -22, -110 );
+	levelsLeft.alignX = "right";
 	levelsLeft.sort = -1;
 	levelsLeft.alpha = 0.75;
 	levelsLeft.color = ( 1, 1, 0 );
@@ -474,10 +474,10 @@ showGunGameInfo()
 	// Create the deaths left 
 	if ( level.scr_gg_death_penalty > 0 ) {
 		deathsLeft = self createFontString( "objective", 1.4 );
-		deathsLeft.archived = true;
+		deathsLeft.archived = false;
 		deathsLeft.hideWhenInMenu = true;
-		deathsLeft setPoint( "CENTER", "CENTER", 250, 120 );
-		deathsLeft.alignX = "left";
+		deathsLeft setPoint( "RIGHT", "RIGHT BOTTOM", -22, -130 );
+		deathsLeft.alignX = "right";
 		deathsLeft.sort = -1;
 		deathsLeft.alpha = 0.75;
 		deathsLeft.color = ( 1, 0, 0 );
@@ -488,10 +488,10 @@ showGunGameInfo()
 		
 	// Create the kills left 
 	killsLeft = self createFontString( "objective", 1.4 );
-	killsLeft.archived = true;
+	killsLeft.archived = false;
 	killsLeft.hideWhenInMenu = true;
-	killsLeft setPoint( "CENTER", "CENTER", 250, 160 );
-	killsLeft.alignX = "left";
+	killsLeft setPoint( "RIGHT", "RIGHT BOTTOM", -22, -90 );
+	killsLeft.alignX = "right";
 	killsLeft.sort = -1;
 	killsLeft.alpha = 0.75;
 	killsLeft.color = ( 0, 0.5, 0 );

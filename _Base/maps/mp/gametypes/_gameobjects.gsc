@@ -591,12 +591,12 @@ giveObject( object )
 		}
 		else
 		{
-			self.carryIcon = createIcon( object.carryIcon, 50, 50 );
+			self.carryIcon = createIcon( object.carryIcon, 32, 32 );
 
 			if ( !object.allowWeapons )
-				self.carryIcon setPoint( "CENTER", "CENTER", 0, 60 );
+				self.carryIcon setPoint( "CENTER", "RIGHT BOTTOM", -31, -100 );
 			else
-				self.carryIcon setPoint( "CENTER", "CENTER", 220, 140 );
+				self.carryIcon setPoint( "CENTER", "RIGHT BOTTOM", -31, -100 );
 		}
 	}
 }

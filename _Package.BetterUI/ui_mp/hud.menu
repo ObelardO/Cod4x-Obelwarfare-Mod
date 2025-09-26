@@ -337,7 +337,7 @@
 	{
 		name			"gamemessages"
 		// (todo: use VERTICAL_ALIGN_TOP in SP)
-		rect			20 -30 10 10 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+		rect			20 -28 10 10 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
 		fullScreen		0
 		visible			when( !inkillcam() );
 

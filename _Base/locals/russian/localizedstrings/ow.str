@@ -632,7 +632,7 @@ REFERENCE	AACP_PLAYER_BAN
 LANG_RUSSIAN "Забанить игрока"
 
 REFERENCE AACP_WARNING
-LANG_RUSSIAN "^1Предупреждение номер &&1 из &&2 прежде чем игрок будет удален из игры!"
+LANG_RUSSIAN "^1Предупреждение^7 номер &&1 из &&2 прежде чем игрок будет удален из игры!"
 
 REFERENCE	AACP_NOTENABLED
 LANG_RUSSIAN "На данном сервере панель администрирования не подключена."
@@ -796,7 +796,7 @@ LANG_RUSSIAN "&&1"
 // openwarfare/_healthsystem.gsc
 //******************************************************************************
 REFERENCE BLEEDING_NOBANDAGES
-LANG_RUSSIAN "У вас нет бинтов чтобы перевязать раны."
+LANG_RUSSIAN "У вас нет бинтов для перевязки."
 
 REFERENCE MEDIC_BANDAGE_SUCCESS
 LANG_RUSSIAN "Перевязка удалась."
@@ -805,28 +805,37 @@ REFERENCE MEDIC_BANDAGE_UNSUCCESSFUL
 LANG_RUSSIAN "Перевязка не удалась."
 
 REFERENCE MEDIC_SELF_BANDAGE
-LANG_RUSSIAN "Вы первязываете ^1&&1^7."
+LANG_RUSSIAN "Вы первязываете ^3&&1^7."
 
 REFERENCE MEDIC_TEAMMATE_BANDAGE
-LANG_RUSSIAN "Вас перевязывает ^1&&1^7."
+LANG_RUSSIAN "Вас перевязывает ^3&&1^7."
 
 REFERENCE MEDIC_SELF_HEAL
-LANG_RUSSIAN "Вы лечите ^1&&1^7."
+LANG_RUSSIAN "Вы лечите ^3&&1^7."
 
 REFERENCE MEDIC_TEAMMATE_HEAL
-LANG_RUSSIAN "Вас лечит ^1&&1^7."
+LANG_RUSSIAN "Вас лечит ^3&&1^7."
 
 REFERENCE MEDIC_HEALING_FULL
-LANG_RUSSIAN "Перевязка закончена. Бинты использованы полностью."
+LANG_RUSSIAN "Лечение завершено. Бинты закончились."
 
 REFERENCE MEDIC_HEALING_PARTIAL
-LANG_RUSSIAN "Перевязка закончена. Бинты частично израсходованы."
+LANG_RUSSIAN "Лечение завершено. Бинты частично израсходованы."
 
 REFERENCE TEAMMATE_BANDAGE
-LANG_RUSSIAN "Член вашей команды производит перебинтовку. Подождите, пока он закончит."
+LANG_RUSSIAN "Союзник производит перевязку. Подождите, пока он закончит."
 
 REFERENCE TEAMMATE_HEAL
-LANG_RUSSIAN "Член вашей команды производит лечение. Подождите, пока он закончит."
+LANG_RUSSIAN "Союзник производит лечение. Подождите, пока он закончит."
+
+REFERENCE STATUS_BLEEDING
+LANG_RUSSIAN "Кровотечение"
+
+REFERENCE STATUS_HEALING
+LANG_RUSSIAN "Лечение"
+
+REFERENCE STATUS_BANDAGE
+LANG_RUSSIAN "Перевязка"
 
 
 //******************************************************************************
@@ -1042,6 +1051,13 @@ LANG_RUSSIAN "Стратегическая пауза."
 
 REFERENCE PRESS_TO_BYPASS
 LANG_RUSSIAN "Нажмите^3 [{+activate}] ^7для готовности"
+
+
+//******************************************************************************
+// openwarfare/_spawnprotection.gsc
+//******************************************************************************
+REFERENCE SPAWN_PROTECTION
+LANG_RUSSIAN "Неуязвимость"
 
 
 //******************************************************************************

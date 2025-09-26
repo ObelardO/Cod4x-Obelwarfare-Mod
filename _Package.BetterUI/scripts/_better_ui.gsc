@@ -142,7 +142,7 @@ onPlayerSpawned()
     //while( isPlayer( self ) && isAlive( self ) )
     while( 1 )
     {
-        playerScoreRank = 0;
+        playerScoreRank = 0; 
 
         for( i = 0; i < level.players.size; i++ )
         {
@@ -155,7 +155,7 @@ onPlayerSpawned()
         }
 
         self setClientDvar( "ui_hud_teamstat_player_rank", int( playerScoreRank * -1 + 1 ) );
-        self iPrintLn( "Your score rank is: " + ( playerScoreRank * -1 + 1 ) );
+        //self iPrintLn( "Your score rank is: " + ( playerScoreRank * -1 + 1 ) );
 
         wait( 1 );
     }

@@ -795,16 +795,16 @@ REFERENCE MEDIC_BANDAGE_UNSUCCESSFUL
 LANG_ENGLISH "Unsuccessful bandage."
 
 REFERENCE MEDIC_SELF_BANDAGE
-LANG_ENGLISH "Bandaging ^1&&1^7."
+LANG_ENGLISH "Bandaging ^3&&1^7."
 
 REFERENCE MEDIC_TEAMMATE_BANDAGE
-LANG_ENGLISH "^1&&1^7 is bandaging you."
+LANG_ENGLISH "^3&&1^7 is bandaging you."
 
 REFERENCE MEDIC_SELF_HEAL
-LANG_ENGLISH "Healing ^1&&1^7."
+LANG_ENGLISH "Healing ^3&&1^7."
 
 REFERENCE MEDIC_TEAMMATE_HEAL
-LANG_ENGLISH "^1&&1^7 is healing you."
+LANG_ENGLISH "^3&&1^7 is healing you."
 
 REFERENCE MEDIC_HEALING_FULL
 LANG_ENGLISH "Done healing. Full use of bandage."
@@ -817,6 +817,15 @@ LANG_ENGLISH "Your teammate is bandaging. Wait until he is done."
 
 REFERENCE TEAMMATE_HEAL
 LANG_ENGLISH "Your teammate is healing. Wait until he is done."
+
+REFERENCE STATUS_BLEEDING
+LANG_ENGLISH "Bleeding"
+
+REFERENCE STATUS_HEALING
+LANG_ENGLISH "Healing"
+
+REFERENCE STATUS_BANDAGE
+LANG_ENGLISH "Bandaging"
 
 
 //******************************************************************************
@@ -1032,6 +1041,13 @@ LANG_ENGLISH "Round strategy time:"
 
 REFERENCE PRESS_TO_BYPASS
 LANG_ENGLISH "Press^3 [{+activate}] ^7to bypass"
+
+
+//******************************************************************************
+// openwarfare/_spawnprotection.gsc
+//******************************************************************************
+REFERENCE SPAWN_PROTECTION
+LANG_ENGLISH "Spawn protect"
 
 
 //******************************************************************************

@@ -328,18 +328,18 @@ showTeamStatus()
 	self endon("disconnect");
 	
 	// Create the icon and the number of players frozen
-	frozenIcon = self createIcon( "icon_snowflake", 50, 50 );
-	frozenIcon setPoint( "CENTER", "CENTER", 220, 140 );
+	frozenIcon = self createIcon( "icon_snowflake", 32, 32 );
+	frozenIcon setPoint( "CENTER", "RIGHT BOTTOM", -31, -100 );
 	frozenIcon.archived = true;
 	frozenIcon.hideWhenInMenu = true;
 	frozenIcon.sort = -3;
 	frozenIcon.alpha = 0.75;
 
 	// Create the teammates frozen
-	playersFrozen = self createFontString( "objective", 1.8 );
+	playersFrozen = self createFontString( "objective", 1.4 );
 	playersFrozen.archived = true;
 	playersFrozen.hideWhenInMenu = true;
-	playersFrozen setPoint( "CENTER", "CENTER", 245, 155 );
+	playersFrozen setPoint( "CENTER", "RIGHT BOTTOM", -50, -100 );
 	playersFrozen.alignX = "right";
 	playersFrozen.sort = -1;
 	playersFrozen.alpha = 0.75;

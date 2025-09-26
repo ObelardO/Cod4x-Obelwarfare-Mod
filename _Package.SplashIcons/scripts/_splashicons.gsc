@@ -364,7 +364,8 @@ onPlayerMultikill( killCount )
 
 isWallBang( attacker, victim, hitPoint )
 {
-    return !SightTracePassed( attacker getEye(), hitPoint, false, attacker );
+    return !SightTracePassed( attacker getPlayerEyes(), hitPoint, false, attacker );
+    //return !SightTracePassed( attacker getEye(), hitPoint, false, attacker );
     //return !bulletTracePassed( attacker getEye(), hitPoint, false, attacker );
 }
 

@@ -542,8 +542,8 @@ pickVIP()
 	}
 	
 	// Create the VIP icon and tell the player about it
-	level.playerVIP.vipIcon = level.playerVIP createIcon( "icon_vip", 50, 50 );
-	level.playerVIP.vipIcon setPoint( "CENTER", "CENTER", 220, 140 );
+	level.playerVIP.vipIcon = level.playerVIP createIcon( "zakhaev_face", 32, 32 );
+	level.playerVIP.vipIcon setPoint( "CENTER", "RIGHT BOTTOM", -31, -100 );
 	level.playerVIP.vipIcon.alpha = 0.75;
 	
 	level.playerVIP playLocalSound( "mp_challenge_complete" );

@@ -218,8 +218,8 @@ onSpawnPlayer()
 	assert( isDefined(spawnpoint) );
 
 	if ( !isDefined( self.carryIcon ) ) {
-		self.carryIcon = self createIcon( "dogtag", 50, 50 );
-		self.carryIcon setPoint( "CENTER", "CENTER", 220, 140 );
+		self.carryIcon = createIcon( "dogtag", 32, 32 );
+		self.carryIcon setPoint( "CENTER", "RIGHT BOTTOM", -31, -100 );
 		self.carryIcon.archived = true;
 		self.carryIcon.hideWhenInMenu = true;
 		self.carryIcon.sort = -3;
@@ -227,14 +227,14 @@ onSpawnPlayer()
 	}
 
 	if ( !isDefined( self.carryAmount ) ) {
-		self.carryAmount = self createFontString( "objective", 1.8 );
+		self.carryAmount = self createFontString( "objective", 1.4 );
 		self.carryAmount.archived = true;
 		self.carryAmount.hideWhenInMenu = true;
-		self.carryAmount setPoint( "CENTER", "CENTER", 245, 155 );
+		self.carryAmount setPoint( "CENTER", "RIGHT BOTTOM", -50, -100 );
 		self.carryAmount.alignX = "right";
 		self.carryAmount.sort = -1;
 		self.carryAmount.alpha = 0.75;
-		self.carryAmount.color = ( 1, 1, 0 );
+		self.carryAmount.color = ( 1, 1, 1 );
 	}
 
 	self.carryAmount setValue( 0 );

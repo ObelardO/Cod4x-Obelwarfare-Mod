@@ -11,6 +11,8 @@
 //            Website: http://openwarfaremod.com/
 //******************************************************************************
 
+#include maps\mp\gametypes\_hud_util;
+
 #include openwarfare\_eventmanager;
 #include openwarfare\_utils;
 
@@ -33,6 +35,7 @@ init()
 	// Precache the shield icon that will be use to indicate player protection
 	precacheShader( "shield" );
 	precacheShellShock( "frag_grenade_mp" );
+	preCacheString( &"OW_SPAWN_PROTECTION" );
 
 	level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
 }
@@ -60,17 +63,19 @@ onPlayerSpawned()
 		wait (0.05);
 
 	// Create the hud element for the new connected player
-	self.hud_shield_icon = newClientHudElem( self );
-	self.hud_shield_icon.x = 0;
-	self.hud_shield_icon.y = 140;
-	self.hud_shield_icon.alignX = "center";
-	self.hud_shield_icon.alignY = "middle";
-	self.hud_shield_icon.horzAlign = "center_safearea";
-	self.hud_shield_icon.vertAlign = "center_safearea";
+	self.hud_shield_icon = createIcon( "shield", 32, 32 );
+	self.hud_shield_icon setPoint( "BOTTOM RIGHT", undefined, -20, -133 );
 	self.hud_shield_icon.alpha = 0.9;
-	self.hud_shield_icon.archived = true;
+	self.hud_shield_icon.alpha = true;
 	self.hud_shield_icon.hideWhenInMenu = true;
-	self.hud_shield_icon setShader( "shield", 32, 32);
+
+	self.hud_shield_text = createFontString( "default", 1.4 );
+	self.hud_shield_text setParent( self.hud_healthsystem_icon );
+	self.hud_shield_text setPoint( "RIGHT", "LEFT", -5, 0 );
+	self.hud_shield_text setText( &"OW_SPAWN_PROTECTION" );
+	self.hud_shield_text.alpha = 1;
+	self.hud_shield_text.archived = false;
+	self.hud_shield_text.foreground = true;
 
 	self thread spawnProtectPlayer();
 }
@@ -81,6 +86,9 @@ onPlayerKilled()
 	// This has to be done because a protected player can still die from falling
 	if ( isDefined( self.hud_shield_icon ) )
 		self.hud_shield_icon destroy();
+
+	if ( isDefined( self.hud_shield_text ) )
+		self.hud_shield_text destroy();
 }
 
 
@@ -123,6 +131,9 @@ spawnProtectPlayer()
 		self.spawn_protected = false;
 		if ( isDefined( self.hud_shield_icon ) )
 			self.hud_shield_icon destroy();
+
+		if ( isDefined( self.hud_shield_text ) )
+			self.hud_shield_text destroy();
 	}
 }
 

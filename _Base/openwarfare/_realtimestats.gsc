@@ -619,7 +619,6 @@ onHardpointCalled()
 
 isBot( player )
 {
-
 	return level.scr_realtime_stats_skipbots == 1 && isPlayer ( player ) && ( player getGUID() ) == "0";
 	//TODO: try isDefined( self.pers["isBot"] flag for checking 
 }

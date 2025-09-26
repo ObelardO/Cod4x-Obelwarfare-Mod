@@ -1,6 +1,6 @@
 #define MATCHTIMER_HUD_VISIBLE        ( ( team( name ) != "TEAM_SPECTATOR" || dvarInt( ui_broadcaster ) == 0 ) && dvarInt( "ui_timelimit" ) > 0 && !isIntermission() && !inkillcam() && !ui_active() && !isIntermission() && !flashbanged() && !scoped() && ( dvarInt( "ui_timelimit" ) * 60 - timeLeft() > 5 ) )
 
-#define PLAYER_HUD_HEALTH_VISIBLE     ( ( team( name ) != "TEAM_SPECTATOR" || dvarInt( ui_broadcaster ) == 0 ) !flashbanged() && !isIntermission() && !ui_active() && !inkillcam() && !scoped() )
+#define PLAYER_HUD_HEALTH_VISIBLE     ( !flashbanged() && !isIntermission() && !ui_active() && !scoped() && team( name ) != "TEAM_SPECTATOR" )
 
 
 
@@ -426,7 +426,7 @@ menuDef
         forecolor 0.1 0.1 0.1 0.3
         background "white"
         ownerdraw CG_PLAYER_BAR_HEALTH_BACK
-        visible when( !dvarInt( "wideScreen" ) && !flashbanged() && !isIntermission() && !ui_active() && team( name ) != "TEAM_SPECTATOR" );
+        visible when( !dvarInt( "wideScreen" ) && PLAYER_HUD_HEALTH_VISIBLE );
         decoration
     }
     itemDef
@@ -436,7 +436,7 @@ menuDef
         forecolor 0.7 0.7 0.7 0.3
         background "white"
         ownerdraw CG_PLAYER_BAR_HEALTH
-        visible when( !dvarInt( "wideScreen" ) && !flashbanged() && !isIntermission() && !ui_active() && team( name ) != "TEAM_SPECTATOR" );
+        visible when( !dvarInt( "wideScreen" ) && PLAYER_HUD_HEALTH_VISIBLE );
         decoration
     }
     itemDef
@@ -447,7 +447,7 @@ menuDef
         //background "hud_healthbar_heart"
         background "hint_health"
         ownerdraw CG_PLAYER_BAR_HEALTH_BACK
-        visible when( !dvarInt( "wideScreen" ) && !flashbanged() && !isIntermission() && !ui_active() && team( name ) != "TEAM_SPECTATOR" );
+        visible when( !dvarInt( "wideScreen" ) && PLAYER_HUD_HEALTH_VISIBLE );
         decoration
     }
 
@@ -460,7 +460,7 @@ menuDef
         forecolor 0.1 0.1 0.1 0.3
         background "white"
         ownerdraw CG_PLAYER_BAR_HEALTH_BACK
-        visible when( dvarInt( "wideScreen" ) && !flashbanged() && !isIntermission() && !ui_active() && team( name ) != "TEAM_SPECTATOR" );
+        visible when( dvarInt( "wideScreen" ) && PLAYER_HUD_HEALTH_VISIBLE );
         decoration
     }
     itemDef
@@ -470,7 +470,7 @@ menuDef
         forecolor 0.7 0.7 0.7 0.3
         background "white"
         ownerdraw CG_PLAYER_BAR_HEALTH
-        visible when( dvarInt( "wideScreen" ) && !flashbanged() && !isIntermission() && !ui_active() && team( name ) != "TEAM_SPECTATOR" );
+        visible when( dvarInt( "wideScreen" ) && PLAYER_HUD_HEALTH_VISIBLE );
         decoration
     }
     itemDef
@@ -480,7 +480,7 @@ menuDef
         forecolor 1.0 1.0 1.0 0.3
         background "hint_health"
         ownerdraw CG_PLAYER_BAR_HEALTH_BACK
-        visible when( dvarInt( "wideScreen" ) && !flashbanged() && !isIntermission() && !ui_active() && team( name ) != "TEAM_SPECTATOR" );
+        visible when( dvarInt( "wideScreen" ) && PLAYER_HUD_HEALTH_VISIBLE );
         decoration
     }
     
@@ -489,8 +489,8 @@ menuDef
     itemDef
     {
         style			WINDOW_STYLE_SHADER
-        rect			0 53 32 32 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_TOP
-        origin			-15 -23
+        rect			-16 100 32 32 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP
+        origin			-27 3
         exp				material( "hud_suitcase_bomb" );
         visible			when ( dvarBool( ui_bomb_timer ) && MATCHTIMER_HUD_VISIBLE );
         forecolor		1 1 1 0.25
@@ -498,12 +498,12 @@ menuDef
     }
     itemDef
     {
-        rect		0 53 1 1 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_TOP
-        origin		-2 0
+        rect		-16 100 1 1 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP
+        origin		0 0
         exp text	( secondsAsCountdown( timeLeft() ) );
         textfont	UI_FONT_OBJECTIVE
         textscale	0.35
-        textalign	ITEM_ALIGN_CENTER
+        textalign	ITEM_ALIGN_RIGHT
         textstyle	ITEM_TEXTSTYLE_SHADOWEDMORE
         visible 	when ( timeLeft() >= 60 && !dvarBool( ui_bomb_timer ) && MATCHTIMER_HUD_VISIBLE );
         forecolor	1 1 1 HUD_FOREGROUND_ALPHA
@@ -511,12 +511,12 @@ menuDef
     }
     itemDef
     {
-        rect		0 53 1 1 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_TOP
-        origin		-2 0
+        rect		-16 100 1 1 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP
+        origin		0 0
         exp text	( secondsAsCountdown( timeLeft() ) );
         textfont	UI_FONT_OBJECTIVE
         textscale	0.35
-        textalign	ITEM_ALIGN_CENTER
+        textalign	ITEM_ALIGN_RIGHT
         textstyle	ITEM_TEXTSTYLE_SHADOWEDMORE
         forecolor	1 0.75 0 HUD_FOREGROUND_ALPHA
         visible 	when ( timeLeft() >= 30 && timeLeft() < 60 && !dvarBool( ui_bomb_timer ) && MATCHTIMER_HUD_VISIBLE );
@@ -524,12 +524,12 @@ menuDef
     }
     itemDef
     {
-        rect		0 53 1 1 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_TOP
-        origin		-2 0
+        rect		-16 100 1 1 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP
+        origin		0 0
         exp text	( secondsAsCountdown( timeLeft() ) + "." + (9 - int( (milliseconds() / 100)%10 )) );
         textfont	UI_FONT_OBJECTIVE
         textscale	0.35
-        textalign	ITEM_ALIGN_CENTER
+        textalign	ITEM_ALIGN_RIGHT
         textstyle	ITEM_TEXTSTYLE_SHADOWEDMORE
         forecolor	1 0.5 0 1
         visible 	when ( ( (timeLeft() >= 0 && timeLeft() < 30) || dvarBool( ui_bomb_timer ) ) && MATCHTIMER_HUD_VISIBLE );
