@@ -105,6 +105,8 @@ explosiveMonitor()
 		// Create a trigger_radius around the explosive
 		self.trigger = spawn( "trigger_radius", self.origin + ( 0, 0, -40 ), 0, 35, 80 );
 		self thread deleteTriggerOnDeath();
+
+
 		self thread triggerHint( self.trigger, &"OW_EXPLOSIVE_HINT" );
 		
 		for (;;)
@@ -133,12 +135,16 @@ triggerHint( trigger, hintText )
 
 		self.trigger waittill("trigger", player);
 
-		player iPrintLnBold( hintText );
+		player openwarfare\_customhints::showHint( hintText, "disarm_" + self getEntityNumber(), self );
+
+		//player iPrintLnBold( hintText );
 
 		while ( player isTouching( self.trigger ) )
 		{
 			wait( 0.05 );
 		}
+
+		player openwarfare\_customhints::hideHint( "disarm_" + self getEntityNumber() );
 	}
 }
 
