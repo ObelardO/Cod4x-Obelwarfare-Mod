@@ -140,7 +140,7 @@ onPrecacheGameType()
 	
 	// Precache some resources needed 
 	precacheStatusIcon( "hud_status_vip" );
-	precacheShader( "zakhaev_face" );
+	precacheShader( "icon_vip" );
 	
 	precacheShader( "compass_waypoint_extraction_zone" );
 	precacheShader( "waypoint_extraction_zone" );
@@ -542,7 +542,7 @@ pickVIP()
 	}
 	
 	// Create the VIP icon and tell the player about it
-	level.playerVIP.vipIcon = level.playerVIP createIcon( "zakhaev_face", 32, 32 );
+	level.playerVIP.vipIcon = level.playerVIP createIcon( "icon_vip", 32, 32 );
 	level.playerVIP.vipIcon setPoint( "CENTER", "RIGHT BOTTOM", -31, -100 );
 	
 	level.playerVIP.vipIcon.alpha = 0.75;
