@@ -342,6 +342,11 @@ giveNadesAfterDelay( nadeType, nadeCount, nadePrimary )
 	
 		if( nadePrimary )
 			self switchToOffhand( nadeType );
+
+		if( nadePrimary )
+			self setClientDvar( "ui_hud_has_frags", "1" );
+		else
+			self setClientDvar( "ui_hud_has_spec_gren", "1" );
 	}
 
 	return;

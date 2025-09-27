@@ -740,6 +740,9 @@ giveLoadout( team, class )
 
 	primaryWeapon = undefined;
 
+	self setClientDvar( "ui_hud_has_frags", "0" );
+	self setClientDvar( "ui_hud_has_spec_gren", "0" );
+
 	// ============= custom class selected ==============
 	if( isSubstr( class, "CLASS_CUSTOM" ) )
 	{

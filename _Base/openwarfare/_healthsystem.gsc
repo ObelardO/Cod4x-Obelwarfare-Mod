@@ -220,6 +220,8 @@ onPlayerDeath()
 	
 	if (level.scr_healthsystem_show_healthbar )
 		self setClientdvar( "cg_drawhealth", 0 );
+
+	self setClientDvar( "ui_bandages", "0" );     
 }
 
 onJoinedSpectators()
@@ -228,6 +230,8 @@ onJoinedSpectators()
 	
 	if ( level.scr_healthsystem_show_healthbar )
 		self setClientdvar( "cg_drawhealth", 0 );
+
+	self setClientDvar( "ui_bandages", "0" );     
 }
 
 /*

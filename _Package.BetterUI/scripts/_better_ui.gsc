@@ -130,6 +130,7 @@ teamCountsWatcher( team )
 onPlayerConnected()
 {
     self thread addNewEvent( "onPlayerSpawned", ::onPlayerSpawned );
+    self thread addNewEvent( "onPlayerDeath", ::onPlayerDeath );
 }
 
 onPlayerSpawned()
@@ -159,6 +160,12 @@ onPlayerSpawned()
 
         wait( 1 );
     }
+}
+
+onPlayerDeath()
+{
+    self setClientDvar( "ui_hud_has_frags", "0" );
+	self setClientDvar( "ui_hud_has_spec_gren", "0" );
 }
 
 
