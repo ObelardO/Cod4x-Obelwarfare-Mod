@@ -42,8 +42,13 @@ onPlayerSpawned()
         self.customHints.hudText.alpha = 1;
         self.customHints.hudText.archived = false;
         self.customHints.hudText.foreground = true;
+        self.customHints.hudText.textalign = "center";
+        self.customHints.hudText.hideWhenInMenu = true;
+
 
         self.customHints.hintsStack = [];
+
+        self.customHints.overrideAll = false;
     }
 
         
@@ -62,7 +67,7 @@ onPlayerDeath()
 }
 
 
-showHint( hintText, ownerKey, entityRef )
+showHint( hintText, ownerKey, entityRef, overrideAll )
 {
     if( !isDefined( self.customHints ) ) return;
 
@@ -142,4 +147,5 @@ clearHintsStack()
 {
     self.customHints.hintsStack = [];
     self.customHints.hudText setText( "" );
+    self.customHints.overrideAll = false;
 }

@@ -106,7 +106,6 @@ explosiveMonitor()
 		self.trigger = spawn( "trigger_radius", self.origin + ( 0, 0, -40 ), 0, 35, 80 );
 		self thread deleteTriggerOnDeath();
 
-
 		self thread triggerHint( self.trigger, &"OW_EXPLOSIVE_HINT" );
 		
 		for (;;)
@@ -114,7 +113,7 @@ explosiveMonitor()
 			wait (0.05);
 
 			// Wait until a player has entered my radius
-			self.trigger waittill("trigger", player);
+			self.trigger waittill( "trigger", player );
 
 			// A player is within my radius, let's see what's done
 			if ( !isDefined( player.checkDisarming ) || !player.checkDisarming ) {
@@ -133,14 +132,28 @@ triggerHint( trigger, hintText )
 	{
 		wait( 0.05 );
 
-		self.trigger waittill("trigger", player);
+		trigger waittill("trigger", player);
 
-		player openwarfare\_customhints::showHint( hintText, "disarm_" + self getEntityNumber(), self );
+		lastCanDisarm = false;
 
-		//player iPrintLnBold( hintText );
-
-		while ( player isTouching( self.trigger ) )
+		while ( player isTouching( trigger ) )
 		{
+			canDisarm = player IsLookingAt( self );
+
+			if( canDisarm != lastCanDisarm )
+			{
+				lastCanDisarm = canDisarm;
+
+				if( canDisarm )
+				{
+					player openwarfare\_customhints::showHint( hintText, "disarm_" + self getEntityNumber(), self );
+				}
+				else
+				{
+					player openwarfare\_customhints::hideHint( "disarm_" + self getEntityNumber() );
+				}
+			}
+
 			wait( 0.05 );
 		}
 

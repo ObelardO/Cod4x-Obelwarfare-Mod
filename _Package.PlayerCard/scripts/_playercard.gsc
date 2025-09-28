@@ -88,7 +88,7 @@ initWeaponInfo()
                 if( !isDefined ( weaponName ) || weaponName == "" ) continue;
 
                 level.playerCard.weaponInfo[weaponName] = spawnStruct();
-                level.playerCard.weaponInfo[weaponName].hudImage = tableLookup( "mp/cardtable.csv", 0, i, imageColumn );;
+                level.playerCard.weaponInfo[weaponName].hudImage = tableLookup( "mp/cardtable.csv", 0, i, imageColumn );
 
                 precacheShader( level.playerCard.weaponInfo[weaponName].hudImage );
 

@@ -868,6 +868,9 @@ LANG_RUSSIAN "У вас последня жизнь!"
 //******************************************************************************
 // openwarfare/_objpoints.gsc
 //******************************************************************************
+REFERENCE QUICK_DEFUSE
+LANG_RUSSIAN "Нажмите ^3[{+attack}]^7 чтобы разрезать провод!\nНажмите ^3[{+toggleads_throw}]^7 чтобы выбрать провод."
+
 REFERENCE QUICK_DEFUSE_1
 LANG_RUSSIAN "Нажмите ^3[{+toggleads_throw}]^7 чтобы выбрать провод."
 
@@ -895,8 +898,15 @@ LANG_RUSSIAN "Уничтожение бомбы"
 REFERENCE DESTROY_EXPLOSIVES
 LANG_RUSSIAN "Удерживайте ^3[{+melee}]^7 чтобы уничтожить бомбу"
 
-REFERENCE DROP_EXPLOSIVES
+REFERENCE BOMB_DROP
 LANG_RUSSIAN "Нажмите ^3[{openScriptMenu modkeybind objectdrop}]^7 чтобы бросить бомбу"
+
+REFERENCE BOMB_STOLEN
+LANG_RUSSIAN "Удерживайте ^3[{+melee}]^7 чтобы уничтожить бомбу\nНажмите ^3[{openScriptMenu modkeybind objectdrop}]^7 чтобы бросить бомбу"
+
+REFERENCE EXPLOSIVES_IN_SAFEZONE
+LANG_RUSSIAN "Здесь нельзя установить взрывчатку"
+
 
 
 //******************************************************************************

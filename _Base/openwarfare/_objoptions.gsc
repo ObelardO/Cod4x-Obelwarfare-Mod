@@ -213,6 +213,8 @@ monitorSafeZone()
           if ( stockCount < maxStock ) 
             self setWeaponAmmoStock( explosive.weaponName, stockCount + 1 );
 
+          self iprintlnbold( &"OW_EXPLOSIVES_IN_SAFEZONE" );
+
           explosive delete();
           break;  
         } 
@@ -510,15 +512,22 @@ quickDefuse()
     
     correctWire = randomIntRange( 0, 4 );
     playerChoice = 0;
-    self iprintlnbold( &"OW_QUICK_DEFUSE_1" );
-    self iprintlnbold( &"OW_QUICK_DEFUSE_2" );
+
+    openwarfare\_customhints::showHint( &"OW_QUICK_DEFUSE", "quick_defuse" );
+
+    //self iprintlnbold( &"OW_QUICK_DEFUSE_1" );
+    //self iprintlnbold( &"OW_QUICK_DEFUSE_2" );
+
     while ( self.isDefusing && isAlive( self ) && !level.gameEnded && !level.bombExploded && !self.didQuickDefuse )
     {
-      if ( self attackButtonPressed() ) {
+      if ( self attackButtonPressed() )
+      {
       	self.didQuickDefuse = true;
 				self thread quickDefuseResults( playerChoice, correctWire );
 				
-      } else if ( self adsButtonPressed() && !self.isChangingWire ) {
+
+      } 
+      else if ( self adsButtonPressed() && !self.isChangingWire ) {
         self.isChangingWire = true;
         self allowAds( false );
         if ( playerChoice == 3 )
@@ -533,6 +542,8 @@ quickDefuse()
       
       wait( 0.05 );
     }
+
+    self openwarfare\_customhints::hideHint( "quick_defuse" );
   }
 }  
 

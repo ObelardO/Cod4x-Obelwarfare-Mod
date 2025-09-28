@@ -858,8 +858,11 @@ LANG_ENGLISH "This is your last life!"
 //******************************************************************************
 // openwarfare/_objpoints.gsc
 //******************************************************************************
+REFERENCE QUICK_DEFUSE
+LANG_ENGLISH "^7Press ^3[{+toggleads_throw}]^7 to quick defuse\nPress ^3[{+attack}]^7 to select the wire to cut."
+
 REFERENCE QUICK_DEFUSE_1
-LANG_ENGLISH "^7Press ^3[{+toggleads_throw}]^7 to quick Defuse"
+LANG_ENGLISH "^7Press ^3[{+toggleads_throw}]^7 to quick defuse"
  	 
 REFERENCE QUICK_DEFUSE_2
 LANG_ENGLISH "Press ^3[{+attack}]^7 to select the wire to cut"
@@ -885,8 +888,15 @@ LANG_ENGLISH "Destroying explosive..."
 REFERENCE DESTROY_EXPLOSIVES
 LANG_ENGLISH "Hold ^3[{+melee}]^7 to destroy an explosive"
 
-REFERENCE DROP_EXPLOSIVES
+REFERENCE BOMB_DROP
 LANG_ENGLISH "Press ^3[{openScriptMenu modkeybind objectdrop}]^7 to drop explosive"
+
+REFERENCE BOMB_STOLEN
+LANG_ENGLISH "Press ^3[{openScriptMenu modkeybind objectdrop}]^7 to drop explosive\nHold ^3[{+melee}]^7 to destroy an explosive"
+
+
+REFERENCE EXPLOSIVES_IN_SAFEZONE
+LANG_ENGLISH "Can't place explosive here!"
 
 	
 //******************************************************************************
