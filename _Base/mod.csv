@@ -142,6 +142,7 @@ rawfile,maps/mp/gametypes/_hardpoints.gsc
 rawfile,maps/mp/gametypes/_healthoverlay.gsc
 rawfile,maps/mp/gametypes/_hud.gsc
 rawfile,maps/mp/gametypes/_hud_message.gsc
+rawfile,maps/mp/gametypes/_hud_hints.gsc
 rawfile,maps/mp/gametypes/_hud_util.gsc
 rawfile,maps/mp/gametypes/_killcam.gsc
 rawfile,maps/mp/gametypes/_menus.gsc
@@ -277,7 +278,6 @@ rawfile,openwarfare/_bodyremoval.gsc
 rawfile,openwarfare/_caceditor.gsc
 rawfile,openwarfare/_capeditor.gsc
 rawfile,openwarfare/_clanvsall.gsc
-rawfile,openwarfare/_customhints.gsc
 rawfile,openwarfare/_cyclefpslag.gsc
 rawfile,openwarfare/_damageeffect.gsc
 rawfile,openwarfare/_daycyclesystem.gsc

@@ -513,7 +513,7 @@ quickDefuse()
     correctWire = randomIntRange( 0, 4 );
     playerChoice = 0;
 
-    openwarfare\_customhints::showHint( &"OW_QUICK_DEFUSE", "quick_defuse" );
+    self maps\mp\gametypes\_hud_hints::showHint( &"OW_QUICK_DEFUSE", "quick_defuse" );
 
     //self iprintlnbold( &"OW_QUICK_DEFUSE_1" );
     //self iprintlnbold( &"OW_QUICK_DEFUSE_2" );
@@ -543,7 +543,7 @@ quickDefuse()
       wait( 0.05 );
     }
 
-    self openwarfare\_customhints::hideHint( "quick_defuse" );
+    self maps\mp\gametypes\_hud_hints::hideHint( "quick_defuse" );
   }
 }  
 

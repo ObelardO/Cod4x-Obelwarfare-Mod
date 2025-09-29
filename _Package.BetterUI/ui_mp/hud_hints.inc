@@ -2,7 +2,7 @@
 menuDef
 {
     name			"MantleHint"
-    rect			0 145 20 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+    rect			0 170 20 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
     fullScreen		0
     visible			when( ( dvarInt( ui_hud_hardcore ) == 0 && dvarInt( ui_hud_show_mantle_hint ) == 1 ) || dvarInt( ui_hud_show_mantle_hint ) == 2 )
 
@@ -30,10 +30,10 @@ menuDef
     {
         name			"chRect"
         rect			0 0 20 20 // 64x64
-        textscale		(TEXTSIZE_SMALL * 0.6)
+        textscale		(TEXTSIZE_SMALL * 0.9)
         textstyle		ITEM_TEXTSTYLE_SHADOWED
         ownerdraw		CG_CURSORHINT
-        visible			when( NOT_SPECTATING )
+        visible			when( NOT_SPECTATING && dvarString ( ui_hud_hint_text ) == "" )
         decoration
     }
 }
@@ -64,9 +64,9 @@ menuDef
 menuDef
 {
     name			"HoldBreathHint"
-    rect			0 70 0 0 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+    rect			0 110 20 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
     fullScreen		0
-    visible 0
+    visible 1
     //visible when ( !adsjavelin() && dvarInt( ui_hud_hardcore ) == 0 && !inkillcam() && NOT_SPECTATING );
 
     itemDef
@@ -76,7 +76,7 @@ menuDef
         textscale		TEXTSIZE_SMALL
         textstyle		ITEM_TEXTSTYLE_SHADOWED
         ownerdraw		CG_HOLD_BREATH_HINT
-        visible			1
+        visible			0
         decoration
     }
 }

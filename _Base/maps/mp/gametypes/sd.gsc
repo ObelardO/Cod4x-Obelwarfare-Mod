@@ -713,7 +713,7 @@ onEndUse( team, player, result )
 	player.isDefusing = false;
 	player.isPlanting = false;
 
-	player openwarfare\_customhints::hideHint( "quick_defuse" );
+	player maps\mp\gametypes\_hud_hints::hideHint( "quick_defuse" );
 
 	if ( self maps\mp\gametypes\_gameobjects::isFriendlyTeam( player.pers["team"] ) )
 	{
@@ -818,7 +818,7 @@ onDrop( player )
 
 		if ( isDefined( player ) && player.pers["team"] == game["defenders"] )
 		{
-			player openwarfare\_customhints::hideHint( "bomb_stolen" );
+			player maps\mp\gametypes\_hud_hints::hideHint( "bomb_stolen" );
 		}
 
 //		maps\mp\gametypes\_globallogic::leaderDialog( "bomb_lost", player.pers["team"] );
@@ -858,14 +858,11 @@ onPickup( player )
 
 		if ( level.scr_sd_allow_defender_explosivedestroy == 1 )
 		{
-			player openwarfare\_customhints::showHint( &"OW_BOMB_STOLEN", "bomb_stolen" );
-
-			//player iprintlnbold( &"OW_DESTROY_EXPLOSIVES" );
-			//player iprintlnbold( &"OW_DROP_EXPLOSIVES" );
+			player maps\mp\gametypes\_hud_hints::showHint( &"OW_BOMB_STOLEN", "bomb_stolen" );
 		}
 		else
 		{
-			player openwarfare\_customhints::showHint( &"OW_BOMB_DROP", "bomb_stolen" );
+			player maps\mp\gametypes\_hud_hints::showHint( &"OW_BOMB_DROP", "bomb_stolen" );
 		}
 	}
  	 

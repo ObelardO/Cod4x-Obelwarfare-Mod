@@ -146,18 +146,18 @@ triggerHint( trigger, hintText )
 
 				if( canDisarm )
 				{
-					player openwarfare\_customhints::showHint( hintText, "disarm_" + self getEntityNumber(), self );
+					player maps\mp\gametypes\_hud_hints::showHint( hintText, "disarm_" + self getEntityNumber(), self );
 				}
 				else
 				{
-					player openwarfare\_customhints::hideHint( "disarm_" + self getEntityNumber() );
+					player maps\mp\gametypes\_hud_hints::hideHint( "disarm_" + self getEntityNumber() );
 				}
 			}
 
 			wait( 0.05 );
 		}
 
-		player openwarfare\_customhints::hideHint( "disarm_" + self getEntityNumber() );
+		player maps\mp\gametypes\_hud_hints::hideHint( "disarm_" + self getEntityNumber() );
 	}
 }
 

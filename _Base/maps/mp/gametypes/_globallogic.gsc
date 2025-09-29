@@ -632,7 +632,7 @@ matchStartTimer()
 	visionSetNaked( "mpIntro", 0 );
 
 	if ( level.scr_match_readyup_period == 1 ) {
-		game["matchReadyUpText"] = createServerFontString( "objective", 2.0 );
+		game["matchReadyUpText"] = createServerFontString( "objective", 1.4 );
 		game["matchReadyUpText"] setPoint( "CENTER", "CENTER", 0, -45 );
 		game["matchReadyUpText"].sort = 1001;
 		game["matchReadyUpText"] setText( &"OW_READYUP_ALL_PLAYERS_READY" );
@@ -640,7 +640,7 @@ matchStartTimer()
 		game["matchReadyUpText"].hidewheninmenu = true;
 	}
 
-	matchStartText = createServerFontString( "objective", 1.5 );
+	matchStartText = createServerFontString( "objective", 1.4 );
 	matchStartText setPoint( "CENTER", "CENTER", 0, -20 );
 	matchStartText.sort = 1001;
 	matchStartText setText( game["strings"]["waiting_for_teams"] );
@@ -4155,6 +4155,7 @@ Callback_StartGameType()
 		thread maps\mp\gametypes\_friendicons::init();
 
 	thread maps\mp\gametypes\_hud_message::init();
+	thread maps\mp\gametypes\_hud_hints::init();
 
 	if ( !level.console )
 		thread maps\mp\gametypes\_quickmessages::init();

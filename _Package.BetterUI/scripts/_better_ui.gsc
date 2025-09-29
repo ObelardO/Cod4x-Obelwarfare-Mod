@@ -75,9 +75,18 @@ init()
         setDvar( "ui_hud_teamstat_visible", 0 );
         makeDvarServerInfo( "ui_hud_teamstat_visible" );
     }
+
+    // Better hints
+    level.showHintAction = ::showHintAction;
 }
 
 
+showHintAction( hintText )
+{
+    self setClientDvar( "ui_hud_hint_text", hintText );
+
+    self maps\mp\gametypes\_hud_hints::showHintAction( hintText );
+}
 
 
 prematchOverWatcher()

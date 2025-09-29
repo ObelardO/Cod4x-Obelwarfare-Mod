@@ -33,7 +33,6 @@ init()
 	thread openwarfare\_caceditor::init();	
 	thread openwarfare\_capeditor::init();
 	thread openwarfare\_clanvsall::init();
-	thread openwarfare\_customhints::init();
 	thread openwarfare\_damageeffect::init();
 	thread openwarfare\_daycyclesystem::init();
 	thread openwarfare\_disarmexplosives::init();

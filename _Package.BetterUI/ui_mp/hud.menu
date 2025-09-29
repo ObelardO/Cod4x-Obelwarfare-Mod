@@ -359,7 +359,7 @@
 	{
 		name			"boldgamemessages"
 		// (todo: use VERTICAL_ALIGN_TOP in SP, origin 0 180)
-		rect			0 110 10 10 HORIZONTAL_ALIGN_CENTER_SAFEAREA VERTICAL_ALIGN_CENTER_SAFEAREA
+		rect			0 -60 10 10 HORIZONTAL_ALIGN_CENTER_SAFEAREA VERTICAL_ALIGN_CENTER_SAFEAREA
 		fullScreen		0
 		visible			when( !inkillcam() );
 
@@ -372,7 +372,7 @@
 			textfont			UI_FONT_OBJECTIVE
 			textstyle			ITEM_TEXTSTYLE_SHADOWED
 			textalign			ITEM_ALIGN_CENTER
-			textscale			0.25 // SP: 0.5
+			textscale			0.3
 			visible				when ( dvarstring( "g_gametype" ) != "vg" && dvarint( ui_hud_obituaries ) == 1 && !ui_active() );
 		}
 	}

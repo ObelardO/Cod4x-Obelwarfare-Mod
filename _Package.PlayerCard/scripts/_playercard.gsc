@@ -310,7 +310,6 @@ onPlayerSpawned()
 
 waitForKill()
 {
-	self endon ( "death" );
 	self endon ( "disconnect" );
         level endon( "game_ended" );
 
