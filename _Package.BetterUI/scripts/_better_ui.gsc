@@ -35,6 +35,8 @@ init()
 	forceClientDvar( "waypointiconwidth", scr_hud_waypoint_size );
 	forceClientDvar( "waypointiconheight", scr_hud_waypoint_size );
 
+    forceClientDvar( "cg_cursorHints", 4 );
+
     // Apply other player dvars
     openwarfare\_playerdvars::completeForceClientDvarsArray();
 

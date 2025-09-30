@@ -1498,7 +1498,7 @@ LANG_RUSSIAN "Коментатор"
 // ui_mp/scriptmenus/serverinfo.menu
 //******************************************************************************
 REFERENCE SERVER_INFO
-LANG_RUSSIAN "Информация"
+LANG_RUSSIAN "ИНФОРМАЦИЯ"
 
 
 ENDMARKER

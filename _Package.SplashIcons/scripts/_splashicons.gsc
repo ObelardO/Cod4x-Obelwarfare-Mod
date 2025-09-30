@@ -446,7 +446,7 @@ splashNotify( splash )
 			self playlocalsound( splash.sound );
 		}
 
-		splashNotify[0] = addTextHud( self, 0, -120, 0, "center", "middle", 1.4 );
+		splashNotify[0] = addTextHud( self, 0, -85, 0, "center", "middle", 1.4 );
 		splashNotify[0].font = "default";
 		splashNotify[0].horzAlign = "center";
 		splashNotify[0].vertAlign = "middle";
@@ -458,7 +458,7 @@ splashNotify( splash )
 		splashNotify[0].hideWhenInMenu = true;
 		splashNotify[0].archived = false;
 
-		splashNotify[1] = addTextHud( self, 0, -160, 0, "center", "middle", 1.4 );
+		splashNotify[1] = addTextHud( self, 0, -125, 0, "center", "middle", 1.4 );
 		splashNotify[1].horzAlign = "center";
 		splashNotify[1].vertAlign = "middle";
 		splashNotify[1] setshader( getSplashMaterial( splash.name ), 120, 120 );//getSplashDescription(splash.name)

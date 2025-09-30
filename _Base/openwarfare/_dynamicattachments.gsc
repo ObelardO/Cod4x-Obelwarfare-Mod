@@ -244,6 +244,7 @@ installAttachment( newAttachment )
 
 		// Take the current weapon from the player
 		self takeWeapon( currentWeapon );
+		self setClientDvar( "ui_hud_show_weapon", 0 );
 
 		if (newAttachment == "")
 		{
@@ -272,6 +273,8 @@ installAttachment( newAttachment )
 
 		//self thread maps\mp\gametypes\_gameobjects::_enableWeapon();
 		self stopPlayer( false );
+
+		self setClientDvar( "ui_hud_show_weapon", 1 );
 
 		self.dynAttachInProgress = false;		
 	}

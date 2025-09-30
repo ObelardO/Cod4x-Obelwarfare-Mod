@@ -156,47 +156,22 @@ killcam(
 	self.killcam = true;
 
 	self setClientDvar ("cg_airstrikeKillCamDist", camdist );
+	self setClientDvar ("ui_hud_killcam_title", "OW_KILLCAM_TITLE" );
 
-	if ( !isdefined( self.kc_skiptext ) )
-	{
-		self.kc_skiptext = newClientHudElem(self);
-		self.kc_skiptext.archived = false;
-		self.kc_skiptext.x = 0;
-		self.kc_skiptext.alignX = "center";
-		self.kc_skiptext.alignY = "middle";
-		self.kc_skiptext.horzAlign = "center_safearea";
-		self.kc_skiptext.vertAlign = "top";
-		self.kc_skiptext.sort = 1; // force to draw after the bars
-		self.kc_skiptext.font = "objective";
-		self.kc_skiptext.foreground = true;
-		
-		if ( level.splitscreen )
-		{
-			self.kc_skiptext.y = 34;
-			self.kc_skiptext.fontscale = 1.4;
-		}
-		else
-		{
-			self.kc_skiptext.y = 60;
-			self.kc_skiptext.fontscale = 1.4;
-		}
-	}
 	if ( respawn )
-		self.kc_skiptext setText(&"PLATFORM_PRESS_TO_RESPAWN");
+		self maps\mp\gametypes\_hud_hints::showHint( &"PLATFORM_PRESS_TO_RESPAWN", "killcam", undefined, true );
 	else
-		self.kc_skiptext setText(&"PLATFORM_PRESS_TO_SKIP");
-		
-	self.kc_skiptext.alpha = 1;
+		self maps\mp\gametypes\_hud_hints::showHint( &"PLATFORM_PRESS_TO_SKIP", "killcam", undefined, true );
 
 	if ( !level.splitscreen )
 	{
 		if ( !isdefined( self.kc_timer ) )
 		{
-			self.kc_timer = createFontString( "objective", 1.6 );
+			self.kc_timer = createFontString( "default", 1.4 );
 			if ( level.console )
-				self.kc_timer setPoint( "TOP", undefined, 0, 80 );
+				self.kc_timer setPoint( "CENTER", "BOTTOM", 0, -30 );
 			else
-				self.kc_timer setPoint( "TOP", undefined, 0, 75 );
+				self.kc_timer setPoint( "CENTER", "BOTTOM", 0, -30 );
 			self.kc_timer.archived = false;
 			self.kc_timer.foreground = true;
 			/*
@@ -260,8 +235,8 @@ waitSkipKillcamButton()
 
 endKillcam()
 {
-	if(isDefined(self.kc_skiptext))
-		self.kc_skiptext.alpha = 0;
+	self maps\mp\gametypes\_hud_hints::hideHint( "killcam" );
+
 	if(isDefined(self.kc_timer))
 		self.kc_timer.alpha = 0;
 	

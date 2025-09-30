@@ -14,6 +14,7 @@
 init()
 {
     level thread levelPlayerConnectionWatcher();
+    level thread levelGameEndWatcher();
 
     level.showHintAction = ::showHintAction;
 }
@@ -45,7 +46,7 @@ playerSpawnWatcher()
             self.hudHints = spawnStruct();
 
             self.hudHints.hudText = createFontString( "default", 1.4 );
-            self.hudHints.hudText setPoint( "CENTER", "CENTER", 0, 110 );
+            self.hudHints.hudText setPoint( "CENTER", "CENTER", 0, 130 );
             self.hudHints.hudText.alpha = 1;
             self.hudHints.hudText.width = 300;
             self.hudHints.hudText.archived = false;
@@ -74,6 +75,21 @@ playerDeathWatcher()
     }
 }
 
+levelGameEndWatcher()
+{
+    level waittill( "game_ended" );
+
+    for( i = 0; i < level.players.size; i++ )
+    {
+        player = level.players[ i ];
+
+        if ( isDefined( player.hudHints ) )
+        {
+            player clearHintsStack();
+        }
+    }
+}
+
 
 showHint( hintText, ownerKey, entityRef, overrideAll )
 {
@@ -86,7 +102,15 @@ showHint( hintText, ownerKey, entityRef, overrideAll )
 
     self.hudHints.hintsStack[ ownerKey ] = hintText;
 
-    [[level.showHintAction]]( hintText );
+    if( isDefined( overrideAll ) && overrideAll )
+    {
+        self.hudHints.overridingKey = ownerKey;
+    }
+
+    if( !isDefined( self.hudHints.overridingKey ) || self.hudHints.overridingKey == ownerKey )
+    {
+        [[level.showHintAction]]( hintText );
+    }
 
     if ( isDefined( entityRef ) )
     {
@@ -112,9 +136,22 @@ hideHint( ownerKey )
 
     if( isDefined( self.hudHints.hintsStack[ ownerKey ] ) )
     {
-        [[level.showHintAction]]( "" );
-        rmeoveKeyFromHintsStack( ownerKey );
-        showPrevHint(); 
+        if ( isDefined( self.hudHints.overridingKey ) && self.hudHints.overridingKey == ownerKey )
+        {
+            self.hudHints.overridingKey = undefined;
+        }
+
+        if( isDefined( self.hudHints.overridingKey ) )
+        {
+            rmeoveKeyFromHintsStack( ownerKey );
+        }
+        else
+        {
+            [[level.showHintAction]]( "" );
+
+            rmeoveKeyFromHintsStack( ownerKey );
+            showPrevHint(); 
+        }
     }
 }
 
@@ -154,7 +191,7 @@ showPrevHint()
 clearHintsStack()
 {
     self.hudHints.hintsStack = [];
-    self.hudHints.overrideAll = false;
+    self.hudHints.overridingKey = undefined;
 
     [[level.showHintAction]]( "" );
 }

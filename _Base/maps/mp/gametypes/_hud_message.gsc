@@ -381,7 +381,7 @@ lowerMessageThink()
 	self.lowerMessage setText( "" );
 	self.lowerMessage.archived = false;
 	
-	timerFontSize = 1.5;
+	timerFontSize = 1.4;
 	if ( level.splitscreen )
 		timerFontSize = 1.4;
 	

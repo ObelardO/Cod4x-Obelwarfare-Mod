@@ -55,14 +55,14 @@ start()
 	level.strategyPeriodEnds = gettime() + level.scr_match_strategy_time * 1000;
 
 	// Show HUD elements
-	level.strategyPeriodText = createServerFontString( "objective", 1.5 );
+	level.strategyPeriodText = createServerFontString( "default", 1.4 );
 	level.strategyPeriodText setPoint( "CENTER", "CENTER", 0, -20 );
 	level.strategyPeriodText.sort = 1001;
 	level.strategyPeriodText setText( &"OW_STRATEGY_PERIOD_STARTED" );
 	level.strategyPeriodText.foreground = false;
 	level.strategyPeriodText.hidewheninmenu = true;
 
-	level.strategyPeriodTimer = createServerTimer( "objective", 1.5 );
+	level.strategyPeriodTimer = createServerTimer( "default", 1.4 );
 	level.strategyPeriodTimer setTimer( ( level.strategyPeriodEnds - gettime() ) / 1000 );
 	level.strategyPeriodTimer setPoint( "CENTER", "CENTER", 0, 0 );
 	level.strategyPeriodTimer.color = ( 1, 0.5, 0 );
@@ -86,6 +86,9 @@ start()
 				for ( index = 0; index < level.players.size; index++ )
 				{
 					player = level.players[index];
+
+					//isBot = player getGuid() == "" || ( isDefined( player.isBot ) && player.isBot ) || ( isDefined( player.pers[ "isBot" ] ) && player.pers[ "isBot" ] ) ;
+
 					// Spectator don't count
 					if ( player.pers["team"] != "spectator" ) {
 						if ( !isDefined( player.bypassedStratPeriod ) || !player.bypassedStratPeriod ) {
@@ -180,7 +183,7 @@ strategyPeriod()
 	
 	self.bypassedStratPeriod =  false;
 	
-	self.bypassedPeriodText = createFontString( "objective", 1.5 );
+	self.bypassedPeriodText = createFontString( "objective", 1.4 );
 	self.bypassedPeriodText setPoint( "CENTER", "CENTER", 0, 18 );
 	self.bypassedPeriodText.sort = 1001;
 	self.bypassedPeriodText.color = ( .42, 1, 0.42 );
@@ -188,9 +191,10 @@ strategyPeriod()
 	self.bypassedPeriodText.hidewheninmenu = true;	
 
 	// Make sure players are allowed to bypass
-	if ( level.scr_match_strategy_allow_bypass == 1 ) {
-		self setLowerMessage( &"OW_PRESS_TO_BYPASS" );
-
+	if( level.scr_match_strategy_allow_bypass == 1 )
+	{
+		self maps\mp\gametypes\_hud_hints::showHint( &"OW_PRESS_TO_BYPASS", "strategy_bypass", undefined, true );
+	
 		// Wait for players to bypass or for the strategy time to be over
 		while ( level.inStrategyPeriod && !self.bypassedStratPeriod )
 		{
@@ -208,7 +212,7 @@ strategyPeriod()
 			self.bypassedPeriodText setText( &"OW_STRATEGY_BYPASSED" );
 		}
 
-		self clearLowerMessage();
+		self maps\mp\gametypes\_hud_hints::hideHint( "strategy_bypass" );
 	}
 
 	// Wait until strategy period is over

@@ -1414,6 +1414,7 @@ useHoldThink( player )
 		player setWeaponAmmoStock( useWeapon, 0 );
 		player setWeaponAmmoClip( useWeapon, 0 );
 		player switchToWeapon( useWeapon );
+		player setClientDvar( "ui_hud_show_weapon", 0 );
 
 		player thread attachUseModel( "prop_suitcase_bomb", "tag_inhand", true );
 	}
@@ -1437,6 +1438,11 @@ useHoldThink( player )
 	}
 
 	// result may be undefined if useholdthinkloop hits an endon
+
+	if ( isDefined( player ) )
+	{
+		player setClientDvar( "ui_hud_show_weapon", 1 );
+	}
 
 	if ( isDefined( useWeapon ) && isDefined( player ) )
 		player thread takeUseWeapon( useWeapon );
@@ -2103,18 +2109,24 @@ _disableWeapon()
 		
 	self.disabledWeapon++;
 	self disableWeapons();
+
+	self setClientDvar( "ui_hud_show_weapon", 0 );
 }
 
 _enableWeapon()
 {
 	if ( !isDefined( self.disabledWeapon ) )
+	{
 		self.disabledWeapon = 0;
+	}
 
 	self.disabledWeapon--;
 
 	if ( self.disabledWeapon <= 0 ) {
 		self.disabledWeapon = 0;
 		self enableWeapons();
+
+		self setClientDvar( "ui_hud_show_weapon", 1 );
 	}
 }
 

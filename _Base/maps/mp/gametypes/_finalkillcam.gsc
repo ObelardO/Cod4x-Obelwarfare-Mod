@@ -13,20 +13,6 @@ init()
     
     level.slowmotstart = undefined;
 
-    /////////////////////////////////////////////////////////////////////////////////
-    //                                     HUD                                     //
-    /////////////////////////////////////////////////////////////////////////////////
-
-    game["strings"]["finalcam_pvp"] = &"OW_FINALCAM_PLAYER_VS_PLAYER";
-    game["strings"]["finalcam_round"] = &"OW_FINALCAM_ROUND_WIN";
-    game["strings"]["finalcam_match"] = &"OW_FINALCAM_MATCH_WIN";
-
-    preCacheString( game["strings"]["finalcam_pvp"] );
-    preCacheString( game["strings"]["finalcam_round"] );
-    preCacheString( game["strings"]["finalcam_match"] );
-
-    /////////////////////////////////////////////////////////////////////////////////
-
     for(;;)
     {
         level waittill("connected", player);
@@ -114,7 +100,6 @@ finalkillcam( attacker, attackerNum, deathtime, victim, weapon, killcamentity)
     killcamlength = camtime + postdelay;
     killcamoffset = camtime + predelay;
     
-
     visionSetNaked( getdvar("mapname") );
     
     self notify ( "begin_killcam", getTime() );
@@ -153,14 +138,13 @@ finalkillcam( attacker, attackerNum, deathtime, victim, weapon, killcamentity)
 
     self setClientDvar ("cg_airstrikeKillCamDist", camdist );
     
-    if( !isDefined( self.fk_title ) )
+    if( isDefined( self.fk_title_low ) )
     {
-        self CreateFKHUD( victim, attacker );
+        self.fk_title_low.alpha = 1;
     }
     else
     {
-        self.fk_title.alpha = 1;
-        self.fk_title_low.alpha = 1;
+        self CreateFKHUD( victim, attacker );
     }
     
     self thread WaitEnd( killcamlength );
@@ -201,12 +185,8 @@ EndFK()
 
 CleanFK()
 {
-    self.fk_title.alpha = 0;
     self.fk_title_low.alpha = 0;
 
-    //if( isDefined( self.fk_title ) ) self.fk_title destroy(); 
-    //if( isDefined( self.fk_title_low ) ) self.fk_title_low destroy(); 
-    
     visionSetNaked( "mpOutro", 1.0 );
 }
 
@@ -222,41 +202,17 @@ WaitEnd( killcamlength )
 
 CreateFKHUD( victim, attacker )
 {
-    self.fk_title = newClientHudElem(self);
-    self.fk_title.archived = false;
-    self.fk_title.y = 60;
-    self.fk_title.alignX = "center";
-    self.fk_title.alignY = "middle";
-    self.fk_title.horzAlign = "center";
-    self.fk_title.vertAlign = "top";
-    self.fk_title.sort = 1; // force to draw after the bars
-    self.fk_title.font = "objective";
-    self.fk_title.fontscale = 1.75;
-    self.fk_title.foreground = true;
-    self.fk_title.shadown = 1;
-    
-    self.fk_title_low = newClientHudElem(self);
+    self.fk_title_low = createFontString( "default", 1.4 );
+    self.fk_title_low setPoint( "CENTER", "BOTTOM", 0, -30 );
     self.fk_title_low.archived = false;
-    self.fk_title_low.x = 0;
-    self.fk_title_low.y = 80;
-    self.fk_title_low.alignX = "center";
-    self.fk_title_low.alignY = "top";
-    self.fk_title_low.horzAlign = "center_safearea";
-    self.fk_title_low.vertAlign = "top";
-    self.fk_title_low.sort = 1; // force to draw after the bars
-    self.fk_title_low.font = "objective";
-    self.fk_title_low.fontscale = 1.4;
     self.fk_title_low.foreground = true;
-    
-    self.fk_title.alpha = 1;
     self.fk_title_low.alpha = 1;
-
-    self.fk_title_low setText( game["strings"]["finalcam_pvp"], attacker.name, victim.name );
+    self.fk_title_low setText( &"OW_FINALCAM_PLAYER_VS_PLAYER", attacker.name, victim.name );
     
-    if( !level.killcam_style )
-        self.fk_title setText( game["strings"]["finalcam_match"] );
+    if( level.killcam_style )
+        self setClientDvar ("ui_hud_killcam_title", "OW_FINALCAM_ROUND_WIN" );
     else
-        self.fk_title setText( game["strings"]["finalcam_round"] );
+        self setClientDvar ("ui_hud_killcam_title", "OW_FINALCAM_MATCH_WIN" );
 }
 
 onPlayerKilled( eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, killcamentity )

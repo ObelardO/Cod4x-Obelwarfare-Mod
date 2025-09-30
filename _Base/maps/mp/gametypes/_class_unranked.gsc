@@ -320,6 +320,8 @@ giveLoadout( team, class )
 	self maps\mp\gametypes\_class_unranked::cac_selector();
 		
 	[[level.onLoadoutGiven]]();
+
+	self setClientDvar( "ui_hud_show_weapon", 1 );
 }
 
 

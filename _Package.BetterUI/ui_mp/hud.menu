@@ -220,9 +220,9 @@
 		itemDef
 		{
 			style			WINDOW_STYLE_SHADER
-			rect			0 0 640 112 HORIZONTAL_ALIGN_FULLSCREEN VERTICAL_ALIGN_FULLSCREEN
+			rect			0 0 640 60 HORIZONTAL_ALIGN_FULLSCREEN VERTICAL_ALIGN_FULLSCREEN
 			background		"white"
-			forecolor		.49 .05 .03 0.5
+			forecolor		0 0 0 0.5
 			visible			1
 			decoration
 		}
@@ -230,9 +230,9 @@
 		itemDef
 		{
 			style			WINDOW_STYLE_SHADER
-			rect			0 368 640 112 HORIZONTAL_ALIGN_FULLSCREEN VERTICAL_ALIGN_FULLSCREEN
+			rect			0 420 640 112 HORIZONTAL_ALIGN_FULLSCREEN VERTICAL_ALIGN_FULLSCREEN
 			background		"white"
-			forecolor		.49 .05 .03 0.5
+			forecolor		0 0 0 0.5
 			visible			1
 			decoration
 		}
@@ -241,9 +241,9 @@
 		{
 			rect		0 45 1 1 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_TOP
 			origin		0 0
-			exp text	( locString( "@OW_KILLCAM_TITLE" ) );
+			exp text	( locString( "@" + dvarString( ui_hud_killcam_title ) ) );
 			textfont	UI_FONT_OBJECTIVE
-			textscale	0.50
+			textscale	0.45
 			textalign	ITEM_ALIGN_CENTER
 			textstyle	ITEM_TEXTSTYLE_SHADOWEDMORE
 			visible 	1
@@ -263,7 +263,7 @@
 		{
 			name			"chRect"
 			rect			0 0 0 0
-			textscale		TEXTSIZE_DEFAULT
+			textscale		TEXTSIZE_SMALL
 			textstyle		ITEM_TEXTSTYLE_SHADOWED
 			ownerdraw		CG_CENTER_MESSAGE
 			visible			1
@@ -338,8 +338,9 @@
 		name			"gamemessages"
 		// (todo: use VERTICAL_ALIGN_TOP in SP)
 		rect			20 -28 10 10 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+		//rect			20 -128 10 10 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
 		fullScreen		0
-		visible			when( !inkillcam() );
+		visible			when( !inkillcam() && !flashbanged() && !ui_active() && !scoped() );
 
 		itemDef
 		{
@@ -347,11 +348,12 @@
 			type				ITEM_TYPE_GAME_MESSAGE_WINDOW
 			gamemsgwindowindex	0
 			gamemsgwindowmode	MODE_BOTTOMUP_ALIGN_BOTTOM
+			//gamemsgwindowmode	MODE_TOPDOWN_ALIGN_BOTTOM
 			textfont			UI_FONT_DEFAULT
 			textstyle			ITEM_TEXTSTYLE_SHADOWED
 			textalign			ITEM_ALIGN_LEFT
 			textscale			(TEXTSIZE_SMALL*0.6)
-			visible				when ( dvarstring( "g_gametype" ) != "vg" && dvarint( ui_hud_obituaries ) == 1 && !ui_active() );
+			visible				when ( dvarstring( "g_gametype" ) != "vg" && dvarint( ui_hud_obituaries ) == 1 );
 		}
 	}
 
@@ -359,7 +361,7 @@
 	{
 		name			"boldgamemessages"
 		// (todo: use VERTICAL_ALIGN_TOP in SP, origin 0 180)
-		rect			0 -60 10 10 HORIZONTAL_ALIGN_CENTER_SAFEAREA VERTICAL_ALIGN_CENTER_SAFEAREA
+    	rect			0 130 20 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
 		fullScreen		0
 		visible			when( !inkillcam() );
 
@@ -372,7 +374,7 @@
 			textfont			UI_FONT_OBJECTIVE
 			textstyle			ITEM_TEXTSTYLE_SHADOWED
 			textalign			ITEM_ALIGN_CENTER
-			textscale			0.3
+        	textscale			(TEXTSIZE_SMALL * 0.9)
 			visible				when ( dvarstring( "g_gametype" ) != "vg" && dvarint( ui_hud_obituaries ) == 1 && !ui_active() );
 		}
 	}

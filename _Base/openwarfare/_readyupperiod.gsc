@@ -73,7 +73,7 @@ start()
 	precacheStatusIcon( "hud_status_notready" );
 
 	// Show the player we are in ready up period
-	game["readyUpPeriod"] = createServerFontString( "objective", 2.4 );
+	game["readyUpPeriod"] = createServerFontString( "objective", 1.6 );
 	game["readyUpPeriod"].archived = false;
 	game["readyUpPeriod"].hideWhenInMenu = true;
 	game["readyUpPeriod"].alignX = "center";
@@ -125,6 +125,8 @@ start()
 		{
 			player = level.players[index];
 
+			//isBot = player getGuid() == "" || ( isDefined( player.isBot ) && player.isBot ) || ( isDefined( player.pers[ "isBot" ] ) && player.pers[ "isBot" ] ) ;
+			
 			// Start the monitoring thread if this player doesn't have it running
 			if ( !isDefined( player.readyUpPeriod ) && player.pers["team"] != "spectator" ) {				
 				player.matchReady = false;
@@ -202,19 +204,21 @@ readyUpPeriod()
 		wait (0.05);
 
 	// Create the HUD element that will show the player if is ready or not
-	self.readyUpText = createFontString( "objective", 2.0 );
+	self.readyUpText = createFontString( "default", 1.4 );
 	self.readyUpText setPoint( "CENTER", "CENTER", 0, 0 );
 	self.readyUpText.sort = 1001;
 	self.readyUpText.foreground = false;
 	self.readyUpText.hidewheninmenu = true;
 
 	// Create the press USE key to toggle the readiness status
-	self.readyUpToggleText = createFontString( "default", 2.0 );
-	self.readyUpToggleText setPoint( "CENTER", "CENTER", 0, 30 );
-	self.readyUpToggleText.sort = 1001;
-	self.readyUpToggleText.foreground = false;
-	self.readyUpToggleText.hidewheninmenu = true;
-	self.readyUpToggleText setText( &"OW_READYUP_PRESS_TO_TOGGLE" );
+	//self.readyUpToggleText = createFontString( "default", 1.4 );
+	//self.readyUpToggleText setPoint( "CENTER", "CENTER", 0, 30 );
+	//self.readyUpToggleText.sort = 1001;
+	//self.readyUpToggleText.foreground = false;
+	//self.readyUpToggleText.hidewheninmenu = true;
+	//self.readyUpToggleText setText( &"OW_READYUP_PRESS_TO_TOGGLE" );
+
+	self maps\mp\gametypes\_hud_hints::showHint( &"OW_READYUP_PRESS_TO_TOGGLE", "readyup_bypass", undefined, true );
 
 	// We are going to monitor this player until the readyup period ends
 	keyDown = false;
@@ -256,8 +260,10 @@ readyUpPeriod()
 	if ( isDefined( self.readyUpText ) )
 		self.readyUpText destroy();
 
-	if ( isDefined( self.readyUpToggleText ) )
-		self.readyUpToggleText destroy();
+	//if ( isDefined( self.readyUpToggleText ) )
+	//	self.readyUpToggleText destroy();
+
+	self maps\mp\gametypes\_hud_hints::hideHint( "readyup_bypass" );
 
 	if ( self.pers["team"] != "spectator" )
 		self notify("readyupperiod_ended");
@@ -269,7 +275,7 @@ readyUpPeriod()
 waitForPlayers()
 {
 	// Create the HUD element so players know we are waiting for more players
-	waitingForPlayersText = createServerFontString( "objective", 1.8 );
+	waitingForPlayersText = createServerFontString( "default", 1.4 );
 	waitingForPlayersText setPoint( "CENTER", "CENTER", 0, 0 );
 	waitingForPlayersText.sort = 1001;
 	waitingForPlayersText.foreground = false;
@@ -573,7 +579,7 @@ getCheckSums( dvarNames, dvarCheckSums, fileExtension )
 showTimeLimitCountdown( timeLimit )
 {
 	// Create the time limit countdown number
-	limitCountdownTimer = createServerTimer( "objective", 3.0 );
+	limitCountdownTimer = createServerTimer( "default", 1.5 );
 	limitCountdownTimer setTimer( timeLimit );
 	limitCountdownTimer setPoint( "CENTER", "CENTER", 0, 65 );
 	limitCountdownTimer.color = ( 1, 0.5, 0 );

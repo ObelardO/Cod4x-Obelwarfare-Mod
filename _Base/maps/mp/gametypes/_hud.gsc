@@ -184,8 +184,8 @@ init()
 	else
 	{
 		level.lowerTextYAlign = "CENTER";
-		level.lowerTextY = 70;
-		level.lowerTextFontSize = 2;
+		level.lowerTextY = 130;
+		level.lowerTextFontSize = 1.4;
 	}
 }
 

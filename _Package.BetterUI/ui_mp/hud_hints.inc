@@ -2,7 +2,7 @@
 menuDef
 {
     name			"MantleHint"
-    rect			0 170 20 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+    rect			0 100 20 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
     fullScreen		0
     visible			when( ( dvarInt( ui_hud_hardcore ) == 0 && dvarInt( ui_hud_show_mantle_hint ) == 1 ) || dvarInt( ui_hud_show_mantle_hint ) == 2 )
 
@@ -22,9 +22,9 @@ menuDef
 menuDef
 {
     name			"Cursorhints"
-    rect			0 110 20 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+    rect			0 130 20 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
     fullScreen		0
-    visible			when( !ui_active() )
+    visible			when( !inkillcam() && !flashbanged() && !ui_active() && !scoped() )
 
     itemDef
     {

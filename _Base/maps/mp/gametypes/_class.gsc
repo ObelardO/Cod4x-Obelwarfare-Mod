@@ -980,6 +980,8 @@ giveLoadout( team, class )
 	self cac_selector();
 	
 	[[level.onLoadoutGiven]]();
+
+	self setClientDvar( "ui_hud_show_weapon", 1 );
 }
 
 // sets the amount of ammo in the gun.
