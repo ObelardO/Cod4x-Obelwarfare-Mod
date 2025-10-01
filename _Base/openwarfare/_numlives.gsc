@@ -48,9 +48,11 @@ onPlayerSpawned()
 	if ( level.inPrematchPeriod )
 		level waittill("prematch_over");	
 
+	self maps\mp\gametypes\_hud_hints::showHint( "  ", "lives_count", undefined, true );
+
 	// Create the HUD element to show the remaining lives for this player
-	numLives = createFontString( "objective", 2.3 );
-	numLives setPoint( "CENTER", "CENTER", 0, 50 );
+	numLives = createFontString( "default", 1.4 );
+	numLives setPoint( "CENTER", "CENTER", 0, 130 );
 	numLives.sort = 1001;
 	numLives.foreground = false;
 	numLives.hidewheninmenu = true;
@@ -78,5 +80,8 @@ onPlayerSpawned()
 	// Do the pulse effect and destroy the element	
 	numLives thread maps\mp\gametypes\_hud::fontPulse( level );
 	wait (2.5);
+
+	self maps\mp\gametypes\_hud_hints::hideHint( "lives_count" );
+
 	numLives destroyElem();
 }

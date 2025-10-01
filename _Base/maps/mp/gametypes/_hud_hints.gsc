@@ -54,7 +54,10 @@ playerSpawnWatcher()
             self.hudHints.hudText.hideWhenInMenu = true;
         }
 
-        clearHintsStack();
+        if ( !isDefined( self.hudHints.overridingKey ) )
+        {
+            clearHintsStack();
+        }
     }
 }
 

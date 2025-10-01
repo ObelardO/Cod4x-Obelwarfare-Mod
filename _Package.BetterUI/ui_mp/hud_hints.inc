@@ -13,7 +13,7 @@ menuDef
         textscale		(TEXTSIZE_SMALL * 0.6)
         textstyle		ITEM_TEXTSTYLE_SHADOWED
         ownerdraw		CG_MANTLE_HINT
-        visible			when( NOT_SPECTATING )
+        visible			when( NOT_SPECTATING && dvarString ( ui_hud_hint_text ) == "" )
         decoration
     }
 }

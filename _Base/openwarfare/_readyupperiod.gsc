@@ -211,13 +211,6 @@ readyUpPeriod()
 	self.readyUpText.hidewheninmenu = true;
 
 	// Create the press USE key to toggle the readiness status
-	//self.readyUpToggleText = createFontString( "default", 1.4 );
-	//self.readyUpToggleText setPoint( "CENTER", "CENTER", 0, 30 );
-	//self.readyUpToggleText.sort = 1001;
-	//self.readyUpToggleText.foreground = false;
-	//self.readyUpToggleText.hidewheninmenu = true;
-	//self.readyUpToggleText setText( &"OW_READYUP_PRESS_TO_TOGGLE" );
-
 	self maps\mp\gametypes\_hud_hints::showHint( &"OW_READYUP_PRESS_TO_TOGGLE", "readyup_bypass", undefined, true );
 
 	// We are going to monitor this player until the readyup period ends
@@ -581,7 +574,7 @@ showTimeLimitCountdown( timeLimit )
 	// Create the time limit countdown number
 	limitCountdownTimer = createServerTimer( "default", 1.5 );
 	limitCountdownTimer setTimer( timeLimit );
-	limitCountdownTimer setPoint( "CENTER", "CENTER", 0, 65 );
+	limitCountdownTimer setPoint( "CENTER", "CENTER", 0, 147 );
 	limitCountdownTimer.color = ( 1, 0.5, 0 );
 	limitCountdownTimer.sort = 1001;
 	limitCountdownTimer.foreground = false;
