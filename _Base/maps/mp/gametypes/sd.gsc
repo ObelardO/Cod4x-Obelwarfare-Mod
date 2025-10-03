@@ -606,6 +606,8 @@ bombs()
 		bombZone.onEndUse = ::onEndUse;
 		bombZone.onUse = ::onUsePlantObject;
 		bombZone.onCantUse = ::onCantUse;
+		bombZone.useWeapon = undefined;
+
 		if( level.scr_sd_show_briefcase == 1 )
 			bombZone.useWeapon = "briefcase_bomb_mp";
 
@@ -978,6 +980,7 @@ bombPlanted( destroyedObj, player )
 	defuseObject.onBeginUse = ::onBeginUse;
 	defuseObject.onEndUse = ::onEndUse;
 	defuseObject.onUse = ::onUseDefuseObject;
+	defuseObject.useWeapon = undefined;
 
 	if( level.scr_sd_show_briefcase == 1 )
 		defuseObject.useWeapon = "briefcase_bomb_defuse_mp";

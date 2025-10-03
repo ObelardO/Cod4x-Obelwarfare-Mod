@@ -481,6 +481,8 @@ setLowerMessage( text, time )
 	
 	self notify("lower_message_set");
 	self.lowerMessage setText( text );
+
+	self maps\mp\gametypes\_hud_hints::showHint( "   ", "lower_message", undefined, true );
 	
 	if ( isDefined( time ) && time > 0 )
 		self.lowerTimer setTimer( time );
@@ -518,6 +520,8 @@ clearLowerMessage( fadetime )
 		
 		self setLowerMessage("");
 	}
+
+	self maps\mp\gametypes\_hud_hints::hideHint( "lower_message" );
 }
 
 printOnTeam(text, team)

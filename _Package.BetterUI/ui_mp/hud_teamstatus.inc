@@ -32,7 +32,7 @@
 
 #define TEAMSTAT_HUD_PLAYER_INDEX   ( TEAMSTAT_IS_LOSING_PLAYER * TEAMSTAT_SCORE_PLAYER_RANK ) + ( TEAMSTAT_IS_WINNING_PLAYER * 2 )
 
-#define TEAMSTAT_HUD_VISIBLE        ( team( name ) != "TEAM_SPECTATOR") && !isIntermission() && dvarInt( ui_hud_teamstat_visible ) > 0
+#define TEAMSTAT_HUD_VISIBLE        ( !isIntermission() && dvarInt( ui_hud_teamstat_visible ) > 0 )
 
 
 #define TEAMSTAT_HUD( yOffset, icon, visibleFlag, score, highlightFlag, count, blinkFlag ) \
