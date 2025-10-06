@@ -11,3 +11,4 @@ BetterUI
 //Event.Spring
 //Event.Victory
 //Event.Xmas
+Event.Autumn

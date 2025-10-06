@@ -178,6 +178,7 @@ onPlayerDeath()
 {
     self setClientDvar( "ui_hud_has_frags", "0" );
 	self setClientDvar( "ui_hud_has_spec_gren", "0" );
+    self setClientDvar( "ui_hud_show_weapon", "0" );
 }
 
 
