@@ -96,7 +96,12 @@ levelGameEndWatcher()
 
 showHint( hintText, ownerKey, entityRef, overrideAll )
 {
-    if( !isDefined( self.hudHints ) ) return;
+    if( !isDefined( self.hudHints ) )
+    {
+        //self iprintlnBold( "^1Can't show hint case not defined" );
+
+        return;
+    }
 
     if( isDefined( self.hudHints.hintsStack[ ownerKey ] ) )
     {

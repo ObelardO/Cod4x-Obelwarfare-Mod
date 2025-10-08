@@ -361,7 +361,7 @@
 	{
 		name			"boldgamemessages"
 		// (todo: use VERTICAL_ALIGN_TOP in SP, origin 0 180)
-    	rect			0 -60 20 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+    	rect			0 -40 20 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
 		fullScreen		0
 		visible			when( !inkillcam() );
 
