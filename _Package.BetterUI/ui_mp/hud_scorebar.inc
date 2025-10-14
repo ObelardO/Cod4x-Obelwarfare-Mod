@@ -330,7 +330,7 @@ menuDef
         textscale	0.35
         textalign	ITEM_ALIGN_RIGHT
         textstyle	ITEM_TEXTSTYLE_SHADOWEDMORE
-        visible 	when ( timeLeft() >= 60 && !dvarBool( ui_bomb_timer ) && ( team( name ) != "TEAM_SPECTATOR" || dvarInt( ui_broadcaster ) == 0 ) );
+        visible 	when ( timeLeft() >= 60 && !dvarBool( ui_bomb_timer ) && ( team( name ) != "TEAM_SPECTATOR" && dvarInt( ui_broadcaster ) == 0 ) );
         forecolor	1 1 1 HUD_FOREGROUND_ALPHA
         decoration
     }
@@ -344,7 +344,7 @@ menuDef
         textalign	ITEM_ALIGN_RIGHT
         textstyle	ITEM_TEXTSTYLE_SHADOWEDMORE
         forecolor	1 0.75 0 HUD_FOREGROUND_ALPHA
-        visible 	when ( timeLeft() >= 30 && timeLeft() < 60 && !dvarBool( ui_bomb_timer ) && ( team( name ) != "TEAM_SPECTATOR" || dvarInt( ui_broadcaster ) == 0 ) );
+        visible 	when ( timeLeft() >= 30 && timeLeft() < 60 && !dvarBool( ui_bomb_timer ) && ( team( name ) != "TEAM_SPECTATOR" && dvarInt( ui_broadcaster ) == 0 ) );
         decoration
     }
     itemDef
@@ -357,7 +357,7 @@ menuDef
         textalign	ITEM_ALIGN_RIGHT
         textstyle	ITEM_TEXTSTYLE_SHADOWEDMORE
         forecolor	1 0.5 0 1
-        visible 	when ( ( (timeLeft() >= 0 && timeLeft() < 30) || dvarBool( ui_bomb_timer ) ) && ( team( name ) != "TEAM_SPECTATOR" || dvarInt( ui_broadcaster ) == 0 ) );
+        visible 	when ( ( (timeLeft() >= 0 && timeLeft() < 30) || dvarBool( ui_bomb_timer ) ) && ( team( name ) != "TEAM_SPECTATOR" && dvarInt( ui_broadcaster ) == 0 ) );
         decoration
     }
     

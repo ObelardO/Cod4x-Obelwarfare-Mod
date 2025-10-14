@@ -1,4 +1,4 @@
-#define MATCHTIMER_HUD_VISIBLE        ( ( team( name ) != "TEAM_SPECTATOR" || dvarInt( ui_broadcaster ) == 0 ) && dvarInt( "ui_timelimit" ) > 0 && !isIntermission() && !inkillcam() && !ui_active() && !isIntermission() && !flashbanged() && !scoped() && ( dvarInt( "ui_timelimit" ) * 60 - timeLeft() > 5 ) )
+#define MATCHTIMER_HUD_VISIBLE        ( ( team( name ) != "TEAM_SPECTATOR" || ( team( name ) == "TEAM_SPECTATOR" && dvarInt( ui_broadcaster ) > 0 ) ) && dvarInt( "ui_timelimit" ) > 0 && !isIntermission() && !inkillcam() && !ui_active() && !isIntermission() && !flashbanged() && !scoped() && ( dvarInt( "ui_timelimit" ) * 60 - timeLeft() > 5 ) )
 
 #define PLAYER_HUD_HEALTH_VISIBLE     ( !flashbanged() && !isIntermission() && !ui_active() && !scoped() && team( name ) != "TEAM_SPECTATOR" )
 

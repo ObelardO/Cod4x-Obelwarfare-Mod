@@ -10,13 +10,15 @@
 #define WEAPINFO_AMMO_SIZE              25
 #define WEAPINFO_ICON_SPACING           10
 
-#define WEAPINFO_INVENTORY_VISIBLE      ( dvarint( ui_hud_hardcore ) == 0 || dvarint( ui_hud_show_inventory ) > 0 )
+#define WEAPINFO_INVENTORY_VISIBLE      ( dvarint( ui_hud_show_offhand_items ) == dvarint( ui_hud_hardcore ) + 1 )
+#define WEAPINFO_WEAPON_AMMO_VISIBLE    ( dvarint( ui_hud_show_ammo_stock ) == dvarint( ui_hud_hardcore ) + 1 )
 
 #define WEAPINFO_ICON_FRAG_VISIBLE      ( WEAPINFO_INVENTORY_VISIBLE && dvarint( ui_hud_has_frags ) > 0 )
 #define WEAPINFO_ICON_SPECIAL_VISIBLE   ( WEAPINFO_INVENTORY_VISIBLE && dvarint( ui_hud_has_spec_gren ) > 0 )
 #define WEAPINFO_ICON_BANDAGE_VISIBLE   ( WEAPINFO_INVENTORY_VISIBLE && dvarint( ui_bandages ) == 1 )
 
-#define WEAPINFO_INVENTORY_POS_Y        WEAPINFO_Y
+#define WEAPINFO_INVENTORY_POS_Y        ( WEAPINFO_Y )
+#define WEAPINFO_WEAPON_AMMO_POS_Y      ( -6 - ( ( WEAPINFO_ICON_FRAG_VISIBLE + WEAPINFO_ICON_SPECIAL_VISIBLE + WEAPINFO_ICON_BANDAGE_VISIBLE ) > 0 ) * ( WEAPINFO_ICON_SIZE + WEAPINFO_ICON_SPACING ) )
 
 #define WEAPINFO_ICON_FRAG_POS_X        ( WEAPINFO_ICON_SIZE * WEAPINFO_ICON_FRAG_VISIBLE )
 #define WEAPINFO_ICON_SPECIAL_POS_X     ( WEAPINFO_ICON_FRAG_POS_X + WEAPINFO_ICON_SIZE * WEAPINFO_ICON_SPECIAL_VISIBLE + WEAPINFO_ICON_SPACING * WEAPINFO_ICON_FRAG_VISIBLE )
@@ -30,13 +32,15 @@ menuDef
     fullScreen		0
     visible			when( !inkillcam() && dvarBool( ammoCounterHide ) == 0 && !flashbanged() && !ui_active() && team( name ) != "TEAM_SPECTATOR" && dvarInt( ui_hud_show_weapon ) == 1 );
 
+    // WEAPON
     itemDef
     {
         name			"clipGraphic"
         rect			(WEAPINFO_X -35) (WEAPINFO_Y -12) 1 1
+        exp             rect Y( WEAPINFO_WEAPON_AMMO_POS_Y - 12 )
         forecolor		1 1 1 HUD_ALPHA
         ownerdraw		CG_PLAYER_WEAPON_AMMO_CLIP_GRAPHIC
-        visible			when ( dvarint( ui_hud_hardcore ) == 0 || dvarint( ui_hud_show_inventory ) == 2 );
+        visible			when ( WEAPINFO_WEAPON_AMMO_VISIBLE );
         decoration
     }
 
@@ -44,16 +48,33 @@ menuDef
     {
         name			"ammoStock"
         rect			(WEAPINFO_X -29) (WEAPINFO_Y -6) 1 1
+        exp             rect Y( WEAPINFO_WEAPON_AMMO_POS_Y - 6 )
         textscale		(TEXTSIZE_SMALL * 1.2)
         textstyle		ITEM_TEXTSTYLE_SHADOWED
         textfont		UI_FONT_OBJECTIVE
         textalign	    ITEM_ALIGN_RIGHT
         forecolor		1 1 1 HUD_FOREGROUND_ALPHA
         ownerdraw		CG_PLAYER_WEAPON_AMMO_STOCK
-        visible			when ( dvarint( ui_hud_hardcore ) == 0 || dvarint( ui_hud_show_inventory ) == 2 );
+        visible			when ( WEAPINFO_WEAPON_AMMO_VISIBLE );
         decoration
     }
 
+    itemDef
+    {
+        name			"weapname"
+        rect			(WEAPINFO_X -8) (WEAPINFO_Y -15) 1 1
+        exp             rect Y( WEAPINFO_WEAPON_AMMO_POS_Y - 15 )
+        textstyle		ITEM_TEXTSTYLE_SHADOWED
+        textscale		(TEXTSIZE_SMALL * 0.4)
+        textfont		UI_FONT_OBJECTIVE
+        textalign	    ITEM_ALIGN_RIGHT
+        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
+        ownerdraw		CG_PLAYER_WEAPON_NAME
+        visible         when ( WEAPINFO_WEAPON_AMMO_VISIBLE );
+        decoration
+    }
+
+    // FRAG
     itemDef
     {
         name			"offhandFragIcon"
@@ -82,6 +103,21 @@ menuDef
 
     itemDef
     {
+        name			"offHandFragAmmo"
+        rect			WEAPINFO_X (WEAPINFO_INVENTORY_POS_Y + WEAPINFO_ICON_SIZE + 3) WEAPINFO_AMMO_SIZE WEAPINFO_AMMO_SIZE
+        exp             rect X( WEAPINFO_X - (WEAPINFO_ICON_FRAG_POS_X - WEAPINFO_ICON_SIZE) );
+        textscale		(TEXTSIZE_SMALL * 0.6)
+        textstyle		ITEM_TEXTSTYLE_SHADOWED
+        textfont		UI_FONT_OBJECTIVE
+        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
+        ownerdraw		CG_OFFHAND_WEAPON_AMMO_FRAG
+        visible			when ( WEAPINFO_ICON_FRAG_VISIBLE );
+        decoration
+    }
+
+    // SPECIAL GRENADE
+    itemDef
+    {
         name			"offhandSmokeIcon"
         rect			WEAPINFO_X WEAPINFO_INVENTORY_POS_Y WEAPINFO_ICON_SIZE WEAPINFO_ICON_SIZE
         exp             rect X( WEAPINFO_X - WEAPINFO_ICON_SPECIAL_POS_X );
@@ -102,10 +138,25 @@ menuDef
         textscale	0.18
         textalign	ITEM_ALIGN_CENTER
         textstyle	ITEM_TEXTSTYLE_SHADOWED
-        visible 	when ( WEAPINFO_ICON_SPECIAL_VISIBLE && WEAPINFO_HAS_SPECIAL );
+        visible 	when ( WEAPINFO_ICON_SPECIAL_VISIBLE );
         decoration 
     }
-    
+
+    itemDef
+    {
+        name			"offHandSmokeAmmo"
+        rect			WEAPINFO_X (WEAPINFO_INVENTORY_POS_Y + WEAPINFO_ICON_SIZE + 3) WEAPINFO_AMMO_SIZE WEAPINFO_AMMO_SIZE
+        exp             rect X( WEAPINFO_X - (WEAPINFO_ICON_SPECIAL_POS_X - WEAPINFO_ICON_SIZE) );
+        textscale		(TEXTSIZE_SMALL * 0.6)
+        textstyle		ITEM_TEXTSTYLE_SHADOWED
+        textfont		UI_FONT_OBJECTIVE
+        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
+        ownerdraw		CG_OFFHAND_WEAPON_AMMO_SMOKEFLASH
+        visible			when ( WEAPINFO_ICON_SPECIAL_VISIBLE );
+        decoration
+    }
+
+    // BANDAGES
     itemDef
     {
         rect			WEAPINFO_X WEAPINFO_INVENTORY_POS_Y WEAPINFO_ICON_SIZE WEAPINFO_ICON_SIZE
@@ -134,29 +185,15 @@ menuDef
             
     itemDef
     {
-        name			"offHandFragAmmo"
+        name			"bandagesQty"
         rect			WEAPINFO_X (WEAPINFO_INVENTORY_POS_Y + WEAPINFO_ICON_SIZE + 3) WEAPINFO_AMMO_SIZE WEAPINFO_AMMO_SIZE
-        exp             rect X( WEAPINFO_X - (WEAPINFO_ICON_FRAG_POS_X - WEAPINFO_ICON_SIZE) );
+        exp             rect X( WEAPINFO_X - (WEAPINFO_ICON_BANDAGE_POS_X - WEAPINFO_ICON_SIZE) );
         textscale		(TEXTSIZE_SMALL * 0.6)
         textstyle		ITEM_TEXTSTYLE_SHADOWED
         textfont		UI_FONT_OBJECTIVE
         forecolor		1 1 1 HUD_FOREGROUND_ALPHA
-        ownerdraw		CG_OFFHAND_WEAPON_AMMO_FRAG
-        visible			when ( WEAPINFO_ICON_FRAG_VISIBLE );
-        decoration
-    }
-
-    itemDef
-    {
-        name			"offHandSmokeAmmo"
-        rect			WEAPINFO_X (WEAPINFO_INVENTORY_POS_Y + WEAPINFO_ICON_SIZE + 3) WEAPINFO_AMMO_SIZE WEAPINFO_AMMO_SIZE
-        exp             rect X( WEAPINFO_X - (WEAPINFO_ICON_SPECIAL_POS_X - WEAPINFO_ICON_SIZE) );
-        textscale		(TEXTSIZE_SMALL * 0.6)
-        textstyle		ITEM_TEXTSTYLE_SHADOWED
-        textfont		UI_FONT_OBJECTIVE
-        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
-        ownerdraw		CG_OFFHAND_WEAPON_AMMO_SMOKEFLASH
-        visible			when ( WEAPINFO_ICON_SPECIAL_VISIBLE );
+        exp				text( dvarint( ui_bandages_qty ) );
+        visible			when ( WEAPINFO_ICON_BANDAGE_VISIBLE && dvarint( ui_bandages_qty ) > 0 );
         decoration
     }
 
@@ -168,23 +205,9 @@ menuDef
         textscale		(TEXTSIZE_SMALL * 0.6)
         textstyle		ITEM_TEXTSTYLE_SHADOWED
         textfont		UI_FONT_OBJECTIVE
-        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
-        exp					text( dvarint( ui_bandages_qty ) );
-        visible			when ( WEAPINFO_ICON_BANDAGE_VISIBLE  );
-        decoration
-    }
-
-    itemDef
-    {
-        name			"weapname"
-        rect			(WEAPINFO_X -8) (WEAPINFO_Y -15) 1 1
-        textstyle		ITEM_TEXTSTYLE_SHADOWED
-        textscale		(TEXTSIZE_SMALL * 0.4)
-        textfont		UI_FONT_OBJECTIVE
-        textalign	    ITEM_ALIGN_RIGHT
-        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
-        ownerdraw		CG_PLAYER_WEAPON_NAME
-        visible         when ( dvarint( ui_hud_hardcore ) == 0 || dvarint( ui_hud_show_inventory ) == 2 );
+        forecolor		0.9 0 0 HUD_FOREGROUND_ALPHA
+        exp				text( dvarint( ui_bandages_qty ) );
+        visible			when ( WEAPINFO_ICON_BANDAGE_VISIBLE && dvarint( ui_bandages_qty ) == 0 );
         decoration
     }
 }

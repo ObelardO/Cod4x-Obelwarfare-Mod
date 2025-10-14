@@ -83,7 +83,7 @@
         textscale		(TEXTSIZE_SMALL * 0.6) \
         textstyle		ITEM_TEXTSTYLE_SHADOWED \
         textfont		UI_FONT_OBJECTIVE \
-        forecolor		1 0 0 1 \
+        forecolor		0.9 0 0 1 \
         exp				text( count ); \
         exp             forecolor A( 1 - ( float ( milliseconds() % 1000 ) / 1000 ) ); \
         visible			when( visibleFlag && blinkFlag && count <= 1 ); \

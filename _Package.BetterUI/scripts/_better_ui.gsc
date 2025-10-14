@@ -16,6 +16,16 @@
 
 init()
 {
+    // Weapon info HUD
+    scr_hud_show_offhand_items = getdvarx( "scr_hud_show_offhand_items", "int", 1, 0, 2 );
+    setDvar( "ui_hud_show_offhand_items", scr_hud_show_offhand_items );
+    makeDvarServerInfo( "ui_hud_show_offhand_items" );
+
+    //ammodisplay
+    scr_hud_show_ammo_stock = getdvarx( "scr_hud_show_ammo_stock", "int", 1, 0, 2 );
+    setDvar( "ui_hud_show_ammo_stock", scr_hud_show_ammo_stock );
+    makeDvarServerInfo( "ui_hud_show_ammo_stock" );
+
     // Fade options
     scr_hud_fade_enabled = getdvarx( "scr_hud_fade_enabled", "int", 1, 0, 1 );
     scr_hud_fade_time = getdvarx( "scr_hud_fade_time", "float", 1.7, 0, 10 );
@@ -35,6 +45,7 @@ init()
 	forceClientDvar( "waypointiconwidth", scr_hud_waypoint_size );
 	forceClientDvar( "waypointiconheight", scr_hud_waypoint_size );
 
+    // Other
 	forceClientDvar( "cg_youinkillcamsize", 1 );
     forceClientDvar( "cg_cursorHints", 4 );
 
