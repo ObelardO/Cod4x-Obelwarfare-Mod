@@ -516,15 +516,18 @@ validateLoadoutItem( className, dataType, tag )
     dvarName = "loadout_" + dataType;
 
     itemValueRef = self.cacIngame.loadoutDataRef[dvarName];
-    itemValueRefRaw = itemValueRef;
+    itemValueRefValidated = itemValueRef;
 
-    itemValueRef = validateAllowedItem( itemValueRef, tag, className );
-    itemValueRef = validateAllowedItem( itemValueRef, tag, "*all*" );
+    itemValueRefValidated = validateAllowedItem( itemValueRefValidated, tag, className );
+    itemValueRefValidated = validateAllowedItem( itemValueRefValidated, tag, "*all*" );
 
-    self.cacIngame.loadoutDataRef[dvarName] = itemValueRef;
+    self.cacIngame.loadoutDataRef[dvarName] = itemValueRefValidated;
 
-    self setClientDvar( dvarName, itemValueRef );
-    //self iPrintLn( "[CAC Ingame] Validated: ^2" + dvarName + "^7 ref ^2" + itemValueRef + "^7 (from ^2" + itemValueRefRaw + "^7) in class ^2" + className + "^7 with tag ^2" + tag );
+    if( itemValueRef != itemValueRefValidated )
+    {
+        self setClientDvar( dvarName, itemValueRefValidated );
+    }
+    //self iPrintLn( "[CAC Ingame] Validated: ^2" + dvarName + "^7 ref ^2" + itemValueRefValidated + "^7 (from ^2" + itemValueRef + "^7) in class ^2" + className + "^7 with tag ^2" + tag );
 }
 
 
