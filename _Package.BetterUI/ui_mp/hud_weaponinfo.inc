@@ -6,8 +6,8 @@
 #define WEAPINFO_AMMO_SIZE              25
 #define WEAPINFO_ICON_SPACING           10
 
-#define WEAPINFO_INVENTORY_VISIBLE      ( dvarint( ui_hud_show_offhand_items ) == dvarint( ui_hud_hardcore ) + 1 )
-#define WEAPINFO_WEAPON_AMMO_VISIBLE    ( dvarint( ui_hud_show_ammodisplay ) == dvarint( ui_hud_hardcore ) + 1 )
+#define WEAPINFO_INVENTORY_VISIBLE      ( dvarint( ui_hud_show_offhand_items ) >= dvarint( ui_hud_hardcore ) + 1 )
+#define WEAPINFO_WEAPON_AMMO_VISIBLE    ( dvarint( ui_hud_show_ammodisplay ) >= dvarint( ui_hud_hardcore ) + 1 )
 
 #define WEAPINFO_ICON_FRAG_VISIBLE      ( WEAPINFO_INVENTORY_VISIBLE && dvarint( ui_hud_has_frags ) > 0 )
 #define WEAPINFO_ICON_SPECIAL_VISIBLE   ( WEAPINFO_INVENTORY_VISIBLE && dvarint( ui_hud_has_spec_gren ) > 0 )

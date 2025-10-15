@@ -32,7 +32,7 @@
 
 #define TEAMSTAT_HUD_PLAYER_INDEX   ( TEAMSTAT_IS_LOSING_PLAYER * TEAMSTAT_SCORE_PLAYER_RANK ) + ( TEAMSTAT_IS_WINNING_PLAYER * 2 )
 
-#define TEAMSTAT_HUD_VISIBLE        ( !isIntermission() && ( dvarint( ui_hud_show_teamstat ) == dvarint( ui_hud_hardcore ) + 1 ) )
+#define TEAMSTAT_HUD_VISIBLE        ( !isIntermission() && ( dvarint( ui_hud_show_teamstat ) >= dvarint( ui_hud_hardcore ) + 1 ) )
 
 
 #define TEAMSTAT_HUD_ITEM( yOffset, icon, visibleFlag, score, highlightFlag, count, blinkFlag ) \
