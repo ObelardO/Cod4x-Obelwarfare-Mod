@@ -7,7 +7,7 @@
 menuDef
 {
     name				"amitalking"
-    rect				BOTTOM_RECT_X BOTTOM_RECT_Y 640 480 HORIZONTAL_ALIGN_FULLSCREEN VERTICAL_ALIGN_FULLSCREEN
+    rect				0 0 640 480 HORIZONTAL_ALIGN_FULLSCREEN VERTICAL_ALIGN_FULLSCREEN
     fullScreen	0
     visible 		when( dvarInt( ui_broadcaster ) == 1 && !ui_active() && team( name ) == "TEAM_SPECTATOR" && !isIntermission() );
 

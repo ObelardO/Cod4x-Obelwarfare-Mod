@@ -20,8 +20,8 @@
 menuDef
 	{
 		name			"DPad"
- 	   	rect			BOTTOM_RECT_X (BOTTOM_RECT_Y-42) 25 25 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_BOTTOM
-		exp				rect Y( (BOTTOM_RECT_Y-42) - (ONLINEGAME * ONLINEGAME_OFFSET) );
+ 	   	rect			0 -42 25 25 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_BOTTOM
+		exp				rect Y( -42 - (ONLINEGAME * ONLINEGAME_OFFSET) );
  	   	fullScreen		0
 		visible			when( !inkillcam() && !flashbanged() && !ui_active() && !scoped() && (dvarString( createfx ) != "on") && ( dvarint( ui_hud_hardcore ) == 0 || dvarint( ui_hud_show_inventory ) > 0 ) );
 
