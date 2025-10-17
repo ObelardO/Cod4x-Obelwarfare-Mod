@@ -26,6 +26,9 @@ init()
     setDvar( "ui_hud_show_ammodisplay", scr_hud_show_ammodisplay );
     makeDvarServerInfo( "ui_hud_show_ammodisplay" );
 
+    setDvar( "ui_hud_show_weaponinfo", 0 );
+    makeDvarServerInfo( "ui_hud_show_weaponinfo" );
+
     // Fade options
     scr_hud_fade_enabled = getdvarx( "scr_hud_fade_enabled", "int", 1, 0, 1 );
     scr_hud_fade_time = getdvarx( "scr_hud_fade_time", "float", 1.7, 0, 10 );
@@ -48,6 +51,7 @@ init()
     // Other
 	forceClientDvar( "cg_youinkillcamsize", 1 );
     forceClientDvar( "cg_cursorHints", 4 );
+    forceClientDvar( "cg_chatHeight", 6 );
 
     // Apply other player dvars
     openwarfare\_playerdvars::completeForceClientDvarsArray();
@@ -73,9 +77,6 @@ init()
         setDvar( "ui_hud_teamstat_count_axis", 0 );
         makeDvarServerInfo( "ui_hud_teamstat_count_axis" );
 
-        level thread prematchOverWatcher();
-        level thread gameOverWatcher();
-
         if ( level.teamStats.teamBasedHUD )
         {
             level thread updateTeamCountsHUD( "allies" );
@@ -87,6 +88,10 @@ init()
         setDvar( "ui_hud_show_teamstat", 0 );
         makeDvarServerInfo( "ui_hud_show_teamstat" );
     }
+
+
+    level thread prematchOverWatcher();
+    level thread gameOverWatcher();
 
     level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
 
@@ -107,9 +112,9 @@ onPlayerConnected()
 
 onPlayerDeath()
 {
-    self setClientDvar( "ui_hud_has_frags", "0" );
-	self setClientDvar( "ui_hud_has_spec_gren", "0" );
-    self setClientDvar( "ui_hud_show_weapon", "0" );
+    //self setClientDvar( "ui_hud_has_frags", "0" );
+	//self setClientDvar( "ui_hud_has_spec_gren", "0" );
+    //self setClientDvar( "ui_hud_show_weapon", "0" );
 }
 
 
@@ -125,7 +130,12 @@ prematchOverWatcher()
 {
     self waittill( "prematch_over" );
 
-    setdvar( "ui_hud_show_teamstat", level.teamStats.showHUD );
+    if( isDefined( level.teamStats ) )
+    {   
+        setdvar( "ui_hud_show_teamstat", level.teamStats.showHUD );
+    }
+
+    setdvar( "ui_hud_show_weaponinfo", 1 );
 }
 
 
@@ -133,7 +143,12 @@ gameOverWatcher()
 {
     self waittill( "game_ended" );
 
-    setdvar( "ui_hud_show_teamstat", 0 );
+    if( isDefined( level.teamStats ) )
+    {   
+        setdvar( "ui_hud_show_teamstat", 0 );
+    }
+
+    setdvar( "ui_hud_show_weaponinfo", 0 );
 }
 
 

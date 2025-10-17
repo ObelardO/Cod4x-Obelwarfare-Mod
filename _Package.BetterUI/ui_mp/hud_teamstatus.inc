@@ -1,8 +1,11 @@
 #define TEAMSTAT_HUD_OFFSET_X	    -20
 #define TEAMSTAT_HUD_OFFSET_Y	    20
 #define TEAMSTAT_HUD_SPACING        30
+#define TEAMSTAT_HUD_SPACING_HALF   0
 #define TEAMSTAT_HUD_SIZE           24
 
+#define TEAMSTAT_HUD_BACK_SIZE_Y    ( TEAMSTAT_HUD_SIZE + 6 )
+#define TEAMSTAT_HUD_BACK_SIZE_X    ( TEAMSTAT_HUD_BACK_SIZE_Y * 2 )
 
 #define TEAMSTAT_TEAMCOUNT_ALLIES   dvarint( ui_hud_teamstat_count_allies )
 #define TEAMSTAT_TEAMCOUNT_AXIS     dvarint( ui_hud_teamstat_count_axis )
@@ -34,8 +37,42 @@
 
 #define TEAMSTAT_HUD_VISIBLE        ( !isIntermission() && ( dvarint( ui_hud_show_teamstat ) >= dvarint( ui_hud_hardcore ) + 1 ) )
 
+#define TEAMSTAT_HUD_TIMER_VISIBLE  ( TEAMSTAT_HUD_VISIBLE && ( team( name ) != "TEAM_SPECTATOR" || ( team( name ) == "TEAM_SPECTATOR" && dvarInt( ui_broadcaster ) == 0 ) ) && dvarInt( "ui_timelimit" ) > 0 && !inkillcam() && !ui_active() && !flashbanged() && !scoped() && ( dvarInt( "ui_timelimit" ) * 60 - timeLeft() > 5 ) )
+#define TEAMSTAT_HUD_TIMER_POS_X    ( TEAMSTAT_HUD_POS_X - ( dvarBool( ui_bomb_timer ) * ( TEAMSTAT_HUD_SIZE + 4 ) ) )
+#define TEAMSTAT_HUD_TIMER_POS_Y    ( 2 * TEAMSTAT_HUD_SPACING + TEAMSTAT_HUD_OFFSET_Y )
 
-#define TEAMSTAT_HUD_ITEM( yOffset, icon, visibleFlag, score, highlightFlag, count, blinkFlag ) \
+#define TEAMSTAT_HUD_TIMER( textExp, color, visibleExp ) \
+    itemDef \
+    { \
+        rect		TEAMSTAT_HUD_POS_X ( TEAMSTAT_HUD_TIMER_POS_Y + TEAMSTAT_HUD_SPACING_HALF ) 1 TEAMSTAT_HUD_SIZE HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP \
+        exp         rect X( TEAMSTAT_HUD_TIMER_POS_X ) \
+        exp         text( textExp ); \
+        textfont	UI_FONT_OBJECTIVE \
+        textscale	0.3 \
+        textalign	ITEM_ALIGN_MIDDLE_RIGHT \
+        textstyle	ITEM_TEXTSTYLE_SHADOWEDMORE \
+        forecolor	color \
+        visible 	when ( visibleExp && TEAMSTAT_HUD_TIMER_VISIBLE ) \
+        decoration \
+    }
+
+/*
+
+
+
+    */
+
+#define TEAMSTAT_HUD_ITEM( yOffset, icon, visibleExp, score, highlightFlag, count, blinkExp ) \
+    itemDef \
+    { \
+        rect			( TEAMSTAT_HUD_POS_X - TEAMSTAT_HUD_BACK_SIZE_X + 6 ) TEAMSTAT_HUD_OFFSET_Y TEAMSTAT_HUD_BACK_SIZE_X TEAMSTAT_HUD_BACK_SIZE_Y HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP \
+        exp             rect Y( yOffset - 6 ) \
+        forecolor		1 1 1 ( HUD_BACK_ALPHA * 0.65 ) \
+        style			WINDOW_STYLE_SHADER \
+        background		"hud_background_line_half" \
+        visible			when ( visibleExp ) \
+        decoration \
+    } \
     itemDef \
     { \
         style			WINDOW_STYLE_SHADER \
@@ -44,7 +81,7 @@
         exp             rect Y( yOffset ) \
         origin          (-TEAMSTAT_HUD_SIZE+1) 0 \
         exp				material( icon ); \
-        visible			when ( visibleFlag ); \
+        visible			when ( visibleExp ); \
         forecolor		1 1 1 HUD_FOREGROUND_ALPHA \
         decoration \
     } \
@@ -58,7 +95,7 @@
         textscale	0.3 \
         textalign	ITEM_ALIGN_MIDDLE_RIGHT \
         textstyle	ITEM_TEXTSTYLE_SHADOWEDMORE \
-        visible 	when( visibleFlag ); \
+        visible 	when( visibleExp ); \
         exp         forecolor A( 0.6 + 0.4 * highlightFlag ) \
         decoration \
     } \
@@ -72,7 +109,7 @@
         textfont		UI_FONT_OBJECTIVE \
         forecolor		1 1 1 1 \
         exp				text( count ); \
-        visible			when( visibleFlag ); \
+        visible			when( visibleExp ); \
         decoration \
     } \
     itemDef \
@@ -86,7 +123,7 @@
         forecolor		0.9 0 0 1 \
         exp				text( count ); \
         exp             forecolor A( 1 - ( float ( milliseconds() % 1000 ) / 1000 ) ); \
-        visible			when( visibleFlag && blinkFlag && count <= 1 ); \
+        visible			when( visibleExp && blinkExp && count <= 1 ); \
         decoration \
     }
 
@@ -111,4 +148,30 @@ menuDef
     //FREE GAMEMODE HUD
     TEAMSTAT_HUD_ITEM( TEAMSTAT_HUD_POS_Y_PLAYER_1, "hud_match_cup_gold", TEAMSTAT_HUD_VISIBLE && TEAMSTAT_IS_NOT_TEAMBASED, TEAMSTAT_HUD_SCORE_PLAYER_1, TEAMSTAT_IS_WINNING_PLAYER, 1, 0 )
     TEAMSTAT_HUD_ITEM( TEAMSTAT_HUD_POS_Y_PLAYER_2, "hud_match_cup",      TEAMSTAT_HUD_VISIBLE && TEAMSTAT_IS_NOT_TEAMBASED, TEAMSTAT_HUD_SCORE_PLAYER_2, TEAMSTAT_IS_LOSING_PLAYER,  TEAMSTAT_HUD_PLAYER_INDEX, 0 )
+
+    //RAUND TIMER
+    itemDef
+    {
+        rect			( TEAMSTAT_HUD_POS_X - TEAMSTAT_HUD_BACK_SIZE_X + 6 ) ( TEAMSTAT_HUD_TIMER_POS_Y - 6 ) TEAMSTAT_HUD_BACK_SIZE_X TEAMSTAT_HUD_BACK_SIZE_Y HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP
+        forecolor		1 1 1 ( HUD_BACK_ALPHA * 0.65 )
+        style			WINDOW_STYLE_SHADER
+        background		"hud_background_line_half"
+        visible			when ( TEAMSTAT_HUD_TIMER_VISIBLE )
+        decoration
+    }
+    itemDef
+    {
+        style			WINDOW_STYLE_SHADER
+        rect			TEAMSTAT_HUD_POS_X TEAMSTAT_HUD_TIMER_POS_Y TEAMSTAT_HUD_SIZE TEAMSTAT_HUD_SIZE HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP
+        origin			-22 0
+        exp				material( "hud_suitcase_bomb" );
+        visible			when ( dvarBool( ui_bomb_timer ) && TEAMSTAT_HUD_TIMER_VISIBLE );
+        forecolor		1 1 1 HUD_ALPHA
+        decoration
+    }
+
+
+    TEAMSTAT_HUD_TIMER( secondsAsCountdown( timeLeft() ), 1 1 1 HUD_FOREGROUND_ALPHA, timeLeft() >= 60 && !dvarBool( ui_bomb_timer ) )
+    TEAMSTAT_HUD_TIMER( secondsAsCountdown( timeLeft() ), 1 0.75 0 HUD_FOREGROUND_ALPHA, && timeLeft() >= 30 && timeLeft() < 60 && !dvarBool( ui_bomb_timer ) )
+    TEAMSTAT_HUD_TIMER( secondsAsCountdown( timeLeft() ) + "." + ( 9 - int( ( milliseconds() / 100 ) % 10 ) ), 1 0.5 0 1, ( (timeLeft() >= 0 && timeLeft() < 30) || dvarBool( ui_bomb_timer ) ) )
 }

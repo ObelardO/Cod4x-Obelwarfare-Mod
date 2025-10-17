@@ -26,6 +26,7 @@
 #define FLASH_OFS2 	((sin(milliseconds()/90))*4)
 
 #define HUD_ALPHA 0.65
+#define HUD_BACK_ALPHA 0.35
 #define HUD_FOREGROUND_ALPHA 0.75
 #define DPAD_ICON_ALPHA 0.65
 
@@ -337,7 +338,7 @@
 	{
 		name			"gamemessages"
 		// (todo: use VERTICAL_ALIGN_TOP in SP)
-		rect			20 -28 10 10 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+		rect			14 -32 10 10 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
 		//rect			20 -128 10 10 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
 		fullScreen		0
 		visible			when( !inkillcam() && !flashbanged() && !ui_active() && !scoped() );
