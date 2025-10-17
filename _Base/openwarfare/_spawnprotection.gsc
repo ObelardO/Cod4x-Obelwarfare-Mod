@@ -64,7 +64,7 @@ onPlayerSpawned()
 
 	// Create the hud element for the new connected player
 	self.hud_shield_icon = createIcon( "shield", 32, 32 );
-	self.hud_shield_icon setPoint( "BOTTOM RIGHT", undefined, -20, -133 );
+	self.hud_shield_icon setPoint( "BOTTOM RIGHT", undefined, -14, -133 );
 	self.hud_shield_icon.alpha = 0.9;
 	self.hud_shield_icon.alpha = true;
 	self.hud_shield_icon.hideWhenInMenu = true;

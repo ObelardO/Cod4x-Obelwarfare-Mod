@@ -140,7 +140,7 @@ showCampingIcon()
 
 	// Create the hud element for the new spawned player
 	self.hud_camping_icon = createIcon( "camping", 50, 50 );
-	self.hud_camping_icon setPoint( "CENTER", "CENTER", 220, 90 );
+	self.hud_camping_icon setPoint( "CENTER", "CENTER", 0, 90 );
 
 	// Blink the icon to get the player's attention
 	showIcon = 1;

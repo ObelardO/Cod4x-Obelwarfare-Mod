@@ -362,7 +362,7 @@ onSpawnPlayer()
 		else
 		{
 			self.carryIcon = createIcon( "hud_suitcase_bomb", 32, 32 );
-			self.carryIcon setPoint( "CENTER", "RIGHT BOTTOM", -31, -100 );
+			self.carryIcon setPoint( "CENTER", "RIGHT BOTTOM", -29, -100 );
 			self.carryIcon.alpha = 0.75;
 		}
 	}

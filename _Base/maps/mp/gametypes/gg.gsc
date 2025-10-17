@@ -454,7 +454,7 @@ showGunGameInfo()
 		weaponIcon = self createIcon( game["gunGameWeapons"][ game["gunGameLevels"][ self.gunGame["level"] ]["weapon"] ], 100, 50 );
 	}	
 	
-	weaponIcon setPoint( "RIGHT", "RIGHT BOTTOM", -22, -110 );
+	weaponIcon setPoint( "RIGHT", "RIGHT BOTTOM", -14, -110 );
 	weaponIcon.archived = false;
 	weaponIcon.hideWhenInMenu = true;
 	weaponIcon.sort = -3;
@@ -464,7 +464,7 @@ showGunGameInfo()
 	levelsLeft = self createFontString( "objective", 1.4 );
 	levelsLeft.archived = false;
 	levelsLeft.hideWhenInMenu = true;
-	levelsLeft setPoint( "RIGHT", "RIGHT BOTTOM", -22, -110 );
+	levelsLeft setPoint( "RIGHT", "RIGHT BOTTOM", -14, -110 );
 	levelsLeft.alignX = "right";
 	levelsLeft.sort = -1;
 	levelsLeft.alpha = 0.75;
@@ -476,7 +476,7 @@ showGunGameInfo()
 		deathsLeft = self createFontString( "objective", 1.4 );
 		deathsLeft.archived = false;
 		deathsLeft.hideWhenInMenu = true;
-		deathsLeft setPoint( "RIGHT", "RIGHT BOTTOM", -22, -130 );
+		deathsLeft setPoint( "RIGHT", "RIGHT BOTTOM", -14, -130 );
 		deathsLeft.alignX = "right";
 		deathsLeft.sort = -1;
 		deathsLeft.alpha = 0.75;
@@ -490,7 +490,7 @@ showGunGameInfo()
 	killsLeft = self createFontString( "objective", 1.4 );
 	killsLeft.archived = false;
 	killsLeft.hideWhenInMenu = true;
-	killsLeft setPoint( "RIGHT", "RIGHT BOTTOM", -22, -90 );
+	killsLeft setPoint( "RIGHT", "RIGHT BOTTOM", -14, -90 );
 	killsLeft.alignX = "right";
 	killsLeft.sort = -1;
 	killsLeft.alpha = 0.75;

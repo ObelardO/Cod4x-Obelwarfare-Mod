@@ -176,7 +176,7 @@ onPlayerSpawned()
 		if( !isDefined( self.hud_healthsystem_icon ) )
 		{
 			self.hud_healthsystem_icon = createIcon( "bleeding", 32, 32 );
-			self.hud_healthsystem_icon setPoint( "BOTTOM RIGHT", undefined, -20, -133 );
+			self.hud_healthsystem_icon setPoint( "BOTTOM RIGHT", undefined, -14, -133 );
 			self.hud_healthsystem_icon.alpha = 0;
 			self.hud_healthsystem_icon.archived = true;
 			self.hud_healthsystem_icon.hideWhenInMenu = true;

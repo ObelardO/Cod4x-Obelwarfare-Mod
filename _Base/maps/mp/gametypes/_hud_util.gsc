@@ -698,7 +698,7 @@ showPerk( index, perk, ypos )
 	{
 		assert( !isdefined( self.perkname[ index ] ) );
 		
-		xpos = -20;
+		xpos = -14;
 		if ( level.splitScreen )
 			ypos = 0 - (80 + iconsize * (2 - index));
 		else

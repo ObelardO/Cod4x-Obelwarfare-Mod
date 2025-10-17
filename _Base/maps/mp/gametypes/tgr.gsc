@@ -251,7 +251,7 @@ onSpawnPlayer()
 
 	if ( !isDefined( self.carryIcon ) ) {
 		self.carryIcon = createIcon( "dogtag", 32, 32 );
-		self.carryIcon setPoint( "CENTER", "RIGHT BOTTOM", -31, -100 );
+		self.carryIcon setPoint( "CENTER", "RIGHT BOTTOM", -29, -100 );
 		self.carryIcon.archived = true;
 		self.carryIcon.hideWhenInMenu = true;
 		self.carryIcon.sort = -3;

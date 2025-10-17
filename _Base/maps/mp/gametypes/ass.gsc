@@ -543,7 +543,7 @@ pickVIP()
 	
 	// Create the VIP icon and tell the player about it
 	level.playerVIP.vipIcon = level.playerVIP createIcon( "icon_vip", 32, 32 );
-	level.playerVIP.vipIcon setPoint( "CENTER", "RIGHT BOTTOM", -31, -100 );
+	level.playerVIP.vipIcon setPoint( "CENTER", "RIGHT BOTTOM", -29, -100 );
 	
 	level.playerVIP.vipIcon.alpha = 0.75;
 	

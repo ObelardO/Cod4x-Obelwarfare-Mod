@@ -329,7 +329,7 @@ showTeamStatus()
 	
 	// Create the icon and the number of players frozen
 	frozenIcon = self createIcon( "icon_snowflake", 32, 32 );
-	frozenIcon setPoint( "CENTER", "RIGHT BOTTOM", -31, -100 );
+	frozenIcon setPoint( "CENTER", "RIGHT BOTTOM", -29, -100 );
 	frozenIcon.archived = true;
 	frozenIcon.hideWhenInMenu = true;
 	frozenIcon.sort = -3;
