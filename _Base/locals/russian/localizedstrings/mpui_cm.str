@@ -63,20 +63,11 @@ LANG_RUSSIAN "Снежный храм"
 
 
 
-REFERENCE mp_after_tchernobyl
-LANG_RUSSIAN "После Чернобыля"
-
 REFERENCE mp_apesgorod
 LANG_RUSSIAN "Мирный"
 
 REFERENCE mp_atp
 LANG_RUSSIAN "АТП"
-
-REFERENCE mp_blackrock
-LANG_RUSSIAN "Черная скала"
-
-REFERENCE mp_bo2nuketown
-LANG_RUSSIAN "Дум-таун"
 
 REFERENCE mp_bo2paintball
 LANG_RUSSIAN "Пейнтбол"
@@ -84,26 +75,14 @@ LANG_RUSSIAN "Пейнтбол"
 REFERENCE mp_brdo
 LANG_RUSSIAN "Брдо"
 
-REFERENCE mp_broadcast2
-LANG_RUSSIAN "Новая телестанция"
-
 REFERENCE mp_burg
 LANG_RUSSIAN "Бёрг"
-
-REFERENCE mp_cargo_shipment
-LANG_RUSSIAN "Мокрое отправление"
 
 REFERENCE mp_chernobyl
 LANG_RUSSIAN "Чернобль"
 
 REFERENCE mp_crash_2
 LANG_RUSSIAN "Крушение Ремейк"
-
-REFERENCE mp_crash3
-LANG_RUSSIAN "Новое крушение"
-
-REFERENCE mp_doowood
-LANG_RUSSIAN "Топи"
 
 REFERENCE mp_dust2
 LANG_RUSSIAN "Пыльная"
@@ -117,9 +96,6 @@ LANG_RUSSIAN "Промзона"
 REFERENCE mp_farmhouse
 LANG_RUSSIAN "Ферма 1944"
 
-REFERENCE mp_hollow
-LANG_RUSSIAN "Окружение"
-
 REFERENCE mp_i2
 LANG_RUSSIAN "Рудник"
 
@@ -128,9 +104,6 @@ LANG_RUSSIAN "Вторжение"
 
 REFERENCE mp_mission
 LANG_RUSSIAN "Миссия в Рио"
-
-REFERENCE mp_fatal_morgana
-LANG_RUSSIAN "Моргана"
 
 REFERENCE mp_fav
 LANG_RUSSIAN "Фавела"
@@ -141,17 +114,11 @@ LANG_RUSSIAN "Хисар"
 REFERENCE mp_mw2_rust
 LANG_RUSSIAN "Коррозия"
 
-REFERENCE mp_ngbc
-LANG_RUSSIAN "Ночная кирха"
-
 REFERENCE mp_ngbc_day
 LANG_RUSSIAN "Кирха"
 
 REFERENCE mp_ngbc_shipment
 LANG_RUSSIAN "Погрузка"
-
-REFERENCE mp_oldschool
-LANG_RUSSIAN "Школа"
 
 REFERENCE mp_oukhta
 LANG_RUSSIAN "Охта"
@@ -162,26 +129,11 @@ LANG_RUSSIAN "Припять"
 REFERENCE mp_rasalem
 LANG_RUSSIAN "Расалем"
 
-REFERENCE mp_rescue2014
-LANG_RUSSIAN "Эвакуация"
-
-REFERENCE mp_ricochet
-LANG_RUSSIAN "Рикошет"
-
-REFERENCE mp_sc_hangar
-LANG_RUSSIAN "Ангар"
-
 REFERENCE mp_sconsegrad
 LANG_RUSSIAN "Арзамас"
 
 REFERENCE mp_selo
 LANG_RUSSIAN "Село"
-
-REFERENCE mp_shipment44
-LANG_RUSSIAN "Отправление 1994"
-
-REFERENCE mp_spbase
-LANG_RUSSIAN "Гарнизон"
 
 REFERENCE mp_steamlab
 LANG_RUSSIAN "Лаборатория"
@@ -197,14 +149,5 @@ LANG_RUSSIAN "Стычка"
 
 REFERENCE mp_summit
 LANG_RUSSIAN "Канатная дорога"
-
-REFERENCE mp_uplink
-LANG_RUSSIAN "UPLINK"
-
-REFERENCE mp_vertical
-LANG_RUSSIAN "Холм"
-
-REFERENCE mp_vukovar
-LANG_RUSSIAN "Факел"
 
 ENDMARKER
