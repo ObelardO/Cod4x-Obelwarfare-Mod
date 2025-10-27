@@ -54,12 +54,12 @@ killcam(
 		else if (sWeapon == "claymore_mp")
 		{
 			camtime = 3.0;
-			camdist = 40;
+			camdist = 0;
 		}
 		else if (sWeapon == "frag_grenade_mp")
 		{
 			camtime = 4.0; // show long enough to see grenade thrown
-			camdist = 20;
+			camdist = 160;
 		}
 		else if ( !respawn ) // if we're not going to respawn, we can take more time to watch what happened
 		{

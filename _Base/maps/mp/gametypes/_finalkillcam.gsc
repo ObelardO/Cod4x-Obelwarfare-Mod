@@ -30,15 +30,15 @@ SetKillcamStyle( style )
         
 beginFK()
 {
-    self endon("disconnect");
+    self endon( "disconnect" );
     
-    for(;;)
+    for( ;; )
     {
-        self waittill("beginFK", winner);
+        self waittill( "beginFK", winner );
         
-        self notify ( "reset_outcome" );
+        self notify( "reset_outcome" );
         
-        if(level.TeamBased)
+        if( level.TeamBased && level.gametype != "bel" )
         {
             self finalkillcam(
                 level.KillInfo[winner]["attacker"], 
@@ -86,7 +86,7 @@ finalkillcam( attacker, attackerNum, deathtime, victim, weapon, killcamentity)
     else if (weapon == "claymore_mp")
     {
         camtime = 3.0;
-        camdist = 100;
+        camdist = 0;
     }
 
     else if (weapon == "frag_grenade_mp")

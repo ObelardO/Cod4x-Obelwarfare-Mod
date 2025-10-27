@@ -1669,7 +1669,7 @@ endGame( winner, endReasonText )
 		}
 	}
 
-	wait 9;
+	wait 6;
 
     if(level.players.size > 0 && level.gametype != "sd")
     {
@@ -1748,7 +1748,8 @@ endGame( winner, endReasonText )
 		}
 	}
 	
-	openwarfare\_advancedmvs::mapVoting_Intermission();
+	//openwarfare\_advancedmvs::mapVoting_Intermission();
+	thread maps\mp\gametypes\votemap::map();
 	
 	players = level.players;
 	for ( index = 0; index < players.size; index++ )
@@ -1759,7 +1760,7 @@ endGame( winner, endReasonText )
 		player closeInGameMenu();
 	}
 
-	exitLevel( false );
+	//exitLevel( false );
 }
 
 
