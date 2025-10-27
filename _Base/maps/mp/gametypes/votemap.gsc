@@ -148,8 +148,14 @@ voteMenuResponse()
 	for(;;)
 	{
 		self waittill("menuresponse",menu,response);
+
+		
 		if(menu == game["votemap"])
+		{
+			self iprintLn( "MAP RESP: " + response);
+
 			votemap(response);
+		}
 	}
 }
 
