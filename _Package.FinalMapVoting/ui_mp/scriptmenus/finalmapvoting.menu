@@ -79,7 +79,7 @@ itemDef \
     textScale                 0.375 \
     text                      "" \
     mouseEnter                { play mouse_over } \
-    action                    { scriptmenuresponse RESPONSE_CMD } \
+    action                    { play mouse_click; scriptmenuresponse RESPONSE_CMD } \
     visible 1                 \
 } \
 itemDef \

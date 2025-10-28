@@ -195,8 +195,6 @@ rawfile,maps/mp/gametypes/vg.gsc
 rawfile,maps/mp/gametypes/vg.txt
 rawfile,maps/mp/gametypes/war.gsc
 
-rawfile,maps/mp/gametypes/votemap.gsc
-menufile,ui_mp/scriptmenus/votemap.menu
 
 fx,freezetag/defrostbeam
 fx,freezetag/defrostbeamred

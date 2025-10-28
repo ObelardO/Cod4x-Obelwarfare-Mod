@@ -24,9 +24,6 @@ init()
 	game["menu_changeclass"] = "changeclass";
 	game["menu_changeclass_offline"] = "changeclass_offline";
 	
-	game["votemap"] = "votemap";
-	precacheMenu("votemap");
-
 	if ( !level.console )
 	{
 		game["menu_callvote"] = "callvote";

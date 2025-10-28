@@ -251,6 +251,7 @@ SetupCallbacks()
 	level.onLoadoutGiven = ::blank;
 
 	level.onEndGame = ::blank;
+	level.onEndGameMapVote = ::blank;
 
 	level.autoassign = ::menuAutoAssign;
 	level.spectator = ::menuSpectator;
@@ -1748,8 +1749,12 @@ endGame( winner, endReasonText )
 		}
 	}
 	
+	if ( isDefined( level.onEndGameMapVote ) )
+	{
+		[[level.onEndGameMapVote]] ();
+	}
+
 	//openwarfare\_advancedmvs::mapVoting_Intermission();
-	thread maps\mp\gametypes\votemap::map();
 	
 	players = level.players;
 	for ( index = 0; index < players.size; index++ )
@@ -1760,7 +1765,7 @@ endGame( winner, endReasonText )
 		player closeInGameMenu();
 	}
 
-	//exitLevel( false );
+	exitLevel( false );
 }
 
 

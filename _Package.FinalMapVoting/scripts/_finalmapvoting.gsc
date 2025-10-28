@@ -1,6 +1,48 @@
+//**************************************************************//
+//  _____ _          _    _    _             __                 //
+// |  _  | |        | |  | |  | |           / _|                //
+// | | | | |__   ___| |  | |  | | __ _ _ __| |_ __ _ _ __ ___   //
+// | | | | '_ \ / _ \ |  | |/\| |/ _` | '__|  _/ _` | '__/ _ \  //
+// \ \_/ / |_) |  __/ |__\  /\  / (_| | |  | || (_| | | |  __/  //
+//  \___/|_.__/ \___|____/\/  \/ \__,_|_|  |_| \__,_|_|  \___|  //
+//                                                              //
+//            Website: http://cod4.obelardo.ru                  //
+//**************************************************************//
+
+#include openwarfare\_utils;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                         FINAL MAP VOTING SYSTEM                                         //
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+init()
+{
+	level.scr_fmw_enabled = getdvarx( "scr_fmw_enabled", "int", 0, 0, 1 );
+
+	if( !level.scr_fmw_enabled )
+		return;
+
+	level.onEndGameMapVote = ::onEngGameMapVote;
+
+	game["menu_fmv"] = "finalmapvoting";
+	precacheMenu( game["menu_fmv"] );
+}
+
+onEngGameMapVote()
+{
+	//level thread 
+	thread map();
+
+	wait 35;
+}
+
 map()
 {
-	iprintlnbold("^1STARTING vote!");
+	if( !isDefined( level.scr_fmw_enabled ) || !level.scr_fmw_enabled )
+		return;
+
+	//iprintlnbold("^1STARTING vote!");
+
 
 	logPrint("----- Map Vote Started -----");
 
@@ -79,6 +121,10 @@ map()
 		for(i=0;i<level.players.size;i++)
 		{
 			player = level.players[i];
+
+			player iPrintLn( "START VOTING" );
+
+
 			allClientDvar("map1_realname", level.map["map" + 1 + "_realname"]);
 			allClientDvar("map2_realname", level.map["map" + 2 + "_realname"]);
 			allClientDvar("map3_realname", level.map["map" + 3 + "_realname"]);
@@ -112,7 +158,7 @@ map()
 				if(player.sessionstate != "playing")
 					player notify("menuresponse", game["menu_team"], "autoassign");
 				wait 0.05;
-				player openMenu("votemap");
+				player openMenu( game["menu_fmv"] );
 			}
 		}
 		time = level.votetime;
@@ -150,7 +196,7 @@ voteMenuResponse()
 		self waittill("menuresponse",menu,response);
 
 		
-		if(menu == game["votemap"])
+		if(menu == game["menu_fmv"])
 		{
 			self iprintLn( "MAP RESP: " + response);
 
@@ -426,23 +472,23 @@ votemap(response)
 	{
 		switch(response)
 		{
-			case"map1": if(self.lastvoted != 1){self playLocalSound("mouse_click");level.map["map" + self.lastvoted + "_votes"] -= 1;
+			case"map1": if(self.lastvoted != 1){level.map["map" + self.lastvoted + "_votes"] -= 1;
 						level.map["map1_votes"] += 1; self.lastvoted = 1; self setClientDvar("selected_map", 1);} break;
-			case"map2": if(self.lastvoted != 2){self playLocalSound("mouse_click");level.map["map" + self.lastvoted + "_votes"] -= 1;
+			case"map2": if(self.lastvoted != 2){level.map["map" + self.lastvoted + "_votes"] -= 1;
 						level.map["map2_votes"] += 1; self.lastvoted = 2; self setClientDvar("selected_map", 2);} break;
-			case"map3": if(self.lastvoted != 3){self playLocalSound("mouse_click");level.map["map" + self.lastvoted + "_votes"] -= 1;
+			case"map3": if(self.lastvoted != 3){level.map["map" + self.lastvoted + "_votes"] -= 1;
 						level.map["map3_votes"] += 1; self.lastvoted = 3; self setClientDvar("selected_map", 3);} break;
-			case"map4": if(self.lastvoted != 4){self playLocalSound("mouse_click");level.map["map" + self.lastvoted + "_votes"] -= 1;
+			case"map4": if(self.lastvoted != 4){level.map["map" + self.lastvoted + "_votes"] -= 1;
 						level.map["map4_votes"] += 1; self.lastvoted = 4; self setClientDvar("selected_map", 4);} break;
-			case"map5": if(self.lastvoted != 5){self playLocalSound("mouse_click");level.map["map" + self.lastvoted + "_votes"] -= 1;
+			case"map5": if(self.lastvoted != 5){level.map["map" + self.lastvoted + "_votes"] -= 1;
 						level.map["map5_votes"] += 1; self.lastvoted = 5; self setClientDvar("selected_map", 5);} break;
-			case"map6": if(self.lastvoted != 6){self playLocalSound("mouse_click");level.map["map" + self.lastvoted + "_votes"] -= 1;
+			case"map6": if(self.lastvoted != 6){level.map["map" + self.lastvoted + "_votes"] -= 1;
 						level.map["map6_votes"] += 1; self.lastvoted = 6; self setClientDvar("selected_map", 6);} break;
-			case"map7": if(self.lastvoted != 7){self playLocalSound("mouse_click");level.map["map" + self.lastvoted + "_votes"] -= 1;
+			case"map7": if(self.lastvoted != 7){level.map["map" + self.lastvoted + "_votes"] -= 1;
 						level.map["map7_votes"] += 1; self.lastvoted = 7; self setClientDvar("selected_map", 7);} break;
-			case"map8": if(self.lastvoted != 8){self playLocalSound("mouse_click");level.map["map" + self.lastvoted + "_votes"] -= 1;
+			case"map8": if(self.lastvoted != 8){level.map["map" + self.lastvoted + "_votes"] -= 1;
 						level.map["map8_votes"] += 1; self.lastvoted = 8; self setClientDvar("selected_map", 8);} break;
-			case"map9": if(self.lastvoted != 9){self playLocalSound("mouse_click");level.map["map" + self.lastvoted + "_votes"] -= 1;
+			case"map9": if(self.lastvoted != 9){level.map["map" + self.lastvoted + "_votes"] -= 1;
 						level.map["map9_votes"] += 1; self.lastvoted = 9; self setClientDvar("selected_map", 9);} break;
 		}
 	}
