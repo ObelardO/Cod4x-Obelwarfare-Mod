@@ -118,7 +118,7 @@ itemDef \
 {
     menuDef
     {
-        name                      "votemap"
+        name                      "finalmapvoting"
         rect                      0 0 640 480 HORIZONTAL_ALIGN_SUBLEFT VERTICAL_ALIGN_SUBTOP
         foreColor                 1 1 1 1
         backColor                 0 0 0 0

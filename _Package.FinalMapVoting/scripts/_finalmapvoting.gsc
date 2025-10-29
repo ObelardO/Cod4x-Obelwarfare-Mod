@@ -17,34 +17,35 @@
 
 init()
 {
-	level.scr_fmw_enabled = getdvarx( "scr_fmw_enabled", "int", 0, 0, 1 );
+	level.scr_fmv_enabled = getdvarx( "scr_fmv_enabled", "int", 0, 0, 1 );
 
-	if( !level.scr_fmw_enabled )
+	if( !level.scr_fmv_enabled )
+	{
+		logPrint(" Package FMV disabled \n");
 		return;
+	}
+	
 
 	level.onEndGameMapVote = ::onEngGameMapVote;
 
 	game["menu_fmv"] = "finalmapvoting";
 	precacheMenu( game["menu_fmv"] );
+
+	logPrint(" Package FMV started \n");
 }
 
 onEngGameMapVote()
 {
 	//level thread 
-	thread map();
+	map();
 
 	wait 35;
 }
 
 map()
 {
-	if( !isDefined( level.scr_fmw_enabled ) || !level.scr_fmw_enabled )
+	if( !isDefined( level.scr_fmv_enabled ) || !level.scr_fmv_enabled )
 		return;
-
-	//iprintlnbold("^1STARTING vote!");
-
-
-	logPrint("----- Map Vote Started -----");
 
 	level.votetime = 30;
 
