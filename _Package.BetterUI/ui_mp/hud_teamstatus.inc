@@ -170,8 +170,7 @@ menuDef
         decoration
     }
 
-
     TEAMSTAT_HUD_TIMER( secondsAsCountdown( timeLeft() ), 1 1 1 HUD_FOREGROUND_ALPHA, timeLeft() >= 60 && !dvarBool( ui_bomb_timer ) )
-    TEAMSTAT_HUD_TIMER( secondsAsCountdown( timeLeft() ), 1 0.75 0 HUD_FOREGROUND_ALPHA, && timeLeft() >= 30 && timeLeft() < 60 && !dvarBool( ui_bomb_timer ) )
-    TEAMSTAT_HUD_TIMER( secondsAsCountdown( timeLeft() ) + "." + ( 9 - int( ( milliseconds() / 100 ) % 10 ) ), 1 0.5 0 1, ( (timeLeft() >= 0 && timeLeft() < 30) || dvarBool( ui_bomb_timer ) ) )
+    TEAMSTAT_HUD_TIMER( secondsAsCountdown( timeLeft() ), 1 0.75 0 HUD_FOREGROUND_ALPHA, timeLeft() >= 30 && timeLeft() < 60 && !dvarBool( ui_bomb_timer ) )
+    TEAMSTAT_HUD_TIMER( secondsAsCountdown( timeLeft() ) + "." + ( 9 - int( ( milliseconds() / 100 ) % 10 ) ), 1 0.5 0 1, (timeLeft() >= 0 && timeLeft() < 30) || dvarBool( ui_bomb_timer ) )
 }
