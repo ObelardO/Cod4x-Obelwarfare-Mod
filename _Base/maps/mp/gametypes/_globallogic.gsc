@@ -1735,7 +1735,7 @@ endGame( winner, endReasonText )
 		}
 	}
 
-	thread timeLimitClock_Intermission( level.scr_intermission_time, ( level.scr_amvs_enable == 0 || game["amvs_skip_voting"] ) );
+	thread timeLimitClock_Intermission( level.scr_intermission_time, ( level.scr_amvs_enable == 0 || game["skip_final_map_voting"] ) );
 	wait (level.scr_intermission_time);
 
 	if ( level.scr_eog_fastrestart != 0 ) {	

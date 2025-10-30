@@ -26,7 +26,7 @@
 #define FLASH_OFS2 	((sin(milliseconds()/90))*4)
 
 #define HUD_ALPHA 0.65
-#define HUD_BACK_ALPHA 0.35
+#define HUD_BACK_ALPHA 0.5
 #define HUD_FOREGROUND_ALPHA 0.75
 #define DPAD_ICON_ALPHA 0.65
 

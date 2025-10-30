@@ -60,7 +60,7 @@ monitorMap()
 						// We check one more time that rotate if there are no players
 						if ( !enoughPlayers() ) {
 							game["rotateifempty"] = 0;
-							game["amvs_skip_voting"] = true;
+							game["skip_final_map_voting"] = true;
 							exitLevel( false );								
 						}						
 					}
