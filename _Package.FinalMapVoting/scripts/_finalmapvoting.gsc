@@ -56,9 +56,9 @@ resetVoteOptions()
 	for( i = 1; i <= level.fmvMod.voteOptions.size; i++ )
 	{
 		level.fmvMod.voteOptions[i].mapName = "";
-		level.fmvMod.voteOptions[i].mapTitle = "";
+		//level.fmvMod.voteOptions[i].mapTitle = "";
 		level.fmvMod.voteOptions[i].gameType = "";
-		level.fmvMod.voteOptions[i].gameTypeTitle = "";
+		//level.fmvMod.voteOptions[i].gameTypeTitle = "";
 		level.fmvMod.voteOptions[i].votes = 0;
 	}
 }
@@ -72,8 +72,8 @@ initPlayer()
 		dvarPrefix = "ui_fmv_option_" + i + "_";
 
 		self setClientDvars(
-			dvarPrefix + "map", voteOption.mapTitle,
-			dvarPrefix + "gametype", voteOption.gameTypeTitle,
+			dvarPrefix + "map", voteOption.mapName,
+			dvarPrefix + "gametype", voteOption.gameType,
 			dvarPrefix + "votes", voteOption.votes
 		);
 	}
@@ -140,9 +140,9 @@ onEngGameMapVote()
 					mgCombo = mgCombos[mgComboIndex];
 
 					level.fmvMod.voteOptions[i].mapName = mgCombo["mapname"];
-					level.fmvMod.voteOptions[i].mapTitle = getMapTitle( mgCombo["mapname"] );
+					//level.fmvMod.voteOptions[i].mapTitle = getMapTitle( mgCombo["mapname"] );
 					level.fmvMod.voteOptions[i].gameType = mgCombo["gametype"];
-					level.fmvMod.voteOptions[i].gameTypeTitle = mgCombo["gametype"];
+					//level.fmvMod.voteOptions[i].gameTypeTitle = mgCombo["gametype"];
 					level.fmvMod.voteOptions[i].votes = 0;
 
 					isComboUnique = true;
@@ -184,7 +184,7 @@ onEngGameMapVote()
 
 		resultOption = level getVotingResult();
 
-		setAllClientsDvar( "ui_fmv_time", "Next map:^3 " + resultOption.mapTitle );
+		setAllClientsDvar( "ui_fmv_time", "Next map:^3 " + resultOption.mapName );
 		setAllClientsDvar( "ui_fmv_vote_done", 1 );
 
 		logPrint("FMV;R;" + resultOption.mapName + ";" + resultOption.gameType + "\n");
@@ -257,6 +257,7 @@ makeVote( response )
 //                                         FINAL MAP VOTING UTILS                                          //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/*
 
 getMapTitle( mapName )
 {
@@ -367,6 +368,7 @@ getCustomMapTitle( mapName )
 	return mapTitle;
 }
 
+*/
 
 changelevel( map, gameType, delay )
 {

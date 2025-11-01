@@ -1,2 +1,5 @@
 rawfile,scripts/_finalmapvoting.gsc
 menufile,ui_mp/scriptmenus/finalmapvoting.menu
+
+localize,mpui_maps
+localize,mpui_gametypes

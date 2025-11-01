@@ -1,0 +1,84 @@
+//**************************************************************//
+//  _____ _          _    _    _             __                 //
+// |  _  | |        | |  | |  | |           / _|                //
+// | | | | |__   ___| |  | |  | | __ _ _ __| |_ __ _ _ __ ___   //
+// | | | | '_ \ / _ \ |  | |/\| |/ _` | '__|  _/ _` | '__/ _ \  //
+// \ \_/ / |_) |  __/ |__\  /\  / (_| | |  | || (_| | | |  __/  //
+//  \___/|_.__/ \___|____/\/  \/ \__,_|_|  |_| \__,_|_|  \___|  //
+//                                                              //
+//            Website: http://cod4.obelardo.ru                  //
+//**************************************************************//
+
+VERSION          "1"
+CONFIG           "C:\trees\cod3\cod3\bin\StringEd.cfg"
+FILENOTES        ""
+
+//******************************************************************************
+// STOCK GAMETYPES
+//******************************************************************************
+
+REFERENCE DM
+LANG_RUSSIAN "Свободная игра"
+
+REFERENCE WAR
+LANG_RUSSIAN "Командный бой"
+
+REFERENCE SD
+LANG_RUSSIAN "Найти и уничтожить"
+
+REFERENCE DOM
+LANG_RUSSIAN "Первенство"
+
+REFERENCE KOTH
+LANG_RUSSIAN "Штаб"
+
+REFERENCE SAB
+LANG_RUSSIAN "Саботаж"
+
+REFERENCE CTF
+LANG_RUSSIAN "Захват флага"
+
+//******************************************************************************
+// OPENWARFARE GAMETYPES
+//******************************************************************************
+
+REFERENCE ASS
+LANG_RUSSIAN "Особо важная персона"
+
+REFERENCE BEL
+LANG_RUSSIAN "Охотники и беглецы"
+
+REFERENCE CH
+LANG_RUSSIAN "Захватить и удержать"
+
+REFERENCE FTAG
+LANG_RUSSIAN "Заморозка"
+
+REFERENCE GG
+LANG_RUSSIAN "Гонка вооружений"
+
+REFERENCE GR
+LANG_RUSSIAN "Жадина"
+
+REFERENCE TGR
+LANG_RUSSIAN "Командная жадина"
+
+REFERENCE HNS
+LANG_RUSSIAN "Прятки"
+
+REFERENCE LMS
+LANG_RUSSIAN "Последний выживший"
+
+REFERENCE LTS
+LANG_RUSSIAN "Выжившая команда"
+
+REFERENCE OITC
+LANG_RUSSIAN "Последняя пуля"
+
+REFERENCE RE
+LANG_RUSSIAN "Шпионаж"
+
+REFERENCE SS
+LANG_RUSSIAN "Рулетка"
+
+ENDMARKER
