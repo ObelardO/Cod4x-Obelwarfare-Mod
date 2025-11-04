@@ -601,12 +601,12 @@ onMenuResponse()
 						// Make sure the map rotation is not too long
 						if ( nextRotation.size + newMap.size <= 1020 ) {
 							setDvar( "sv_mapRotationCurrent",  newMap + " " + nextRotation );
-							game["amvs_skip_voting"] = true;
+							game["skip_final_map_voting"] = true;
 							openwarfare\_maprotationcs::getNextMapInRotation();
 						}
 					} else {
 						// Don't add the new map to the rotation but prevent the map votation anyway
-						game["amvs_skip_voting"] = true;
+						game["skip_final_map_voting"] = true;
 					}
 					break;		
 

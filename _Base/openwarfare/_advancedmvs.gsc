@@ -23,8 +23,8 @@ init()
 	level.mapVotingInProgress = false;
 
 	// Variable to be used to know if the admin has set the next gametype/map manually
-	if ( !isDefined( game["amvs_skip_voting"] ) )
-		game["amvs_skip_voting"] = false;	
+	if ( !isDefined( game["skip_final_map_voting"] ) )
+		game["skip_final_map_voting"] = false;	
 		
 	// If the advanced map voting system is not enabled then there's nothing else to do here
 	if ( level.scr_amvs_enable == 0 )
@@ -54,6 +54,8 @@ init()
 
 	precacheMenu( "advancedmvs" );
 
+	level.onEndGameMapVote = ::mapVoting_Intermission;
+
 	level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
 }
 
@@ -61,7 +63,7 @@ init()
 mapVoting_Intermission()
 {
 	// Check if the map voting system is not enabled
-	if ( level.scr_amvs_enable == 0 || game["amvs_skip_voting"] )
+	if ( level.scr_amvs_enable == 0 || game["skip_final_map_voting"] )
 		return;
 
 	// Save the next map in the rotation

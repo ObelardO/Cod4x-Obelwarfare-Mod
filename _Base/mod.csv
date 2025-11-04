@@ -13,8 +13,6 @@ ignore,mod_ignore
 
 localize,ow
 localize,props
-localize,mpui
-localize,mpui_cm
 
 rawfile,maps/createfx/mp_backlot_fx.gsc
 rawfile,maps/createfx/mp_bloc_fx.gsc
@@ -194,6 +192,7 @@ rawfile,maps/mp/gametypes/tgr.txt
 rawfile,maps/mp/gametypes/vg.gsc
 rawfile,maps/mp/gametypes/vg.txt
 rawfile,maps/mp/gametypes/war.gsc
+
 
 fx,freezetag/defrostbeam
 fx,freezetag/defrostbeamred

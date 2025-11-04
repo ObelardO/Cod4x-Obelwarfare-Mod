@@ -61,7 +61,7 @@ onServerLoadSet()
 	level waittill( "server_load", newServerLoad );
 	
 	// Check if we need to change the map rotation based on the new server load
-	if ( !game["amvs_skip_voting"] && level.sv_mapRotationLoadBased == 1 && oldServerLoad != newServerLoad ) {
+	if ( !game["skip_final_map_voting"] && level.sv_mapRotationLoadBased == 1 && oldServerLoad != newServerLoad ) {
 		// Save the current rotation
 		setDvar( "_mrcs_sv_mapRotationCurrent_" + oldServerLoad, getDvar( "sv_mapRotationCurrent" ) );
 		setDvar( "sv_mapRotationCurrent", "" );

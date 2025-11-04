@@ -452,7 +452,7 @@ menuDef
     itemDef
     {
         name "healthbarback"
-        rect 19 449 93 6
+        rect 20 449 93 6
         forecolor 0.1 0.1 0.1 0.3
         background "white"
         ownerdraw CG_PLAYER_BAR_HEALTH_BACK

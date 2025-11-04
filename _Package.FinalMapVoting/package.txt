@@ -1,0 +1,4 @@
+name=Final Map Voting
+iwd=mapvote
+gsc=_finalmapvoting
+cfg=finalmapvoting

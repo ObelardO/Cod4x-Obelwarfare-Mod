@@ -163,7 +163,7 @@ dayCycleSounds( dayCycle )
 	
 	for (;;)
 	{
-		wait ( randomFloatRange( 5.0, 15.0 ) );
+		wait ( randomFloatRange( 10.0, 20.0 ) );
 		
 		// Check if we have a sound for the current day cycle
 		if ( dayCycle[ game["_dcs_daycycle"] ]["sound"] != "" ) {

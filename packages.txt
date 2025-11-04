@@ -6,6 +6,7 @@ PlayerCard
 SplashIcons
 IW4MAdmin
 BetterUI
+FinalMapVoting
 //TrashRemover // Not worked (1000 xmodels limit)
 //Event.HappyBirthday
 //Event.Spring
