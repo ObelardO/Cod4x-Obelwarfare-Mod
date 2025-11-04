@@ -301,8 +301,8 @@
 
 
 {
-	map			"MP_WINTER_RASALEM"
-	longname	"mpui_maps_MP_WINTER_RASALEM"
+	map			"mp_winter_rasalem"
+	longname	"mpui_maps_mp_winter_rasalem"
 	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
 }
 

@@ -54,6 +54,8 @@ init()
 
 	precacheMenu( "advancedmvs" );
 
+	level.onEndGameMapVote = ::mapVoting_Intermission;
+
 	level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
 }
 
