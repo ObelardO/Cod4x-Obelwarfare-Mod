@@ -165,6 +165,7 @@ onEngGameMapVote()
 
 	setAllClientsDvar( "ui_fmv_winner", resultOption.index );
 	setAllClientsDvar( "ui_fmv_vote_done", 1 );
+	setAllClientsDvar( "ui_fmv_selected_index", 1337 );
 
 	logPrint("FMV;R;" + resultOption.mapName + ";" + resultOption.gameType + "\n");
 
