@@ -405,6 +405,7 @@ xmodel,health_obj
 xmodel,hp_medium
 xmodel,iceberg
 xmodel,icebergred
+xmodel,weapon_bf3_medicbag
 
 weapon,mp/binoculars_mp
 

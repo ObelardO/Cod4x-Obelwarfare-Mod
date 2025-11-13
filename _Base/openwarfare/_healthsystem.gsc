@@ -98,8 +98,8 @@ init()
   precacheShader( "bandaging" );
   precacheShader( "bleeding" );
   
-  precacheModel( "health_obj" );
-  precacheModel( "hp_medium" );
+  precacheModel( "weapon_bf3_medicbag" );
+  //precacheModel( "weapon_bf3_medicbag" );
 
   preCacheString( &"OW_STATUS_BLEEDING" );
   preCacheString( &"OW_STATUS_HEALING" );
@@ -361,18 +361,22 @@ dropHealthPack()
 	healthPackTrigger = spawn( "trigger_radius", dropOrigin, 0, 10, 2 );
 	healthPackModel = spawn( "script_model", dropOrigin );
 	healthPackModel.angles = dropAngles;
-	healthPackModel setModel( "hp_medium" );
+	healthPackModel setModel( "weapon_bf3_medicbag" );
 	
+	// TODO return glowing health pack model
+	/*
 	if ( level.scr_healthsystem_healthpacks_enable == 2 ) 
 	{
 		healthPackGlow = spawn( "script_model", dropOrigin );
 		healthPackGlow.angles = dropAngles;
-		healthPackGlow setModel( "health_obj" );	
+		healthPackGlow setModel( "weapon_bf3_medicbag" );	
 	} 
 	else 
 	{
 		healthPackGlow = undefined;
 	}
+	*/
+	healthPackGlow = undefined;
 
 	// Function to control the pickup
 	healthPackTrigger thread pickupHealthPackThink( healthPackModel, healthPackGlow );
