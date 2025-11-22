@@ -675,12 +675,27 @@ onMenuResponse()
 					// Check if this player is still connected and alive
 					player = self getCurrentPlayer( false );
 					if ( isDefined( player ) ) {
-						if ( isDefined( player.pers ) && isDefined( player.pers["team"] ) && player.pers["team"] != "spectator" && isAlive( player ) ) {
+						if ( isDefined( player.pers ) && isDefined( player.pers["team"] ) && player.pers["team"] != "spectator" ) {
 							// Return player to his/her last known spawn
+
 							self adminActionLog( "RS", player );
-							player iprintlnbold( &"OW_AACP_PLAYER_RETURNED" );
-							player setOrigin( player.spawnOrigin );
-							player setPlayerAngles( player.spawnAngles );
+
+							if ( isAlive( player ) )
+							{
+								self adminActionLog( "RS", player );
+								player iprintlnbold( &"OW_AACP_PLAYER_RETURNED" );
+								player setOrigin( player.spawnOrigin );
+								player setPlayerAngles( player.spawnAngles );
+
+								break;
+							}
+
+							if ( !player.hasSpawned )
+							{
+								player iprintlnbold( &"OW_AACP_PLAYER_REVIVED" );
+								player maps\mp\gametypes\_globallogic::forceSpawnPlayer();
+							}
+
 						}
 					} else {
 						self setClientDvar( "ui_aacp_player", self getNextPlayer() );

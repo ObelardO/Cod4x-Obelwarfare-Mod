@@ -563,10 +563,10 @@ LANG_RUSSIAN "Prestige Supreme Commander"
 // openwarfare/_advancedacp.gsc
 //******************************************************************************
 REFERENCE	AACP_TITLE
-LANG_RUSSIAN "Администрирование сервера"
+LANG_RUSSIAN "АДМИНИСТРИРОВАНИЕ"
 
 REFERENCE	AACP_MAP_CONTROL
-LANG_RUSSIAN "^3Управление картами"
+LANG_RUSSIAN "Управление картами"
 
 REFERENCE	AACP_MAP_LOAD
 LANG_RUSSIAN "Загрузить карту/режим игры"
@@ -587,7 +587,7 @@ REFERENCE	AACP_MAP_NEXT
 LANG_RUSSIAN "Перейти на следующую карту"
 
 REFERENCE	AACP_RULESET_CONTROL
-LANG_RUSSIAN "^3Управление правилами игры"
+LANG_RUSSIAN "Управление правилами игры"
 
 REFERENCE	AACP_RULESET_LOAD
 LANG_RUSSIAN "Загрузить правила игры"
@@ -596,13 +596,16 @@ REFERENCE	AACP_NORULESET
 LANG_RUSSIAN "^1<Правила игры не активированы>"
 
 REFERENCE	AACP_PLAYER_CONTROL
-LANG_RUSSIAN "^3Администрирование"
+LANG_RUSSIAN "Управление игроками"
 
 REFERENCE AACP_PLAYER_RETURNSPAWN
-LANG_RUSSIAN "Вернуть игрока на точку возрождения"
+LANG_RUSSIAN "Вернуть на спавн / возрадить игрока"
 
 REFERENCE AACP_PLAYER_RETURNED
-LANG_RUSSIAN "^3Вас вернули на вашу последнюю точку возрождения!"
+LANG_RUSSIAN "Вы были перемещены администратором"
+
+REFERENCE AACP_PLAYER_REVIVED
+LANG_RUSSIAN "Вы были возрождены администратором"
 
 REFERENCE AACP_PLAYER_POINTOUT
 LANG_RUSSIAN "Выделить игрока"
@@ -641,13 +644,13 @@ REFERENCE	AACP_NOACCESS
 LANG_RUSSIAN "У вас нет права доступа к панели администрирования с GUID-а ^3&&1^7."
 
 REFERENCE	AACP_NOPLAYER
-LANG_RUSSIAN "^1<Защита игроков включена>"
+LANG_RUSSIAN "^1<Защищенный игрок>"
 
 REFERENCE	AACP_YOU_TARGETED
-LANG_RUSSIAN "^1Вы назначены мишенью для всех!"
+LANG_RUSSIAN "Вы назначены мишенью для всех!"
 
 REFERENCE	AACP_PLAYER_TARGETED
-LANG_RUSSIAN "^1Игрок ^7&&1^1 стал мишенью для всех!"
+LANG_RUSSIAN "Игрок ^3&&1^1 стал мишенью для всех!"
 
 
 //******************************************************************************
@@ -718,10 +721,10 @@ LANG_RUSSIAN "^7Администратор сервера перевел вас в другую команду."
 //******************************************************************************
 
 REFERENCE CAP_OPEN
-LANG_RUSSIAN "Нажмите ^3[Использовать] ^7чтобы открыть\n^3Настройки Внешности Игрока"
+LANG_RUSSIAN "Нажмите ^3[{+activate}] ^7чтобы открыть\n^3Настройки Внешности Игрока"
 
 REFERENCE CAP_CYCLE_AND_CLOSE
-LANG_RUSSIAN "Нажмите ^3[Использовать] ^7чтобы пролистать варианты Внешности\nНажмите ^3[Удар Ножом] ^7чтобы закрыть Настройки"
+LANG_RUSSIAN "Нажмите ^3[{+activate}] ^7чтобы пролистать варианты Внешности\nНажмите ^3[{+melee}] ^7чтобы закрыть Настройки"
 
 REFERENCE CAP_INITIALIZING
 LANG_RUSSIAN "Загрузка ^7интерфейса ^3Настройка внешности"
@@ -734,7 +737,7 @@ LANG_RUSSIAN "(осталось времени)"
 // openwarfare/_damageeffect.gsc
 //******************************************************************************
 REFERENCE DE_BROKEN_ANKLE
-LANG_RUSSIAN "^1У вас сломана нога!"
+LANG_RUSSIAN "У вас сломана нога!"
 
 
 //******************************************************************************
@@ -770,7 +773,7 @@ LANG_RUSSIAN "Удерживайте ^3[{+activate}]^7 чтобы обезвредить"
 // openwarfare/_extendedobituaries.gsc
 //******************************************************************************
 REFERENCE EXTENDED_OBITUARY
-LANG_RUSSIAN "^2&&1^7 Убил ^1&&2^7. Область поражения: &&3. Оружие: &&4. Расстояние: &&5."
+LANG_RUSSIAN "^3&&1^7 Убил ^3&&2^7. Область поражения: &&3. Оружие: &&4. Расстояние: &&5."
 
 REFERENCE EXTENDED_OBITUARY_KILLEDBY_WEAPON
 LANG_RUSSIAN "Вас убил: ^3&&1^7. Оружие: ^3&&2^7."
@@ -968,7 +971,7 @@ REFERENCE READYUP_ALL_PLAYERS_READY
 LANG_RUSSIAN "Все игроки готовы!"
 
 REFERENCE READYUP_MOD_CHECKSUMS
-LANG_RUSSIAN "^3Проверка контрольных сумм^7: &&1."
+LANG_RUSSIAN "Проверка контрольных сумм^3: &&1."
 
 REFERENCE READYUP_NOPASSWORD
 LANG_RUSSIAN "Внимание! Пароль на сервер не установлен!"
@@ -989,7 +992,7 @@ REFERENCE READYUP_READY
 LANG_RUSSIAN "Готов"
 
 REFERENCE READYUP_RECORD_REMINDER
-LANG_RUSSIAN "^3Не забудьте /RECORD матч"
+LANG_RUSSIAN "Не забудьте /RECORD матч"
 
 REFERENCE READYUP_WAITING_FOR_MORE_PLAYERS
 LANG_RUSSIAN "Ожидание других игроков..."
@@ -1002,10 +1005,10 @@ REFERENCE RESERVEDSLOTS_DISCONNECTED
 LANG_RUSSIAN "Игрок ^3&&1^7 был отключен чтобы освободить место для членов клана."
 
 REFERENCE RESERVEDSLOTS_MAKEROOM_DISCONNECT
-LANG_RUSSIAN "^3Вас отключили чтобы освободить место для членов клана."
+LANG_RUSSIAN "Вас отключили чтобы освободить место для членов клана."
 
 REFERENCE RESERVEDSLOTS_MAKEROOM_REDIRECT
-LANG_RUSSIAN "^3Вас перенаправили на другой сервер чтобы освободить место для членов клана."
+LANG_RUSSIAN "Вас перенаправили на другой сервер чтобы освободить место для членов клана."
 
 REFERENCE RESERVEDSLOTS_REDIRECTED
 LANG_RUSSIAN "Игрок ^3&&1^7 был переадресован на ^2&&2^7 чтобы освободить место на сервер для членов клана (press ^3[{openScriptMenu modkeybind redirect}]^7 to follow)."
@@ -1014,7 +1017,7 @@ REFERENCE RESERVEDSLOTS_MANUAL_REDIRECT
 LANG_RUSSIAN "Игрок ^3&&1^7 был переадресован на ^2&&2^7 (press ^3[{openscriptmenu modkeybind redirect}]^7 to follow)."
 
 REFERENCE RESERVEDSLOTS_TRYAGAIN
-LANG_RUSSIAN "^3Попробуйте подключиться еще раз через 2-3 минуты..."
+LANG_RUSSIAN "Попробуйте подключиться еще раз через 2-3 минуты..."
 
 
 //******************************************************************************

@@ -594,6 +594,9 @@ LANG_ENGLISH "^3Player Control Panel"
 REFERENCE AACP_PLAYER_RETURNSPAWN
 LANG_ENGLISH "Return Player to Spawn"
 
+REFERENCE AACP_PLAYER_REVIVED
+LANG_ENGLISH "^3You have been revived by administrator!"
+
 REFERENCE AACP_PLAYER_RETURNED
 LANG_ENGLISH "^3You have been returned to your last spawn!"
 

@@ -2209,6 +2209,36 @@ registerNumLivesDvar( dvarString, defaultValue, minValue, maxValue )
 }
 
 
+getAverageNumlives()
+{
+	totalLives = 0;
+	numPlayers = 0;
+
+	doTeamCheck = ( level.teamBased || level.gametype == "bel" ) && isDefined( self.pers["team"] );
+
+	players = level.players;
+	
+	for ( i = 0; i < players.size; i++ )
+	{
+		player = players[i];
+
+		if ( player == self || !isAlive( player ) || player.sessionstate != "playing" || !isDefined( player.pers["lives"] ) || !isDefined( player.pers["team"] ) || player.pers["team"] == "spectator" )
+			continue;
+
+		if ( doTeamCheck && player.pers["team"] != self.pers["team"] )
+			continue;
+		
+		totalLives += player.pers["lives"];
+		numPlayers++;
+	}
+
+	if ( numPlayers == 0 )
+		return 1;
+
+	return getValueInRange( int( totalLives / numPlayers ) + 1, 1, level.numLives );
+}
+
+
 getValueInRange( value, minValue, maxValue )
 {
 	if ( value > maxValue )
@@ -4665,6 +4695,7 @@ Callback_PlayerConnect()
 	if ( isDefined( self.pers["isBot"] ) )
 		return;
 
+	/* Disabled
 	// <font size="8"><strong>TO DO: DELETE THIS WHEN CODE HAS CHECKSUM SUPPORT!</strong></font> :: Check for stat integrity
 	for( i=0; i<5; i++ )
 	{
@@ -4674,6 +4705,7 @@ Callback_PlayerConnect()
 			return;
 		}
 	}
+	*/
 }
 
 
@@ -4704,6 +4736,40 @@ forceSpawn()
 	self closeMenus();
 	self thread [[level.spawnClient]]();
 }
+
+
+forceSpawnPlayer()
+{
+	if ( self.hasSpawned )
+		return;
+
+	if ( self.pers["team"] == "spectator" )
+		return;
+
+	if ( !self isValidClass( self.pers["class"] ) )
+	{
+		if ( getDvarInt( "onlinegame" ) )
+			self.pers["class"] = "CLASS_CUSTOM1";
+		else
+			self.pers["class"] = "CLASS_ASSAULT";
+
+		self.class = self.pers["class"];
+	}
+
+	if ( level.numLives )
+	{
+		self.pers["lives"] = getAverageNumlives();
+	}
+
+	self.waitingToSpawn = false;
+	self.waveSpawnIndex = undefined;
+
+	self clearLowerMessage();
+	self closeMenus();
+
+	self thread [[level.spawnPlayer]]();
+}
+
 
 kickIfDontSpawn()
 {
