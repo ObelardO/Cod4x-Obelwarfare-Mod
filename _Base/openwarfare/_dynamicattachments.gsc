@@ -80,16 +80,20 @@ init()
 	level thread waitPrematchOverThread();	
 }
 
+
 onPlayerConnected()
 {
 	self thread addNewEvent( "onPlayerSpawned", ::onPlayerSpawned );
 	self thread addNewEvent( "onPlayerKilled", ::onPlayerKilled );
+	self thread addNewEvent( "onMenuResponse", ::onMenuResponse );
 }	
+
 
 onPlayerSpawned()
 {
 	self.dynAttachInProgress = false;
 }
+
 
 onPlayerKilled()
 {
@@ -100,6 +104,20 @@ onPlayerKilled()
 	}
 }
 
+
+onMenuResponse( menu, response )
+{
+	if ( menu == "-1" && response == "attachdetach" )
+	{
+		self thread openDynamicAttachmentsMenu();
+		return;
+	}
+
+	if( menu == "dynamic_attachments" )
+	{
+		self thread installAttachment( response );
+	}
+}
 
 waitPrematchOverThread()
 {
@@ -126,7 +144,6 @@ setupMenuDvars()
 	currentAttachment = getWeaponAttachment( currentWeapon );
 	currentBaseWeapon = getWeaponWithoutAttachments ( currentWeapon, currentAttachment );
 
-	//for ( i = 1; i <= level.scr_enable_dynamic_attachments; i++ )
 	for ( i = 1; i < level.dynAttach.attachments.size; i++ )
 	{
 		checkAttachment = level.dynAttach.attachments[i]["tag"];

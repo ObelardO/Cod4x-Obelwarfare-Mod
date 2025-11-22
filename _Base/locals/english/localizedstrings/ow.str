@@ -1066,14 +1066,23 @@ LANG_ENGLISH "Spawn protect"
 //******************************************************************************
 // openwarfare/_timeout.gsc
 //******************************************************************************
-REFERENCE TIMEOUT_CALLED
+REFERENCE TIMEOUTS_CALLED
 LANG_ENGLISH "Timeout Called!"
 
 REFERENCE TIMEOUTS_LEFT
 LANG_ENGLISH "^3&&1^7 has called a timeout. Your team has ^3&&2^7 timeouts left."
 
 REFERENCE TIMEOUTS_NOMORE
-LANG_ENGLISH "^3&&1^7 tried to call a timeout but our team doesn't have any timeouts left."
+LANG_ENGLISH "Your team doesn't have any timeouts left."
+
+REFERENCE TIMEOUTS_CALL_LOCKED
+LANG_ENGLISH "You can't call timeout."
+
+REFERENCE TIMEOUTS_BRAKE_LOCKED
+LANG_ENGLISH "You can't stop timeout."
+
+REFERENCE TIMEOUTS_BRAKE
+LANG_ENGLISH "Timeout stopped."
 
 
 //******************************************************************************

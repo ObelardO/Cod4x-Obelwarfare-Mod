@@ -32,14 +32,21 @@ init()
 	level.scr_timeouts_length = getdvarx( "scr_timeouts_length", "int", 30, 15, 300 );
 	level.scr_timeouts_tags = getdvarx( "scr_timeouts_tags", "string", "" );
 	level.scr_timeouts_guids = getdvarx( "scr_timeouts_guids", "string", "" );
+	level.scr_timeouts_cancel = getdvarx( "scr_timeouts_cancel", "int", 1, 0, 3 );
 
 	// Transform the protected tags into an array (format for the variable should be "[FLOT] [TGW] {1stAD}"
 	level.scr_timeouts_tags = strtok( level.scr_timeouts_tags, " " );
 
+	setDvar( "ui_show_timeout", 0 );
+    makeDvarServerInfo( "ui_show_timeout" );
+
 	// Precache some resources we'll be using
-	precacheString( &"OW_TIMEOUT_CALLED" );
+	precacheString( &"OW_TIMEOUTS_CALLED" );
 	precacheString( &"OW_TIMEOUTS_NOMORE" );
 	precacheString( &"OW_TIMEOUTS_LEFT" );
+	precacheString( &"OW_TIMEOUTS_BRAKE_LOCKED" );
+	precacheString( &"OW_TIMEOUTS_BRAKE" );
+	precacheString( &"OW_TIMEOUTS_CALL_LOCKED" );
 	precacheShader( "hudStopwatch" );
 
 	// Check if we already stored the number of timeouts remaining for each team in this game
@@ -58,6 +65,7 @@ init()
 onPlayerConnected()
 {
 	self thread addNewEvent( "onPlayerSpawned", ::onPlayerSpawned );
+	self thread addNewEvent( "onMenuResponse", ::onMenuResponse );
 }
 
 
@@ -66,6 +74,15 @@ onPlayerSpawned()
 	// By default a player is not in timeout mode
 	self.inTimeout = false;
 	self thread monitorTimeout();
+}
+
+
+onMenuResponse( menu, response )
+{
+	if ( menu == "-1" && response == "calltimeout" )
+	{
+		self thread timeoutCalled();
+	}
 }
 
 
@@ -111,14 +128,59 @@ monitorTimeout()
 }
 
 
+canBrakeTimeout()
+{
+	switch ( level.scr_timeouts_cancel )
+	{
+		case 0:
+			// No one can cancel the timeout
+			return false;
+
+		case 1:
+			// Only the player who called the timeout can cancel it
+			if ( isDefined( level.timeoutCaller ) && level.timeoutCaller != self )
+				return false;
+
+			break;
+
+		case 2:
+			// Only the team that called the timeout can cancel it
+			if ( level.timeoutTeam != self.pers["team"] )
+				return false;
+
+			break;
+
+		case 3:
+			// Any player can cancel the timeout
+			break;
+	}
+
+	return true;
+}
+
+
 timeoutCalled()
 {
+	// Allready in timeout, try to brake it
+	if ( level.inTimeoutPeriod )
+	{
+		if ( !self canBrakeTimeout() )
+		{
+			self iprintln( &"OW_TIMEOUTS_BRAKE_LOCKED" );
+			return;
+		}
+
+		iprintln( &"OW_TIMEOUTS_BRAKE", self.name );
+		endTimeout();
+		return;
+	}
+
 	// Make sure timeouts are allowed
 	if ( level.scr_timeouts_perteam == 0 || !level.teamBased )
 		return;
 
 	// Make sure we are not in any state where we don't allowe timeouts to be called
-	if ( level.inReadyUpPeriod || level.inStrategyPeriod || level.inPrematchPeriod || level.inHidingPeriod || level.inTimeoutPeriod || game["state"] == "postgame" )
+	if ( level.inReadyUpPeriod || level.inStrategyPeriod || level.inPrematchPeriod || level.inHidingPeriod || game["state"] == "postgame" )
 		return;
 
 	// Check also states where players are capturing objectives or in situations where timeouts can be called
@@ -127,7 +189,10 @@ timeoutCalled()
 
 	// Check if only certain people can call timeouts
 	if ( level.scr_timeouts_guids != "" ) {
-		if ( !issubstr( level.scr_timeouts_guids, self getGuid() ) ) {
+		if ( !issubstr( level.scr_timeouts_guids, self getGuid() ) )
+		{
+			self iprintln( &"OW_TIMEOUTS_CALL_LOCKED" );
+
 			return;
 		}
 	} else if ( level.scr_timeouts_tags.size > 0 ) {
@@ -138,19 +203,23 @@ timeoutCalled()
 				break;
 			}
 		}
-		if ( !playerAllowed ) {
+		if ( !playerAllowed )
+		{
+			self iprintln( &"OW_TIMEOUTS_CALL_LOCKED" );
+
 			return;
 		}
 	}
 
 	// Check if this player's team has timeouts left
 	playerTeam = self.pers["team"];
+	
 	if ( game["timeouts"][playerTeam] == 0 ) {
 		// Inform all the players in the player's team that there are no more timeouts left
 		for ( i = 0; i < level.players.size; i++ )
 		{
 			if ( level.players[i].pers["team"] == playerTeam ) {
-				level.players[i] iprintln( &"OW_TIMEOUTS_NOMORE", self.name );
+				level.players[i] iprintln( &"OW_TIMEOUTS_NOMORE" );
 			}
 		}
 		return;
@@ -169,9 +238,11 @@ timeoutCalled()
 
 	// We are officially in timeout mode
 	level.timeoutTeam = playerTeam;
+	level.timeoutCaller = self;
 	maps\mp\gametypes\_globallogic::pauseTimer();
 	visionSetNaked( "mpOutro", 0 );
 	level.inTimeoutPeriod = true;
+	setdvar( "ui_show_timeout", 1 );
 
 	// Create the HUD elements and wait for the timeout to be over to destroy them
 	thread createHUDelements( game[playerTeam] );
@@ -180,11 +251,21 @@ timeoutCalled()
 	wait (level.scr_timeouts_length);
 
 	// Timeout is officially over
+	if ( level.inTimeoutPeriod )
+	{
+		endTimeout();
+	}
+
+	return;
+}
+
+
+endTimeout()
+{
 	visionSetNaked( getDvar( "mapname" ), 0 );
 	level.inTimeoutPeriod = false;
 	maps\mp\gametypes\_globallogic::resumeTimer();
-
-	return;
+	setdvar( "ui_show_timeout", 0 );
 }
 
 
@@ -202,7 +283,7 @@ createHUDelements( playerTeam )
 	timeoutCalled.x = 0;
 	timeoutCalled.y = 60;
 	timeoutCalled.color = ( 0.694, 0.220, 0.114 );
-	timeoutCalled setText( &"OW_TIMEOUT_CALLED" );
+	timeoutCalled setText( &"OW_TIMEOUTS_CALLED" );
 
 	// Team name
 	timeoutTeamName = createServerFontString( "default", 2.2 );

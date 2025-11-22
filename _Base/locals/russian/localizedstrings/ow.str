@@ -942,7 +942,7 @@ LANG_RUSSIAN "Вы были повышены!"
 // openwarfare/_quickactions.gsc
 //******************************************************************************
 REFERENCE QUICKACTION_BANDAGE
-LANG_RUSSIAN "Забинтовать"
+LANG_RUSSIAN "Перевязать"
 
 REFERENCE QUICKACTION_ENDED
 LANG_RUSSIAN "^1****************"
@@ -1076,14 +1076,23 @@ LANG_RUSSIAN "Неуязвимость"
 //******************************************************************************
 // openwarfare/_timeout.gsc
 //******************************************************************************
-REFERENCE TIMEOUT_CALLED
+REFERENCE TIMEOUTS_CALLED
 LANG_RUSSIAN "Вызван таймаут!"
 
 REFERENCE TIMEOUTS_LEFT
-LANG_RUSSIAN "^3&&1^7 взял таймаут. У вашей команды осталось ^3&&2^7 таймаутов"
+LANG_RUSSIAN "^3&&1^7 вызвал таймаут. У вашей команды осталось ^3&&2^7 таймаутов."
 
 REFERENCE TIMEOUTS_NOMORE
-LANG_RUSSIAN "^3&&1^7 попытался взять таймаут но у команды их больше нет"
+LANG_RUSSIAN "У вашей команды больше нет таймаутов."
+
+REFERENCE TIMEOUTS_CALL_LOCKED
+LANG_RUSSIAN "Вы не можете вызвать таймаут."
+
+REFERENCE TIMEOUTS_BRAKE_LOCKED
+LANG_RUSSIAN "Вы не можете прервать таймаут."
+
+REFERENCE TIMEOUTS_BRAKE
+LANG_RUSSIAN "^3&&1^7 прервал таймаут."
 
 
 //******************************************************************************
@@ -1297,25 +1306,25 @@ REFERENCE	AACP_MENU
 LANG_RUSSIAN	"Админ-Панель"
 
 REFERENCE ATTACH_DETACH
-LANG_RUSSIAN "Сн/Уст. Модуль"
+LANG_RUSSIAN "Сн. / Уст. Модуль"
 
 REFERENCE FIRING_MODE
 LANG_RUSSIAN "Режим стрельбы"
 
 REFERENCE BANDAGE
-LANG_RUSSIAN "Бинты"
+LANG_RUSSIAN "Перевязка / Лечение"
 
 REFERENCE BINOCULARS
 LANG_RUSSIAN "Бинокль"
 
 REFERENCE CYCLE_FPSLAG
-LANG_RUSSIAN "FPS/Lagometer"
+LANG_RUSSIAN "FPS / Lagometer"
 
 REFERENCE DROP_OBJECT
-LANG_RUSSIAN "Бросить Предмет"
+LANG_RUSSIAN "Бросить предмет"
 
 REFERENCE DROP_WEAPON
-LANG_RUSSIAN "Бросить Оружие"
+LANG_RUSSIAN "Бросить оружие"
 
 REFERENCE REDIRECT
 LANG_RUSSIAN "Перенаправление"
@@ -1327,7 +1336,7 @@ REFERENCE TIMEOUT_CALL
 LANG_RUSSIAN "Вызвать таймаут"
 
 REFERENCE UNJAM_WEAPON
-LANG_RUSSIAN "Разблок. Оружие"
+LANG_RUSSIAN "Разблок. оружие"
 
 REFERENCE ZOOM_IN
 LANG_RUSSIAN "Приблизить"
@@ -1336,7 +1345,7 @@ REFERENCE ZOOM_OUT
 LANG_RUSSIAN "Удалить"
 
 REFERENCE STATS_TOGGLE
-LANG_RUSSIAN "Вкл. Статистику"
+LANG_RUSSIAN "Показать статистику"
 
 
 //******************************************************************************

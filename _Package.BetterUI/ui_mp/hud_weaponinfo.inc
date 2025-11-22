@@ -82,7 +82,7 @@ menuDef
     rect			0 0 0 0 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_BOTTOM
     exp				rect Y( 0 - (ONLINEGAME * ONLINEGAME_OFFSET) )
     fullScreen		0
-    visible			when( !isIntermission() && !inkillcam() && dvarBool( ammoCounterHide ) == 0 && !flashbanged() && !ui_active() && team( name ) != "TEAM_SPECTATOR" && dvarInt( ui_hud_show_weapon ) == 1 && dvarInt( ui_hud_show_weaponinfo ) == 1 )
+    visible			when( !isIntermission() && !inkillcam() && dvarBool( ammoCounterHide ) == 0 && !flashbanged() && !ui_active() && team( name ) != "TEAM_SPECTATOR" && dvarInt( ui_hud_show_weapon ) == 1 && dvarInt( ui_hud_show_weaponinfo ) == 1 && dvarInt( ui_show_timeout ) == 0 )
 
     // WEAPON
     itemDef

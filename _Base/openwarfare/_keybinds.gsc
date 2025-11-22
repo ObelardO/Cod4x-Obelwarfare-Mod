@@ -66,10 +66,6 @@ onMenuResponse()
 					self openMenu( game[ "menu_changeclass_" + self.pers["team"] ] );
 					break;
 
-				case "attachdetach":
-					self thread openwarfare\_dynamicattachments::openDynamicAttachmentsMenu();
-					break;	
-
 				case "firingmode":
 					//self thread openwarfare\_firingmode::switchFiringMode();
 					break;
@@ -91,19 +87,15 @@ onMenuResponse()
 					
 				case "bandage":
 					if ( isDefined( self.isBleeding ) && self.isBleeding )
-            self thread openwarfare\_healthsystem::bandageSelf();
-          else
-            self thread openwarfare\_healthsystem::medic(); 
+            			self thread openwarfare\_healthsystem::bandageSelf();
+          			else
+            			self thread openwarfare\_healthsystem::medic(); 
 					break;				
 						
 				case "unjam":
 					self thread openwarfare\_weaponjam::unjamWeapon();
 					break;	
-									
-				case "calltimeout":
-					self thread openwarfare\_timeout::timeoutCalled();
-					break;
-					
+														
 				case "redirect":
 					self thread openwarfare\_reservedslots::disconnectPlayer( true );
 					break;					
@@ -136,11 +128,6 @@ onMenuResponse()
 					break;
 			}
 			continue;
-		}
-
-		if( menu == "dynamic_attachments" )
-		{
-			self thread openwarfare\_dynamicattachments::installAttachment( response );
 		}
 	}
 }
