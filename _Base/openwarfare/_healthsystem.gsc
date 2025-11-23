@@ -104,6 +104,8 @@ init()
   preCacheString( &"OW_STATUS_BLEEDING" );
   preCacheString( &"OW_STATUS_HEALING" );
   preCacheString( &"OW_STATUS_BANDAGE" );
+  preCacheString( &"OW_MEDIC_HINT_HEAL" );
+  preCacheString( &"OW_MEDIC_HINT_BANDAGE" );
 
   level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
 }
@@ -202,6 +204,9 @@ onPlayerSpawned()
 	}
 	else
 		self setClientDvar( "ui_bandages", "0" );     
+
+	if ( level.scr_healthsystem_medic_enable && ( level.scr_healthsystem_medic_healing || level.scr_healthsystem_medic_bandaging ) )
+		self thread medicHintThread();
 }
 
 onPlayerDeath()
@@ -221,7 +226,9 @@ onPlayerDeath()
 	if (level.scr_healthsystem_show_healthbar )
 		self setClientdvar( "cg_drawhealth", 0 );
 
-	self setClientDvar( "ui_bandages", "0" );     
+	self setClientDvar( "ui_bandages", "0" );
+	
+	self maps\mp\gametypes\_hud_hints::hideHint( "HS_MED" );     
 }
 
 onJoinedSpectators()
@@ -232,6 +239,8 @@ onJoinedSpectators()
 		self setClientdvar( "cg_drawhealth", 0 );
 
 	self setClientDvar( "ui_bandages", "0" );     
+
+	self maps\mp\gametypes\_hud_hints::hideHint( "HS_MED" );
 }
 
 /*
@@ -590,6 +599,61 @@ bleedPlayer( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vP
 	}
 }
 
+medicHintThread()
+{
+	self endon("disconnect");
+	self endon("death");
+	level endon( "game_ended" );
+
+	maxHealth = getMaxHealth();
+
+	lastTeammate = undefined;
+	isHintShown = false;
+	teamMateNeedHelp = false;
+
+	for(;;)
+	{
+		if ( isHintShown )
+		{
+			isMedicActionInProgress = ( 
+				 ( isDefined( self.isBandagingTeammate ) && self.isBandagingTeammate ) ||
+			 	 ( isDefined( self.isHealingTeammate ) && self.isHealingTeammate ) ||
+				 ( isDefined( self.isHealing ) && self.isHealing ) ||
+				 ( isDefined( self.isBandaging ) && self.isBandaging ) );
+
+			if ( !teamMateNeedHelp || isMedicActionInProgress )
+			{
+				lastTeammate = undefined;
+				isHintShown = false;
+
+				self maps\mp\gametypes\_hud_hints::hideHint( "HS_MED" );
+			}
+		}	
+
+		wait (1);
+
+		teamMate = self findClosestTeammate();
+		teamMateNeedHelp = isDefined( teamMate ) && teamMate.health < maxHealth && ( level.gametype != "ftag" || !teamMate.freezeTag["frozen"] );
+
+		if ( teamMateNeedHelp && ( !isDefined( lastTeammate ) || lastTeammate != teamMate ) )
+		{
+			lastTeammate = teamMate;
+			isHintShown = true;
+
+			switch ( getMedicActionType( teamMate ) )
+			{
+				case "bandage":
+					self maps\mp\gametypes\_hud_hints::showHint( &"OW_MEDIC_HINT_BANDAGE", "HS_MED", teamMate, false );
+					break;
+		
+				case "heal":
+					self maps\mp\gametypes\_hud_hints::showHint( &"OW_MEDIC_HINT_HEAL", "HS_MED", teamMate, false );
+					break;
+			}
+		}
+	}
+}
+
 medic()
 {
 	self endon("disconnect");
@@ -654,25 +718,38 @@ medic()
 		return;
 	}
   
-	if ( isDefined( teammate.isBleeding ) && teammate.isBleeding )
+	switch ( getMedicActionType( teammate ) )
 	{
-		if ( !level.scr_healthsystem_medic_bandaging )
-		{
-		self thread healTeammate( teammate );
-		}
-		else
-		{
-		self thread bandageTeammate( teammate );
-		}
-	}
-	else
-	{
-		self thread healTeammate( teammate );
+		case "bandage":
+			self thread bandageTeammate( teammate );
+			break;
+	
+		case "heal":
+			
+			self thread healTeammate( teammate );
+			break;
 	}
   
 	return;
 }  
       
+
+getMedicActionType( player )
+{
+	if ( isDefined( player.isBleeding ) && player.isBleeding )
+	{
+		if ( !level.scr_healthsystem_medic_bandaging )
+		{
+			return "heal";
+		}
+		else
+		{
+			return "bandage";
+		}
+	}
+
+	return "heal";
+}
    
 
 /*
@@ -713,7 +790,7 @@ bandageSelf()
 				self.isBandaging = true;
 
 				// Reduce speed, prevent sprinting, and disable weapons
-				self stopPlayer( true );
+				self stopPlayer( true, 75 );
 
 				if ( level.scr_healthsystem_healing_icon && isDefined( self.hud_healthsystem_icon ) ) 
 					self setHealingStatus( "bandaging" );
@@ -744,7 +821,7 @@ bandageSelf()
       self setHealingStatus( "bleeding" );
       
     // Restore speed, allow sprinting, and enable weapons
-    self stopPlayer( false );
+    self stopPlayer( false, 0 );
 	}
 	return;
 }
@@ -770,7 +847,7 @@ healSelf()
 	{    
 		self.isHealing = true;  
   
-		self stopPlayer( true );
+		self stopPlayer( true, 75 );
     
 		self playLocalSound( "scramble" );
   
@@ -826,7 +903,7 @@ healSelf()
 	if ( level.scr_healthsystem_healing_icon && isDefined( self.hud_healthsystem_icon ) )
 		self showHealingStatus( false );  
     
-	self stopPlayer( false );
+	self stopPlayer( false, 0 );
   
 	return;
 }    
@@ -848,8 +925,8 @@ bandageTeammate( teammate )
 		self iprintln( &"OW_MEDIC_SELF_BANDAGE", teammate );
 		teammate iprintln( &"OW_MEDIC_TEAMMATE_BANDAGE", self );
 		
-		self stopPlayer( true );
-		teammate stopPlayer( true );
+		self stopPlayer( true, 100 );
+		teammate stopPlayer( true, 100 );
     
 		self playLocalSound( "scramble" );  
     
@@ -895,8 +972,8 @@ bandageTeammate( teammate )
 	if ( level.scr_healthsystem_bleeding_icon && isDefined( self.hud_healthsystem_icon ) && !teammate.isBleeding )
 		teammate showHealingStatus( false );
   
-	self stopPlayer( false );
-	teammate stopPlayer( false ); 
+	self stopPlayer( false, 0 );
+	teammate stopPlayer( false, 0 ); 
   
 	return;    
 }
@@ -919,8 +996,8 @@ healTeammate( teammate )
 		self iprintln( &"OW_MEDIC_SELF_HEAL", teammate );
 		teammate iprintln( &"OW_MEDIC_TEAMMATE_HEAL", self );
 
-		self stopPlayer( true );
-		teammate stopPlayer( true );
+		self stopPlayer( true, 100 );
+		teammate stopPlayer( true, 100 );
     
 		if ( level.scr_healthsystem_healing_icon && isDefined( self.hud_healthsystem_icon) )
 		{
@@ -995,8 +1072,8 @@ healTeammate( teammate )
 		teammate showHealingStatus( false );
 	}
       
-	self stopPlayer( false );
-	teammate stopPlayer( false ); 
+	self stopPlayer( false, 0 );
+	teammate stopPlayer( false, 0 ); 
   
 	return;
 }
@@ -1016,31 +1093,40 @@ findClosestTeammate()
 	theChosenOne = undefined;
 	team = self.sessionteam;
 	currentShortestDistance = undefined;
-  
+
 	for ( index = 0; index < level.players.size; index++ )
 	{
 		player = level.players[index];
     
 		if ( isDefined( self.lastStand ) && self.lastStand )
 			break;
+
 		if ( isDefined( player.lastStand ) && player.lastStand ) 
 			continue;
     
 		if ( player.pers["team"] == team && self != player && isAlive( player ) )
 		{       
-			distance = distance( self.origin, player.origin );
-			if ( distance < 80 ) 
+			//distance = distance( self.origin, player.origin );
+
+			originDelta = self.origin - player.origin;
+
+			distSq = originDelta[0]*originDelta[0] + 
+					 originDelta[1]*originDelta[1] + 
+					 originDelta[2]*originDelta[2];
+
+			//if ( distance < 60 ) 
+			if ( distSq < 6400 ) 
 			{
 				if ( !isDefined( currentShortestDistance ) )
 				{
 					theChosenOne = player;
-					currentShortestDistance = distance;
+					currentShortestDistance = distSq;
 				}
 				else
 				{
-					if ( distance < currentShortestDistance )
+					if ( distSq < currentShortestDistance )
 					{
-						currentShortestDistance = distance;
+						currentShortestDistance = distSq;
 						theChosenOne = player;
 					}
 				}     
@@ -1104,11 +1190,11 @@ playerHasBandages()
 		return false;
 }
 
-stopPlayer( condition )
+stopPlayer( condition, speedModifierPercent )
 {
 	if ( condition )
 	{
-		self thread openwarfare\_speedcontrol::setModifierSpeed( "_healthsystem", 95 );
+		self thread openwarfare\_speedcontrol::setModifierSpeed( "_healthsystem", speedModifierPercent );
 		self thread maps\mp\gametypes\_gameobjects::_disableWeapon();
 		self thread maps\mp\gametypes\_gameobjects::_disableJump();
 		self thread maps\mp\gametypes\_gameobjects::_disableSprint();

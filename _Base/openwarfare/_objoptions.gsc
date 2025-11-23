@@ -432,7 +432,7 @@ allowDefenderExplosiveDestroy()
           }
           else
           {
-            self thread openwarfare\_healthsystem::stopPlayer( true );
+            self thread openwarfare\_healthsystem::stopPlayer( true, 90 );
           }
           startTime = openwarfare\_timer::getTimePassed();
           self.destroyingExplosive = true;
@@ -469,7 +469,7 @@ allowDefenderExplosiveDestroy()
       }
       else
       {
-        self thread openwarfare\_healthsystem::stopPlayer( false );
+        self thread openwarfare\_healthsystem::stopPlayer( false, 0 );
       }
       startTime = 0;  
     }  
