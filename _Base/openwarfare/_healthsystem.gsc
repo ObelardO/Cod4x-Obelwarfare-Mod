@@ -70,6 +70,7 @@ init()
   level.scr_healthsystem_medic_healing_self = getdvarx( "scr_healthsystem_medic_healing_self", "int", 1, 0, 1 );
   level.scr_healthsystem_medic_healing_time = getdvarx( "scr_healthsystem_medic_healing_time", "int", 3, 2, 10 );
   level.scr_healthsystem_medic_healing_health = getdvarx( "scr_healthsystem_medic_healing_health", "int", 25, 1, getDvarInt( "scr_player_maxhealth" ) );
+  level.scr_healthsystem_medic_clear_damage_effects = getdvarx( "scr_healthsystem_medic_clear_damage_effects", "int", 0, 0, 1 );
   level.scr_healthsystem_medic_take_bandage = getdvarx( "scr_healthsystem_medic_take_bandage", "int", 0, 0, 1 );
     
   //=======
@@ -951,13 +952,13 @@ bandageTeammate( teammate )
 			teammate.isBleeding = false;  
 			self.isBandagingTeammate = false;
           
-		if ( isDefined( self.isUsingTeammateBandage ) && self.isUsingTeammateBandage )
-			teammate removeBandage();
-		else
-			self removeBandage();
-        
-		self iprintln( &"OW_MEDIC_BANDAGE_SUCCESS" );  
-		teammate iprintln( &"OW_MEDIC_BANDAGE_SUCCESS" );  
+			if ( isDefined( self.isUsingTeammateBandage ) && self.isUsingTeammateBandage )
+				teammate removeBandage();
+			else
+				self removeBandage();
+			
+			self iprintln( &"OW_MEDIC_BANDAGE_SUCCESS" );  
+			teammate iprintln( &"OW_MEDIC_BANDAGE_SUCCESS" );  
 		}
 		else
 		{
@@ -1048,6 +1049,11 @@ healTeammate( teammate )
       
 			self iprintln( &"OW_MEDIC_HEALING_FULL" );
 			teammate iprintln( &"OW_MEDIC_HEALING_FULL" );
+
+			if ( level.scr_healthsystem_medic_clear_damage_effects > 0 )
+			{
+				teammate openwarfare\_damageeffect::clearAllDamageEffects();
+			}
       
 			if ( isDefined( self.isUsingTeammateBandage ) && self.isUsingTeammateBandage )
 				teammate removeBandage();
@@ -1144,6 +1150,9 @@ getMaxHealth()
 
 showHealingStatus( condition )
 {
+	if ( !isDefined( self.hud_healthsystem_icon ) || !isDefined( self.hud_healthsystem_text ) )
+		return;
+
 	if ( condition )
 	{
 		self.hud_healthsystem_icon.alpha = 1;

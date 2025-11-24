@@ -799,13 +799,13 @@ LANG_RUSSIAN "&&1"
 // openwarfare/_healthsystem.gsc
 //******************************************************************************
 REFERENCE BLEEDING_NOBANDAGES
-LANG_RUSSIAN "У вас нет бинтов для перевязки."
+LANG_RUSSIAN "У вас нет бинтов."
 
 REFERENCE MEDIC_BANDAGE_SUCCESS
 LANG_RUSSIAN "Перевязка удалась."
 
 REFERENCE MEDIC_BANDAGE_UNSUCCESSFUL
-LANG_RUSSIAN "Перевязка не удалась."
+LANG_RUSSIAN "Перевязка прервана."
 
 REFERENCE MEDIC_SELF_BANDAGE
 LANG_RUSSIAN "Вы первязываете ^3&&1^7."
@@ -820,10 +820,10 @@ REFERENCE MEDIC_TEAMMATE_HEAL
 LANG_RUSSIAN "Вас лечит ^3&&1^7."
 
 REFERENCE MEDIC_HEALING_FULL
-LANG_RUSSIAN "Лечение завершено. Бинты закончились."
+LANG_RUSSIAN "Лечение завершено."
 
 REFERENCE MEDIC_HEALING_PARTIAL
-LANG_RUSSIAN "Лечение завершено. Бинты частично израсходованы."
+LANG_RUSSIAN "Лечение прервано."
 
 REFERENCE MEDIC_HINT_HEAL
 LANG_RUSSIAN "Нажмите ^3[{openScriptMenu modkeybind bandage}]^7 чтобы лечить напарника"
@@ -832,10 +832,10 @@ REFERENCE MEDIC_HINT_BANDAGE
 LANG_RUSSIAN "Нажмите ^3[{openScriptMenu modkeybind bandage}]^7 чтобы перевязать напарника"
 
 REFERENCE TEAMMATE_BANDAGE
-LANG_RUSSIAN "Союзник производит перевязку. Подождите, пока он закончит."
+LANG_RUSSIAN "Напарник производит перевязку. Подождите, пока он закончит."
 
 REFERENCE TEAMMATE_HEAL
-LANG_RUSSIAN "Союзник производит лечение. Подождите, пока он закончит."
+LANG_RUSSIAN "Напарник производит лечение. Подождите, пока он закончит."
 
 REFERENCE STATUS_BLEEDING
 LANG_RUSSIAN "Кровотечение"

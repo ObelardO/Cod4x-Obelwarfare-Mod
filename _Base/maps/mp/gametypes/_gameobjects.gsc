@@ -2176,6 +2176,18 @@ _enableJump()
 	}
 }
 
+_resetSprint()
+{
+	self.disabledSprint = 0;
+	self allowSprint(true);
+}
+
+_resetJump()
+{
+	self.disabledJump = 0;
+	self allowJump(true);
+}
+
 
 getEnemyTeam( team )
 {

@@ -66,7 +66,7 @@ onDamageTaken()
 		if ( sMeansOfDeath == "MOD_FALLING" ) {
 			// Check if we need to slow down the player
 			if ( level.scr_de_break_ankle_on_fall > 0 && iDamage > level.scr_de_break_ankle_on_fall ) {
-				self thread openwarfare\_speedcontrol::setModifierSpeed( "_damageeffect_fall", 75 );
+				self thread openwarfare\_speedcontrol::setModifierSpeed( "_damageeffect_fall", 50 );
 				self ExecClientCommand("gocrouch");
 				self thread maps\mp\gametypes\_gameobjects::_disableSprint();
 				self thread maps\mp\gametypes\_gameobjects::_disableJump();
@@ -118,7 +118,7 @@ onDamageTaken()
 				case "right_leg_upper":
 					// Player was hit in the upper legs. Check if we need to slow him down.
 					if ( level.scr_de_slowdown_on_leg_hit > 0 && iDamage >= level.scr_de_slowdown_on_leg_hit ) {
-						self thread openwarfare\_speedcontrol::setModifierSpeed( "_damageeffect_leg", 50 );
+						self thread openwarfare\_speedcontrol::setModifierSpeed( "_damageeffect_leg", 30 );
 					}
 					break;
 									
@@ -133,7 +133,7 @@ onDamageTaken()
 							self ExecClientCommand("gocrouch");
 							self ExecClientCommand("goprone");
 							if ( level.scr_de_falldown_on_leg_hit == 2 ) {
-								self thread openwarfare\_speedcontrol::setModifierSpeed( "_damageeffect_leg", 50 );
+								self thread openwarfare\_speedcontrol::setModifierSpeed( "_damageeffect_leg", 40 );
 								self thread maps\mp\gametypes\_gameobjects::_disableSprint();
 								self thread maps\mp\gametypes\_gameobjects::_disableJump();
 							}
@@ -148,4 +148,13 @@ onDamageTaken()
 			}
 		}
 	}
+}
+
+clearAllDamageEffects()
+{
+	self thread openwarfare\_speedcontrol::setModifierSpeed( "_damageeffect_leg", 0 ); 
+	self thread openwarfare\_speedcontrol::setModifierSpeed( "_damageeffect_fall", 0 ); 
+
+	self thread maps\mp\gametypes\_gameobjects::_resetJump();
+	self thread maps\mp\gametypes\_gameobjects::_resetSprint();
 }
