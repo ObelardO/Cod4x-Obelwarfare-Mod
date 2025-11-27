@@ -9,6 +9,8 @@
 //            Website: http://cod4.obelardo.ru                  //
 //**************************************************************//
 
+#include maps\mp\_utility;
+
 #include openwarfare\_eventmanager;
 #include openwarfare\_utils;
 
@@ -112,6 +114,7 @@ onPlayerConnected()
 
 onPlayerDeath()
 {
+    //TODO Work with player session state
     if (self maps\mp\gametypes\_globallogic::maySpawn())
     {
         self setClientDvar( "ui_hud_has_frags", "0" );
@@ -167,7 +170,7 @@ updateTeamCountsHUD( team )
 
     for( ;; )
 	{
-		wait( 0.1 );
+		wait( 0.5 );
 
         currentCount = 0;
 
@@ -175,7 +178,7 @@ updateTeamCountsHUD( team )
 		{
 			player = level.players[i];
 
-            if( player.team == team && isAlive( player ) && ( level.gametype != "ftag" || !player.freezeTag["frozen"] ))
+            if( player.team == team && isPlaying( player ) && ( level.gametype != "ftag" || !player.freezeTag["frozen"] ) )
             {
                 currentCount++;
             }
@@ -197,6 +200,8 @@ updatePlayerScoreHUD()
     self endon( "joined_spectators" );
     level endon( "game_ended" );
 
+    lastPlayerScoreRank = 0;
+
     //TODO: update eventialy 
     //while( isPlayer( self ) && isAlive( self ) )
     while( 1 )
@@ -207,13 +212,17 @@ updatePlayerScoreHUD()
         {
             otherPlayer = level.players[i];
 
-            if( self != otherPlayer && isDefined ( otherPlayer ) && isAlive( otherPlayer ) && getBestPlayerOf( self, otherPlayer ) == otherPlayer )
+            if( self != otherPlayer && isDefined ( otherPlayer ) && otherPlayer.sessionteam != "spectator" && getBestPlayerOf( self, otherPlayer ) == otherPlayer )
             {
                 playerScoreRank--;
             }
         }
 
-        self setClientDvar( "ui_hud_teamstat_player_rank", int( playerScoreRank * -1 + 1 ) );
+        if ( playerScoreRank != lastPlayerScoreRank )
+        {
+            lastPlayerScoreRank = playerScoreRank;
+            self setClientDvar( "ui_hud_teamstat_player_rank", int( playerScoreRank * -1 + 1 ) );
+        }
 
         wait( 1 );
     }

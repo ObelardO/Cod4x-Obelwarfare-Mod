@@ -4740,8 +4740,9 @@ forceSpawn()
 
 forceSpawnPlayer()
 {
-	if ( self.hasSpawned )
-		return;
+	//Disabled -- this is force respawn. Spawn player anyway
+	//if ( self.hasSpawned )
+	//	return;
 
 	if ( self.pers["team"] == "spectator" )
 		return;

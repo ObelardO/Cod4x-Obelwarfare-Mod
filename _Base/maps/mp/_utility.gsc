@@ -1003,3 +1003,8 @@ isMG( weapon )
 {
 	return isSubStr( weapon, "_bipod_" );
 }
+
+isPlaying( player )
+{
+	return ( isDefined( player.sessionstate ) && isPlayer( player ) && player.sessionstate == "playing" );
+}

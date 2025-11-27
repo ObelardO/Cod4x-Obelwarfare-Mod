@@ -1005,6 +1005,9 @@ claymoreDetonation()
 	{
 		damagearea waittill("trigger", player);
 
+		if ( !isPlaying( player ) )
+			continue;
+
 		if ( openwarfare\_timer::getTimePassed() - self.planttime < level.scr_claymore_arm_time )
 			continue;
 

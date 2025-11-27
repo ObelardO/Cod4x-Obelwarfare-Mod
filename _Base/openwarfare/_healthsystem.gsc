@@ -1110,7 +1110,7 @@ findClosestTeammate()
 		if ( isDefined( player.lastStand ) && player.lastStand ) 
 			continue;
     
-		if ( player.pers["team"] == team && self != player && isAlive( player ) )
+		if ( player.pers["team"] == team && self != player && isPlaying( player ) )
 		{       
 			//distance = distance( self.origin, player.origin );
 

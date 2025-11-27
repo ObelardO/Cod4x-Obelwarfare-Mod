@@ -11,6 +11,7 @@
 //            Website: http://openwarfaremod.com/
 //******************************************************************************
 
+#include maps\mp\_utility;
 #include common_scripts\utility;
 
 #include openwarfare\_eventmanager;
@@ -680,7 +681,7 @@ onMenuResponse()
 
 							self adminActionLog( "RS", player );
 
-							if ( isAlive( player ) )
+							if ( isPlaying( player ) )
 							{
 								self adminActionLog( "RS", player );
 								player iprintlnbold( &"OW_AACP_PLAYER_RETURNED" );
@@ -689,8 +690,7 @@ onMenuResponse()
 
 								break;
 							}
-
-							if ( !player.hasSpawned )
+							else// ( !player.hasSpawned )
 							{
 								player iprintlnbold( &"OW_AACP_PLAYER_REVIVED" );
 								player maps\mp\gametypes\_globallogic::forceSpawnPlayer();
