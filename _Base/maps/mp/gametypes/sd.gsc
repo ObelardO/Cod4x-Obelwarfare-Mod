@@ -151,8 +151,10 @@ onPrecacheGameType()
 	game["bombmodelnameobj"] = "mil_tntbomb_mp";
 	game["bomb_dropped_sound"] = "mp_war_objective_lost";
 	game["bomb_recovered_sound"] = "mp_war_objective_taken";
+	game["bomb_prop_model"] = "prop_suitcase_bomb";
 	precacheModel(game["bombmodelname"]);
 	precacheModel(game["bombmodelnameobj"]);
+	precacheModel(game["bomb_prop_model"]);
 
 	precacheShader("waypoint_bomb");
 	precacheShader("hud_suitcase_bomb");
@@ -189,8 +191,6 @@ onPrecacheGameType()
 	precacheString( &"MP_DEFUSING_EXPLOSIVE" );
 	precacheString( &"OW_DROP_EXPLOSIVES" );
 	precacheString( &"OW_DESTROY_EXPLOSIVES" );
-
-	precacheModel( "prop_suitcase_bomb" );
 }
 
 sd_getTeamKillPenalty( eInflictor, attacker, sMeansOfDeath, sWeapon )
@@ -555,7 +555,7 @@ bombs()
 		return;
 	}
 
-	visuals[0] setModel( "prop_suitcase_bomb" );
+	visuals[0] setModel( game["bomb_prop_model"] );
 
 	if ( !level.multiBomb )
 	{
@@ -937,7 +937,7 @@ bombPlanted( destroyedObj, player )
 
 		level.sdBombModel = spawn( "script_model", trace["position"] );
 		level.sdBombModel.angles = dropAngles;
-		level.sdBombModel setModel( "prop_suitcase_bomb" );
+		level.sdBombModel setModel( game["bomb_prop_model"] );
 	}
 	destroyedObj maps\mp\gametypes\_gameobjects::allowUse( "none" );
 		

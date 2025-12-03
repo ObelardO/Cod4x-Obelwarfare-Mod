@@ -1,41 +1,56 @@
+#include openwarfare\_eventmanager;
+#include openwarfare\_utils;
+
 init()
 {
-	level._effect["snow_light"] = loadfx("weather/snow_light_mp_bloc");
-
-	thread snow();
-
-	ambientPlay("ambient_day");
-}
-
-snow()
-{
-	while ( !isDefined(level.mapCenter) )
+	if ( level.gametype == "sab" || level.gametype == "sd" )
 	{
-		wait 0.05;
-	}
+		game["bomb_prop_model"] = "giftbox_2";
+		precacheModel( game["bomb_prop_model"] );
 
-	snow1 = spawnfx(level._effect["snow_light"], getWeatherOrigin()+(0,0,170));
-	snow2 = spawnfx(level._effect["snow_light"], getWeatherOrigin()+(0,0,140));
-	//snow3 = spawnfx(level._effect["snow_light"], getWeatherOrigin()+(0,0,110));
-	
-	triggerfx(snow1,-15);
-	triggerfx(snow2,-15);
-	//triggerfx(snow3,-15);
+		if ( level.gametype == "sab" )
+		{
+			thread bombs ( "sab_bomb_allies" );
+			thread bombs ( "sab_bomb_axis" );
+		}
+		else
+		{
+			thread bombs ( "bombzone" );
+		}
+		
+	} 
+
+	level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
 }
-/*
-rain()
-{
-	rain = spawnfx(level.fx["weather_rain"], getWeatherOrigin()+(0,0,200));
-	triggerfx(rain,-15);
 
-	if(game["rounds"] > level.dvar["roundLimit"])
+onPlayerConnected()
+{
+	self thread addNewEvent( "onPlayerSpawned", ::onPlayerSpawned );
+}
+
+onPlayerSpawned()
+{
+	self attach("santa_hat");
+}
+
+bombs( bombZoneEntityName )
+{
+	bombZones = getEntArray( bombZoneEntityName, "targetname" );
+
+	for ( index = 0; index < bombZones.size; index++ )
 	{
-		thunder = spawnfx(level.fx["weather_lightning"], getWeatherOrigin()+(0,0,200));
-		triggerfx(thunder,-15);
+		trigger = bombZones[index];
+		visuals = getEntArray( bombZones[index].target, "targetname" );
+
+		for ( i = 0; i < visuals.size; i++ )
+		{
+			if ( isDefined( visuals[i].model ) )
+			{
+				visuals[i].modelscale = 0.5;
+				visuals[i] setModel ("xmas_tree");
+
+				break;
+			}
+		}
 	}
-}
-*/
-getWeatherOrigin()
-{
-	return level.mapCenter;
 }

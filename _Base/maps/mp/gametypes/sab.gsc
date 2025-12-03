@@ -105,6 +105,9 @@ onPrecacheGameType()
 	game["bomb_dropped_sound"] = "mp_war_objective_lost";
 	game["bomb_recovered_sound"] = "mp_war_objective_taken";
 
+	game["bomb_prop_model"] = "prop_suitcase_bomb";
+	precacheModel(game["bomb_prop_model"]);
+
 	precacheShader("waypoint_bomb");
 
 	precacheShader("waypoint_kill");
@@ -134,8 +137,6 @@ onPrecacheGameType()
 	precacheString(&"MP_TIE_BREAKER");
 	precacheString(&"MP_NO_RESPAWN");
 	precacheString(&"MP_SUDDEN_DEATH");
-
-	precacheModel( "prop_suitcase_bomb" );
 }
 
 
@@ -399,7 +400,7 @@ sabotage()
 		return;
 	}
 
-	visuals[0] setModel( "prop_suitcase_bomb" );
+	visuals[0] setModel( game["bomb_prop_model"] );
 	level.sabBomb = maps\mp\gametypes\_gameobjects::createCarryObject( "neutral", trigger, visuals, (0,0,32) );
 	level.sabBomb maps\mp\gametypes\_gameobjects::allowCarry( "any" );
 	level.sabBomb maps\mp\gametypes\_gameobjects::set2DIcon( "enemy", "compass_waypoint_bomb" );

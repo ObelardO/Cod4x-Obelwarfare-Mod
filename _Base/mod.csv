@@ -395,7 +395,6 @@ sound,items,,all_mp
 sound,dynattach,,all_mp
 sound,weapons,,all_mp
 sound,explosions,,all_mp
-sound,ambient,,all_mp
 
 xanim,viewmodel_binoculars_idle
 
