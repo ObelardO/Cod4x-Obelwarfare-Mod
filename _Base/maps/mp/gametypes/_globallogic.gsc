@@ -75,7 +75,7 @@ init()
 	
 	// Set mod name and version
 	setDvar( "_Mod", "ObelWarfare Mod", true );
-	setDvar( "_ModVer", "v5.1122 (RU)", true );
+	setDvar( "_ModVer", "v5.1205 (RU)", true );
 
 	// Make a health check of the server
 	//level thread openwarfare\_servercheck::init();

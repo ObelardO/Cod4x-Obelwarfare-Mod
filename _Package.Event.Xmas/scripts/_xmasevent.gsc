@@ -3,6 +3,8 @@
 
 init()
 {
+	preCacheModel( "santa_hat" );
+
 	if ( level.gametype == "sab" || level.gametype == "sd" )
 	{
 		game["bomb_prop_model"] = "giftbox_2";
