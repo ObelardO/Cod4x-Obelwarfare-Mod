@@ -16,10 +16,6 @@
 #include openwarfare\_eventmanager;
 #include openwarfare\_utils;
 
-
-// Function to get extended dvar values
-// getdvarx( dvarName, dvarType, dvarDefault, minValue, maxValue )
-
 init()
 {
 	// Get the main module's dvar
@@ -66,64 +62,116 @@ init()
 		game["_dcs_timeleft"] = getdvard( "_dcs_timeleft", "int", 0, 0, 86400000 );
 	}	
 
+	// Initialize visions and sounds for each day cycle
+	if ( !isDefined( game["_dcs_data"] ) )
+	{
+		game["_dcs_data"] = getDayCyclesData();
+	}
+
+	// Override the default vision function to return the current day cycle vision file instead of the map's one
+	level.getNakedVision = ::override_getNakedVision;
+
 	// Start the thread to control the day cycles
-	level thread dayCycleController();	
+	level thread dayCycleThread();	
+
+	// Check if we need to play the sounds for each day cycle
+	if ( level.scr_dcs_sounds_enable == 1 ) {
+		level thread dayCycleSoundsThread();
+	}
 }
 
 
-dayCycleController()
+getDayCyclesData()
+{
+	dayCycles = [];
+	dayCycles[0] = initDayCycleData( level.scr_dcs_dawn_length, "ow_sunrise1;ow_sunrise2;ow_sunrise3;ow_sunrise4", "dcsdawn", true, false, level.scr_dcs_dawn_length, (1/255, 1/255, 1/255) ); 
+	dayCycles[1] = initDayCycleData( level.scr_dcs_day_length, level.script, "dcsday", false, false, 0, (1/255, 1/255, 1/255) );
+	dayCycles[2] = initDayCycleData( level.scr_dcs_dusk_length, "ow_sunset1;ow_sunset2;ow_sunset3;ow_sunset4", "dcsdusk", false, true, level.scr_dcs_dusk_length, (1/255, 1/255, 1/255) );
+	dayCycles[3] = initDayCycleData( level.scr_dcs_night_length, "ow_night1;ow_night2;ow_night3;ow_night4", "dcsnight", true, true, 0, (1/255, 1/255, 1/255) );
+	
+	return dayCycles;
+}
+
+
+initDayCycleData( cycleLength, visionFiles, soundAlias, isFogOnStart, isFogOnEnd, fogTime, fogColor)
+{
+	dayCycle = [];
+	dayCycle["visions"] = strtok( visionFiles, ";" );
+	dayCycle["length"] = int( cycleLength / dayCycle["visions"].size );
+	dayCycle["sound"] = soundAlias;
+
+	dayCycle["fog_start"] = isFogOnStart;
+	dayCycle["fog_end"] = isFogOnEnd;
+	dayCycle["fog_time"] = fogTime;
+	dayCycle["fog_clr"] = fogColor;
+
+	return dayCycle;	
+}
+
+
+override_getNakedVision()
+{
+	if ( isDefined( game["_dcs_data"] ) )
+	{
+		//iprintln( "Switching to vision file: " + game["_dcs_data"][ game["_dcs_daycycle"] ]["visions"][ game["_dcs_cyclevision"] ] );
+		return game["_dcs_data"][game["_dcs_daycycle"]]["visions"][game["_dcs_cyclevision"]];
+	}
+	
+	return getdvar( "mapname" );
+}
+
+
+dayCycleThread()
 {
 	level endon( "game_ended" );
 	
-	// Initialize visions and sounds for each day cycle
-	dayCycle = openwarfare\_daycycleutils::getDayCycleData();
-
+	//visionSetNaked( maps\mp\gametypes\_globallogic::GetNakedVision(), 0 );
+	
 	// Wait until the game starts
 	level waittill("prematch_over");
 	
 	firstCycle = true;
 
-	// Check if we need to play the sounds for each day cycle
-	if ( level.scr_dcs_sounds_enable == 1 ) {
-		level thread dayCycleSounds( dayCycle );
-	}
-		
+	visionSetNaked( maps\mp\gametypes\_globallogic::GetNakedVision(), 1 );
+
+	wait (1);
+
 	for (;;)
 	{
 		wait (0.05);
 		
 		// Set current vision file if enabled
-		if ( dayCycle[ game["_dcs_daycycle"] ]["length"] > 0 ) {
-			//iprintln( "Switching to vision file: " + dayCycle[ game["_dcs_daycycle"] ]["visions"][ game["_dcs_cyclevision"] ] );
-			
+		if ( game["_dcs_data"][ game["_dcs_daycycle"] ]["length"] > 0 ) {
+
 			if ( firstCycle ) {
 				transitionTime = 0;
 			} else {
-				transitionTime = dayCycle[ game["_dcs_daycycle"] ]["length"] / 1000;
+				transitionTime = game["_dcs_data"][ game["_dcs_daycycle"] ]["length"] / 1000;
 			}
-			visionSetNaked( dayCycle[ game["_dcs_daycycle"] ]["visions"][ game["_dcs_cyclevision"] ], transitionTime );
-			
+			visionSetNaked( maps\mp\gametypes\_globallogic::GetNakedVision(), transitionTime );
+
 			if (level.scr_dcs_fog_enable) {
 				visionIndex = game["_dcs_cyclevision"];
-				visionCount = dayCycle[ game["_dcs_daycycle"] ]["visions"].size;
-				fogStart = dayCycle[ game["_dcs_daycycle"] ]["fog_start"];
-				fogEnd = dayCycle[ game["_dcs_daycycle"] ]["fog_end"];
-				fogTime = dayCycle[ game["_dcs_daycycle"] ]["fog_time"] / visionCount / 1000;
-				fogClr = dayCycle[ game["_dcs_daycycle"] ]["fog_clr"];
+				visionCount = game["_dcs_data"][ game["_dcs_daycycle"] ]["visions"].size;
+				fogStartDst	= game["_dcs_data"][ game["_dcs_daycycle"] ]["fog_start"];
+				fogEndDst	= game["_dcs_data"][ game["_dcs_daycycle"] ]["fog_end"];
+				fogColor	= game["_dcs_data"][ game["_dcs_daycycle"] ]["fog_clr"];
+				fogTime 	= game["_dcs_data"][ game["_dcs_daycycle"] ]["fog_time"] / visionCount / 1000;
+
 
 				if ( firstCycle ) {
-					setFog(visionIndex, visionCount, fogStart, fogEnd, 0, fogClr);
+					setFog(visionIndex, visionCount, fogStartDst, fogEndDst, 1, fogColor);
 					wait (0.05);
 				} 
 
-				setFog(visionIndex + 1, visionCount, fogStart, fogEnd, fogTime, fogClr);
+				setFog(visionIndex + 1, visionCount, fogStartDst, fogEndDst, fogTime, fogColor);
 			}
 
 			if ( firstCycle ) firstCycle = false;
 
 			// Determine the next day cycle / vision file change
 			if ( game["_dcs_timeleft"] == 0 ) {
-				level.dcsNextCycle = openwarfare\_timer::getTimePassed() + dayCycle[ game["_dcs_daycycle"] ]["length"];
+				level.dcsNextCycle = openwarfare\_timer::getTimePassed() + game["_dcs_data"][ game["_dcs_daycycle"] ]["length"];
 			} else {
 				level.dcsNextCycle = openwarfare\_timer::getTimePassed() + game["_dcs_timeleft"];
 				game["_dcs_timeleft"] = 0;
@@ -146,10 +194,10 @@ dayCycleController()
 			
 		// Move to the next vision or to the next cycle if that was the last one
 		game["_dcs_cyclevision"]++;
-		if ( game["_dcs_cyclevision"] == dayCycle[ game["_dcs_daycycle"] ]["visions"].size ) {
+		if ( game["_dcs_cyclevision"] == game["_dcs_data"][game["_dcs_daycycle"]]["visions"].size ) {
 			game["_dcs_cyclevision"] = 0;
 			game["_dcs_daycycle"]++;
-			if ( game["_dcs_daycycle"] == dayCycle.size ) {
+			if ( game["_dcs_daycycle"] == game["_dcs_data"].size ) {
 				game["_dcs_daycycle"] = 0;
 			}
 		}
@@ -157,7 +205,7 @@ dayCycleController()
 }
 
 
-dayCycleSounds( dayCycle )
+dayCycleSoundsThread()
 {
 	level endon( "game_ended" );
 	
@@ -166,8 +214,8 @@ dayCycleSounds( dayCycle )
 		wait ( randomFloatRange( 10.0, 20.0 ) );
 		
 		// Check if we have a sound for the current day cycle
-		if ( dayCycle[ game["_dcs_daycycle"] ]["sound"] != "" ) {
-			playSoundOnPlayers( dayCycle[ game["_dcs_daycycle"] ]["sound"] );
+		if ( game["_dcs_data"][ game["_dcs_daycycle"] ]["sound"] != "" ) {
+			playSoundOnPlayers( game["_dcs_data"][ game["_dcs_daycycle"] ]["sound"] );
 		}
 	}	
 }
@@ -178,7 +226,7 @@ setFog(index, count, isFogOnStart, isFogOnEnd, fogTime, fogClr)
 	FOG_MIN_DIST_ON = 0;
 	FOG_MIN_DIST_OFF = 500;
 
-	FOG_MAX_DIST_ON = 200;
+	FOG_MAX_DIST_ON = 500;
 	FOG_MAX_DIST_OFF = 5000;
 
 	if (isFogOnStart) {

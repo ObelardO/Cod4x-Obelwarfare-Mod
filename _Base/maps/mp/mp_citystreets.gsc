@@ -19,7 +19,7 @@ main()
 
 	maps\mp\_compass::setupMiniMap("compass_map_mp_citystreets");
 
-	VisionSetNaked( "mp_citystreets" );
+	//VisionSetNaked( "mp_citystreets" );
 
 	game["allies"] = "marines";
 	game["axis"] = "opfor";

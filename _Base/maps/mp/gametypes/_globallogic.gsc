@@ -218,6 +218,7 @@ SetupCallbacks()
 	level.spawnIntermission = ::spawnIntermission;
 	level.onPlayerScore = ::default_onPlayerScore;
 	level.onTeamScore = ::default_onTeamScore;
+	level.getNakedVision = ::default_getNakedVision;
 
 	level.onXPEvent = ::onXPEvent;
 	level.waveSpawnTimer = ::waveSpawnTimer;
@@ -702,7 +703,7 @@ matchStartTimer()
 		}
 	}
 
-	visionSetNaked( getDvar( "mapname" ), 2.0 );
+	visionSetNaked( GetNakedVision(), 2.0 );
 
 	matchStartTimer destroyElem();
 	matchStartText destroyElem();
@@ -715,7 +716,7 @@ matchStartTimer()
 
 matchStartTimerSkip()
 {
-	visionSetNaked( getDvar( "mapname" ), 0 );
+	visionSetNaked( GetNakedVision(), 0 );
 }
 
 
@@ -6705,4 +6706,14 @@ showPlayerJoinedTeam()
 	// Display a message to all the players in the server
 	iprintln( &"OW_JOINED_TEAM", self.name, teamJoined );
 	
+}
+
+default_getNakedVision()
+{
+	return getDvar( "mapname" );
+}
+
+GetNakedVision()
+{
+	return [[level.getNakedVision]]();
 }

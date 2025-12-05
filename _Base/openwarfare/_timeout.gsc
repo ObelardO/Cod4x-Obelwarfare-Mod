@@ -262,7 +262,7 @@ timeoutCalled()
 
 endTimeout()
 {
-	visionSetNaked( getDvar( "mapname" ), 0 );
+	visionSetNaked( maps\mp\gametypes\_globallogic::GetNakedVision(), 0 );
 	level.inTimeoutPeriod = false;
 	maps\mp\gametypes\_globallogic::resumeTimer();
 	setdvar( "ui_show_timeout", 0 );

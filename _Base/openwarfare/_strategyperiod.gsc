@@ -118,7 +118,7 @@ start()
 		}
 	}
 
-	visionSetNaked( getDvar( "mapname" ), level.scr_match_strategy_getready_time );
+	visionSetNaked( maps\mp\gametypes\_globallogic::GetNakedVision(), level.scr_match_strategy_getready_time );
 	wait ( level.scr_match_strategy_getready_time );
 	level.strategyPeriodText destroy();
 	level.strategyPeriodTimer destroy();

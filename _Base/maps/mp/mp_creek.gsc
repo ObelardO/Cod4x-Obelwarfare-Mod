@@ -17,7 +17,7 @@
 main()
 {
 	setExpFog(612, 25000, 0.613, 0.671, 0.75, 0);
-	VisionSetNaked( "mp_creek", 0 );
+	//VisionSetNaked( "mp_creek", 0 );
 
 	maps\mp\mp_creek_fx::main();
 

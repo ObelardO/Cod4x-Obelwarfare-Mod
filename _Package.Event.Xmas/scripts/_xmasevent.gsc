@@ -10,7 +10,7 @@ init()
 		game["bomb_prop_model"] = "giftbox_2";
 		precacheModel( game["bomb_prop_model"] );
 
-		if ( level.gametype == "sab" )
+		if ( level.gametype == "sab" )  
 		{
 			thread bombs ( "sab_bomb_allies" );
 			thread bombs ( "sab_bomb_axis" );

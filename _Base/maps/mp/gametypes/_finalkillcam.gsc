@@ -100,7 +100,7 @@ finalkillcam( attacker, attackerNum, deathtime, victim, weapon, killcamentity)
     killcamlength = camtime + postdelay;
     killcamoffset = camtime + predelay;
     
-    visionSetNaked( getdvar("mapname") );
+    visionSetNaked( maps\mp\gametypes\_globallogic::GetNakedVision() );
     
     self notify ( "begin_killcam", getTime() );
     
