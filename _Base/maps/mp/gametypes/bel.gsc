@@ -323,7 +323,7 @@ onSpawnPlayer( teamMove )
 		spawnPoints = maps\mp\gametypes\_spawnlogic::getTeamSpawnPoints( spawnTeam );
 		spawnPoint = maps\mp\gametypes\_spawnlogic::getSpawnpoint_NearTeam( spawnPoints );
 	}
-	
+
 	// If it's a team move we just return where the player needs to be moved
 	if ( isDefined( teamMove ) && teamMove ) {
 		return spawnPoint;
@@ -339,6 +339,8 @@ onSpawnPlayer( teamMove )
 			glowColor = (0.7, 0.2, 0.2);
 		}
 		self thread spawnInformation( textLine, glowColor );
+
+		self openwarfare\_damageeffect::clearAllDamageEffects();
 	}
 	
 	// If this player is a defender start giving score points for surviving
