@@ -104,12 +104,10 @@ setDefaultSpawnMusic()
 	{
 		case "sas":
 			game["music"]["spawn_allies"] = "mp_spawn_sas";
-			game["music"]["victory_allies"] = "mp_victory_sas";
 			break;
 		case "marines":
 		default:
 			game["music"]["spawn_allies"] = "mp_spawn_usa";
-			game["music"]["victory_allies"] = "mp_victory_usa";
 			break;
 	}
 
@@ -117,13 +115,11 @@ setDefaultSpawnMusic()
 	{
 		case "russian":
 			game["music"]["spawn_axis"] = "mp_spawn_soviet";
-			game["music"]["victory_axis"] = "mp_victory_soviet";
 			break;
 		case "arab":
 		case "opfor":
 		default:
 			game["music"]["spawn_axis"] = "mp_spawn_opfor";
-			game["music"]["victory_axis"] = "mp_victory_opfor";
 			break;
 	}
 }

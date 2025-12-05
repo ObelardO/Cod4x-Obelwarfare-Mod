@@ -817,14 +817,6 @@ spawnPlayer()
 
 		team = self.pers["team"];
 
-		music = game["music"]["spawn_" + team];
-		if ( level.splitscreen )
-		{
-			if ( isDefined( level.playedStartingMusic ) )
-				music = undefined;
-			else
-				level.playedStartingMusic = true;
-		}
 		thread maps\mp\gametypes\_hud::showClientScoreBar( 5.0 );
 
 	} else if ( level.inStrategyPeriod ) {
@@ -833,16 +825,7 @@ spawnPlayer()
 
 		team = self.pers["team"];
 
-		music = game["music"]["spawn_" + team];
-		if ( level.splitscreen )
-		{
-			if ( isDefined( level.playedStartingMusic ) )
-				music = undefined;
-			else
-				level.playedStartingMusic = true;
-		}
-
-		thread maps\mp\gametypes\_hud_message::oldNotifyMessage( game["strings"][team + "_name"], undefined, game["icons"][team], game["colors"][team], music );
+		thread maps\mp\gametypes\_hud_message::oldNotifyMessage( game["strings"][team + "_name"], undefined, game["icons"][team], game["colors"][team], undefined );
 		if ( isDefined( game["dialog"]["gametype"] ) && (!level.splitscreen || self == level.players[0]) )
 			self leaderDialogOnPlayer( "gametype" );
 
@@ -855,16 +838,7 @@ spawnPlayer()
 
 		team = self.pers["team"];
 
-		music = game["music"]["spawn_" + team];
-		if ( level.splitscreen )
-		{
-			if ( isDefined( level.playedStartingMusic ) )
-				music = undefined;
-			else
-				level.playedStartingMusic = true;
-		}
-
-		thread maps\mp\gametypes\_hud_message::oldNotifyMessage( game["strings"][team + "_name"], undefined, game["icons"][team], game["colors"][team], music );
+		thread maps\mp\gametypes\_hud_message::oldNotifyMessage( game["strings"][team + "_name"], undefined, game["icons"][team], game["colors"][team], undefined );
 		if ( isDefined( game["dialog"]["gametype"] ) && (!level.splitscreen || self == level.players[0]) )
 			self leaderDialogOnPlayer( "gametype" );
 
@@ -877,22 +851,13 @@ spawnPlayer()
 		} else {
 			self freezeControls( false );
 		}		
-		
+
 		self thread maps\mp\gametypes\_gameobjects::_enableWeapon();
 		if ( !hadSpawned && game["state"] == "playing" )
 		{
 			team = self.team;
 
-			music = game["music"]["spawn_" + team];
-			if ( level.splitscreen )
-			{
-				if ( isDefined( level.playedStartingMusic ) )
-					music = undefined;
-				else
-					level.playedStartingMusic = true;
-			}
-
-			thread maps\mp\gametypes\_hud_message::oldNotifyMessage( game["strings"][team + "_name"], undefined, game["icons"][team], game["colors"][team], music );
+			thread maps\mp\gametypes\_hud_message::oldNotifyMessage( game["strings"][team + "_name"], undefined, game["icons"][team], game["colors"][team], undefined );
 				
 			if ( level.gametype != "hns" ) {
 				if ( isDefined( game["dialog"]["gametype"] ) && (!level.splitscreen || self == level.players[0]) )
@@ -3440,6 +3405,18 @@ prematchPeriod()
 
 		if ( level.gametype != "hns" )
 			level.players[index] thread maps\mp\gametypes\_hud_message::hintMessage( hintMessage );
+
+		if ( isDefined( level.players[index].team ))
+		{
+			team = level.players[index].pers["team"];
+		}
+
+		if ( !isDefined( level.players[index].isSpawnMusicPlayed ) )
+		{
+			spawnMusic = game["music"]["spawn_" + level.players[index].pers["team"]];
+			level.players[index] playLocalSound ( spawnMusic ); 
+			level.players[index].isSpawnMusicPlayed = true;
+		}
 	}
 
 	if ( level.gametype != "hns" ) {
