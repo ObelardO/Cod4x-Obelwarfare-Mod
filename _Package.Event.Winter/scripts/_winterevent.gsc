@@ -3,13 +3,14 @@ init()
 	// Override the daytime vision for winter server event
 	if ( isDefined ( game["_dcs_data"] ) )
 	{
-		game["_dcs_data"][1]["visions"] = [];
-		game["_dcs_data"][1]["visions"][0] = "default_day";
+		game["_dcs_data"][1] = openwarfare\_daycyclesystem::initDayCycleData( level.scr_dcs_day_length, "default_day", "dcsday", false, false, 5000, (170/255, 189/255, 224/255) );
 	}
 
 	level._effect["snow_light"] = loadfx("weather/snow_light_mp_bloc");
 
 	ambientPlay("ambient_day");
+
+	level thread snow();
 }
 
 
