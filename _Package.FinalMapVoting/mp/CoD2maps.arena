@@ -299,6 +299,23 @@
 	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
 }
 
+{
+	map			"mp_getaway"
+	longname	"mpui_maps_mp_getaway"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_sinai"
+	longname	"mpui_maps_mp_sinai"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_firingrange"
+	longname	"mpui_maps_mp_firingrange"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
 
 {
 	map			"mp_winter_rasalem"
@@ -327,6 +344,12 @@
 {
 	map			"mp_dome_night"
 	longname	"mpui_maps_mp_dome_night"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_farm_xmas"
+	longname	"mpui_maps_mp_farm_xmas"
 	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
 }
 

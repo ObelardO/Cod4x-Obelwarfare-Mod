@@ -62,6 +62,9 @@ material,mp_stream_preview
 material,mp_strike_2_preview
 material,mp_struggle_preview
 material,mp_summit_preview
+material,mp_firingrange_preview
+material,mp_sinai_preview
+material,mp_getaway_preview
 
 #Final Map Voting: Materials (Custom Xmax Maps)
 material,mp_backlot_snow_preview
@@ -69,6 +72,7 @@ material,mp_carentan_snow_preview
 material,mp_compact_preview
 material,mp_crash_snow_preview
 material,mp_dome_night_preview
+material,mp_farm_xmas_preview
 material,mp_naout_s_preview
 material,mp_ngbc_shipmentw_preview
 material,mp_seatown_snow_preview

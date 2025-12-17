@@ -172,6 +172,16 @@ LANG_RUSSIAN "Стычка"
 REFERENCE mp_summit
 LANG_RUSSIAN "Канатная дорога"
 
+REFERENCE mp_firingrange
+LANG_RUSSIAN "Лагерь"
+
+REFERENCE mp_sinai
+LANG_RUSSIAN "Синай"
+
+REFERENCE mp_getaway
+LANG_RUSSIAN "Вилла"
+
+
 //******************************************************************************
 // CUSTOM XMAS MAPS
 //******************************************************************************
@@ -217,5 +227,8 @@ LANG_RUSSIAN "Снежный офис"
 
 REFERENCE mp_waw_castle_snow
 LANG_RUSSIAN "Снежный храм"
+
+REFERENCE mp_farm_xmas
+LANG_RUSSIAN "Снежная ферма"
 
 ENDMARKER
