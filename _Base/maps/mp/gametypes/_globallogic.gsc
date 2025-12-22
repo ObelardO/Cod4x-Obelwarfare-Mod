@@ -5792,8 +5792,8 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 		self.body = body;
 		self notify("player_body");
 	
-		if ( !isDefined( self.switching_teams ) && level.scr_hud_show_death_icons == 1 )
-			thread maps\mp\gametypes\_deathicons::addDeathicon( body, self, self.pers["team"], 5.0 );
+		if ( !isDefined( self.switching_teams ) && level.scr_hud_show_death_icons != 0 )
+			thread maps\mp\gametypes\_deathicons::addDeathicon( body, self, self.pers["team"], 3.0, level.scr_hud_show_death_icons == 2 );
 	}
 	
 	self.switching_teams = undefined;

@@ -78,7 +78,7 @@ init()
 	level.scr_player_healthregentime = getdvarx( "scr_player_healthregentime", "int", 5, 0, 120 );
 
 	// HUD elements
-	level.scr_hud_show_death_icons = getdvarx( "scr_hud_show_death_icons", "int", 1, 0, 1 );
+	level.scr_hud_show_death_icons = getdvarx( "scr_hud_show_death_icons", "int", 0, 0, 2 );
 
 	// Variables used in menu files
 	level.scr_hud_show_inventory = getdvarx( "scr_hud_show_inventory", "int", 0, 0, 2 );

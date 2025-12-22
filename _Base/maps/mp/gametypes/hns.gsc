@@ -451,8 +451,8 @@ killPropOwner( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, 
 	
 	// Check if we need to remove the prop
 	if ( isDefined( self.pers["myprop"] ) ) {
-		if ( !isDefined( self.switching_teams ) && level.scr_hud_show_death_icons == 1 ) {
-			thread maps\mp\gametypes\_deathicons::addDeathicon( self.pers["myprop"], self, self.pers["team"], 5.0 );
+		if ( !isDefined( self.switching_teams ) && level.scr_hud_show_death_icons > 0 ) {
+			thread maps\mp\gametypes\_deathicons::addDeathicon( self.pers["myprop"], self, self.pers["team"], 5.0, level.scr_hud_show_death_icons == 2 );
 			wait (0.05);
 		}
 					

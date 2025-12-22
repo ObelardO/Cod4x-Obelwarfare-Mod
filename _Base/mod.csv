@@ -131,6 +131,7 @@ rawfile,maps/mp/gametypes/_class.gsc
 rawfile,maps/mp/gametypes/_class_unranked.gsc
 rawfile,maps/mp/gametypes/_class_ingame.gsc
 rawfile,maps/mp/gametypes/_damagefeedback.gsc
+rawfile,maps/mp/gametypes/_deathicons.gsc
 rawfile,maps/mp/gametypes/_finalkillcam.gsc
 rawfile,maps/mp/gametypes/_friendicons.gsc
 rawfile,maps/mp/gametypes/_gameobjects.gsc
@@ -259,6 +260,7 @@ material,sponsor_logo2
 material,waypoint_extraction_zone
 material,weapon_knife
 material,animbg_blur_back
+material,waypoint_dead
 
 rawfile,mp/CoD2maps.arena
 stringtable,mp/propsTable.csv
