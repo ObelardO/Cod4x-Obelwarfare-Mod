@@ -225,7 +225,7 @@ onPlayerKilled( eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHi
         
         level.doFK[team] = true;
         
-        if(level.teamBased)
+        if( level.teamBased && level.gametype != "bel" )
         {
             level.KillInfo[team]["attacker"] = attacker;
             level.KillInfo[team]["attackerNumber"] = attacker getEntityNumber();
@@ -266,7 +266,8 @@ startFK( winner )
         player notify("beginFK", winner);
     }
     
-    slowMotion();
+    //Disabled cas slow motion calls MAX PACKETS network issues
+    //slowMotion();
 }
 
 slowMotion()
