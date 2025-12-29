@@ -260,7 +260,6 @@ material,sponsor_logo2
 material,waypoint_extraction_zone
 material,weapon_knife
 material,animbg_blur_back
-material,waypoint_dead
 
 rawfile,mp/CoD2maps.arena
 stringtable,mp/propsTable.csv

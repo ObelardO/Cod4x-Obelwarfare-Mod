@@ -86,7 +86,7 @@ getDayCyclesData()
 	dayCycles = [];
 	dayCycles[0] = initDayCycleData( level.scr_dcs_dawn_length, "ow_sunrise1;ow_sunrise2;ow_sunrise3;ow_sunrise4", "dcsdawn", true, false, level.scr_dcs_dawn_length, (104/255, 88/255, 83/255) ); 
 	dayCycles[1] = initDayCycleData( level.scr_dcs_day_length, level.script, "dcsday", false, false, 5000, (216/255, 235/255, 255/255) );
-	dayCycles[2] = initDayCycleData( level.scr_dcs_dusk_length, "ow_sunset1;ow_sunset2;ow_sunset3;ow_sunset4", "dcsdusk", false, true, level.scr_dcs_dusk_length, (145/255, 127/255, 123/255) );
+	dayCycles[2] = initDayCycleData( level.scr_dcs_dusk_length, "ow_sunset1;ow_sunset2;ow_sunset3;ow_sunset4", "dcsdusk", false, true, level.scr_dcs_dusk_length, (97/255, 84/255, 81/255) );
 	dayCycles[3] = initDayCycleData( level.scr_dcs_night_length, "ow_night1;ow_night2;ow_night3;ow_night4", "dcsnight", true, true, level.scr_dcs_night_length, (0/255, 13/255, 22/255) );
 	
 	return dayCycles;

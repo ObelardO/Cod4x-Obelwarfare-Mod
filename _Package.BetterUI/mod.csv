@@ -22,3 +22,4 @@ material,hud_suitcase_bomb_item
 material,hud_background_line
 material,hud_background_line_half
 material,hud_background_quad
+material,waypoint_dead
