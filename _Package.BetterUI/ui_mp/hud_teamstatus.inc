@@ -1,8 +1,9 @@
-#define TEAMSTAT_HUD_OFFSET_X	    -20
+#define TEAMSTAT_HUD_OFFSET_X	    0
 #define TEAMSTAT_HUD_OFFSET_Y	    20
-#define TEAMSTAT_HUD_SPACING        30
-#define TEAMSTAT_HUD_SPACING_HALF   0
+#define TEAMSTAT_HUD_SPACING_Y      30
 #define TEAMSTAT_HUD_SIZE           24
+#define TEAMSTAT_HUD_SPACING_X      60
+#define TEAMSTAT_HUD_SPACING_X_HALF 30
 
 #define TEAMSTAT_HUD_BACK_SIZE_Y    ( TEAMSTAT_HUD_SIZE + 6 )
 #define TEAMSTAT_HUD_BACK_SIZE_X    ( TEAMSTAT_HUD_BACK_SIZE_Y * 2 )
@@ -17,9 +18,14 @@
 #define TEAMSTAT_IS_LOSING_AXIS     ( TEAMSTAT_IS_TEAMBASED && opforfield( score ) <= marinesfield( score ) )
 #define TEAMSTAT_IS_LOSING_ALLIES   ( TEAMSTAT_IS_TEAMBASED && marinesfield( score ) < opforfield( score ) )
 
-#define TEAMSTAT_HUD_POS_Y_AXIS     ( TEAMSTAT_IS_LOSING_AXIS * TEAMSTAT_HUD_SPACING + TEAMSTAT_HUD_OFFSET_Y )
-#define TEAMSTAT_HUD_POS_Y_ALLIES   ( TEAMSTAT_IS_LOSING_ALLIES * TEAMSTAT_HUD_SPACING + TEAMSTAT_HUD_OFFSET_Y )
+#define TEAMSTAT_HUD_POS_Y_AXIS     ( TEAMSTAT_IS_LOSING_AXIS * TEAMSTAT_HUD_SPACING_Y + TEAMSTAT_HUD_OFFSET_Y )
+#define TEAMSTAT_HUD_POS_Y_ALLIES   ( TEAMSTAT_IS_LOSING_ALLIES * TEAMSTAT_HUD_SPACING_Y + TEAMSTAT_HUD_OFFSET_Y )
 #define TEAMSTAT_HUD_POS_X          ( TEAMSTAT_HUD_OFFSET_X )
+
+#define TEAMSTAT_HUD_POS_X_AXIS     ( TEAMSTAT_HUD_POS_X + TEAMSTAT_HUD_SPACING_X_HALF )
+//#define TEAMSTAT_HUD_POS_X_AXIS     30
+#define TEAMSTAT_HUD_POS_X_ALLIES   ( TEAMSTAT_HUD_POS_X - TEAMSTAT_HUD_SPACING_X_HALF - TEAMSTAT_HUD_SIZE )
+//#define TEAMSTAT_HUD_POS_X_ALLIES   -30
 
 
 #define TEAMSTAT_SCORE_PLAYER_RANK  ( dvarint( ui_hud_teamstat_player_rank ) )
@@ -27,8 +33,8 @@
 #define TEAMSTAT_IS_LOSING_PLAYER   ( TEAMSTAT_IS_NOT_TEAMBASED && TEAMSTAT_SCORE_PLAYER_RANK > 1 )
 #define TEAMSTAT_IS_WINNING_PLAYER  ( TEAMSTAT_IS_NOT_TEAMBASED && TEAMSTAT_SCORE_PLAYER_RANK == 1 )
 
-#define TEAMSTAT_HUD_POS_Y_PLAYER_1 ( 0 * TEAMSTAT_HUD_SPACING + TEAMSTAT_HUD_OFFSET_Y )
-#define TEAMSTAT_HUD_POS_Y_PLAYER_2 ( 1 * TEAMSTAT_HUD_SPACING + TEAMSTAT_HUD_OFFSET_Y )
+#define TEAMSTAT_HUD_POS_Y_PLAYER_1 ( 0 * TEAMSTAT_HUD_SPACING_Y + TEAMSTAT_HUD_OFFSET_Y )
+#define TEAMSTAT_HUD_POS_Y_PLAYER_2 ( 1 * TEAMSTAT_HUD_SPACING_Y + TEAMSTAT_HUD_OFFSET_Y )
 
 #define TEAMSTAT_HUD_SCORE_PLAYER_1 ( scoreatrank( 1 ) )
 #define TEAMSTAT_HUD_SCORE_PLAYER_2 ( TEAMSTAT_IS_LOSING_PLAYER * player ( score ) ) + ( TEAMSTAT_IS_WINNING_PLAYER * scoreatrank( 2 ) )
@@ -39,12 +45,12 @@
 
 #define TEAMSTAT_HUD_TIMER_VISIBLE  ( TEAMSTAT_HUD_VISIBLE && ( team( name ) != "TEAM_SPECTATOR" || ( team( name ) == "TEAM_SPECTATOR" && dvarInt( ui_broadcaster ) == 0 ) ) && dvarInt( "ui_timelimit" ) > 0 && !inkillcam() && !ui_active() && !flashbanged() && !scoped() && ( dvarInt( "ui_timelimit" ) * 60 - timeLeft() > 5 ) )
 #define TEAMSTAT_HUD_TIMER_POS_X    ( TEAMSTAT_HUD_POS_X - ( dvarBool( ui_bomb_timer ) * ( TEAMSTAT_HUD_SIZE + 4 ) ) )
-#define TEAMSTAT_HUD_TIMER_POS_Y    ( 2 * TEAMSTAT_HUD_SPACING + TEAMSTAT_HUD_OFFSET_Y )
+#define TEAMSTAT_HUD_TIMER_POS_Y    ( 2 * TEAMSTAT_HUD_SPACING_Y + TEAMSTAT_HUD_OFFSET_Y )
 
 #define TEAMSTAT_HUD_TIMER( textExp, color, visibleExp ) \
     itemDef \
     { \
-        rect		TEAMSTAT_HUD_POS_X ( TEAMSTAT_HUD_TIMER_POS_Y + TEAMSTAT_HUD_SPACING_HALF ) 1 TEAMSTAT_HUD_SIZE HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP \
+        rect		TEAMSTAT_HUD_POS_X TEAMSTAT_HUD_TIMER_POS_Y 1 TEAMSTAT_HUD_SIZE HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_TOP \
         exp         rect X( TEAMSTAT_HUD_TIMER_POS_X ) \
         exp         text( textExp ); \
         textfont	UI_FONT_OBJECTIVE \
@@ -62,24 +68,24 @@
 
     */
 
-#define TEAMSTAT_HUD_ITEM( yOffset, icon, visibleExp, score, highlightFlag, count, blinkExp ) \
+#define TEAMSTAT_HUD_ITEM( yOffset, xOffset, xAlign, icon, backImagePostfix, visibleExp, score, highlightFlag, count, blinkExp ) \
     itemDef \
     { \
-        rect			( TEAMSTAT_HUD_POS_X - TEAMSTAT_HUD_BACK_SIZE_X + 6 ) TEAMSTAT_HUD_OFFSET_Y TEAMSTAT_HUD_BACK_SIZE_X TEAMSTAT_HUD_BACK_SIZE_Y HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP \
+        rect			( TEAMSTAT_HUD_POS_X - TEAMSTAT_HUD_BACK_SIZE_X + 6 ) TEAMSTAT_HUD_OFFSET_Y TEAMSTAT_HUD_BACK_SIZE_X TEAMSTAT_HUD_BACK_SIZE_Y HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_TOP \
         exp             rect Y( yOffset - 6 ) \
         forecolor		1 1 1 ( HUD_BACK_ALPHA * 0.65 ) \
         style			WINDOW_STYLE_SHADER \
-        background		"hud_background_line_half" \
+        background		"hud_background_line_half"backImagePostfix \
         visible			when ( visibleExp ) \
         decoration \
     } \
     itemDef \
     { \
         style			WINDOW_STYLE_SHADER \
-        rect			TEAMSTAT_HUD_POS_X TEAMSTAT_HUD_OFFSET_Y TEAMSTAT_HUD_SIZE TEAMSTAT_HUD_SIZE HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP \
-        origin		    1 0 \
-        exp             rect Y( yOffset ) \
-        origin          (-TEAMSTAT_HUD_SIZE+1) 0 \
+        rect			TEAMSTAT_HUD_POS_X TEAMSTAT_HUD_OFFSET_Y TEAMSTAT_HUD_SIZE TEAMSTAT_HUD_SIZE HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_TOP \
+        exp             rect Y( yOffset ); \
+        exp             rect X( xOffset ); \
+        origin          0 0; \
         exp				material( icon ); \
         visible			when ( visibleExp ); \
         forecolor		1 1 1 HUD_FOREGROUND_ALPHA \
@@ -87,7 +93,7 @@
     } \
     itemDef \ 
     { \
-        rect		( TEAMSTAT_HUD_POS_X - TEAMSTAT_HUD_SIZE ) TEAMSTAT_HUD_OFFSET_Y 1 TEAMSTAT_HUD_SIZE HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP \
+        rect		( TEAMSTAT_HUD_POS_X - TEAMSTAT_HUD_SIZE ) TEAMSTAT_HUD_OFFSET_Y 1 TEAMSTAT_HUD_SIZE HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_TOP \
         exp         rect Y( yOffset ) \
         origin		-4 0 \
         exp         text( score ); \
@@ -102,7 +108,7 @@
     itemDef \
     { \
         name			"teamCount" \
-        rect			TEAMSTAT_HUD_POS_X TEAMSTAT_HUD_OFFSET_Y 1 1 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP \
+        rect			TEAMSTAT_HUD_POS_X TEAMSTAT_HUD_OFFSET_Y 1 1 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_TOP \
         exp             rect Y( yOffset + TEAMSTAT_HUD_SIZE ) \
         textscale		( TEXTSIZE_SMALL * 0.6 ) \
         textstyle		ITEM_TEXTSTYLE_SHADOWED \
@@ -115,7 +121,7 @@
     itemDef \
     { \
         name			"teamCountLast" \
-        rect			TEAMSTAT_HUD_POS_X TEAMSTAT_HUD_OFFSET_Y 1 1 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP \
+        rect			TEAMSTAT_HUD_POS_X TEAMSTAT_HUD_OFFSET_Y 1 1 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_TOP \
         exp             rect Y( yOffset + TEAMSTAT_HUD_SIZE ) \
         textscale		(TEXTSIZE_SMALL * 0.6) \
         textstyle		ITEM_TEXTSTYLE_SHADOWED \
@@ -134,20 +140,13 @@ menuDef
     fullScreen		0
     visible         when( !inkillcam() && !ui_active() && !isIntermission() && !flashbanged() && !scoped() );
 
-    itemDef
-    {
-        rect 0 100 200 380 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP
-        ownerdraw CG_SPECTATORS
-        textscale 4
-    }
-
     //TEAMBASED HUD
-    TEAMSTAT_HUD_ITEM( TEAMSTAT_HUD_POS_Y_ALLIES, dvarString( g_TeamIcon_Allies ), TEAMSTAT_HUD_VISIBLE && TEAMSTAT_IS_TEAMBASED, marinesfield( score ), TEAMSTAT_IS_ALLIES, TEAMSTAT_TEAMCOUNT_ALLIES, 1 )
-    TEAMSTAT_HUD_ITEM( TEAMSTAT_HUD_POS_Y_AXIS,   dvarString( g_TeamIcon_Axis ),   TEAMSTAT_HUD_VISIBLE && TEAMSTAT_IS_TEAMBASED, opforfield( score ),   TEAMSTAT_IS_AXIS,   TEAMSTAT_TEAMCOUNT_AXIS,   1 )
+    TEAMSTAT_HUD_ITEM( TEAMSTAT_HUD_POS_Y_ALLIES, TEAMSTAT_HUD_POS_X_ALLIES,  10, dvarString( g_TeamIcon_Allies ),   "", TEAMSTAT_HUD_VISIBLE && TEAMSTAT_IS_TEAMBASED, marinesfield( score ), TEAMSTAT_IS_ALLIES, TEAMSTAT_TEAMCOUNT_ALLIES, 1 )
+    TEAMSTAT_HUD_ITEM( TEAMSTAT_HUD_POS_Y_AXIS,   TEAMSTAT_HUD_POS_X_AXIS,    0, dvarString( g_TeamIcon_Axis ), "_inv", TEAMSTAT_HUD_VISIBLE && TEAMSTAT_IS_TEAMBASED, opforfield( score ),   TEAMSTAT_IS_AXIS,   TEAMSTAT_TEAMCOUNT_AXIS,   1 )
 
     //FREE GAMEMODE HUD
-    TEAMSTAT_HUD_ITEM( TEAMSTAT_HUD_POS_Y_PLAYER_1, "hud_match_cup_gold", TEAMSTAT_HUD_VISIBLE && TEAMSTAT_IS_NOT_TEAMBASED, TEAMSTAT_HUD_SCORE_PLAYER_1, TEAMSTAT_IS_WINNING_PLAYER, 1, 0 )
-    TEAMSTAT_HUD_ITEM( TEAMSTAT_HUD_POS_Y_PLAYER_2, "hud_match_cup",      TEAMSTAT_HUD_VISIBLE && TEAMSTAT_IS_NOT_TEAMBASED, TEAMSTAT_HUD_SCORE_PLAYER_2, TEAMSTAT_IS_LOSING_PLAYER,  TEAMSTAT_HUD_PLAYER_INDEX, 0 )
+    TEAMSTAT_HUD_ITEM( TEAMSTAT_HUD_POS_Y_PLAYER_1, TEAMSTAT_HUD_POS_X_ALLIES,  10, "hud_match_cup_gold", "", TEAMSTAT_HUD_VISIBLE && TEAMSTAT_IS_NOT_TEAMBASED, TEAMSTAT_HUD_SCORE_PLAYER_1, TEAMSTAT_IS_WINNING_PLAYER, 1, 0 )
+    TEAMSTAT_HUD_ITEM( TEAMSTAT_HUD_POS_Y_PLAYER_2, TEAMSTAT_HUD_POS_X_AXIS,    0, "hud_match_cup",  "_inv", TEAMSTAT_HUD_VISIBLE && TEAMSTAT_IS_NOT_TEAMBASED, TEAMSTAT_HUD_SCORE_PLAYER_2, TEAMSTAT_IS_LOSING_PLAYER,  TEAMSTAT_HUD_PLAYER_INDEX, 0 )
 
     //RAUND TIMER
     itemDef
