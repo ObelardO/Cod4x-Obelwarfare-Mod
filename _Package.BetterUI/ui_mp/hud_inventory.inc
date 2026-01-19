@@ -17,7 +17,8 @@
 #define DPAD_SLOT_B_POS_X		( DPAD_SLOT_A_POS_X + DPAD_ICON_SPACING * DPAD_SLOT_A_USABLE )
 #define DPAD_SLOT_C_POS_X		( DPAD_SLOT_B_POS_X + DPAD_ICON_SPACING * DPAD_SLOT_B_USABLE )
 
-#define DPAD_VISIBLE			( dvarint( ui_hud_show_inventory ) >= dvarint( ui_hud_hardcore ) + 1 )
+//#define DPAD_VISIBLE			( dvarint( ui_hud_show_inventory ) >= dvarint( ui_hud_hardcore ) + 1 )
+#define DPAD_VISIBLE			0
 
 #define DPAD_SLOT_ITEM( vertPos, iconOwnerDraw, KeyBindingText, visibleExp ) \
 	itemDef \
@@ -34,11 +35,12 @@
 	itemDef \
 	{ \
 		name			"slotIcon" \
-		rect			0 DPAD_ICON_Y DPAD_BASE_SIZE DPAD_BASE_SIZE HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_BOTTOM \
+		rect			0 DPAD_ICON_Y -DPAD_BASE_SIZE DPAD_BASE_SIZE HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_BOTTOM \
 		exp				rect X( vertPos ) \
 		iconOwnerDraw \
 		forecolor		1 1 1 HUD_ALPHA \
 		visible			1 \
+		origin			10 0 \
 		decoration \
 		textstyle		ITEM_TEXTSTYLE_SHADOWED \
 		textalign		ITEM_ALIGN_LEFT \ 
