@@ -1,7 +1,7 @@
 #define TS_HUD_ALIGN              HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_BOTTOM
 
 #define TS_HUD_SIZE               24
-#define TS_HUD_OFFSET_X	          20
+#define TS_HUD_OFFSET_X	          0
 #define TS_HUD_OFFSET_Y	          ( -TS_HUD_SIZE - 24 )
 #define TS_HUD_SPACING_X          72
 #define TS_HUD_SPACING_X_HALF     36
@@ -52,6 +52,8 @@
 
 
 #define TS_HUD_TIMER_VISIBLE      ( TS_HUD_VISIBLE && ( team( name ) != "TEAM_SPECTATOR" || ( team( name ) == "TEAM_SPECTATOR" && dvarInt( ui_broadcaster ) == 0 ) ) && !inkillcam() && !ui_active() && !flashbanged() && !scoped() && ( dvarInt( "ui_timelimit" ) == 0 || ( dvarInt( "ui_timelimit" ) * 60 - timeLeft() > 5 ) ) )
+#define TS_HUD_BOMB_SIZE          36
+#define TS_HUD_BOMB_SIZE_HALF     18
 
 
 #define TS_HUD_TIMER( textExp, color, xOffset, visibleExp ) \
@@ -167,25 +169,16 @@ menuDef
     TS_HUD_ITEM( TS_HUD_ALIGN_X_OP_RIGHT, TS_HUD_ALIGN_W_MOD_RIGHT, ITEM_ALIGN_MIDDLE_LEFT,  "hud_match_cup", "_inv",  TS_HUD_VISIBLE && TS_IS_NOT_TEAMBASED, TS_HUD_PLAYER_SCORE_2, 0, TS_IS_PLAYER_LOSING, TS_IS_PLAYER_TIE, TS_HUD_PLAYER_INDEX, 0 )
 
     //RAUND TIMER
-    /*itemDef
-    {
-        rect			( TS_HUD_OFFSET_X - TS_HUD_BACK_SIZE_X + 6 ) ( TS_HUD_TIMER_POS_Y - 6 ) TS_HUD_BACK_SIZE_X TS_HUD_BACK_SIZE_Y HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP
-        forecolor		1 1 1 ( HUD_BACK_ALPHA * 0.65 )
-        style			WINDOW_STYLE_SHADER
-        background		"hud_background_line_half"
-        visible			when ( TS_HUD_TIMER_VISIBLE )
-        decoration
-    }
     itemDef
     {
         style			WINDOW_STYLE_SHADER
-        rect			TS_HUD_OFFSET_X TS_HUD_TIMER_POS_Y TS_HUD_SIZE TS_HUD_SIZE HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP
-        origin			-22 0
-        exp				material( "hud_suitcase_bomb" );
-        visible			when ( dvarBool( ui_bomb_timer ) && TS_HUD_TIMER_VISIBLE );
-        forecolor		1 1 1 HUD_ALPHA
+        rect			TS_HUD_OFFSET_X TS_HUD_OFFSET_Y TS_HUD_BOMB_SIZE TS_HUD_BOMB_SIZE TS_HUD_ALIGN
+        origin			-TS_HUD_BOMB_SIZE_HALF -6
+        exp				material( "hud_suitcase_bomb" )
+        visible			when ( TS_HUD_TIMER_VISIBLE && dvarBool( ui_bomb_timer ) )
+        forecolor		1 1 1 ( HUD_ALPHA * 0.4 )
         decoration
-    }*/
+    }
 
     TS_HUD_TIMER( "--:--", 1 1 1 HUD_FOREGROUND_ALPHA, 0, dvarInt( "ui_timelimit" ) == 0 )
     TS_HUD_TIMER( secondsAsCountdown( timeLeft() ), 1 1 1 HUD_FOREGROUND_ALPHA, -2, dvarInt( "ui_timelimit" ) > 0 && timeLeft() >= 60 && !dvarBool( ui_bomb_timer ) )
