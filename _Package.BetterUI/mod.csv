@@ -5,6 +5,7 @@ rawfile,ui_mp/hud_hints.inc
 rawfile,ui_mp/hud_stance.inc
 rawfile,ui_mp/hud_compass.inc
 rawfile,ui_mp/hud_stats.inc
+rawfile,ui_mp/hud_dpad.inc
 rawfile,ui_mp/hud_scorebar.inc
 rawfile,ui_mp/hud_weaponinfo.inc
 rawfile,ui_mp/hud_locselector.inc

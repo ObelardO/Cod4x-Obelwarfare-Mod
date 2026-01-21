@@ -33,6 +33,8 @@
 
 #define WIDESCREEN_OFFSET			107 0
 
+
+
 #define OBJICON( teamName, idx, texture, dvarName, showValue ) \
 	itemDef \
 	{ \

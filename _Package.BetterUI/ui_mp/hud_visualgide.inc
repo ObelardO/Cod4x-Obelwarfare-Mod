@@ -418,7 +418,7 @@ menuDef
     itemDef
     {
         name "healthbarback"
-        rect 24 449 124 6
+        rect 24 ( 449 - 50 ) 124 6
         forecolor 0.1 0.1 0.1 0.3
         background "white"
         ownerdraw CG_PLAYER_BAR_HEALTH_BACK
@@ -428,7 +428,7 @@ menuDef
     itemDef
     {
         name "healthbar"
-        rect 25 450 122 4
+        rect 25 ( 450 - 50 ) 122 4
         forecolor 0.7 0.7 0.7 0.3
         background "white"
         ownerdraw CG_PLAYER_BAR_HEALTH
@@ -438,7 +438,7 @@ menuDef
     itemDef
     {
         name "healthbarcross"
-        rect 9 446 15 15
+        rect 9 ( 446 - 50 ) 15 15
         forecolor 1.0 1.0 1.0 0.3
         //background "hud_healthbar_heart"
         background "hint_health"
@@ -452,7 +452,7 @@ menuDef
     itemDef
     {
         name "healthbarback"
-        rect 20 449 93 6
+        rect 20 ( 449 - 50 ) 93 6
         forecolor 0.1 0.1 0.1 0.3
         background "white"
         ownerdraw CG_PLAYER_BAR_HEALTH_BACK
@@ -462,7 +462,7 @@ menuDef
     itemDef
     {
         name "healthbar"
-        rect 21 450 91 4
+        rect 21 ( 450 - 50 ) 91 4
         forecolor 0.7 0.7 0.7 0.3
         background "white"
         ownerdraw CG_PLAYER_BAR_HEALTH
@@ -472,7 +472,7 @@ menuDef
     itemDef
     {
         name "healthbarcross"
-        rect 10 446 9 12
+        rect 10 ( 446 - 50 ) 9 12
         forecolor 1.0 1.0 1.0 0.3
         background "hint_health"
         ownerdraw CG_PLAYER_BAR_HEALTH_BACK

@@ -20,7 +20,8 @@
 
 #define RANK_ORIGIN 0 6
 #define ONLINEGAME (dvarInt( "onlinegame" ) && !dvarInt( "xblive_privatematch" ) )
-#define ONLINEGAME_OFFSET 10
+#define ONLINEGAME_OFFSET 15
+#define ONLINEGAME_OFFSET_EXP ( ONLINEGAME * ONLINEGAME_OFFSET )
 
 #define FLASH_OFS 	((sin(milliseconds()/90))*2)
 #define FLASH_OFS2 	((sin(milliseconds()/90))*4)
@@ -33,6 +34,8 @@
 #define NOT_SPECTATING (!spectatingClient())
 
 #define WIDESCREEN_OFFSET			107 0
+#define HUD_OFFSET_X				15
+#define HUD_OFFSET_Y				15
 
 #define OBJICON( teamName, idx, texture, dvarName, showValue ) \
 	itemDef \
@@ -112,6 +115,8 @@
 		fadeAmount		0.1					// amount to adjust alpha per cycle
 	}
 
+	#include "ui_mp/hud_inventory.inc"
+
 	#include "ui_mp/hud_visualgide.inc"
 
 	#include "ui_mp/hud_hints.inc"
@@ -124,11 +129,11 @@
 
 	#include "ui_mp/hud_scorebar.inc"
 	
-	#include "ui_mp/hud_weaponinfo.inc"
-
 	#include "ui_mp/hud_locselector.inc"
 	
-	#include "ui_mp/hud_inventory.inc"
+	#include "ui_mp/hud_weaponinfo.inc"
+
+	#include "ui_mp/hud_dpad.inc"
 
 	#include "ui_mp/hud_broadcast.inc"
 
@@ -338,7 +343,7 @@
 	{
 		name			"gamemessages"
 		// (todo: use VERTICAL_ALIGN_TOP in SP)
-		rect			14 -32 10 10 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+		rect			14 ( -32 -50 ) 10 10 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
 		//rect			20 -128 10 10 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
 		fullScreen		0
 		visible			when( !inkillcam() && !flashbanged() && !ui_active() && !scoped() );
