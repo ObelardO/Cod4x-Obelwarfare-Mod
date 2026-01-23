@@ -7,7 +7,7 @@
 #define INV_SPACING             10
 
 #define INV_OFFSET_X            ( INV_BACK_PAD )
-#define INV_OFFSET_Y            ( 0 - INV_ICON_SIZE - INV_BACK_PAD )
+#define INV_OFFSET_Y            ( 0 - INV_ICON_SIZE - INV_BACK_PAD - 8 )
 
 
 #define INV_SLOT_L1_IS_VISIBLE  1
@@ -24,6 +24,7 @@
 
 #define INV_BACK_PAD            ( 1 )  
 #define INV_BACK_SIZE           ( ( INV_ICON_SIZE + INV_BACK_PAD * 2 ) * 1.25 )
+#define INV_BACK_SIZE_HALF      ( INV_BACK_SIZE * 0.5 )
 #define INV_BACK_ALPHA          ( HUD_BACK_ALPHA * 0.9 )        
       
 
@@ -31,6 +32,9 @@
 
 #define INV_CLR_WHITE           1 1 1
 #define INV_CLR_RED             0.9 0 0
+
+
+//#define INV_SLOT_ICON( xPos, isVisibleExp, iconDrawerDef, iconMaterial, keyBinding, alphaExp ) \
 
 
 
@@ -66,6 +70,20 @@
         background		iconMaterial \
         visible			when ( isVisibleExp ) \
         textscale       0 \
+        decoration \
+    } \
+    itemDef \ 
+    { \
+        rect		0 ( INV_OFFSET_Y + INV_ICON_SIZE + INV_BACK_PAD + 5 ) 0 0 INV_ALIGN_L \
+        exp         rect X( xPos + INV_BACK_SIZE_HALF - 2 ) \
+        exp         text( KeyBinding( keyBinding ) ) \
+        exp         forecolor A( alphaExp ) \
+        forecolor	1 1 0 1 \
+        textfont	UI_FONT_OBJECTIVE \
+        textscale	0.18 \
+        textalign	ITEM_ALIGN_MIDDLE_CENTER \
+        textstyle	ITEM_TEXTSTYLE_SHADOWED \
+        visible 	when ( isVisibleExp && keyBinding != "" ) \
         decoration \
     }
 
