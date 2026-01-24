@@ -36,6 +36,7 @@
 #define WIDESCREEN_OFFSET			107 0
 #define HUD_OFFSET_X				15
 #define HUD_OFFSET_Y				15
+#define HUD_MINUS_ONE				( 0 - 1 )
 
 #define OBJICON( teamName, idx, texture, dvarName, showValue ) \
 	itemDef \

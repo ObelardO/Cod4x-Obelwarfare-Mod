@@ -1,179 +1,102 @@
-#define WEAPINFO_X -20
-#define WEAPINFO_Y -36
+#define WEAPINFO_OFFSET_X        2
 
-#define WEAPINFO_ICON_SIZE              20
-#define WEAPINFO_ICON_SIZE_HALF         10
-#define WEAPINFO_AMMO_SIZE              25
-#define WEAPINFO_ICON_SPACING           10
+#define WEAPINFO_ITIMS_VISIBLE   ( dvarint( ui_hud_show_offhand_items ) >= dvarint( ui_hud_hardcore ) + 1 )
+#define WEAPINFO_AMMOS_VISIBLE   ( dvarint( ui_hud_show_ammodisplay ) >= dvarint( ui_hud_hardcore ) + 1 )
 
-#define WEAPINFO_ICON_BACK_SIZE         29
-#define WEAPINFO_AMMO_BACK_SIZE_Y       29
-#define WEAPINFO_AMMO_BACK_SIZE_X       116
+#define WEAPINFO_AMMOS_POS_Y      ( ( INV_SLOT_ANY_VISIABLE_RIGHT + 1 ) * ( INV_BACK_SIZE + 5 ) * HUD_MINUS_ONE + WEAPINFO_OFFSET_X )
 
-#define WEAPINFO_INVENTORY_VISIBLE      ( dvarint( ui_hud_show_offhand_items ) >= dvarint( ui_hud_hardcore ) + 1 )
-#define WEAPINFO_WEAPON_AMMO_VISIBLE    ( dvarint( ui_hud_show_ammodisplay ) >= dvarint( ui_hud_hardcore ) + 1 )
+#undef INV_SLOT_R1_IS_VISIBLE
+#define INV_SLOT_R1_IS_VISIBLE   ( WEAPINFO_ITIMS_VISIBLE && dvarint( ui_hud_has_frags ) > 0 )
 
-#define WEAPINFO_ICON_FRAG_VISIBLE      ( WEAPINFO_INVENTORY_VISIBLE && dvarint( ui_hud_has_frags ) > 0 )
-#define WEAPINFO_ICON_SPECIAL_VISIBLE   ( WEAPINFO_INVENTORY_VISIBLE && dvarint( ui_hud_has_spec_gren ) > 0 )
-#define WEAPINFO_ICON_BANDAGE_VISIBLE   ( WEAPINFO_INVENTORY_VISIBLE && dvarint( ui_bandages ) == 1 )
+#undef INV_SLOT_R2_IS_VISIBLE
+#define INV_SLOT_R2_IS_VISIBLE   ( WEAPINFO_ITIMS_VISIBLE && dvarint( ui_hud_has_spec_gren ) > 0 )
 
-#define WEAPINFO_INVENTORY_POS_Y        ( WEAPINFO_Y )
-#define WEAPINFO_WEAPON_AMMO_POS_Y      ( -9 - ( ( WEAPINFO_ICON_FRAG_VISIBLE + WEAPINFO_ICON_SPECIAL_VISIBLE + WEAPINFO_ICON_BANDAGE_VISIBLE ) > 0 ) * ( WEAPINFO_ICON_SIZE + WEAPINFO_ICON_SPACING ) )
+#undef INV_SLOT_R3_IS_VISIBLE
+#define INV_SLOT_R3_IS_VISIBLE   ( WEAPINFO_ITIMS_VISIBLE && dvarint( ui_bandages ) == 1 )
 
-#define WEAPINFO_ICON_FRAG_POS_X        ( WEAPINFO_ICON_SIZE * WEAPINFO_ICON_FRAG_VISIBLE )
-#define WEAPINFO_ICON_SPECIAL_POS_X     ( WEAPINFO_ICON_FRAG_POS_X + WEAPINFO_ICON_SIZE * WEAPINFO_ICON_SPECIAL_VISIBLE + WEAPINFO_ICON_SPACING * WEAPINFO_ICON_FRAG_VISIBLE )
-#define WEAPINFO_ICON_BANDAGE_POS_X     ( WEAPINFO_ICON_SPECIAL_POS_X + WEAPINFO_ICON_SIZE * WEAPINFO_ICON_BANDAGE_VISIBLE + WEAPINFO_ICON_SPACING * WEAPINFO_ICON_SPECIAL_VISIBLE )
-
-
-
-
-
-//#undef INV_SLOT_L1_IS_VISIBLE
-//#define INV_SLOT_L1_IS_VISIBLE  ( WEAPINFO_INVENTORY_VISIBLE && dvarint( ui_hud_has_frags ) > 0 )
-
-//#undef INV_SLOT_L2_IS_VISIBLE
-//#define INV_SLOT_L2_IS_VISIBLE  ( WEAPINFO_INVENTORY_VISIBLE && dvarint( ui_hud_has_spec_gren ) > 0 )
-
-//#undef INV_SLOT_L3_IS_VISIBLE
-//#define INV_SLOT_L3_IS_VISIBLE  ( WEAPINFO_INVENTORY_VISIBLE && dvarint( ui_bandages ) == 1 )
-
-
-
-#define WEAPINFO_ITEM_ICON( vertPos, iconOwnerDraw, iconMaterial, KeyBindingText, visibleExp ) \
-    itemDef \
-    { \
-        rect			WEAPINFO_X (WEAPINFO_INVENTORY_POS_Y - 1) WEAPINFO_ICON_BACK_SIZE WEAPINFO_ICON_BACK_SIZE HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_BOTTOM \
-        exp             rect X( WEAPINFO_X - vertPos - 2 ) \
-        forecolor		1 1 1 HUD_BACK_ALPHA \
-        style			WINDOW_STYLE_SHADER \
-        background		"hud_background_quad" \
-        visible			when ( visibleExp ) \
-        decoration \
-    } \
-    itemDef \
-    { \
-        rect			WEAPINFO_X WEAPINFO_INVENTORY_POS_Y WEAPINFO_ICON_SIZE WEAPINFO_ICON_SIZE HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_BOTTOM \
-        exp             rect X( WEAPINFO_X - vertPos ) \
-        forecolor		1 1 1 HUD_ALPHA \
-        iconOwnerDraw \
-        background		iconMaterial \
-        visible			when ( visibleExp ) \
-        decoration \
-    } \
-    itemDef \ 
-    { \
-        rect		WEAPINFO_X (WEAPINFO_INVENTORY_POS_Y + WEAPINFO_ICON_SIZE + 12) 1 1 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_BOTTOM \
-        exp         rect X( WEAPINFO_X - (vertPos - WEAPINFO_ICON_SIZE_HALF + 2) ) \
-        exp         text( KeyBinding( KeyBindingText ) ) \
-        forecolor	1 1 0 HUD_ALPHA \
-        textfont	UI_FONT_OBJECTIVE \
-        textscale	0.18 \
-        textalign	ITEM_ALIGN_CENTER \
-        textstyle	ITEM_TEXTSTYLE_SHADOWED \
-        visible 	when ( visibleExp ) \
-        decoration \
-    }
-
-#define WEAPINFO_ITEM_AMMO( vertPos, ammoOwnerDraw, baseColor, visibleExp ) \
-    itemDef \
-    { \
-        rect			WEAPINFO_X (WEAPINFO_INVENTORY_POS_Y + WEAPINFO_ICON_SIZE + 3) WEAPINFO_AMMO_SIZE WEAPINFO_AMMO_SIZE HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_BOTTOM \
-        exp             rect X( WEAPINFO_X - (vertPos - WEAPINFO_ICON_SIZE) ) \
-        textscale		(TEXTSIZE_SMALL * 0.6) \
-        textstyle		ITEM_TEXTSTYLE_SHADOWED \
-        textfont		UI_FONT_OBJECTIVE \
-        forecolor		baseColor HUD_FOREGROUND_ALPHA \
-        ammoOwnerDraw \
-        visible			when ( visibleExp ) \
-        decoration \
-    }
-
-#define WEAPINFO_ITEM_AMMO_BANDAGES name "offhandAmmo" \ 
-    exp             text( dvarint( ui_bandages_qty ) ) \
 
 menuDef
 {
     name			"weaponinfo"
-	rect			0 0 0 0 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+	rect			0 0 0 0 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_BOTTOM
 	exp				rect Y( 0 - ONLINEGAME_OFFSET_EXP )
-	exp				rect X( ONLINEGAME_OFFSET_EXP )
+	exp				rect X( 0 - ONLINEGAME_OFFSET_EXP )
     fullScreen		1
     visible			when( !isIntermission() && !inkillcam() && dvarBool( ammoCounterHide ) == 0 && !flashbanged() && !ui_active() && team( name ) != "TEAM_SPECTATOR" && dvarInt( ui_hud_show_weapon ) == 1 && dvarInt( ui_hud_show_weaponinfo ) == 1 && dvarInt( ui_show_timeout ) == 0 )
 
     // WEAPON
     itemDef
     {
-        rect			( WEAPINFO_X - WEAPINFO_AMMO_BACK_SIZE_X + 6 ) WEAPINFO_Y WEAPINFO_AMMO_BACK_SIZE_X WEAPINFO_AMMO_BACK_SIZE_Y HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_BOTTOM
-        exp             rect Y( WEAPINFO_WEAPON_AMMO_POS_Y - WEAPINFO_AMMO_BACK_SIZE_Y - 5 )
+        rect			( INV_BACK_SIZE_QUAD * HUD_MINUS_ONE ) 0 INV_BACK_SIZE_QUAD INV_BACK_SIZE
+        exp             rect Y( WEAPINFO_AMMOS_POS_Y )
         forecolor		1 1 1 HUD_BACK_ALPHA
         style			WINDOW_STYLE_SHADER
         background		"hud_background_line"
-        visible			when ( WEAPINFO_WEAPON_AMMO_VISIBLE )
-        decoration
-    }
-
-    itemDef
-    {
-        name			"clipGraphic"
-        rect			(WEAPINFO_X -35) (WEAPINFO_Y -12) 1 1
-        exp             rect Y( WEAPINFO_WEAPON_AMMO_POS_Y - 12 )
-        forecolor		1 1 1 HUD_ALPHA
-        ownerdraw		CG_PLAYER_WEAPON_AMMO_CLIP_GRAPHIC
-        visible			when ( WEAPINFO_WEAPON_AMMO_VISIBLE )
+        visible			when ( WEAPINFO_AMMOS_VISIBLE )
         decoration
     }
 
     itemDef
     {
         name			"ammoStock"
-        rect			(WEAPINFO_X -29) (WEAPINFO_Y -6) 1 1
-        exp             rect Y( WEAPINFO_WEAPON_AMMO_POS_Y - 6 )
-        textscale		(TEXTSIZE_SMALL * 1.2)
+        rect			0 0 1 1
+        //exp             rect Y( WEAPINFO_AMMOS_POS_Y - INV_BACK_SIZE_HALF )
+        textscale		( TEXTSIZE_SMALL * 1.2 )
         textstyle		ITEM_TEXTSTYLE_SHADOWED
         textfont		UI_FONT_OBJECTIVE
         textalign	    ITEM_ALIGN_RIGHT
         forecolor		1 1 1 HUD_FOREGROUND_ALPHA
         ownerdraw		CG_PLAYER_WEAPON_AMMO_STOCK
-        visible			when ( WEAPINFO_WEAPON_AMMO_VISIBLE )
+        visible			when ( WEAPINFO_AMMOS_VISIBLE )
         decoration
     }
+
+    
+    /*
+
+
+
+
+    itemDef
+    {
+        name			"clipGraphic"
+        rect			(0 -35) (0 -12) 1 1
+        exp             rect Y( WEAPINFO_AMMOS_POS_Y - 12 )
+        forecolor		1 1 1 HUD_ALPHA
+        ownerdraw		CG_PLAYER_WEAPON_AMMO_CLIP_GRAPHIC
+        visible			when ( WEAPINFO_AMMOS_VISIBLE )
+        decoration
+    }
+
+
 
     itemDef
     {
         name			"weapname"
-        rect			(WEAPINFO_X -8) (WEAPINFO_Y -15) 1 1
-        exp             rect Y( WEAPINFO_WEAPON_AMMO_POS_Y - 15 )
+        rect			(0 -8) (0 -15) 1 1
+        exp             rect Y( WEAPINFO_AMMOS_POS_Y - 15 )
         textstyle		ITEM_TEXTSTYLE_SHADOWED
         textscale		(TEXTSIZE_SMALL * 0.4)
         textfont		UI_FONT_OBJECTIVE
         textalign	    ITEM_ALIGN_RIGHT
         forecolor		1 1 1 HUD_FOREGROUND_ALPHA
         ownerdraw		CG_PLAYER_WEAPON_NAME
-        visible         when ( WEAPINFO_WEAPON_AMMO_VISIBLE )
+        visible         when ( WEAPINFO_AMMOS_VISIBLE )
         decoration
     }
 
+    */
+
     //FRAG
-    //WEAPINFO_ITEM_ICON( WEAPINFO_ICON_FRAG_POS_X, ownerdraw CG_OFFHAND_WEAPON_ICON_FRAG, "hud_us_grenade", "+frag", WEAPINFO_ICON_FRAG_VISIBLE )
-    //WEAPINFO_ITEM_AMMO( WEAPINFO_ICON_FRAG_POS_X, ownerdraw CG_OFFHAND_WEAPON_AMMO_FRAG, 1 1 1, WEAPINFO_ICON_FRAG_VISIBLE )
+	INV_SLOT_ICON_R1 ( ownerdraw CG_OFFHAND_WEAPON_ICON_FRAG, "hud_us_grenade", "+frag", 1 )
+	INV_SLOT_AMMO_R1 ( ownerdraw CG_OFFHAND_WEAPON_AMMO_FRAG, INV_CLR_WHITE, HUD_FOREGROUND_ALPHA, 0, 0 )
 
     //SPECIAL
-    //WEAPINFO_ITEM_ICON( WEAPINFO_ICON_SPECIAL_POS_X, ownerdraw CG_OFFHAND_WEAPON_ICON_SMOKEFLASH, "hud_us_smokegrenade", "+smoke", WEAPINFO_ICON_SPECIAL_VISIBLE )
-    //WEAPINFO_ITEM_AMMO( WEAPINFO_ICON_SPECIAL_POS_X, ownerdraw CG_OFFHAND_WEAPON_AMMO_SMOKEFLASH, 1 1 1, WEAPINFO_ICON_SPECIAL_VISIBLE )
+	INV_SLOT_ICON_R2 ( ownerdraw CG_OFFHAND_WEAPON_ICON_SMOKEFLASH, "hud_us_smokegrenade", "+smoke", 1 )
+	INV_SLOT_AMMO_R2 ( ownerdraw CG_OFFHAND_WEAPON_AMMO_SMOKEFLASH, INV_CLR_WHITE, HUD_FOREGROUND_ALPHA, 0, 0 )	
 
     //BANDAGES
-    //WEAPINFO_ITEM_ICON( WEAPINFO_ICON_BANDAGE_POS_X, style WINDOW_STYLE_SHADER, "hud_us_bandages", "openScriptMenu modkeybind bandage", WEAPINFO_ICON_BANDAGE_VISIBLE )
-    //WEAPINFO_ITEM_AMMO( WEAPINFO_ICON_BANDAGE_POS_X, WEAPINFO_ITEM_AMMO_BANDAGES, 1.0 1 1, WEAPINFO_ICON_BANDAGE_VISIBLE && dvarint( ui_bandages_qty ) > 0 )
-    //WEAPINFO_ITEM_AMMO( WEAPINFO_ICON_BANDAGE_POS_X, WEAPINFO_ITEM_AMMO_BANDAGES, 0.9 0 0, WEAPINFO_ICON_BANDAGE_VISIBLE && dvarint( ui_bandages_qty ) == 0 )
-
-
-	INV_SLOT_ICON_LEFT ( INV_SLOT_L1_POS_X, INV_SLOT_L1_IS_VISIBLE, ownerdraw CG_OFFHAND_WEAPON_ICON_FRAG, "hud_us_grenade", "+frag", HUD_FOREGROUND_ALPHA )
-	INV_SLOT_AMMO_LEFT ( INV_SLOT_L1_POS_X, INV_SLOT_L1_IS_VISIBLE, ownerdraw CG_OFFHAND_WEAPON_AMMO_FRAG, INV_CLR_WHITE, HUD_FOREGROUND_ALPHA, 0, 0 )
-
-	//INV_SLOT_ICON_LEFT ( INV_SLOT_L2_POS_X, INV_SLOT_L2_IS_VISIBLE, ownerdraw CG_OFFHAND_WEAPON_ICON_SMOKEFLASH, "hud_us_smokegrenade", "+smoke", HUD_FOREGROUND_ALPHA )
-	//INV_SLOT_AMMO_LEFT ( INV_SLOT_L2_POS_X, INV_SLOT_L2_IS_VISIBLE, ownerdraw CG_OFFHAND_WEAPON_AMMO_SMOKEFLASH, INV_CLR_WHITE, HUD_FOREGROUND_ALPHA, 0, 0 )	
-
-	INV_SLOT_ICON_LEFT ( INV_SLOT_L3_POS_X, INV_SLOT_L3_IS_VISIBLE, style WINDOW_STYLE_SHADER, "hud_us_bandages", "openScriptMenu modkeybind bandage", HUD_FOREGROUND_ALPHA )
-	INV_SLOT_AMMO_LEFT ( INV_SLOT_L3_POS_X, INV_SLOT_L3_IS_VISIBLE && dvarint( ui_bandages_qty ) > 0, exp text( dvarint( ui_bandages_qty ) ), INV_CLR_WHITE, HUD_FOREGROUND_ALPHA, 0, 0 )	
-	INV_SLOT_AMMO_LEFT ( INV_SLOT_L3_POS_X, INV_SLOT_L3_IS_VISIBLE && dvarint( ui_bandages_qty ) < 1, exp text( dvarint( ui_bandages_qty ) ), INV_CLR_RED,   HUD_FOREGROUND_ALPHA, 0, 0 )	
+	INV_SLOT_ICON_R3 ( style WINDOW_STYLE_SHADER, "hud_us_bandages", "openScriptMenu modkeybind bandage", 1 )
+	INV_SLOT_AMMO_RIGHT ( INV_SLOT_R3_POS_X, INV_SLOT_R3_IS_VISIBLE && dvarint( ui_bandages_qty ) > 0, exp text( dvarint( ui_bandages_qty ) ), INV_CLR_WHITE, HUD_FOREGROUND_ALPHA, 0, 0 )	
+	INV_SLOT_AMMO_RIGHT ( INV_SLOT_R3_POS_X, INV_SLOT_R3_IS_VISIBLE && dvarint( ui_bandages_qty ) < 1, exp text( dvarint( ui_bandages_qty ) ), INV_CLR_RED,   HUD_FOREGROUND_ALPHA, 0, 0 )	
 }
