@@ -47,7 +47,7 @@
         forecolor		0 1 0 1 \
         style			WINDOW_STYLE_SHADER \
         background		"white" \
-        visible			when ( 1 ) \
+        visible			when ( 0 ) \
 		decoration \
     }
 

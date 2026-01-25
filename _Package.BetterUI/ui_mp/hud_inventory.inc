@@ -2,17 +2,17 @@
 #define INV_ALIGN_R             HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_BOTTOM
                                 
 #define INV_ICON_SIZE           20
+#define INV_ICON_NONE           "white"
+
 #define INV_SPACING             ( 8 + INV_BACK_PAD * 2 )
-
-#define INV_BINDKEY_SUZE        8 
-
+#define INV_BINDKEY_SIZE        8 
 #define INV_OFFSET_X            ( INV_BACK_PAD )
-#define INV_OFFSET_Y            ( 0 - INV_ICON_SIZE - INV_BACK_PAD - INV_BINDKEY_SUZE )
+#define INV_OFFSET_Y            ( 0 - INV_ICON_SIZE - INV_BACK_PAD - INV_BINDKEY_SIZE )
 
 
-#define INV_SLOT_L1_IS_VISIBLE  0
-#define INV_SLOT_L2_IS_VISIBLE  0
-#define INV_SLOT_L3_IS_VISIBLE  0
+#define INV_SLOT_L1_IS_VISIBLE  1
+#define INV_SLOT_L2_IS_VISIBLE  1
+#define INV_SLOT_L3_IS_VISIBLE  1
 
 #define INV_SLOT_ANY_VISIABLE_LEFT  ( INV_SLOT_L1_IS_VISIBLE || INV_SLOT_L2_IS_VISIBLE || INV_SLOT_L3_IS_VISIBLE )
 
@@ -21,9 +21,9 @@
 #define INV_SLOT_L3_POS_X       ( INV_SLOT_L2_POS_X + ( INV_ICON_SIZE + INV_SPACING ) * INV_SLOT_L2_IS_VISIBLE )
 
 
-#define INV_SLOT_R1_IS_VISIBLE  0
-#define INV_SLOT_R2_IS_VISIBLE  0
-#define INV_SLOT_R3_IS_VISIBLE  0
+#define INV_SLOT_R1_IS_VISIBLE  1
+#define INV_SLOT_R2_IS_VISIBLE  1
+#define INV_SLOT_R3_IS_VISIBLE  1
 
 #define INV_SLOT_ANY_VISIABLE_RIGHT ( INV_SLOT_R1_IS_VISIBLE || INV_SLOT_R2_IS_VISIBLE || INV_SLOT_R3_IS_VISIBLE )
 
@@ -33,16 +33,13 @@
 
 
 #define INV_BACK_PAD            ( 1 )  
+#define INV_BACK_ALPHA          ( HUD_BACK_ALPHA * 0.8 )      
 #define INV_BACK_HEIGHT         ( INV_ICON_SIZE + INV_BACK_PAD * 2 )
 #define INV_BACK_HEIGHT_HALF    ( INV_BACK_HEIGHT * 0.5 )
 #define INV_BACK_SIZE           ( INV_BACK_HEIGHT * 1.25 )
 #define INV_BACK_SIZE_HALF      ( INV_BACK_SIZE * 0.5 )
 #define INV_BACK_SIZE_QUAD      ( INV_BACK_SIZE * 4.0 )
 
-#define INV_BACK_ALPHA          ( HUD_BACK_ALPHA * 0.8 )        
-      
-
-#define INV_ICON_NONE           "white"
 
 #define INV_CLR_WHITE           1 1 1
 #define INV_CLR_RED             0.9 0 0
@@ -51,6 +48,15 @@
 #define INV_ALIGN_X_OP_RIGHT      ( 0 - 1 )
 #define INV_ALIGN_W_MOD_LEFT      0
 #define INV_ALIGN_W_MOD_RIGHT     1
+
+
+#define INV_DPAD_AMMO_OFFSET_X_L ( 7.5 )
+#define INV_DPAD_AMMO_OFFSET_Y_L ( 3 )
+
+#define INV_DPAD_AMMO_OFFSET_X_R ( 7.5 * HUD_MINUS_ONE )
+#define INV_DPAD_AMMO_OFFSET_Y_R ( 3 )
+
+#define INV_DPAD_ALPHA     	     ( HudFade( "dpad" ) * HUD_FOREGROUND_ALPHA )   
 
 
 #define INV_SLOT_ICON_L1( iconDrawerDef, iconMaterial, keyBinding, alphaExp ) \
@@ -160,7 +166,7 @@
     itemDef \
     { \
         rect			0 ( INV_OFFSET_Y + INV_ICON_SIZE - yOffset + 1.5 ) 0 0 align \
-        exp             rect X( xOffsetOp * ( xPos + xOffset + INV_ICON_SIZE ) - widthMod * 5 ) \
+        exp             rect X( xOffsetOp * ( xPos + xOffset + INV_ICON_SIZE - 0.5 ) - widthMod * 5 ) \
         textscale		( TEXTSIZE_SMALL * 0.6 ) \
         textstyle		ITEM_TEXTSTYLE_SHADOWED \
         textfont		UI_FONT_OBJECTIVE \
