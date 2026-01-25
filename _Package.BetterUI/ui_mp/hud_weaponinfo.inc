@@ -1,10 +1,10 @@
-#define WEAPINFO_OFFSET_X        2
+#define WEAPINFO_OFFSET_Y        1
 
 #define WEAPINFO_ITIMS_VISIBLE   ( dvarint( ui_hud_show_offhand_items ) >= dvarint( ui_hud_hardcore ) + 1 )
 #define WEAPINFO_AMMOS_VISIBLE   ( dvarint( ui_hud_show_ammodisplay ) >= dvarint( ui_hud_hardcore ) + 1 )
 
-#define WEAPINFO_AMMOS_POS_Y     ( ( INV_SLOT_ANY_VISIABLE_RIGHT + 1 ) * ( INV_BACK_SIZE + 5 ) * HUD_MINUS_ONE + WEAPINFO_OFFSET_X )
-#define WEAPINFO_AMMOS_MID_Y     ( WEAPINFO_AMMOS_POS_Y + INV_BACK_SIZE - INV_BACK_HEIGHT_HALF )
+#define WEAPINFO_AMMOS_POS_Y     ( INV_OFFSET_Y - INV_SLOT_ANY_VISIABLE_RIGHT * ( INV_BACK_HEIGHT + 4 ) - INV_BACK_PAD )
+#define WEAPINFO_AMMOS_MID_Y     ( WEAPINFO_AMMOS_POS_Y + INV_BACK_HEIGHT_HALF )
 
 #undef INV_SLOT_R1_IS_VISIBLE
 #define INV_SLOT_R1_IS_VISIBLE   ( WEAPINFO_ITIMS_VISIBLE && dvarint( ui_hud_has_frags ) > 0 )
@@ -13,7 +13,7 @@
 #define INV_SLOT_R2_IS_VISIBLE   ( WEAPINFO_ITIMS_VISIBLE && dvarint( ui_hud_has_spec_gren ) > 0 )
 
 #undef INV_SLOT_R3_IS_VISIBLE
-#define INV_SLOT_R3_IS_VISIBLE   ( WEAPINFO_ITIMS_VISIBLE && dvarint( ui_bandages ) == 1 )
+#define INV_SLOT_R3_IS_VISIBLE   ( WEAPINFO_ITIMS_VISIBLE && ActionSlotUsable( 3 ) )
 
 
 menuDef
@@ -53,6 +53,7 @@ menuDef
         decoration
     }
 
+    //DEBUG
     HUD_DEBUG_DOT( 0, WEAPINFO_AMMOS_MID_Y, HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_BOTTOM )
 
     //WEAPON AMMO GRAPHIC
@@ -91,8 +92,7 @@ menuDef
 	INV_SLOT_ICON_R2 ( ownerdraw CG_OFFHAND_WEAPON_ICON_SMOKEFLASH, "hud_us_smokegrenade", "+smoke", 1 )
 	INV_SLOT_AMMO_R2 ( ownerdraw CG_OFFHAND_WEAPON_AMMO_SMOKEFLASH, INV_CLR_WHITE, HUD_FOREGROUND_ALPHA, 0, 0 )	
 
-    //BANDAGES
-	INV_SLOT_ICON_R3 ( style WINDOW_STYLE_SHADER, "hud_us_bandages", "openScriptMenu modkeybind bandage", 1 )
-	INV_SLOT_AMMO_RIGHT ( INV_SLOT_R3_POS_X, INV_SLOT_R3_IS_VISIBLE && dvarint( ui_bandages_qty ) > 0, exp text( dvarint( ui_bandages_qty ) ), INV_CLR_WHITE, HUD_FOREGROUND_ALPHA, 0, 0 )	
-	INV_SLOT_AMMO_RIGHT ( INV_SLOT_R3_POS_X, INV_SLOT_R3_IS_VISIBLE && dvarint( ui_bandages_qty ) < 1, exp text( dvarint( ui_bandages_qty ) ), INV_CLR_RED,   HUD_FOREGROUND_ALPHA, 0, 0 )	
+    //EXPLOSIVES (MOVED FROM DPAD)
+	INV_SLOT_ICON_R3 ( ownerdraw CG_PLAYER_ACTIONSLOT_3, INV_ICON_NONE, "+actionslot 3", DPAD_ALPHA )
+	INV_SLOT_AMMO_R3 ( ownerdraw CG_PLAYER_ACTIONSLOT_3, INV_CLR_WHITE, DPAD_ALPHA, DPAD_AMMO_OFFSET_X, DPAD_AMMO_OFFSET_Y )	
 }

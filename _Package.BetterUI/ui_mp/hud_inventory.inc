@@ -2,7 +2,7 @@
 #define INV_ALIGN_R             HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_BOTTOM
                                 
 #define INV_ICON_SIZE           20
-#define INV_SPACING             10
+#define INV_SPACING             ( 8 + INV_BACK_PAD * 2 )
 
 #define INV_BINDKEY_SUZE        8 
 
@@ -17,8 +17,8 @@
 #define INV_SLOT_ANY_VISIABLE_LEFT  ( INV_SLOT_L1_IS_VISIBLE || INV_SLOT_L2_IS_VISIBLE || INV_SLOT_L3_IS_VISIBLE )
 
 #define INV_SLOT_L1_POS_X       ( INV_OFFSET_X )
-#define INV_SLOT_L2_POS_X       ( INV_SLOT_L1_POS_X + ( INV_ICON_SIZE + INV_SPACING + INV_BACK_PAD * 2 ) * INV_SLOT_L1_IS_VISIBLE )
-#define INV_SLOT_L3_POS_X       ( INV_SLOT_L2_POS_X + ( INV_ICON_SIZE + INV_SPACING + INV_BACK_PAD * 2 ) * INV_SLOT_L2_IS_VISIBLE )
+#define INV_SLOT_L2_POS_X       ( INV_SLOT_L1_POS_X + ( INV_ICON_SIZE + INV_SPACING ) * INV_SLOT_L1_IS_VISIBLE )
+#define INV_SLOT_L3_POS_X       ( INV_SLOT_L2_POS_X + ( INV_ICON_SIZE + INV_SPACING ) * INV_SLOT_L2_IS_VISIBLE )
 
 
 #define INV_SLOT_R1_IS_VISIBLE  0
@@ -28,8 +28,8 @@
 #define INV_SLOT_ANY_VISIABLE_RIGHT ( INV_SLOT_R1_IS_VISIBLE || INV_SLOT_R2_IS_VISIBLE || INV_SLOT_R3_IS_VISIBLE )
 
 #define INV_SLOT_R1_POS_X       ( INV_OFFSET_X )
-#define INV_SLOT_R2_POS_X       ( INV_SLOT_R1_POS_X + ( INV_ICON_SIZE + INV_SPACING + INV_BACK_PAD * 2 ) * INV_SLOT_R1_IS_VISIBLE )
-#define INV_SLOT_R3_POS_X       ( INV_SLOT_R2_POS_X + ( INV_ICON_SIZE + INV_SPACING + INV_BACK_PAD * 2 ) * INV_SLOT_R2_IS_VISIBLE )
+#define INV_SLOT_R2_POS_X       ( INV_SLOT_R1_POS_X + ( INV_ICON_SIZE + INV_SPACING ) * INV_SLOT_R1_IS_VISIBLE )
+#define INV_SLOT_R3_POS_X       ( INV_SLOT_R2_POS_X + ( INV_ICON_SIZE + INV_SPACING ) * INV_SLOT_R2_IS_VISIBLE )
 
 
 #define INV_BACK_PAD            ( 1 )  
@@ -172,6 +172,6 @@
         visible			when ( isVisibleExp ) \
         decoration \
     } \
-    HUD_DEBUG_DOT( xOffsetOp * ( xPos + INV_ICON_SIZE ) - widthMod * 5, INV_OFFSET_Y + INV_ICON_SIZE - 1 , align )
+    HUD_DEBUG_DOT( xOffsetOp * ( xPos + xOffset + INV_ICON_SIZE ) - widthMod * 5, INV_OFFSET_Y + INV_ICON_SIZE - 1 , align )
 
 
