@@ -1,6 +1,6 @@
 #define TS_HUD_ALIGN              HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_BOTTOM
 
-#define TS_HUD_SIZE               24
+#define TS_HUD_SIZE               20
 #define TS_HUD_OFFSET_X	          0
 #define TS_HUD_OFFSET_Y	          ( -TS_HUD_SIZE - 24 )
 #define TS_HUD_SPACING_X          72
@@ -142,7 +142,7 @@
         textfont		UI_FONT_OBJECTIVE \
         forecolor		0.9 0 0 1 \
         exp				text( count ); \
-        exp             forecolor A( 1 - ( float ( milliseconds() % 1000 ) / 1000 ) ); \
+        exp             forecolor A( (sin(milliseconds()*0.005)+1)/2 ) ; \
         visible			when( visibleExp && blinkExp && count <= 1 ); \
         decoration \
     }

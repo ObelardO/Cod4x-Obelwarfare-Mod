@@ -3,7 +3,8 @@
 #define WEAPINFO_ITIMS_VISIBLE   ( dvarint( ui_hud_show_offhand_items ) >= dvarint( ui_hud_hardcore ) + 1 )
 #define WEAPINFO_AMMOS_VISIBLE   ( dvarint( ui_hud_show_ammodisplay ) >= dvarint( ui_hud_hardcore ) + 1 )
 
-#define WEAPINFO_AMMOS_POS_Y      ( ( INV_SLOT_ANY_VISIABLE_RIGHT + 1 ) * ( INV_BACK_SIZE + 5 ) * HUD_MINUS_ONE + WEAPINFO_OFFSET_X )
+#define WEAPINFO_AMMOS_POS_Y     ( ( INV_SLOT_ANY_VISIABLE_RIGHT + 1 ) * ( INV_BACK_SIZE + 5 ) * HUD_MINUS_ONE + WEAPINFO_OFFSET_X )
+#define WEAPINFO_AMMOS_MID_Y     ( WEAPINFO_AMMOS_POS_Y + INV_BACK_SIZE - INV_BACK_HEIGHT_HALF )
 
 #undef INV_SLOT_R1_IS_VISIBLE
 #define INV_SLOT_R1_IS_VISIBLE   ( WEAPINFO_ITIMS_VISIBLE && dvarint( ui_hud_has_frags ) > 0 )
@@ -24,7 +25,7 @@ menuDef
     fullScreen		1
     visible			when( !isIntermission() && !inkillcam() && dvarBool( ammoCounterHide ) == 0 && !flashbanged() && !ui_active() && team( name ) != "TEAM_SPECTATOR" && dvarInt( ui_hud_show_weapon ) == 1 && dvarInt( ui_hud_show_weaponinfo ) == 1 && dvarInt( ui_show_timeout ) == 0 )
 
-    // WEAPON
+    //WEAPON BACK
     itemDef
     {
         rect			( INV_BACK_SIZE_QUAD * HUD_MINUS_ONE ) 0 INV_BACK_SIZE_QUAD INV_BACK_SIZE
@@ -36,56 +37,51 @@ menuDef
         decoration
     }
 
+    //WEAPON AMMO
     itemDef
     {
         name			"ammoStock"
-        rect			0 0 1 1
-        //exp             rect Y( WEAPINFO_AMMOS_POS_Y - INV_BACK_SIZE_HALF )
+        rect			( 0 - INV_BACK_PAD - 32  ) 0 1 1
+        exp             rect Y( WEAPINFO_AMMOS_MID_Y + 11 )
         textscale		( TEXTSIZE_SMALL * 1.2 )
         textstyle		ITEM_TEXTSTYLE_SHADOWED
         textfont		UI_FONT_OBJECTIVE
-        textalign	    ITEM_ALIGN_RIGHT
+        textalign	    ITEM_ALIGN_LEFT
         forecolor		1 1 1 HUD_FOREGROUND_ALPHA
         ownerdraw		CG_PLAYER_WEAPON_AMMO_STOCK
         visible			when ( WEAPINFO_AMMOS_VISIBLE )
         decoration
     }
 
-    
-    /*
+    HUD_DEBUG_DOT( 0, WEAPINFO_AMMOS_MID_Y, HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_BOTTOM )
 
-
-
-
+    //WEAPON AMMO GRAPHIC
     itemDef
     {
         name			"clipGraphic"
-        rect			(0 -35) (0 -12) 1 1
-        exp             rect Y( WEAPINFO_AMMOS_POS_Y - 12 )
+        rect			( 0 - INV_BACK_PAD - 32 - 5 ) 0 1 1
+        exp             rect Y( WEAPINFO_AMMOS_MID_Y + 5.5 )
         forecolor		1 1 1 HUD_ALPHA
         ownerdraw		CG_PLAYER_WEAPON_AMMO_CLIP_GRAPHIC
         visible			when ( WEAPINFO_AMMOS_VISIBLE )
         decoration
     }
 
-
-
+    //WEAPON NAME
     itemDef
     {
         name			"weapname"
-        rect			(0 -8) (0 -15) 1 1
-        exp             rect Y( WEAPINFO_AMMOS_POS_Y - 15 )
+        rect			( 0 - INV_BACK_PAD - 10 ) 0 1 1
+        exp             rect Y( WEAPINFO_AMMOS_MID_Y + 1 )
         textstyle		ITEM_TEXTSTYLE_SHADOWED
-        textscale		(TEXTSIZE_SMALL * 0.4)
+        textscale		(TEXTSIZE_SMALL * 0.5)
         textfont		UI_FONT_OBJECTIVE
-        textalign	    ITEM_ALIGN_RIGHT
+        textalign	    ITEM_ALIGN_BOTTOM_RIGHT
         forecolor		1 1 1 HUD_FOREGROUND_ALPHA
         ownerdraw		CG_PLAYER_WEAPON_NAME
         visible         when ( WEAPINFO_AMMOS_VISIBLE )
         decoration
     }
-
-    */
 
     //FRAG
 	INV_SLOT_ICON_R1 ( ownerdraw CG_OFFHAND_WEAPON_ICON_FRAG, "hud_us_grenade", "+frag", 1 )

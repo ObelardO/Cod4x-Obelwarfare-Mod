@@ -38,6 +38,19 @@
 #define HUD_OFFSET_Y				15
 #define HUD_MINUS_ONE				( 0 - 1 )
 
+#define HUD_DEBUG_DOT( xPos, yPos, align ) \
+    itemDef \
+	{ \
+        rect			0 0 1 1 align \
+        exp             rect X( xPos ) \
+        exp             rect Y( yPos ) \
+        forecolor		0 1 0 1 \
+        style			WINDOW_STYLE_SHADER \
+        background		"white" \
+        visible			when ( 1 ) \
+		decoration \
+    }
+
 #define OBJICON( teamName, idx, texture, dvarName, showValue ) \
 	itemDef \
 	{ \
