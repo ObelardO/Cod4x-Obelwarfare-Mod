@@ -1,13 +1,13 @@
-#define DPAD_VISIBLE			( dvarint( ui_hud_show_inventory ) >= dvarint( ui_hud_hardcore ) + 1 )
+#define DPAD_IS_VISIBLE			 ( dvarint( ui_hud_show_abilities_info ) >= dvarint( ui_hud_hardcore ) + 1 )
 
 #undef INV_SLOT_L1_IS_VISIBLE
-#define INV_SLOT_L1_IS_VISIBLE   ( DPAD_VISIBLE && ActionSlotUsable( 1 ) )
+#define INV_SLOT_L1_IS_VISIBLE   ( DPAD_IS_VISIBLE && ActionSlotUsable( 1 ) )
 
 #undef INV_SLOT_L2_IS_VISIBLE
-#define INV_SLOT_L2_IS_VISIBLE   ( DPAD_VISIBLE && dvarint( ui_bandages ) == 1 )
+#define INV_SLOT_L2_IS_VISIBLE   ( DPAD_IS_VISIBLE && dvarint( ui_bandages ) == 1 )
 
 #undef INV_SLOT_L3_IS_VISIBLE
-#define INV_SLOT_L3_IS_VISIBLE   ( DPAD_VISIBLE && ActionSlotUsable( 4 ) )
+#define INV_SLOT_L3_IS_VISIBLE   ( DPAD_IS_VISIBLE && ActionSlotUsable( 4 ) )
 
 menuDef
 {
@@ -16,7 +16,7 @@ menuDef
 	exp				rect Y( 0 - ONLINEGAME_OFFSET_EXP )
 	exp				rect X( ONLINEGAME_OFFSET_EXP )
 	fullScreen		1
-	visible			when( team( name ) != "TEAM_SPECTATOR" && !inkillcam() && !flashbanged() && !ui_active() && !scoped() && (dvarString( createfx ) != "on") && DPAD_VISIBLE );
+	visible			when( HUD_IS_VISIBLE && dvarInt( ui_hud_show_inventory ) == 1 && dvarInt( ui_hud_has_weapon ) );
 
 	//NIGHT VISION
 	INV_SLOT_ICON_L1 ( ownerdraw CG_PLAYER_ACTIONSLOT_1, INV_ICON_NONE, "+actionslot 1", INV_DPAD_ALPHA )

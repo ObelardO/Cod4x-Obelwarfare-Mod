@@ -17,7 +17,7 @@ menuDef
     name			"Compass_old"
     rect			RECT_COMPASS
     fullScreen		0
-    visible 		when ( !inkillcam() && !flashbanged() && !ui_active() && !scoped() && (dvarString( createfx ) != "on") && ( team( name ) != "TEAM_SPECTATOR" || dvarInt( ui_broadcaster ) == 0 ) );
+    visible 		when ( HUD_IS_VISIBLE );
 
     itemDef
     {

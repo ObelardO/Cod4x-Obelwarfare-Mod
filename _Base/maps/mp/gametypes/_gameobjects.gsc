@@ -1414,7 +1414,7 @@ useHoldThink( player )
 		player setWeaponAmmoStock( useWeapon, 0 );
 		player setWeaponAmmoClip( useWeapon, 0 );
 		player switchToWeapon( useWeapon );
-		player setClientDvar( "ui_hud_show_weapon", 0 );
+		player setClientDvar( "ui_hud_has_weapon", 0 );
 
 		player thread attachUseModel( "prop_suitcase_bomb", "tag_inhand", true );
 	}
@@ -1441,7 +1441,7 @@ useHoldThink( player )
 
 	if ( isDefined( player ) )
 	{
-		player setClientDvar( "ui_hud_show_weapon", 1 );
+		player setClientDvar( "ui_hud_has_weapon", 1 );
 	}
 
 	if ( isDefined( useWeapon ) && isDefined( player ) )
@@ -2110,7 +2110,7 @@ _disableWeapon()
 	self.disabledWeapon++;
 	self disableWeapons();
 
-	self setClientDvar( "ui_hud_show_weapon", 0 );
+	self setClientDvar( "ui_hud_has_weapon", 0 );
 }
 
 _enableWeapon()
@@ -2126,7 +2126,7 @@ _enableWeapon()
 		self.disabledWeapon = 0;
 		self enableWeapons();
 
-		self setClientDvar( "ui_hud_show_weapon", 1 );
+		self setClientDvar( "ui_hud_has_weapon", 1 );
 	}
 }
 

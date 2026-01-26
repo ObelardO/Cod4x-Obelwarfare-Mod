@@ -15,28 +15,31 @@
 
 #include "ui/menudef.h"
 
-#define TEAM_IS_MARINES		(localVarString( ui_team ) == "marines")
-#define TEAM_IS_OPFOR		(localVarString( ui_team ) == "opfor")
+#define TEAM_IS_MARINES				(localVarString( ui_team ) == "marines")
+#define TEAM_IS_OPFOR				(localVarString( ui_team ) == "opfor")
 
-#define RANK_ORIGIN 0 6
-#define ONLINEGAME (dvarInt( "onlinegame" ) && !dvarInt( "xblive_privatematch" ) )
+#define RANK_ORIGIN 				0 6
+
+#define ONLINEGAME 					(dvarInt( "onlinegame" ) && !dvarInt( "xblive_privatematch" ) )
 #define ONLINEGAME_OFFSET 15
-#define ONLINEGAME_OFFSET_EXP ( ONLINEGAME * ONLINEGAME_OFFSET )
+#define ONLINEGAME_OFFSET_EXP 		( ONLINEGAME * ONLINEGAME_OFFSET )
 
-#define FLASH_OFS 	((sin(milliseconds()/90))*2)
-#define FLASH_OFS2 	((sin(milliseconds()/90))*4)
+#define FLASH_OFS 					((sin(milliseconds()/90))*2)
+#define FLASH_OFS2 					((sin(milliseconds()/90))*4)
 
-#define HUD_ALPHA 0.65
-#define HUD_BACK_ALPHA 0.5
-#define HUD_FOREGROUND_ALPHA 0.75
-#define DPAD_ICON_ALPHA 0.65
+#define HUD_ALPHA 					0.65
+#define HUD_BACK_ALPHA 				0.5
+#define HUD_FOREGROUND_ALPHA 		0.75
 
-#define NOT_SPECTATING (!spectatingClient())
+#define DPAD_ICON_ALPHA 			0.65
 
-#define WIDESCREEN_OFFSET			107 0
+#define NOT_SPECTATING_CLIENT 		(!spectatingClient())
+
 #define HUD_OFFSET_X				15
 #define HUD_OFFSET_Y				15
 #define HUD_MINUS_ONE				( 0 - 1 )
+
+#define HUD_IS_VISIBLE           	( !inkillcam() && !flashbanged() && !isIntermission() && !ui_active() && !scoped() && team( name ) != "TEAM_SPECTATOR" && ( dvarString( createfx ) != "on" ) && dvarInt( ui_show_timeout ) == 0 )
 
 #define HUD_DEBUG_DOT( xPos, yPos, align ) \
     itemDef \
@@ -47,7 +50,7 @@
         forecolor		0 1 0 1 \
         style			WINDOW_STYLE_SHADER \
         background		"white" \
-        visible			when ( 0 ) \
+        visible			when ( 1 ) \
 		decoration \
     }
 
@@ -131,27 +134,29 @@
 
 	#include "ui_mp/hud_inventory.inc"
 
-	#include "ui_mp/hud_visualgide.inc"
-
 	#include "ui_mp/hud_hints.inc"
-
-	#include "ui_mp/hud_stance.inc"
 
 	#include "ui_mp/hud_compass.inc"
 
-	#include "ui_mp/hud_stats.inc"
+	//#include "ui_mp/hud_stats.inc"
 
-	#include "ui_mp/hud_scorebar.inc"
+	//#include "ui_mp/hud_scorebar.inc"
 	
-	#include "ui_mp/hud_locselector.inc"
+	//#include "ui_mp/hud_locselector.inc"
 	
-	#include "ui_mp/hud_dpad.inc"
+	#include "ui_mp/hud_weapon_info.inc"
 
-	#include "ui_mp/hud_weaponinfo.inc"
+	#include "ui_mp/hud_abilities_info.inc"
+
+	#include "ui_mp/hud_player_info.inc"
+
+	#include "ui_mp/hud_teams_status.inc"
 
 	#include "ui_mp/hud_broadcast.inc"
 
-	#include "ui_mp/hud_teamstatus.inc"
+	#include "ui_mp/hud_overlay.inc"
+
+
 
 
 	// Remote Talking Status
@@ -297,7 +302,7 @@
 		name			"scorebar"
 		rect			0 0 640 480 HORIZONTAL_ALIGN_FULLSCREEN VERTICAL_ALIGN_FULLSCREEN
 		fullScreen		0
-		visible 		when ( ( ( ( team( name ) == "TEAM_ALLIES" || team( name ) == "TEAM_AXIS" ) && gametype() != "bel" ) && !inkillcam() && NOT_SPECTATING && !menuisopen( background_main ) && !menuisopen( background_systemlink ) && !menuisopen( scoreboard )) && ( dvarInt( ui_hud_hardcore ) == 0 || dvarint( ui_hud_show_inventory ) > 0  ) && (dvarInt( "ui_score_bar" ) || team( name ) == "TEAM_SPECTATOR" || (dvarInt( "ui_timelimit" ) > 0 && timeLeft() < 0) || (timeLeft() >= 0 && (timeLeft() % 60 < 5 || timeLeft() < 60)) || (timeLeft() < 0 && (timeLeft() % 60 > (0-5))) || (dvarInt( "ui_scorelimit" ) > 0 && max( marinesfield( score ), opforfield( score ) ) / dvarInt( "ui_scorelimit" ) > 0.75 ) ) );
+		visible 		when ( ( ( ( team( name ) == "TEAM_ALLIES" || team( name ) == "TEAM_AXIS" ) && gametype() != "bel" ) && !inkillcam() && NOT_SPECTATING_CLIENT && !menuisopen( background_main ) && !menuisopen( background_systemlink ) && !menuisopen( scoreboard )) && ( dvarInt( ui_hud_hardcore ) == 0 || dvarint( ui_hud_show_inventory ) > 0  ) && (dvarInt( "ui_score_bar" ) || team( name ) == "TEAM_SPECTATOR" || (dvarInt( "ui_timelimit" ) > 0 && timeLeft() < 0) || (timeLeft() >= 0 && (timeLeft() % 60 < 5 || timeLeft() < 60)) || (timeLeft() < 0 && (timeLeft() % 60 > (0-5))) || (dvarInt( "ui_scorelimit" ) > 0 && max( marinesfield( score ), opforfield( score ) ) / dvarInt( "ui_scorelimit" ) > 0.75 ) ) );
 
 		#define BARWIDTH	400
 

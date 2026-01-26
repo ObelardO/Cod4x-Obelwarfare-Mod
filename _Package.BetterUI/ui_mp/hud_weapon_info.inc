@@ -1,20 +1,17 @@
-#define WEAPINFO_OFFSET_Y        1
+#define WEAPINFO_ITIMS_IS_VISIBLE   ( ( dvarint( ui_hud_show_offhand_info ) >= dvarint( ui_hud_hardcore ) + 1 ) )
+#define WEAPINFO_AMMOS_IS_VISIBLE   ( ( dvarint( ui_hud_show_weapon_info ) >= dvarint( ui_hud_hardcore ) + 1 ) && dvarBool( ammoCounterHide ) == 0 )
 
-#define WEAPINFO_ITIMS_VISIBLE   ( dvarint( ui_hud_show_offhand_items ) >= dvarint( ui_hud_hardcore ) + 1 )
-#define WEAPINFO_AMMOS_VISIBLE   ( dvarint( ui_hud_show_ammodisplay ) >= dvarint( ui_hud_hardcore ) + 1 )
-
-#define WEAPINFO_AMMOS_POS_Y     ( INV_OFFSET_Y - INV_SLOT_ANY_VISIABLE_RIGHT * ( INV_BACK_HEIGHT + 4 ) - INV_BACK_PAD )
-#define WEAPINFO_AMMOS_MID_Y     ( WEAPINFO_AMMOS_POS_Y + INV_BACK_HEIGHT_HALF )
+#define WEAPINFO_AMMOS_POS_Y        ( INV_OFFSET_Y - INV_SLOT_ANY_VISIABLE_RIGHT * ( INV_BACK_HEIGHT + 4 ) - INV_BACK_PAD )
+#define WEAPINFO_AMMOS_MID_Y        ( WEAPINFO_AMMOS_POS_Y + INV_BACK_HEIGHT_HALF )
 
 #undef INV_SLOT_R1_IS_VISIBLE
-#define INV_SLOT_R1_IS_VISIBLE   ( WEAPINFO_ITIMS_VISIBLE && dvarint( ui_hud_has_frags ) > 0 )
+#define INV_SLOT_R1_IS_VISIBLE      ( WEAPINFO_ITIMS_IS_VISIBLE && dvarint( ui_hud_has_frags ) > 0 )
 
 #undef INV_SLOT_R2_IS_VISIBLE
-#define INV_SLOT_R2_IS_VISIBLE   ( WEAPINFO_ITIMS_VISIBLE && dvarint( ui_hud_has_spec_gren ) > 0 )
+#define INV_SLOT_R2_IS_VISIBLE      ( WEAPINFO_ITIMS_IS_VISIBLE && dvarint( ui_hud_has_spec_gren ) > 0 )
 
 #undef INV_SLOT_R3_IS_VISIBLE
-#define INV_SLOT_R3_IS_VISIBLE   ( WEAPINFO_ITIMS_VISIBLE && ActionSlotUsable( 3 ) )
-
+#define INV_SLOT_R3_IS_VISIBLE      ( WEAPINFO_ITIMS_IS_VISIBLE && ActionSlotUsable( 3 ) )
 
 menuDef
 {
@@ -23,7 +20,7 @@ menuDef
 	exp				rect Y( 0 - ONLINEGAME_OFFSET_EXP )
 	exp				rect X( 0 - ONLINEGAME_OFFSET_EXP )
     fullScreen		1
-    visible			when( !isIntermission() && !inkillcam() && dvarBool( ammoCounterHide ) == 0 && !flashbanged() && !ui_active() && team( name ) != "TEAM_SPECTATOR" && dvarInt( ui_hud_show_weapon ) == 1 && dvarInt( ui_hud_show_weaponinfo ) == 1 && dvarInt( ui_show_timeout ) == 0 )
+    visible			when( HUD_IS_VISIBLE && dvarInt( ui_hud_show_inventory ) == 1 && dvarInt( ui_hud_has_weapon ) )
 
     //WEAPON BACK
     itemDef
@@ -33,7 +30,7 @@ menuDef
         forecolor		1 1 1 HUD_BACK_ALPHA
         style			WINDOW_STYLE_SHADER
         background		"hud_background_line"
-        visible			when ( WEAPINFO_AMMOS_VISIBLE )
+        visible			when ( WEAPINFO_AMMOS_IS_VISIBLE )
         decoration
     }
 
@@ -49,7 +46,7 @@ menuDef
         textalign	    ITEM_ALIGN_LEFT
         forecolor		1 1 1 HUD_FOREGROUND_ALPHA
         ownerdraw		CG_PLAYER_WEAPON_AMMO_STOCK
-        visible			when ( WEAPINFO_AMMOS_VISIBLE )
+        visible			when ( WEAPINFO_AMMOS_IS_VISIBLE )
         decoration
     }
 
@@ -64,7 +61,7 @@ menuDef
         exp             rect Y( WEAPINFO_AMMOS_MID_Y + 5.5 )
         forecolor		1 1 1 HUD_ALPHA
         ownerdraw		CG_PLAYER_WEAPON_AMMO_CLIP_GRAPHIC
-        visible			when ( WEAPINFO_AMMOS_VISIBLE )
+        visible			when ( WEAPINFO_AMMOS_IS_VISIBLE )
         decoration
     }
 
@@ -80,7 +77,7 @@ menuDef
         textalign	    ITEM_ALIGN_BOTTOM_RIGHT
         forecolor		1 1 1 HUD_FOREGROUND_ALPHA
         ownerdraw		CG_PLAYER_WEAPON_NAME
-        visible         when ( WEAPINFO_AMMOS_VISIBLE )
+        visible         when ( WEAPINFO_AMMOS_IS_VISIBLE )
         decoration
     }
 

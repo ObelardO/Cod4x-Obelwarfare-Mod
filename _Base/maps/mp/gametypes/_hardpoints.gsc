@@ -1123,12 +1123,12 @@ hardpointItemWaiter()
 					self takeWeapon( currentWeapon );
 					self setActionSlot( 4, "" );
 					self.pers["hardPointItem"] = undefined;
-					self setClientDvar( "ui_hud_show_weapon", 0 );
+					self setClientDvar( "ui_hud_has_weapon", 0 );
 				}
 
 				if ( lastWeapon != "none" )
 					self switchToWeapon( lastWeapon );
-					self setClientDvar( "ui_hud_show_weapon", 1 );
+					self setClientDvar( "ui_hud_has_weapon", 1 );
 				break;
 			case "none":
 				break;
