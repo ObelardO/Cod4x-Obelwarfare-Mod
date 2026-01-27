@@ -1,7 +1,8 @@
 #define WEAPINFO_ITIMS_IS_VISIBLE   ( ( dvarint( ui_hud_show_offhand_info ) >= dvarint( ui_hud_hardcore ) + 1 ) )
 #define WEAPINFO_AMMOS_IS_VISIBLE   ( ( dvarint( ui_hud_show_weapon_info ) >= dvarint( ui_hud_hardcore ) + 1 ) && dvarBool( ammoCounterHide ) == 0 )
 
-#define WEAPINFO_AMMOS_POS_Y        ( INV_OFFSET_Y - INV_SLOT_ANY_VISIABLE_RIGHT * ( INV_BACK_HEIGHT + 4 ) - INV_BACK_PAD )
+#define WEAPINFO_AMMOS_POS_X        ( 0 - INV_BACK_PAD )
+#define WEAPINFO_AMMOS_POS_Y        ( INV_OFFSET_Y - INV_SLOT_ANY_VISIABLE_RIGHT * ( INV_BACK_HEIGHT + INV_SPACING ) - INV_BACK_PAD )
 #define WEAPINFO_AMMOS_MID_Y        ( WEAPINFO_AMMOS_POS_Y + INV_BACK_HEIGHT_HALF )
 
 #undef INV_SLOT_R1_IS_VISIBLE
@@ -20,7 +21,7 @@ menuDef
 	exp				rect Y( 0 - ONLINEGAME_OFFSET_EXP )
 	exp				rect X( 0 - ONLINEGAME_OFFSET_EXP )
     fullScreen		1
-    visible			when( HUD_IS_VISIBLE && dvarInt( ui_hud_show_inventory ) == 1 && dvarInt( ui_hud_has_weapon ) )
+    visible			when( HUD_IS_VISIBLE && dvarInt( ui_hud_show_inventory ) == 1 && dvarInt( ui_hud_has_weapon ) == 1 )
 
     //WEAPON BACK
     itemDef
@@ -38,7 +39,7 @@ menuDef
     itemDef
     {
         name			"ammoStock"
-        rect			( 0 - INV_BACK_PAD - 32  ) 0 1 1
+        rect			( WEAPINFO_AMMOS_POS_X - 32  ) 0 1 1
         exp             rect Y( WEAPINFO_AMMOS_MID_Y + 11 )
         textscale		( TEXTSIZE_SMALL * 1.2 )
         textstyle		ITEM_TEXTSTYLE_SHADOWED
@@ -57,7 +58,7 @@ menuDef
     itemDef
     {
         name			"clipGraphic"
-        rect			( 0 - INV_BACK_PAD - 32 - 5 ) 0 1 1
+        rect			( WEAPINFO_AMMOS_POS_X - 32 - 5 ) 0 1 1
         exp             rect Y( WEAPINFO_AMMOS_MID_Y + 5.5 )
         forecolor		1 1 1 HUD_ALPHA
         ownerdraw		CG_PLAYER_WEAPON_AMMO_CLIP_GRAPHIC
@@ -69,7 +70,7 @@ menuDef
     itemDef
     {
         name			"weapname"
-        rect			( 0 - INV_BACK_PAD - 10 ) 0 1 1
+        rect			( WEAPINFO_AMMOS_POS_X - 10 ) 0 1 1
         exp             rect Y( WEAPINFO_AMMOS_MID_Y + 1 )
         textstyle		ITEM_TEXTSTYLE_SHADOWED
         textscale		(TEXTSIZE_SMALL * 0.5)
@@ -83,11 +84,11 @@ menuDef
 
     //FRAG
 	INV_SLOT_ICON_R1 ( ownerdraw CG_OFFHAND_WEAPON_ICON_FRAG, "hud_us_grenade", "+frag", 1 )
-	INV_SLOT_AMMO_R1 ( ownerdraw CG_OFFHAND_WEAPON_AMMO_FRAG, INV_CLR_WHITE, HUD_FOREGROUND_ALPHA, INV_AMMO_POS_FIX_NONE )
+	INV_SLOT_AMMO_R1 ( ownerdraw CG_OFFHAND_WEAPON_AMMO_FRAG, INV_CLR_WHITE, 1, INV_AMMO_POS_FIX_NONE )
 
     //SPECIAL
 	INV_SLOT_ICON_R2 ( ownerdraw CG_OFFHAND_WEAPON_ICON_SMOKEFLASH, "hud_us_smokegrenade", "+smoke", 1 )
-	INV_SLOT_AMMO_R2 ( ownerdraw CG_OFFHAND_WEAPON_AMMO_SMOKEFLASH, INV_CLR_WHITE, HUD_FOREGROUND_ALPHA, INV_AMMO_POS_FIX_NONE )	
+	INV_SLOT_AMMO_R2 ( ownerdraw CG_OFFHAND_WEAPON_AMMO_SMOKEFLASH, INV_CLR_WHITE, 1, INV_AMMO_POS_FIX_NONE )	
 
     //EXPLOSIVES (MOVED FROM DPAD)
 	INV_SLOT_ICON_R3 ( ownerdraw CG_PLAYER_ACTIONSLOT_3, INV_ICON_NONE, "+actionslot 3", INV_DPAD_ALPHA )

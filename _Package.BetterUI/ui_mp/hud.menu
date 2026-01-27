@@ -33,7 +33,7 @@
 
 #define DPAD_ICON_ALPHA 			0.65
 
-#define NOT_SPECTATING_CLIENT 		(!spectatingClient())
+#define NOT_SPECTATING_CLIENT 		( !spectatingClient() )
 
 #define HUD_OFFSET_X				15
 #define HUD_OFFSET_Y				15
@@ -139,7 +139,7 @@
 	#include "ui_mp/hud_compass.inc"
 
 	//#include "ui_mp/hud_stats.inc"
-
+	
 	//#include "ui_mp/hud_scorebar.inc"
 	
 	//#include "ui_mp/hud_locselector.inc"

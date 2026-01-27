@@ -16,7 +16,7 @@ menuDef
         visible			when( dvarInt( ui_healthoverlay ) == 1 );
         decoration
     }
-
+    /*
     // HEALTH BAR
     itemDef
     {
@@ -82,7 +82,7 @@ menuDef
         visible when( dvarInt( "wideScreen" ) && PLAYER_HUD_VISIBLE );
         decoration
     }
-
+    */
 
     /*
     //PEL VISUAL GUIDE INFO FRAME
