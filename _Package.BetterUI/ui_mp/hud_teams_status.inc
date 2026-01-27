@@ -47,12 +47,14 @@
 
 #define TS_TEAMCOUNT_BLINK_EXP    ( ( sin ( milliseconds() *0.005 ) + 1 ) / 2 )
 
+#define TS_TEAMSCORE_AXIS         opforfield( score )
+#define TS_TEAMSCORE_ALLIES       marinesfield( score )
 
 #define TS_PLAYER_SCORE_RANK      ( dvarint( ui_hud_teams_status_player_rank ) )
  
 #define TS_IS_PLAYER_TIE          ( TS_IS_NOT_TEAMBASED && player ( score ) > 0 && TS_PLAYER_SCORE_RANK != 1 && player ( score ) == scoreatrank ( 1 ) )
-#define TS_IS_PLAYER_LOSING       ( TS_IS_NOT_TEAMBASED && TS_PLAYER_SCORE_RANK > 1 )
-#define TS_IS_PLAYER_WINNING      ( TS_IS_NOT_TEAMBASED && TS_PLAYER_SCORE_RANK == 1 )
+#define TS_IS_PLAYER_LOSING       ( TS_IS_NOT_TEAMBASED && player ( score ) > 0 && TS_PLAYER_SCORE_RANK > 1 )
+#define TS_IS_PLAYER_WINNING      ( TS_IS_NOT_TEAMBASED && player ( score ) > 0 && TS_PLAYER_SCORE_RANK == 1 )
 
 #define TS_HUD_PLAYER_SCORE_1     ( scoreatrank( 1 ) )
 #define TS_HUD_PLAYER_SCORE_2     ( TS_IS_PLAYER_LOSING * player ( score ) ) + ( TS_IS_PLAYER_WINNING * scoreatrank( 2 ) )
@@ -60,32 +62,44 @@
 #define TS_HUD_PLAYER_INDEX       ( TS_IS_PLAYER_LOSING * TS_PLAYER_SCORE_RANK ) + ( TS_IS_PLAYER_WINNING * 2 )
 
 
+#define TS_HUD_SCORECOLOR_BASE    1.0 1.0 1.0 0.6
+#define TS_HUD_SCORECOLOR_WIN     0.3 1.0 0.3 1.0
+#define TS_HUD_SCORECOLOR_LOSE    1.0 0.2 0.2 1.0
+#define TS_HUD_SCORECOLOR_TIE     1.0 1.0 1.0 1.0
+
+
 #define TS_HUD_TIMER_VISIBLE      ( ( dvarInt( "ui_timelimit" ) == 0 || ( dvarInt( "ui_timelimit" ) * 60 - timeLeft() > 5 ) ) )
 #define TS_HUD_BOMB_SIZE          36
 #define TS_HUD_BOMB_SIZE_HALF     18
 
 
+#define TS_HUD_TEAM_LEFT( isVisibleExp, iconMaterial, count, isCountBlinkingExp, score, isWinExp, isLoseExp, isTieExp ) \
+    INV_SLOT_ICON_LEFT( TS_HUD_ALIGN, TS_HUD_POS_X, isVisibleExp, INV_BACK_MAT_DOUBLE, INV_BACK_SIZE_DOUBLE, style WINDOW_STYLE_SHADER, iconMaterial, "", 1 ) \
+    INV_SLOT_AMMO_LEFT( TS_HUD_ALIGN, TS_HUD_POS_X, isVisibleExp, exp text( count ), INV_CLR_WHITE, 1, INV_AMMO_POS_FIX_NONE ) \
+    INV_SLOT_AMMO_LEFT( TS_HUD_ALIGN, TS_HUD_POS_X, isVisibleExp && isCountBlinkingExp == 1, exp text( count ), INV_CLR_RED, TS_TEAMCOUNT_BLINK_EXP, INV_AMMO_POS_FIX_NONE ) \
+    TS_HUD_TEAM_SCORE( INV_ALIGN_X_OP_RIGHT, ITEM_ALIGN_LEFT, isVisibleExp, score, isWinExp, isLoseExp, isTieExp )
 
-#define TS_HUD_TIMER( textExp, color, xOffset, isVisibleExp ) \
-    itemDef \
-    { \
-        rect		xOffset TS_HUD_OFFSET_Y 0 TS_HUD_SIZE TS_HUD_ALIGN \
-        exp         text( textExp ); \
-        textfont	UI_FONT_OBJECTIVE \
-        textscale	0.3 \
-        textalign	ITEM_ALIGN_MIDDLE_CENTER \
-        textstyle	ITEM_TEXTSTYLE_SHADOWEDMORE \
-        forecolor	color \
-        visible 	when ( isVisibleExp && TS_HUD_TIMER_VISIBLE ) \
-        decoration \
-    }
+
+#define TS_HUD_TEAM_RIGHT( isVisibleExp, iconMaterial, count, isCountBlinkingExp, score, isWinExp, isLoseExp, isTieExp ) \
+    INV_SLOT_ICON_RIGHT( TS_HUD_ALIGN, TS_HUD_POS_X, isVisibleExp, INV_BACK_MAT_DOUBLE, INV_BACK_SIZE_DOUBLE, style WINDOW_STYLE_SHADER, iconMaterial, "", 1 ) \
+    INV_SLOT_AMMO_RIGHT( TS_HUD_ALIGN, TS_HUD_POS_X, isVisibleExp, exp text( count ), INV_CLR_WHITE, 1, INV_AMMO_POS_FIX_NONE ) \
+    INV_SLOT_AMMO_RIGHT( TS_HUD_ALIGN, TS_HUD_POS_X, isVisibleExp && isCountBlinkingExp == 1, exp text( count ), INV_CLR_RED, TS_TEAMCOUNT_BLINK_EXP, INV_AMMO_POS_FIX_NONE ) \
+    TS_HUD_TEAM_SCORE( INV_ALIGN_X_OP_LEFT, ITEM_ALIGN_RIGHT, isVisibleExp, score, isWinExp, isLoseExp, isTieExp )
+
+
+#define TS_HUD_TEAM_SCORE( xOffsetOp, textAlign, isVisibleExp, score, isWinExp, isLoseExp, isTieExp ) \
+    TS_HUD_ITEM_SCORE( xOffsetOp, textAlign, TS_HUD_SCORECOLOR_BASE, score, isVisibleExp ) \
+    TS_HUD_ITEM_SCORE( xOffsetOp, textAlign, TS_HUD_SCORECOLOR_WIN,  score, isVisibleExp && isWinExp ) \
+    TS_HUD_ITEM_SCORE( xOffsetOp, textAlign, TS_HUD_SCORECOLOR_LOSE, score, isVisibleExp && isLoseExp ) \
+    TS_HUD_ITEM_SCORE( xOffsetOp, textAlign, TS_HUD_SCORECOLOR_TIE,  score, isVisibleExp && isTieExp )
+
 
 #define TS_HUD_ITEM_SCORE( xOffsetOp, textAlign, color, score, isVisibleExp ) \
     itemDef \
     { \
-        rect		TS_HUD_OFFSET_X TS_HUD_OFFSET_Y 1 TS_HUD_SIZE TS_HUD_ALIGN \
+        rect		TS_HUD_OFFSET_X TS_HUD_OFFSET_Y 1 1 TS_HUD_ALIGN \
         exp         rect Y( TS_HUD_OFFSET_Y ) \
-        exp         rect X( xOffsetOp * ( TS_HUD_SPACING_X_HALF + TS_HUD_SIZE + 4 ) ) \
+        exp         rect X( xOffsetOp * ( TS_HUD_SPACING_X_HALF + INV_BACK_SIZE ) ) \
         exp         text( score ) \
         textfont	UI_FONT_OBJECTIVE \
         textscale	0.3 \
@@ -96,65 +110,21 @@
         decoration \
     }
 
-#define TS_HUD_ITEM( xOffsetOp, widthMod, textAlign, icon, isVisibleExp, score, winExp, loseExp, tieExp, count, blinkExp ) \
+
+#define TS_HUD_TIMER( textExp, color, xOffset, isVisibleExp ) \
     itemDef \
     { \
-        rect			TS_HUD_OFFSET_X TS_HUD_OFFSET_Y ( xOffsetOp * ( 0 - 1 ) * TS_HUD_BACK_SIZE_X ) TS_HUD_BACK_SIZE_Y TS_HUD_ALIGN \
-        exp             rect Y( TS_HUD_OFFSET_Y - 6 ) \
-        exp             rect X( xOffsetOp * ( TS_HUD_SPACING_X_HALF - 6 ) - widthMod * TS_HUD_BACK_SIZE_X ) \
-        forecolor		1 1 1 ( HUD_BACK_ALPHA * 0.95 ) \
-        style			WINDOW_STYLE_SHADER \
-        background		"hud_background_line_half" \
-        visible			when ( isVisibleExp ) \
-        decoration \
-    } \
-    itemDef \
-    { \
-        style			WINDOW_STYLE_SHADER \
-        rect			TS_HUD_OFFSET_X TS_HUD_OFFSET_Y TS_HUD_SIZE TS_HUD_SIZE TS_HUD_ALIGN \
-        exp             rect Y( TS_HUD_OFFSET_Y ); \
-        exp             rect X( xOffsetOp * TS_HUD_SPACING_X_HALF - widthMod * TS_HUD_SIZE ); \
-        origin          0 0; \
-        exp				material( icon ); \
-        visible			when ( isVisibleExp ); \
-        forecolor		1 1 1 HUD_FOREGROUND_ALPHA \
-        decoration \
-    } \
-    TS_HUD_ITEM_SCORE( xOffsetOp, textAlign, 1 1 1 0.6, score, isVisibleExp ) \
-    TS_HUD_ITEM_SCORE( xOffsetOp, textAlign, 0.3 1 0.3 1, score, isVisibleExp && winExp ) \
-    TS_HUD_ITEM_SCORE( xOffsetOp, textAlign, 1 0.2 0.2 1, score, isVisibleExp && loseExp ) \
-    TS_HUD_ITEM_SCORE( xOffsetOp, textAlign, 1 1 1 1, score, isVisibleExp && tieExp ) \   
-    itemDef \
-    { \
-        name			"teamCount" \
-        rect			TS_HUD_OFFSET_X TS_HUD_OFFSET_Y 1 1 TS_HUD_ALIGN \
-        exp             rect Y( TS_HUD_OFFSET_Y + TS_HUD_SIZE - 5 ) \
-        exp             rect X( xOffsetOp * ( TS_HUD_SPACING_X_HALF - 4 ) - 1 ) \
-        textalign	    textAlign \
-        textscale		( TEXTSIZE_SMALL * 0.6 ) \
-        textstyle		ITEM_TEXTSTYLE_SHADOWED \
-        textfont		UI_FONT_OBJECTIVE \
-        forecolor		1 1 1 1 \
-        exp				text( count ); \
-        visible			when( isVisibleExp ); \
-        decoration \
-    } \
-    itemDef \
-    { \
-        name			"teamCountLast" \
-        rect			TS_HUD_OFFSET_X TS_HUD_OFFSET_Y 1 1 TS_HUD_ALIGN \
-        exp             rect Y( TS_HUD_OFFSET_Y + TS_HUD_SIZE - 5 ) \
-        exp             rect X( xOffsetOp * ( TS_HUD_SPACING_X_HALF - 4 ) - 1 ) \
-        textalign	    textAlign \
-        textscale		(TEXTSIZE_SMALL * 0.6) \
-        textstyle		ITEM_TEXTSTYLE_SHADOWED \
-        textfont		UI_FONT_OBJECTIVE \
-        forecolor		0.9 0 0 1 \
-        exp				text( count ); \
-        exp             forecolor A( (sin(milliseconds()*0.005)+1)/2 ) ; \
-        visible			when( isVisibleExp && blinkExp && count <= 1 ); \
+        rect		xOffset TS_HUD_OFFSET_Y 0 0 TS_HUD_ALIGN \
+        exp         text( textExp ); \
+        textfont	UI_FONT_OBJECTIVE \
+        textscale	0.3 \
+        textalign	ITEM_ALIGN_MIDDLE_CENTER \
+        textstyle	ITEM_TEXTSTYLE_SHADOWEDMORE \
+        forecolor	color \
+        visible 	when ( isVisibleExp && TS_HUD_TIMER_VISIBLE ) \
         decoration \
     }
+
 
 menuDef
 {
@@ -169,46 +139,15 @@ menuDef
     ////TS_HUD_ITEM( TS_HUD_ALIGN_X_OP_RIGHT, TS_HUD_ALIGN_W_MOD_RIGHT, ITEM_ALIGN_MIDDLE_LEFT,  dvarString( g_TeamIcon_Axis ),   TS_IS_TEAMBASED, opforfield( score ),   TS_IS_TEAM_WINNING_AXIS,   TS_IS_TEAM_LOSING_AXIS,   TS_IS_TEAM_TIE_AXIS,   TS_TEAMCOUNT_AXIS,   1 )
 
     //TEAMBASED HUD: PLAYER'S TEAM ALWAYS ON LEFT
-    //TS_HUD_ITEM( TS_HUD_ALIGN_X_OP_LEFT,  TS_HUD_ALIGN_W_MOD_LEFT,  ITEM_ALIGN_MIDDLE_RIGHT, dvarString( g_TeamIcon_Allies ), TS_IS_TEAMBASED && ( TS_IS_ALLIES || TS_IS_FREE ), marinesfield( score ), TS_IS_TEAM_WINNING_ALLIES, TS_IS_TEAM_LOSING_ALLIES, TS_IS_TEAM_TIE_ALLIES, TS_TEAMCOUNT_ALLIES, 1 )
-    //TS_HUD_ITEM( TS_HUD_ALIGN_X_OP_RIGHT, TS_HUD_ALIGN_W_MOD_RIGHT, ITEM_ALIGN_MIDDLE_LEFT,  dvarString( g_TeamIcon_Axis ),   TS_IS_TEAMBASED && ( TS_IS_ALLIES || TS_IS_FREE ), opforfield( score ),   TS_IS_TEAM_WINNING_AXIS,   TS_IS_TEAM_LOSING_AXIS,   TS_IS_TEAM_TIE_AXIS,   TS_TEAMCOUNT_AXIS,   1 )
+    TS_HUD_TEAM_LEFT(  TS_IS_TEAMBASED && ( TS_IS_ALLIES || TS_IS_FREE ), TS_HUD_ICON_TEAM_ALLIES, TS_TEAMCOUNT_ALLIES, TS_TEAMCOUNT_ALLIES < 2, TS_TEAMSCORE_ALLIES, TS_IS_TEAM_WINNING_ALLIES, TS_IS_TEAM_LOSING_ALLIES, TS_IS_TEAM_TIE_ALLIES )
+    TS_HUD_TEAM_RIGHT( TS_IS_TEAMBASED && ( TS_IS_ALLIES || TS_IS_FREE ), TS_HUD_ICON_TEAM_AXIS,   TS_TEAMCOUNT_AXIS,   TS_TEAMCOUNT_AXIS   < 2, TS_TEAMSCORE_AXIS,   TS_IS_TEAM_WINNING_AXIS,   TS_IS_TEAM_LOSING_AXIS,   TS_IS_TEAM_TIE_AXIS   )
 
-    //TS_HUD_ITEM( TS_HUD_ALIGN_X_OP_RIGHT, TS_HUD_ALIGN_W_MOD_RIGHT, ITEM_ALIGN_MIDDLE_LEFT,  dvarString( g_TeamIcon_Allies ), TS_IS_TEAMBASED && TS_IS_AXIS, marinesfield( score ), TS_IS_TEAM_WINNING_ALLIES, TS_IS_TEAM_LOSING_ALLIES, TS_IS_TEAM_TIE_ALLIES, TS_TEAMCOUNT_ALLIES, 1 )
-    //TS_HUD_ITEM( TS_HUD_ALIGN_X_OP_LEFT,  TS_HUD_ALIGN_W_MOD_LEFT,  ITEM_ALIGN_MIDDLE_RIGHT, dvarString( g_TeamIcon_Axis ),   TS_IS_TEAMBASED && TS_IS_AXIS, opforfield( score ),   TS_IS_TEAM_WINNING_AXIS,   TS_IS_TEAM_LOSING_AXIS,   TS_IS_TEAM_TIE_AXIS,   TS_TEAMCOUNT_AXIS,   1 )
-
-    //FREE GAMEMODE HUD
-    //TS_HUD_ITEM( TS_HUD_ALIGN_X_OP_LEFT,  TS_HUD_ALIGN_W_MOD_LEFT,  ITEM_ALIGN_MIDDLE_RIGHT, "hud_match_cup_gold", TS_IS_NOT_TEAMBASED, TS_HUD_PLAYER_SCORE_1, TS_IS_PLAYER_WINNING, 0, 0, 1, 0 )
-    //TS_HUD_ITEM( TS_HUD_ALIGN_X_OP_RIGHT, TS_HUD_ALIGN_W_MOD_RIGHT, ITEM_ALIGN_MIDDLE_LEFT,  "hud_match_cup",      TS_IS_NOT_TEAMBASED, TS_HUD_PLAYER_SCORE_2, 0, TS_IS_PLAYER_LOSING, TS_IS_PLAYER_TIE, TS_HUD_PLAYER_INDEX, 0 )
-
-
-
-    //TEAMBASED HUD: PLAYER'S TEAM ALWAYS ON LEFT
-    INV_SLOT_ICON_LEFT(  TS_HUD_ALIGN, TS_HUD_POS_X, TS_IS_TEAMBASED && TS_IS_ALLIES, INV_BACK_MAT_DOUBLE, INV_BACK_SIZE_DOUBLE, style WINDOW_STYLE_SHADER, TS_HUD_ICON_TEAM_ALLIES, "", 1 )
-    INV_SLOT_AMMO_LEFT(  TS_HUD_ALIGN, TS_HUD_POS_X, TS_IS_TEAMBASED && TS_IS_ALLIES, exp text( TS_TEAMCOUNT_ALLIES ), INV_CLR_WHITE, 1, INV_AMMO_POS_FIX_NONE )
-    INV_SLOT_AMMO_LEFT(  TS_HUD_ALIGN, TS_HUD_POS_X, TS_IS_TEAMBASED && TS_IS_ALLIES && TS_TEAMCOUNT_ALLIES < 2, exp text( TS_TEAMCOUNT_ALLIES ), INV_CLR_RED, TS_TEAMCOUNT_BLINK_EXP, INV_AMMO_POS_FIX_NONE )
-    
-    INV_SLOT_ICON_RIGHT( TS_HUD_ALIGN, TS_HUD_POS_X, TS_IS_TEAMBASED && TS_IS_ALLIES, INV_BACK_MAT_DOUBLE, INV_BACK_SIZE_DOUBLE, style WINDOW_STYLE_SHADER, TS_HUD_ICON_TEAM_AXIS,   "", 1 )
-    INV_SLOT_AMMO_RIGHT( TS_HUD_ALIGN, TS_HUD_POS_X, TS_IS_TEAMBASED && TS_IS_ALLIES, exp text( TS_TEAMCOUNT_AXIS ), INV_CLR_WHITE, 1, INV_AMMO_POS_FIX_NONE )
-    INV_SLOT_AMMO_RIGHT( TS_HUD_ALIGN, TS_HUD_POS_X, TS_IS_TEAMBASED && TS_IS_ALLIES && TS_TEAMCOUNT_AXIS < 2, exp text( TS_TEAMCOUNT_AXIS ), INV_CLR_RED, TS_TEAMCOUNT_BLINK_EXP, INV_AMMO_POS_FIX_NONE )
-    
-
-    INV_SLOT_ICON_LEFT(  TS_HUD_ALIGN, TS_HUD_POS_X, TS_IS_TEAMBASED && TS_IS_AXIS, INV_BACK_MAT_DOUBLE, INV_BACK_SIZE_DOUBLE, style WINDOW_STYLE_SHADER, TS_HUD_ICON_TEAM_AXIS,   "", 1 )
-    INV_SLOT_AMMO_LEFT(  TS_HUD_ALIGN, TS_HUD_POS_X, TS_IS_TEAMBASED && TS_IS_AXIS, exp text( TS_TEAMCOUNT_AXIS ), INV_CLR_WHITE, 1, INV_AMMO_POS_FIX_NONE )
-    INV_SLOT_AMMO_LEFT(  TS_HUD_ALIGN, TS_HUD_POS_X, TS_IS_TEAMBASED && TS_IS_AXIS && TS_TEAMCOUNT_AXIS < 2, exp text( TS_TEAMCOUNT_AXIS ), INV_CLR_RED, TS_TEAMCOUNT_BLINK_EXP, INV_AMMO_POS_FIX_NONE )
-    
-    INV_SLOT_ICON_RIGHT( TS_HUD_ALIGN, TS_HUD_POS_X, TS_IS_TEAMBASED && TS_IS_AXIS, INV_BACK_MAT_DOUBLE, INV_BACK_SIZE_DOUBLE, style WINDOW_STYLE_SHADER, TS_HUD_ICON_TEAM_ALLIES, "", 1 )
-    INV_SLOT_AMMO_RIGHT( TS_HUD_ALIGN, TS_HUD_POS_X, TS_IS_TEAMBASED && TS_IS_AXIS, exp text( TS_TEAMCOUNT_ALLIES ), INV_CLR_WHITE, 1, INV_AMMO_POS_FIX_NONE )
-    INV_SLOT_AMMO_RIGHT( TS_HUD_ALIGN, TS_HUD_POS_X, TS_IS_TEAMBASED && TS_IS_AXIS && TS_TEAMCOUNT_ALLIES < 2, exp text( TS_TEAMCOUNT_ALLIES ), INV_CLR_RED, TS_TEAMCOUNT_BLINK_EXP, INV_AMMO_POS_FIX_NONE )
-    
-
+    TS_HUD_TEAM_RIGHT( TS_IS_TEAMBASED && TS_IS_AXIS, TS_HUD_ICON_TEAM_ALLIES, TS_TEAMCOUNT_ALLIES, TS_TEAMCOUNT_ALLIES < 2, TS_TEAMSCORE_ALLIES, TS_IS_TEAM_WINNING_ALLIES, TS_IS_TEAM_LOSING_ALLIES, TS_IS_TEAM_TIE_ALLIES )
+    TS_HUD_TEAM_LEFT(  TS_IS_TEAMBASED && TS_IS_AXIS, TS_HUD_ICON_TEAM_AXIS,   TS_TEAMCOUNT_AXIS,   TS_TEAMCOUNT_AXIS   < 2, TS_TEAMSCORE_AXIS,   TS_IS_TEAM_WINNING_AXIS,   TS_IS_TEAM_LOSING_AXIS,   TS_IS_TEAM_TIE_AXIS   )
 
     //FREE GAMEMODE HUD
-    INV_SLOT_ICON_LEFT(  TS_HUD_ALIGN, TS_HUD_POS_X, TS_IS_NOT_TEAMBASED, INV_BACK_MAT_DOUBLE, INV_BACK_SIZE_DOUBLE, style WINDOW_STYLE_SHADER, "hud_match_cup_gold", "", 1 )
-    INV_SLOT_AMMO_LEFT(  TS_HUD_ALIGN, TS_HUD_POS_X, TS_IS_NOT_TEAMBASED, exp text( "1" ), 1 1 1, 1, INV_AMMO_POS_FIX_NONE )
-    
-//#define INV_SLOT_AMMO_LEFT( align, xPos, isVisibleExp, ammoDrawerDef, color, alphaExp, posFixExp ) \
-
-    INV_SLOT_ICON_RIGHT( TS_HUD_ALIGN, TS_HUD_POS_X, TS_IS_NOT_TEAMBASED, INV_BACK_MAT_DOUBLE, INV_BACK_SIZE_DOUBLE, style WINDOW_STYLE_SHADER, "hud_match_cup",      "", 1 )
-    INV_SLOT_AMMO_RIGHT( TS_HUD_ALIGN, TS_HUD_POS_X, TS_IS_NOT_TEAMBASED, exp text( TS_HUD_PLAYER_INDEX ), 1 1 1, 1, INV_AMMO_POS_FIX_NONE )
+    TS_HUD_TEAM_LEFT(  TS_IS_NOT_TEAMBASED, "hud_match_cup_gold", "1",                 0, TS_HUD_PLAYER_SCORE_1, TS_IS_PLAYER_WINNING, 0,                   0 )
+    TS_HUD_TEAM_RIGHT( TS_IS_NOT_TEAMBASED, "hud_match_cup",      TS_HUD_PLAYER_INDEX, 0, TS_HUD_PLAYER_SCORE_2, 0,                    TS_IS_PLAYER_LOSING, TS_IS_PLAYER_TIE )
 
     //RAUND TIMER
     itemDef
