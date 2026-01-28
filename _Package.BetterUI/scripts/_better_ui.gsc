@@ -76,6 +76,9 @@ init()
 	forceClientDvar( "cg_youinkillcamsize", 1 );
     forceClientDvar( "cg_cursorHints", 4 );
     forceClientDvar( "cg_chatHeight", 6 );
+    forceClientDvar( "cg_drawHealth", 1 );
+    forceClientDvar( "cg_hudDamageIconHeight", 64 );
+    forceClientDvar( "cg_hudDamageIconWidth", 128 );
 
     // Apply other player dvars
     openwarfare\_playerdvars::completeForceClientDvarsArray();

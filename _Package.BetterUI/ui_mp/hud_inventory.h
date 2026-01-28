@@ -15,7 +15,7 @@
 #define INV_SLOT_L2_IS_VISIBLE  0
 #define INV_SLOT_L3_IS_VISIBLE  0
 
-#define INV_SLOT_ANY_VISIABLE_LEFT  ( INV_SLOT_L1_IS_VISIBLE || INV_SLOT_L2_IS_VISIBLE || INV_SLOT_L3_IS_VISIBLE )
+#define INV_SLOT_ANY_VISIABLE_L ( INV_SLOT_L1_IS_VISIBLE || INV_SLOT_L2_IS_VISIBLE || INV_SLOT_L3_IS_VISIBLE )
 
 #define INV_SLOT_L1_POS_X       ( INV_OFFSET_X )
 #define INV_SLOT_L2_POS_X       ( INV_SLOT_L1_POS_X + ( INV_BACK_SIZE + INV_SPACING ) * INV_SLOT_L1_IS_VISIBLE )
@@ -26,7 +26,7 @@
 #define INV_SLOT_R2_IS_VISIBLE  0
 #define INV_SLOT_R3_IS_VISIBLE  0
 
-#define INV_SLOT_ANY_VISIABLE_RIGHT ( INV_SLOT_R1_IS_VISIBLE || INV_SLOT_R2_IS_VISIBLE || INV_SLOT_R3_IS_VISIBLE )
+#define INV_SLOT_ANY_VISIABLE_R ( INV_SLOT_R1_IS_VISIBLE || INV_SLOT_R2_IS_VISIBLE || INV_SLOT_R3_IS_VISIBLE )
 
 #define INV_SLOT_R1_POS_X       ( INV_OFFSET_X )
 #define INV_SLOT_R2_POS_X       ( INV_SLOT_R1_POS_X + ( INV_BACK_SIZE + INV_SPACING ) * INV_SLOT_R1_IS_VISIBLE )
@@ -34,7 +34,7 @@
 
 
 #define INV_BACK_PAD            ( 2 )  
-#define INV_BACK_ALPHA          ( HUD_BACK_ALPHA * 0.9 )      
+#define INV_BACK_ALPHA          ( HUD_ALPHA * 0.9 )      
 #define INV_BACK_HEIGHT         ( INV_ICON_SIZE + INV_BACK_PAD * 2 )
 #define INV_BACK_HEIGHT_HALF    ( INV_BACK_HEIGHT * 0.5 )
 #define INV_BACK_SIZE           ( INV_BACK_HEIGHT * 1.25 )
@@ -48,11 +48,12 @@
 
 #define INV_CLR_WHITE           1 1 1
 #define INV_CLR_RED             0.9 0 0
+#define INV_CLR_YELLOW          0.9 0.9 0
 
-#define INV_ALIGN_X_OP_LEFT       ( 0 + 1 )
-#define INV_ALIGN_X_OP_RIGHT      ( 0 - 1 )
-#define INV_ALIGN_W_MOD_LEFT      0
-#define INV_ALIGN_W_MOD_RIGHT     1
+#define INV_ALIGN_X_OP_LEFT     ( 0 + 1 )
+#define INV_ALIGN_X_OP_RIGHT    ( 0 - 1 )
+#define INV_ALIGN_W_MOD_LEFT    0
+#define INV_ALIGN_W_MOD_RIGHT   1
 
 
 #define INV_AMMO_POS_FIX_DPAD   1
@@ -61,7 +62,7 @@
 #define INV_AMMO_POS_FIX_DPAD_X ( 7.5 )
 #define INV_AMMO_POS_FIX_DPAD_Y ( 3 )
 
-#define INV_DPAD_ALPHA     	     ( HudFade( "dpad" ) )   
+#define INV_DPAD_ALPHA     	    ( HudFade( "dpad" ) )   
 
 
 #define INV_SLOT_ICON_L1( iconDrawerDef, iconMaterial, keyBinding, alphaExp ) \
@@ -94,7 +95,7 @@
     itemDef \
 	{ \
         rect			0 ( INV_OFFSET_Y - INV_BACK_PAD ) ( backWidth * xOffsetOp ) INV_BACK_SIZE align \
-        forecolor		1 1 1 HUD_BACK_ALPHA \
+        forecolor		INV_CLR_WHITE 1 \
         exp	            rect X( xOffsetOp * ( xPos - INV_BACK_PAD + backWidth - INV_BACK_SIZE ) - widthMod * backWidth ) \
 		exp             forecolor A( alphaExp * INV_BACK_ALPHA ) \
         background      backMat \ 
@@ -102,22 +103,11 @@
         visible			when ( isVisibleExp ) \
         decoration \
 	} \
-    HUD_DEBUG_DOT( ( xOffsetOp * ( xPos - INV_BACK_PAD + backWidth - INV_BACK_SIZE ) - widthMod * backWidth ), ( INV_OFFSET_Y - INV_BACK_PAD ), align ) \
-	itemDef \
-	{ \
-        rect			0 INV_OFFSET_Y INV_ICON_SIZE INV_ICON_SIZE align \
-        exp				rect X( xOffsetOp * xPos - widthMod * INV_ICON_SIZE ) \
-        forecolor		0 1 0 0 \
-        style			WINDOW_STYLE_SHADER \
-        background		INV_ICON_NONE \
-        visible			when ( isVisibleExp ) \
-		decoration \
-    } \
     itemDef \
     { \
         rect			0 INV_OFFSET_Y INV_ICON_SIZE INV_ICON_SIZE align \
         exp				rect X( xOffsetOp * xPos - widthMod * INV_ICON_SIZE ) \
-        forecolor		1 1 1 HUD_ALPHA \
+        forecolor		INV_CLR_WHITE 1 \
         exp             forecolor A( alphaExp * HUD_FOREGROUND_ALPHA ) \
         iconDrawerDef \
         exp				material( iconMaterial ); \
@@ -131,7 +121,7 @@
         exp         rect X( xOffsetOp * ( xPos + INV_BACK_SIZE_HALF - 2 ) ) \
         exp         text( KeyBinding( keyBinding ) ) \
         exp         forecolor A( alphaExp * HUD_FOREGROUND_ALPHA ) \
-        forecolor	1 1 0 0 \
+        forecolor	INV_CLR_YELLOW 1 \
         textfont	UI_FONT_OBJECTIVE \
         textscale	0.18 \
         textalign	ITEM_ALIGN_MIDDLE_CENTER \
@@ -182,5 +172,4 @@
         ammoDrawerDef \
         visible			when ( isVisibleExp ) \
         decoration \
-    } \
-    HUD_DEBUG_DOT( ( xOffsetOp * ( xPos + ( xOffsetOp * posFixExp * INV_AMMO_POS_FIX_DPAD_X ) + INV_BACK_SIZE - INV_BACK_PAD * 2 - 5.5 ) - widthMod * 5 ), ( INV_OFFSET_Y + INV_ICON_SIZE - ( posFixExp * INV_AMMO_POS_FIX_DPAD_Y ) + 1.5 ), align )
+    }

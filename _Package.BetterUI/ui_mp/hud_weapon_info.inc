@@ -2,7 +2,7 @@
 #define WEAPINFO_AMMOS_IS_VISIBLE   ( ( dvarint( ui_hud_show_weapon_info ) >= dvarint( ui_hud_hardcore ) + 1 ) && dvarBool( ammoCounterHide ) == 0 )
 
 #define WEAPINFO_AMMOS_POS_X        ( 0 - INV_BACK_PAD )
-#define WEAPINFO_AMMOS_POS_Y        ( INV_OFFSET_Y - INV_SLOT_ANY_VISIABLE_RIGHT * ( INV_BACK_HEIGHT + INV_SPACING ) - INV_BACK_PAD )
+#define WEAPINFO_AMMOS_POS_Y        ( INV_OFFSET_Y - INV_SLOT_ANY_VISIABLE_R * ( INV_BACK_HEIGHT + INV_SPACING ) - INV_BACK_PAD )
 #define WEAPINFO_AMMOS_MID_Y        ( WEAPINFO_AMMOS_POS_Y + INV_BACK_HEIGHT_HALF )
 
 #undef INV_SLOT_R1_IS_VISIBLE
@@ -28,7 +28,7 @@ menuDef
     {
         rect			( INV_BACK_SIZE_QUAD * HUD_MINUS_ONE ) 0 INV_BACK_SIZE_QUAD INV_BACK_SIZE
         exp             rect Y( WEAPINFO_AMMOS_POS_Y )
-        forecolor		1 1 1 HUD_BACK_ALPHA
+        forecolor		1 1 1 INV_BACK_ALPHA
         style			WINDOW_STYLE_SHADER
         background		"hud_background_line"
         visible			when ( WEAPINFO_AMMOS_IS_VISIBLE )
@@ -50,9 +50,6 @@ menuDef
         visible			when ( WEAPINFO_AMMOS_IS_VISIBLE )
         decoration
     }
-
-    //DEBUG
-    HUD_DEBUG_DOT( 0, WEAPINFO_AMMOS_MID_Y, HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_BOTTOM )
 
     //WEAPON AMMO GRAPHIC
     itemDef

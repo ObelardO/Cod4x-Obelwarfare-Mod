@@ -1,144 +1,60 @@
-
-#define ALLIES_HAVE_UAV (dvarint( ui_uav_allies ) && team( name ) == "TEAM_ALLIES" )
-#define AXIS_HAVE_UAV (dvarint( ui_uav_axis ) && team( name ) == "TEAM_AXIS" )
-#define CLIENT_HAS_UAV (dvarint( ui_uav_client ) && team( name ) == "TEAM_FREE" )
-
-#define RECT_COMPASS	0 0 COMPASS_SIZE_MP COMPASS_SIZE_MP HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_TOP
-#undef MINIMAP_ORIGIN
-#define MINIMAP_ORIGIN 	14 19 //2 2
-
-#define COMPASS_VISIBLE     ( dvarint( ui_hud_hardcore ) == 0 || dvarint( ui_hud_hardcore_show_compass ) == 1 )
-#define MINIMAP_VISIBLE     ( dvarint( ui_hud_hardcore ) == 0 || dvarint( ui_hud_hardcore_show_minimap ) == 1 )
-#define MINIMAP_UAV_VISIBLE ( ALLIES_HAVE_UAV || AXIS_HAVE_UAV || CLIENT_HAS_UAV || dvarInt( g_compassShowEnemies ) )
-
-// Compass
+// Score Bar
 menuDef
 {
-    name			"Compass_old"
-    rect			RECT_COMPASS
+    name			"scorebar"
+    rect			0 0 640 480 HORIZONTAL_ALIGN_FULLSCREEN VERTICAL_ALIGN_FULLSCREEN
     fullScreen		0
-    visible 		when ( HUD_IS_VISIBLE );
+    visible 		when ( ( ( ( team( name ) == "TEAM_ALLIES" || team( name ) == "TEAM_AXIS" ) && gametype() != "bel" ) && !inkillcam() && NOT_SPECTATING_CLIENT && !menuisopen( background_main ) && !menuisopen( background_systemlink ) && !menuisopen( scoreboard )) && ( dvarInt( ui_hud_hardcore ) == 0 || dvarint( ui_hud_show_inventory ) > 0  ) && (dvarInt( "ui_score_bar" ) || team( name ) == "TEAM_SPECTATOR" || (dvarInt( "ui_timelimit" ) > 0 && timeLeft() < 0) || (timeLeft() >= 0 && (timeLeft() % 60 < 5 || timeLeft() < 60)) || (timeLeft() < 0 && (timeLeft() % 60 > (0-5))) || (dvarInt( "ui_scorelimit" ) > 0 && max( marinesfield( score ), opforfield( score ) ) / dvarInt( "ui_scorelimit" ) > 0.75 ) ) );
+
+    #define BARWIDTH	400
 
     itemDef
     {
-        name			"minimapBG"
-        rect			(MINIMAP_X_MP - 14) (MINIMAP_Y_MP - 6) COMPASS_SIZE_MP COMPASS_SIZE_MP
-        origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
-        background		"minimap_background"
-        ownerdraw		CG_PLAYER_COMPASS_BACK
-        visible         when ( ( MINIMAP_VISIBLE || MINIMAP_UAV_VISIBLE ) && !selecting_location() );
+        style			WINDOW_STYLE_SHADER
+        rect			(-BARWIDTH/2) 3 BARWIDTH 18 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_TOP
+        background		"line_horizontal"
+        forecolor		0 0 0 1
+        visible			1
+        decoration
+    }
+
+    itemDef
+    {
+        rect		0 0 1 1 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_TOP
+        origin		0 20
+        exp			text( locString( "@MENU_SCORE_WINNING", team( score ), otherteam( score ) ) );//exp text( "Winning " + team( score ) + " - " + otherteam( score ) );
+        textfont	UI_FONT_OBJECTIVE
+        textscale	0.35
+        textalign	ITEM_ALIGN_CENTER
+        textstyle	ITEM_TEXTSTYLE_SHADOWEDMORE
+        forecolor	0.3 1 0.3 1
+        visible 	when( team( score ) > otherteam( score ) )
         decoration
     }
     itemDef
     {
-        name			"minimapTickerBorder"
-        rect			MINIMAP_X_MP (MINIMAP_Y_MP - 15) MINIMAP_W_MP 14
-        origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 0.1
-        background		"minimap_tickertape_background"
-        ownerdraw		CG_PLAYER_COMPASS_BACK
-        visible         when ( (COMPASS_VISIBLE || MINIMAP_VISIBLE || MINIMAP_UAV_VISIBLE ) && !selecting_location() );
-        decoration
-    }
-    // compass without obj points
-    itemDef
-    {
-        name			"minimapTicker"
-        rect			MINIMAP_X_MP (MINIMAP_Y_MP - 9) MINIMAP_W_MP 6
-        origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
-        background		"minimap_tickertape_mp"
-        ownerdraw		CG_PLAYER_COMPASS_TICKERTAPE_NO_OBJ
-        visible         when ( (COMPASS_VISIBLE || MINIMAP_VISIBLE || MINIMAP_UAV_VISIBLE ) && !selecting_location() && !dvarint( compass_objectives ) );
-        decoration
-    }
-    // compass with obj points
-    itemDef
-    {
-        name			"minimapTicker"
-        rect			MINIMAP_X_MP (MINIMAP_Y_MP - 9) MINIMAP_W_MP 6
-        origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
-        background		"minimap_tickertape_mp"
-        ownerdraw		CG_PLAYER_COMPASS_TICKERTAPE
-        textscale		0.25
-        textstyle		ITEM_TEXTSTYLE_SHADOWED
-        visible         when ( (COMPASS_VISIBLE || MINIMAP_VISIBLE || MINIMAP_UAV_VISIBLE ) && !selecting_location() && dvarint( compass_objectives ) );
+        rect		0 0 1 1 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_TOP
+        origin		0 20
+        exp			text( locString( "@MENU_SCORE_LOSING", otherteam( score ), team( score ) ) );//exp text( "Losing " + otherteam( score ) + " - " + team( score ) );
+        textfont	UI_FONT_OBJECTIVE
+        textscale	0.35
+        textalign	ITEM_ALIGN_CENTER
+        textstyle	ITEM_TEXTSTYLE_SHADOWEDMORE
+        forecolor	1 0.3 0.3 1
+        visible 	when( team( score ) < otherteam( score ) )
         decoration
     }
     itemDef
     {
-        name			"mini_map"
-        rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
-        origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 HUD_ALPHA
-        background		"compass_map_default"
-        ownerdraw		CG_PLAYER_COMPASS_MAP
-        visible         when ( ( MINIMAP_VISIBLE || MINIMAP_UAV_VISIBLE ) && !selecting_location() );
+        rect		0 0 1 1 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_TOP
+        origin		0 20
+        exp			text( locString( "@MENU_SCORE_TIED", team( score ), otherteam( score ) ) );//exp text( "Tied " + team( score ) + " - " + otherteam( score ) );
+        textfont	UI_FONT_OBJECTIVE
+        textscale	0.35
+        textalign	ITEM_ALIGN_CENTER
+        textstyle	ITEM_TEXTSTYLE_SHADOWEDMORE
+        forecolor	1 1 0.3 1
+        visible 	when( team( score ) == otherteam( score ) )
         decoration
-    }
-    // Objective pointers
-    itemDef
-    {
-        name			"compasspointers"
-        rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
-        origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 HUD_ALPHA
-        background		"objective_line"
-        ownerdraw		CG_PLAYER_COMPASS_POINTERS
-        visible         when ( ( MINIMAP_VISIBLE || MINIMAP_UAV_VISIBLE ) && !selecting_location() && dvarint( ui_hud_showobjicons ) > 0 );
-        decoration
-    }
-    // Friendlies pointers
-    itemDef
-    {
-        name			"compassfriendlies"
-        rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
-        origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
-        ownerdraw		CG_PLAYER_COMPASS_FRIENDS
-        visible         when ( ( MINIMAP_VISIBLE || MINIMAP_UAV_VISIBLE ) && !selecting_location() );
-    }
-    // Enemy pings
-    itemDef
-    {
-        name			"compassenemies"
-        rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
-        origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
-        ownerdraw		CG_PLAYER_COMPASS_ENEMIES
-        visible         when ( ( ( MINIMAP_VISIBLE && dvarint( ui_minimap_show_enemies_firing ) == 1 ) || MINIMAP_UAV_VISIBLE ) && !selecting_location() );
-    }
-    // Helicopter pointers
-    itemDef
-    {
-        name			"compasshelicopters"
-        rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
-        origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
-        ownerdraw		CG_PLAYER_COMPASS_HELICOPTERS
-        visible         when ( ( MINIMAP_VISIBLE || MINIMAP_UAV_VISIBLE ) && !selecting_location() && dvarint( ui_hud_show_hardpoints ) == 1 );
-    }
-    // Plane pointers
-    itemDef
-    {
-        name			"compassplanes"
-        rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
-        origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
-        ownerdraw		CG_PLAYER_COMPASS_PLANES
-        visible         when ( ( MINIMAP_VISIBLE || MINIMAP_UAV_VISIBLE ) && !selecting_location() && dvarint( ui_hud_show_hardpoints ) == 1 );
-    }
-    // Player direction indicator
-    itemDef
-    {
-        name			"compassplayer"
-        rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
-        origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 1//HUD_FOREGROUND_ALPHA
-        background		"compassping_player"
-        ownerdraw		CG_PLAYER_COMPASS_PLAYER
-        visible         when ( ( MINIMAP_VISIBLE || MINIMAP_UAV_VISIBLE ) && !selecting_location() );
     }
 }

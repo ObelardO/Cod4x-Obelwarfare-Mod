@@ -1,6 +1,5 @@
-#define HINT_MANTLE_IS_VISIBLE      ( dvarint( ui_hud_show_mantle_hint ) >= dvarint( ui_hud_hardcore ) + 1 )
-#define HINT_BREATH_IS_VISIBLE      ( dvarint( ui_hud_show_breath_hint ) >= dvarint( ui_hud_hardcore ) + 1 )
-
+#define HINT_MANTLE_IS_VISIBLE      ( dvarint( "ui_hud_show_mantle_hint" ) >= dvarint( "ui_hud_hardcore" ) + 1 )
+#define HINT_BREATH_IS_VISIBLE      ( dvarint( "ui_hud_show_breath_hint" ) >= dvarint( "ui_hud_hardcore" ) + 1 )
 
 // Mantle hint
 menuDef
@@ -17,7 +16,7 @@ menuDef
         textscale		(TEXTSIZE_SMALL * 0.6)
         textstyle		ITEM_TEXTSTYLE_SHADOWED
         ownerdraw		CG_MANTLE_HINT
-        visible			when( NOT_SPECTATING_CLIENT && HINT_MANTLE_IS_VISIBLE && dvarString ( ui_hud_hint_text ) == "" )
+        visible			when( NOT_SPECTATING_CLIENT && HINT_MANTLE_IS_VISIBLE && dvarString ( "ui_hud_hint_text" ) == "" )
         decoration
     }
 }
@@ -37,7 +36,7 @@ menuDef
         textscale		(TEXTSIZE_SMALL * 0.9)
         textstyle		ITEM_TEXTSTYLE_SHADOWED
         ownerdraw		CG_CURSORHINT
-        visible			when( NOT_SPECTATING_CLIENT && dvarString ( ui_hud_hint_text ) == "" )
+        visible			when( NOT_SPECTATING_CLIENT && dvarString ( "ui_hud_hint_text" ) == "" )
         decoration
     }
 }

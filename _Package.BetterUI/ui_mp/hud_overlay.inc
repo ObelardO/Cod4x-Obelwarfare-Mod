@@ -13,7 +13,7 @@ menuDef
         forecolor		1 1 1 1
         background		"overlay_low_health"
         ownerdraw		CG_PLAYER_LOW_HEALTH_OVERLAY
-        visible			when( dvarInt( ui_healthoverlay ) == 1 );
+        visible			when( dvarInt( "ui_healthoverlay" ) == 1 );
         decoration
     }
     /*
