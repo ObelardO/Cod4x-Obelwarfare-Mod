@@ -135,7 +135,30 @@ onPlayerConnected()
     }
 
     self thread addNewEvent( "onPlayerDeath", ::onPlayerDeath );
+    self thread updatePlayerAngleThread();
 }
+
+
+updatePlayerAngleThread()
+{
+    //self endon( "death" );
+    self endon( "disconnect" );
+
+    for( ;; )
+    {
+        angles = self getPlayerAngles();
+
+        yaw = 360 - int( angles[1] );
+
+        if ( yaw < 0 ) yaw += 360;
+        if ( yaw >= 360 ) yaw -= 360;
+            
+        self setClientDvar( "ui_hud_compass_angle", yaw );
+
+        wait( 0.05 );
+    }
+}
+
 
 onPlayerDeath()
 {

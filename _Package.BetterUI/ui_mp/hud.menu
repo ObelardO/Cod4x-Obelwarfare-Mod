@@ -16,7 +16,7 @@
 #define RANK_ORIGIN 				0 6
 
 #define ONLINEGAME 					( dvarInt( "onlinegame" ) && !dvarInt( "xblive_privatematch" ) )
-#define ONLINEGAME_OFFSET 15
+#define ONLINEGAME_OFFSET 			13
 #define ONLINEGAME_OFFSET_EXP 		( ONLINEGAME * ONLINEGAME_OFFSET )
 
 #define HUD_ALPHA 					0.65
@@ -29,6 +29,19 @@
 #define HUD_IS_VISIBLE           	( !inkillcam() && !flashbanged() && !isIntermission() && !ui_active() && !scoped() && team( name ) != "TEAM_SPECTATOR" && ( dvarString( createfx ) != "on" ) && dvarInt( ui_show_timeout ) == 0 )
 
 #define MINIMAP_ORIGIN 				2 11
+
+#define HUD_DEBUG_DOT( xPos, yPos, align ) \
+    itemDef \
+	{ \
+        rect			0 0 1 1 align \
+        exp             rect X( xPos ) \
+        exp             rect Y( yPos ) \
+        forecolor		0 1 0 1 \
+        style			WINDOW_STYLE_SHADER \
+        background		"white" \
+        visible			when ( 1 ) \
+		decoration \
+    }
 
 /*
 #define	SCOREBAR_BORDER( setting, alliesColor, axisColor ) \
@@ -133,15 +146,3 @@
 	}*/
 }
 
-#define HUD_DEBUG_DOT( xPos, yPos, align ) \
-    itemDef \
-	{ \
-        rect			0 0 1 1 align \
-        exp             rect X( xPos ) \
-        exp             rect Y( yPos ) \
-        forecolor		0 1 0 1 \
-        style			WINDOW_STYLE_SHADER \
-        background		"white" \
-        visible			when ( 1 ) \
-		decoration \
-    }

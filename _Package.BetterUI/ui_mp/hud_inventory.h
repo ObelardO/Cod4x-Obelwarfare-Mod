@@ -47,8 +47,8 @@
 
 
 #define INV_CLR_WHITE           1 1 1
-#define INV_CLR_RED             0.9 0 0
-#define INV_CLR_YELLOW          0.9 0.9 0
+#define INV_CLR_RED             0.795 0.160 0.012
+#define INV_CLR_YELLOW          1 1 0.5
 
 #define INV_ALIGN_X_OP_LEFT     ( 0 + 1 )
 #define INV_ALIGN_X_OP_RIGHT    ( 0 - 1 )

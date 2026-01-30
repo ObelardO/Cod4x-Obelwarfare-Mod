@@ -23,7 +23,9 @@ menuDef
 menuDef
 {
     name			"gamemessages"
-    rect			14 ( -32 -50 ) 10 10 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+    rect			0 0 10 10 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP
+    exp				rect Y( ONLINEGAME_OFFSET_EXP )
+	exp				rect X( ONLINEGAME_OFFSET_EXP * HUD_MINUS_ONE )
     fullScreen		0
     visible			when( HUD_IS_VISIBLE && dvarint( "ui_hud_obituaries" ) == 1 && dvarstring( "g_gametype" ) != "vg" );
 
@@ -32,11 +34,11 @@ menuDef
         origin				0 0
         type				ITEM_TYPE_GAME_MESSAGE_WINDOW
         gamemsgwindowindex	0
-        gamemsgwindowmode	MODE_BOTTOMUP_ALIGN_BOTTOM
+        gamemsgwindowmode	MODE_TOPDOWN_ALIGN_TOP
         //gamemsgwindowmode	MODE_TOPDOWN_ALIGN_BOTTOM
         textfont			UI_FONT_DEFAULT
         textstyle			ITEM_TEXTSTYLE_SHADOWED
-        textalign			ITEM_ALIGN_LEFT
+        textalign			ITEM_ALIGN_TOP_RIGHT
         textscale			( TEXTSIZE_SMALL * 0.6 )
         visible				when( 1 );
     }

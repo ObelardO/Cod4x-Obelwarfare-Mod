@@ -1,144 +1,61 @@
+#define MM_HUD_IS_VISIBLE       ( dvarint( "ui_hud_hardcore" ) == 0 || dvarint( "ui_hud_hardcore_show_minimap" ) == 1 )
 
-#define ALLIES_HAVE_UAV (dvarint( "ui_uav_allies" ) && team( name ) == "TEAM_ALLIES" )
-#define AXIS_HAVE_UAV (dvarint( "ui_uav_axis" ) && team( name ) == "TEAM_AXIS" )
-#define CLIENT_HAS_UAV (dvarint( "ui_uav_client" ) && team( name ) == "TEAM_FREE" )
+#define MM_HUD_ALIGN            HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_TOP
 
-#define RECT_COMPASS	0 0 COMPASS_SIZE_MP COMPASS_SIZE_MP HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_TOP
-#undef MINIMAP_ORIGIN
-#define MINIMAP_ORIGIN 	14 19 //2 2
+#define MM_HUD_SIZE_W           110
+#define MM_HUD_SIZE_H           110
+#define MM_HUD_RECT             0 0 MM_HUD_SIZE_W MM_HUD_SIZE_H MM_HUD_ALIGN  
+   
 
-#define COMPASS_VISIBLE     ( dvarint( "ui_hud_hardcore" ) == 0 || dvarint( "ui_hud_hardcore_show_compass" ) == 1 )
-#define MINIMAP_VISIBLE     ( dvarint( "ui_hud_hardcore" ) == 0 || dvarint( "ui_hud_hardcore_show_minimap" ) == 1 )
-#define MINIMAP_UAV_VISIBLE ( ALLIES_HAVE_UAV || AXIS_HAVE_UAV || CLIENT_HAS_UAV || dvarInt( "g_compassShowEnemies" ) )
+#define MM_ALLIES_HAVE_UAV      ( dvarint( "ui_uav_allies" ) && team( name ) == "TEAM_ALLIES" )
+#define MM_AXIS_HAVE_UAV        ( dvarint( "ui_uav_axis" ) && team( name ) == "TEAM_AXIS" )
+#define MM_CLIENT_HAS_UAV       ( dvarint( "ui_uav_client" ) && team( name ) == "TEAM_FREE" )
+#define MM_HAS_UAV              ( MM_ALLIES_HAVE_UAV || MM_AXIS_HAVE_UAV || MM_CLIENT_HAS_UAV || dvarInt( "g_compassShowEnemies" ) )
+   
 
-// Compass
+#define MM_HUD_LAYER( nameText, backMat, drawerDef, alphaExp, isVisibleExp ) \
+    itemDef \
+    { \
+        name			nameText \
+        rect			0 0 MM_HUD_SIZE_W MM_HUD_SIZE_H MM_HUD_ALIGN \
+        forecolor		1 1 1 alphaExp \
+        background		backMat \
+        ownerdraw		drawerDef \
+        visible         when ( isVisibleExp ) \
+        decoration \
+    } 
+
+
 menuDef
 {
     name			"Compass_old"
-    rect			RECT_COMPASS
+    rect			MM_HUD_RECT
+    exp				rect Y( ONLINEGAME_OFFSET_EXP )
+	exp				rect X( ONLINEGAME_OFFSET_EXP )
     fullScreen		0
-    visible 		when ( HUD_IS_VISIBLE );
+    visible 		when ( ( HUD_IS_VISIBLE || MM_HAS_UAV ) && !selecting_location() );
 
-    itemDef
-    {
-        name			"minimapBG"
-        rect			(MINIMAP_X_MP - 14) (MINIMAP_Y_MP - 6) COMPASS_SIZE_MP COMPASS_SIZE_MP
-        origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
-        background		"minimap_background"
-        ownerdraw		CG_PLAYER_COMPASS_BACK
-        visible         when ( ( MINIMAP_VISIBLE || MINIMAP_UAV_VISIBLE ) && !selecting_location() );
-        decoration
-    }
-    itemDef
-    {
-        name			"minimapTickerBorder"
-        rect			MINIMAP_X_MP (MINIMAP_Y_MP - 15) MINIMAP_W_MP 14
-        origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 0.1
-        background		"minimap_tickertape_background"
-        ownerdraw		CG_PLAYER_COMPASS_BACK
-        visible         when ( (COMPASS_VISIBLE || MINIMAP_VISIBLE || MINIMAP_UAV_VISIBLE ) && !selecting_location() );
-        decoration
-    }
-    // compass without obj points
-    itemDef
-    {
-        name			"minimapTicker"
-        rect			MINIMAP_X_MP (MINIMAP_Y_MP - 9) MINIMAP_W_MP 6
-        origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
-        background		"minimap_tickertape_mp"
-        ownerdraw		CG_PLAYER_COMPASS_TICKERTAPE_NO_OBJ
-        visible         when ( (COMPASS_VISIBLE || MINIMAP_VISIBLE || MINIMAP_UAV_VISIBLE ) && !selecting_location() && !dvarint( "compass_objectives" ) );
-        decoration
-    }
-    // compass with obj points
-    itemDef
-    {
-        name			"minimapTicker"
-        rect			MINIMAP_X_MP (MINIMAP_Y_MP - 9) MINIMAP_W_MP 6
-        origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
-        background		"minimap_tickertape_mp"
-        ownerdraw		CG_PLAYER_COMPASS_TICKERTAPE
-        textscale		0.25
-        textstyle		ITEM_TEXTSTYLE_SHADOWED
-        visible         when ( (COMPASS_VISIBLE || MINIMAP_VISIBLE || MINIMAP_UAV_VISIBLE ) && !selecting_location() && dvarint( "compass_objectives" ) );
-        decoration
-    }
-    itemDef
-    {
-        name			"mini_map"
-        rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
-        origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 HUD_ALPHA
-        background		"compass_map_default"
-        ownerdraw		CG_PLAYER_COMPASS_MAP
-        visible         when ( ( MINIMAP_VISIBLE || MINIMAP_UAV_VISIBLE ) && !selecting_location() );
-        decoration
-    }
+    // Background layer
+    MM_HUD_LAYER( "minimapBG", "minimap_background", CG_PLAYER_COMPASS_BACK, HUD_FOREGROUND_ALPHA, 1 )
+
+    // Map layer
+    MM_HUD_LAYER( "mini_map",   "compass_map_default", CG_PLAYER_COMPASS_MAP,  HUD_ALPHA, 1 )
+
     // Objective pointers
-    itemDef
-    {
-        name			"compasspointers"
-        rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
-        origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 HUD_ALPHA
-        background		"objective_line"
-        ownerdraw		CG_PLAYER_COMPASS_POINTERS
-        visible         when ( ( MINIMAP_VISIBLE || MINIMAP_UAV_VISIBLE ) && !selecting_location() && dvarint( "ui_hud_showobjicons" ) > 0 );
-        decoration
-    }
+    MM_HUD_LAYER( "compasspointers", "objective_line", CG_PLAYER_COMPASS_POINTERS, HUD_ALPHA, dvarint( "ui_hud_showobjicons" ) > 0 )
+
     // Friendlies pointers
-    itemDef
-    {
-        name			"compassfriendlies"
-        rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
-        origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
-        ownerdraw		CG_PLAYER_COMPASS_FRIENDS
-        visible         when ( ( MINIMAP_VISIBLE || MINIMAP_UAV_VISIBLE ) && !selecting_location() );
-    }
+    MM_HUD_LAYER( "compassfriendlies", "white", CG_PLAYER_COMPASS_FRIENDS, HUD_FOREGROUND_ALPHA, 1 )
+
     // Enemy pings
-    itemDef
-    {
-        name			"compassenemies"
-        rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
-        origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
-        ownerdraw		CG_PLAYER_COMPASS_ENEMIES
-        visible         when ( ( ( MINIMAP_VISIBLE && dvarint( ui_minimap_show_enemies_firing ) == 1 ) || MINIMAP_UAV_VISIBLE ) && !selecting_location() );
-    }
+    MM_HUD_LAYER( "compassenemies", "white", CG_PLAYER_COMPASS_ENEMIES, HUD_FOREGROUND_ALPHA, MM_HAS_UAV || dvarint( "ui_minimap_show_enemies_firing" ) == 1 )
+
     // Helicopter pointers
-    itemDef
-    {
-        name			"compasshelicopters"
-        rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
-        origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
-        ownerdraw		CG_PLAYER_COMPASS_HELICOPTERS
-        visible         when ( ( MINIMAP_VISIBLE || MINIMAP_UAV_VISIBLE ) && !selecting_location() && dvarint( "ui_hud_show_hardpoints" ) == 1 );
-    }
+    MM_HUD_LAYER( "compasshelicopters", "white", CG_PLAYER_COMPASS_HELICOPTERS, HUD_FOREGROUND_ALPHA, dvarint( "ui_hud_show_hardpoints" ) == 1 )
+
     // Plane pointers
-    itemDef
-    {
-        name			"compassplanes"
-        rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
-        origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
-        ownerdraw		CG_PLAYER_COMPASS_PLANES
-        visible         when ( ( MINIMAP_VISIBLE || MINIMAP_UAV_VISIBLE ) && !selecting_location() && dvarint( "ui_hud_show_hardpoints" ) == 1 );
-    }
+    MM_HUD_LAYER( "compassplanes", "white", CG_PLAYER_COMPASS_PLANES, HUD_FOREGROUND_ALPHA, dvarint( "ui_hud_show_hardpoints" ) == 1 )
+
     // Player direction indicator
-    itemDef
-    {
-        name			"compassplayer"
-        rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
-        origin 			MINIMAP_ORIGIN
-        forecolor		1 1 1 1//HUD_FOREGROUND_ALPHA
-        background		"compassping_player"
-        ownerdraw		CG_PLAYER_COMPASS_PLAYER
-        visible         when ( ( MINIMAP_VISIBLE || MINIMAP_UAV_VISIBLE ) && !selecting_location() );
-    }
+    MM_HUD_LAYER( "compassplayer", "compassping_player", CG_PLAYER_COMPASS_PLAYER, 1, 1 )
 }

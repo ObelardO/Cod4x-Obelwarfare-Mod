@@ -52,10 +52,10 @@
 #define TS_HUD_PLAYER_INDEX       ( TS_IS_PLAYER_LOSING * TS_PLAYER_SCORE_RANK ) + ( TS_IS_PLAYER_WINNING * 2 )
 
 
-#define TS_HUD_SCORECOLOR_BASE    1.0 1.0 1.0 0.6
-#define TS_HUD_SCORECOLOR_WIN     0.3 1.0 0.3 1.0
-#define TS_HUD_SCORECOLOR_LOSE    1.0 0.2 0.2 1.0
-#define TS_HUD_SCORECOLOR_TIE     1.0 1.0 1.0 1.0
+#define TS_HUD_SCORECOLOR_BASE    1.00 1.00 1.00 0.60
+#define TS_HUD_SCORECOLOR_WIN     0.71 0.94 0.69 1.00
+#define TS_HUD_SCORECOLOR_LOSE    0.95 0.65 0.65 1.00
+#define TS_HUD_SCORECOLOR_TIE     1.00 1.00 1.00 1.00
 
 
 #define TS_HUD_TIMER_VISIBLE      ( ( dvarInt( "ui_timelimit" ) == 0 || ( dvarInt( "ui_timelimit" ) * 60 - timeLeft() > 5 ) ) )
@@ -118,7 +118,7 @@
 menuDef
 {
     name			"scorebars"
-    rect			0 0 649 480 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_BOTTOM
+    rect			FULLSCREEN HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_BOTTOM
     exp				rect Y( 0 - ONLINEGAME_OFFSET_EXP )
     fullScreen		0
     visible         when( HUD_IS_VISIBLE && TS_HUD_IS_VISIBLE );

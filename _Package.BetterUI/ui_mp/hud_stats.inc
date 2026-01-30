@@ -9,7 +9,7 @@
 menuDef
 {
     name			"xpbar"
-    rect			0 -8 640 480 HORIZONTAL_ALIGN_FULLSCREEN VERTICAL_ALIGN_FULLSCREEN
+    rect			FULLSCREEN HORIZONTAL_ALIGN_FULLSCREEN VERTICAL_ALIGN_FULLSCREEN
     fullScreen		0
     visible 		when( dvarBool( "ui_hud_showstats" ) && !inkillcam() && !scoped() && !ui_active() && team( name ) != "TEAM_SPECTATOR" && NOT_SPECTATING_CLIENT );
 
