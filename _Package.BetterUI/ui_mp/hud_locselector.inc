@@ -9,7 +9,7 @@ menuDef
     fullScreen		0
     visible			1
 
-    #define FSM_VISIBILITY ( selecting_location() && NOT_SPECTATING_CLIENT )
+    #define FSM_VISIBILITY ( selecting_location() && CLIENT_NOT_SPECTATING )
 
     itemDef
     {

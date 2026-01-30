@@ -15,7 +15,7 @@ menuDef
 	exp				rect Y( 0 - ONLINEGAME_OFFSET_EXP )
 	exp				rect X( ONLINEGAME_OFFSET_EXP )
 	fullScreen		1
-	visible			when( HUD_IS_VISIBLE && NOT_SPECTATING_CLIENT && dvarInt( "ui_hud_show_inventory" ) == 1 && dvarInt( "ui_hud_has_weapon" ) == 1 );
+	visible			when( HUD_IS_VISIBLE && CLIENT_NOT_DEAD && CLIENT_NOT_FREE_SPECTATING && INV_IS_VISIBLE && dvarInt( "ui_hud_has_weapon" ) == 1 );
 
 	//PLAYER INFO BACK
 	itemDef
@@ -23,6 +23,7 @@ menuDef
 		rect			0 0 ( INV_BACK_SIZE_QUAD * HUD_MINUS_ONE ) INV_BACK_SIZE INV_ALIGN_L
 		exp             rect Y( PLAYERINFO_HEALTH_POS_Y )
 		forecolor		1 1 1 INV_BACK_ALPHA
+		exp				forecolor A( INV_BACK_ALPHA * INV_DPAD_ALPHA )
 		style			WINDOW_STYLE_SHADER
 		background		"hud_background_line"
 		visible			when ( PLAYERINFO_IS_VISIBLE )
@@ -38,6 +39,7 @@ menuDef
 		exp             rect Y( PLAYERINFO_HEALTH_MID_Y - PLAYERINFO_STANCE_SIZE_HALF - 1 )
 		ownerdraw		CG_PLAYER_STANCE
 		textfont		UI_FONT_OBJECTIVE
+		exp				forecolor A( HUD_ALPHA * INV_DPAD_ALPHA )
 		visible			when( 1 );
 		textscale		TEXTSIZE_SMALL
 		textstyle		ITEM_TEXTSTYLE_SHADOWED
@@ -53,6 +55,7 @@ menuDef
 		exp             rect X( PLAYERINFO_HEALTH_POS_X + 24 )
 		exp				rect Y( PLAYERINFO_HEALTH_MID_Y + 3.5 )
 		forecolor 		0.1 0.1 0.1 0.3
+		exp				forecolor A( INV_DPAD_ALPHA )
 		background 		"white"
 		ownerdraw 		CG_PLAYER_BAR_HEALTH_BACK
 		visible			when( 1 );
@@ -64,6 +67,7 @@ menuDef
 		rect 			0 0 75 2.5
 		exp             rect X( PLAYERINFO_HEALTH_POS_X + 25 )
 		exp				rect Y( PLAYERINFO_HEALTH_MID_Y + 4.5 )
+		exp				forecolor A( INV_DPAD_ALPHA )
 		forecolor 		1 0.6 0.5 0.3
 		background 		"white"
 		ownerdraw 		CG_PLAYER_BAR_HEALTH

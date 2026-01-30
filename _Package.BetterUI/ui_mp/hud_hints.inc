@@ -16,7 +16,7 @@ menuDef
         textscale		(TEXTSIZE_SMALL * 0.6)
         textstyle		ITEM_TEXTSTYLE_SHADOWED
         ownerdraw		CG_MANTLE_HINT
-        visible			when( NOT_SPECTATING_CLIENT && HINT_MANTLE_IS_VISIBLE && dvarString ( "ui_hud_hint_text" ) == "" )
+        visible			when( CLIENT_NOT_SPECTATING && HINT_MANTLE_IS_VISIBLE && dvarString ( "ui_hud_hint_text" ) == "" )
         decoration
     }
 }
@@ -36,7 +36,7 @@ menuDef
         textscale		(TEXTSIZE_SMALL * 0.9)
         textstyle		ITEM_TEXTSTYLE_SHADOWED
         ownerdraw		CG_CURSORHINT
-        visible			when( NOT_SPECTATING_CLIENT && dvarString ( "ui_hud_hint_text" ) == "" )
+        visible			when( CLIENT_NOT_SPECTATING && dvarString ( "ui_hud_hint_text" ) == "" )
         decoration
     }
 }
@@ -57,7 +57,7 @@ menuDef
         textstyle		ITEM_TEXTSTYLE_SHADOWED
         ownerdraw		CG_INVALID_CMD_HINT
         textfont		UI_FONT_NORMAL
-        visible			when( NOT_SPECTATING_CLIENT )
+        visible			when( CLIENT_NOT_SPECTATING )
         decoration
     }
 }*/

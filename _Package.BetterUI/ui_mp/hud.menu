@@ -22,11 +22,20 @@
 #define HUD_ALPHA 					0.65
 #define HUD_FOREGROUND_ALPHA 		0.75
 
-#define NOT_SPECTATING_CLIENT 		( !spectatingClient() )
+
+#define CLIENT_IS_DEAD				( dvarString( "ui_sessionstate" ) == "dead" )
+#define CLIENT_IS_PLAYING			( dvarString( "ui_sessionstate" ) == "playing" )
+#define CLIENT_IS_SPECTATING		( dvarString( "ui_sessionstate" ) == "spectator" )
+#define CLIENT_IS_INTERMISSION		( dvarString( "ui_sessionstate" ) == "intermission" )
+
+#define CLIENT_NOT_SPECTATING 		( !spectatingClient() )
+#define CLIENT_NOT_DEAD				( CLIENT_IS_PLAYING || CLIENT_IS_SPECTATING )
+#define CLIENT_NOT_FREE_SPECTATING	( CLIENT_IS_PLAYING || ( CLIENT_IS_SPECTATING && spectatingClient() ) )
 
 #define HUD_MINUS_ONE				( 0 - 1 )
 
-#define HUD_IS_VISIBLE           	( !inkillcam() && !flashbanged() && !isIntermission() && !ui_active() && !scoped() && team( name ) != "TEAM_SPECTATOR" && ( dvarString( createfx ) != "on" ) && dvarInt( ui_show_timeout ) == 0 )
+#define HUD_IS_VISIBLE           	( !inkillcam() && !flashbanged() && !isIntermission() && !ui_active() && !scoped() && dvarInt( ui_show_timeout ) == 0 )
+//#define HUD_IS_VISIBLE           	( !inkillcam() && !flashbanged() && !isIntermission() && !ui_active() && !scoped() && team( name ) != "TEAM_SPECTATOR" && ( dvarString( createfx ) != "on" ) && dvarInt( ui_show_timeout ) == 0 )
 
 #define MINIMAP_ORIGIN 				2 11
 

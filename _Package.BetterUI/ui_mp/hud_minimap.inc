@@ -33,7 +33,7 @@ menuDef
     exp				rect Y( ONLINEGAME_OFFSET_EXP )
 	exp				rect X( ONLINEGAME_OFFSET_EXP )
     fullScreen		0
-    visible 		when ( ( HUD_IS_VISIBLE || MM_HAS_UAV ) && !selecting_location() );
+    visible 		when ( HUD_IS_VISIBLE && CLIENT_NOT_DEAD && ( MM_HUD_IS_VISIBLE || MM_HAS_UAV ) && !selecting_location() );
 
     // Background layer
     MM_HUD_LAYER( "minimapBG", "minimap_background", CG_PLAYER_COMPASS_BACK, HUD_FOREGROUND_ALPHA, 1 )

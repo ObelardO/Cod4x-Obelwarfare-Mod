@@ -1,3 +1,6 @@
+#define INV_IS_VISIBLE    	    ( dvarint( "ui_hud_show_inventory" ) >= dvarint( "ui_hud_hardcore" ) + 1 )
+
+
 #define INV_ALIGN_L             HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
 #define INV_ALIGN_R             HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_BOTTOM
                                 

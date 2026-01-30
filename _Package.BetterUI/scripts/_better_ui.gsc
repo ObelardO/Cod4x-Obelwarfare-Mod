@@ -14,8 +14,6 @@
 #include openwarfare\_eventmanager;
 #include openwarfare\_utils;
 
-//#include openwarfare\_playerdvars;
-
 init()
 {
     // Weapon info HUD
@@ -42,10 +40,6 @@ init()
     scr_hud_show_breath_hint = getdvarx( "scr_hud_show_breath_hint", "int", 1, 0, 2 );
     setDvar( "ui_hud_show_breath_hint", scr_hud_show_breath_hint );
     makeDvarServerInfo( "ui_hud_show_breath_hint" );
-
-    //TODO: Rename. Make it based on player and game state
-    setDvar( "ui_hud_show_inventory", 0 );
-    makeDvarServerInfo( "ui_hud_show_inventory" );
 
     // Fade options
     scr_hud_fade_enabled = getdvarx( "scr_hud_fade_enabled", "int", 1, 0, 1 );
@@ -76,7 +70,7 @@ init()
 	forceClientDvar( "cg_youinkillcamsize", 1 );
     forceClientDvar( "cg_cursorHints", 4 );
     forceClientDvar( "cg_chatHeight", 6 );
-    forceClientDvar( "cg_drawHealth", 1 );
+    forceClientDvar( "cg_drawhealth", 1 );
     forceClientDvar( "cg_hudDamageIconHeight", 64 );
     forceClientDvar( "cg_hudDamageIconWidth", 128 );
 
@@ -92,7 +86,7 @@ init()
         level.teamsStatus.teamBasedHUD = level.teamBased && level.gametype != "bel";
         level.teamsStatus.showHUD = scr_hud_show_teams_status;
     
-        setDvar( "ui_hud_show_teams_status", 0 );
+        setDvar( "ui_hud_show_teams_status", scr_hud_show_teams_status );
         makeDvarServerInfo( "ui_hud_show_teams_status" );
         
         setDvar( "ui_hud_teams_status_teambased", int( level.teamsStatus.teamBasedHUD ) );
@@ -106,8 +100,8 @@ init()
 
         if ( level.teamsStatus.teamBasedHUD )
         {
-            level thread updateTeamCountsHUD( "allies" );
-            level thread updateTeamCountsHUD( "axis" );
+            level thread teamCountsWatcher( "allies" );
+            level thread teamCountsWatcher( "axis" );
         }
     }
     else
@@ -127,21 +121,37 @@ init()
 }
 
 
-onPlayerConnected()
+showHintAction( hintText )
 {
-    if( isDefined( level.teamsStatus ) && !level.teamsStatus.teamBasedHUD )
-    {
-        self thread addNewEvent( "onPlayerSpawned", ::updatePlayerScoreHUD );
-    }
+    self setClientDvar( "ui_hud_hint_text", hintText );
 
-    self thread addNewEvent( "onPlayerDeath", ::onPlayerDeath );
-    self thread updatePlayerAngleThread();
+    self maps\mp\gametypes\_hud_hints::showHintAction( hintText );
 }
 
 
-updatePlayerAngleThread()
+onPlayerConnected()
 {
-    //self endon( "death" );
+    self thread addNewEvent( "onPlayerSpawned", ::onPlayerSpawned );
+    self thread addNewEvent( "onPlayerDeath", ::onPlayerDeath );
+
+    self thread playerAngleWatcher();
+    self thread playerSessionWatcher();
+}
+
+
+onPlayerSpawned()
+{
+    if( isDefined( level.teamsStatus ) && !level.teamsStatus.teamBasedHUD )
+    {
+        self thread playerScoreWathcher() ;
+    }
+
+    self setClientDvar( "ui_hud_lives_count", self.pers["lives"] );
+}
+
+
+playerAngleWatcher()
+{
     self endon( "disconnect" );
 
     for( ;; )
@@ -160,57 +170,54 @@ updatePlayerAngleThread()
 }
 
 
-onPlayerDeath()
+playerSessionWatcher()
 {
-    //TODO Work with player session state
-    if (self maps\mp\gametypes\_globallogic::maySpawn())
+    self endon( "disconnect" );
+
+    lastSessionstate = "none"; ;
+
+    for( ;; )
     {
-        self setClientDvar( "ui_hud_has_frags", "0" );
-	    self setClientDvar( "ui_hud_has_spec_gren", "0" );
-        self setClientDvar( "ui_hud_has_weapon", "0" );
+        if ( lastSessionstate != self.sessionstate )
+        {
+            lastSessionstate = self.sessionstate;
+
+            self setClientDvar( "ui_sessionstate", self.sessionstate );
+
+            self iPrintLn( self.name + "^2 state: " + self.sessionstate );
+        }
+
+        wait ( 0.05 );
     }
-
-    //self setClientDvar( "ui_hud_has_frags", "0" );
-	//self setClientDvar( "ui_hud_has_spec_gren", "0" );
-    //self setClientDvar( "ui_hud_has_weapon", "0" );
 }
 
 
-showHintAction( hintText )
-{
-    self setClientDvar( "ui_hud_hint_text", hintText );
-
-    self maps\mp\gametypes\_hud_hints::showHintAction( hintText );
-}
+onPlayerDeath() {  }
 
 
-prematchOverWatcher()
-{
+prematchOverWatcher() { }
+/*{
     self waittill( "prematch_over" );
 
     if( isDefined( level.teamsStatus ) )
     {   
         setdvar( "ui_hud_show_teams_status", level.teamsStatus.showHUD );
     }
-
-    setdvar( "ui_hud_show_inventory", 1 );
-}
+}*/
 
 
-gameOverWatcher()
-{
+gameOverWatcher() { }
+/*{
     self waittill( "game_ended" );
 
     if( isDefined( level.teamsStatus ) )
     {   
-        setdvar( "ui_hud_show_teams_status", 0 );
+        //setdvar( "ui_hud_show_teams_status", 0 );
     }
-
-    setdvar( "ui_hud_show_inventory", 0 );
-}
+}*/
 
 
-updateTeamCountsHUD( team )
+teamCountsWatcher( team )
 {
     self endon( "game_ended" );
 
@@ -241,14 +248,14 @@ updateTeamCountsHUD( team )
 }
 
 
-updatePlayerScoreHUD()
+playerScoreWathcher()
 {
 	self endon( "death" );
     self endon( "disconnect" );
     self endon( "joined_spectators" );
     level endon( "game_ended" );
 
-    lastPlayerScoreRank = 0;
+    lastPlayerScoreRank = -1;
 
     //TODO: update eventialy 
     //while( isPlayer( self ) && isAlive( self ) )
@@ -275,8 +282,6 @@ updatePlayerScoreHUD()
         wait( 1 );
     }
 }
-
-
 
 
 getBestPlayerOf( playerA, playerB )

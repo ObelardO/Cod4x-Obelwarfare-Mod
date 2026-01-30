@@ -11,7 +11,7 @@ menuDef
     name			"xpbar"
     rect			FULLSCREEN HORIZONTAL_ALIGN_FULLSCREEN VERTICAL_ALIGN_FULLSCREEN
     fullScreen		0
-    visible 		when( dvarBool( "ui_hud_showstats" ) && !inkillcam() && !scoped() && !ui_active() && team( name ) != "TEAM_SPECTATOR" && NOT_SPECTATING_CLIENT );
+    visible 		when( dvarBool( "ui_hud_showstats" ) && !inkillcam() && !scoped() && !ui_active() && team( name ) != "TEAM_SPECTATOR" && CLIENT_NOT_SPECTATING );
 
     // Player statistics frame
     itemDef

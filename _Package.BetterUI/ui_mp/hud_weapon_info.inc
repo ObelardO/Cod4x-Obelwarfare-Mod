@@ -21,7 +21,7 @@ menuDef
 	exp				rect Y( 0 - ONLINEGAME_OFFSET_EXP )
 	exp				rect X( 0 - ONLINEGAME_OFFSET_EXP )
     fullScreen		1
-    visible			when( HUD_IS_VISIBLE && dvarInt( ui_hud_show_inventory ) == 1 && dvarInt( ui_hud_has_weapon ) == 1 )
+    visible			when( HUD_IS_VISIBLE && CLIENT_NOT_DEAD && CLIENT_NOT_FREE_SPECTATING && INV_IS_VISIBLE && dvarInt( ui_hud_has_weapon ) == 1 )
 
     //WEAPON BACK
     itemDef
@@ -29,6 +29,7 @@ menuDef
         rect			( INV_BACK_SIZE_QUAD * HUD_MINUS_ONE ) 0 INV_BACK_SIZE_QUAD INV_BACK_SIZE
         exp             rect Y( WEAPINFO_AMMOS_POS_Y )
         forecolor		1 1 1 INV_BACK_ALPHA
+        exp             forecolor A( INV_BACK_ALPHA * INV_DPAD_ALPHA )
         style			WINDOW_STYLE_SHADER
         background		"hud_background_line"
         visible			when ( WEAPINFO_AMMOS_IS_VISIBLE )
@@ -80,12 +81,12 @@ menuDef
     }
 
     //FRAG
-	INV_SLOT_ICON_R1 ( ownerdraw CG_OFFHAND_WEAPON_ICON_FRAG, "hud_us_grenade", "+frag", 1 )
-	INV_SLOT_AMMO_R1 ( ownerdraw CG_OFFHAND_WEAPON_AMMO_FRAG, INV_CLR_WHITE, 1, INV_AMMO_POS_FIX_NONE )
+	INV_SLOT_ICON_R1 ( ownerdraw CG_OFFHAND_WEAPON_ICON_FRAG, "hud_us_grenade", "+frag", INV_DPAD_ALPHA )
+	INV_SLOT_AMMO_R1 ( ownerdraw CG_OFFHAND_WEAPON_AMMO_FRAG, INV_CLR_WHITE, INV_DPAD_ALPHA, INV_AMMO_POS_FIX_NONE )
 
     //SPECIAL
-	INV_SLOT_ICON_R2 ( ownerdraw CG_OFFHAND_WEAPON_ICON_SMOKEFLASH, "hud_us_smokegrenade", "+smoke", 1 )
-	INV_SLOT_AMMO_R2 ( ownerdraw CG_OFFHAND_WEAPON_AMMO_SMOKEFLASH, INV_CLR_WHITE, 1, INV_AMMO_POS_FIX_NONE )	
+	INV_SLOT_ICON_R2 ( ownerdraw CG_OFFHAND_WEAPON_ICON_SMOKEFLASH, "hud_us_smokegrenade", "+smoke", INV_DPAD_ALPHA )
+	INV_SLOT_AMMO_R2 ( ownerdraw CG_OFFHAND_WEAPON_AMMO_SMOKEFLASH, INV_CLR_WHITE, INV_DPAD_ALPHA, INV_AMMO_POS_FIX_NONE )	
 
     //EXPLOSIVES (MOVED FROM DPAD)
 	INV_SLOT_ICON_R3 ( ownerdraw CG_PLAYER_ACTIONSLOT_3, INV_ICON_NONE, "+actionslot 3", INV_DPAD_ALPHA )

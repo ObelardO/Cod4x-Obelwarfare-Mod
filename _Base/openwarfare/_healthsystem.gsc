@@ -224,10 +224,10 @@ onPlayerDeath()
 	if ( isDefined( self.hud_healthsystem_text ) )
 		self.hud_healthsystem_text destroy();
 	
-	if (level.scr_healthsystem_show_healthbar )
-		self setClientdvar( "cg_drawhealth", 0 );
+	//if (level.scr_healthsystem_show_healthbar )
+		//self setClientdvar( "cg_drawhealth", 0 );
 
-	self setClientDvar( "ui_bandages", "0" );
+	//self setClientDvar( "ui_bandages", "0" );
 	
 	self maps\mp\gametypes\_hud_hints::hideHint( "HS_MED" );     
 }
@@ -236,10 +236,10 @@ onJoinedSpectators()
 {
 	self notify("end_healthregen");
 	
-	if ( level.scr_healthsystem_show_healthbar )
-		self setClientdvar( "cg_drawhealth", 0 );
+	//if ( level.scr_healthsystem_show_healthbar )
+		//self setClientdvar( "cg_drawhealth", 0 );
 
-	self setClientDvar( "ui_bandages", "0" );     
+	//self setClientDvar( "ui_bandages", "0" );     
 
 	self maps\mp\gametypes\_hud_hints::hideHint( "HS_MED" );
 }

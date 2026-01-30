@@ -1,5 +1,5 @@
 // DISABLED. REWORKED FOR TEAMS STATUS. 
-
+/*
 #define SCOREBAR_ORIGIN         0 -7
 #define ESCOREBAR_ORIGIN        8 -6
 
@@ -26,7 +26,7 @@ menuDef
     rect			SCORE_OFFSET_X SCORE_OFFSET_Y 640 480 HORIZONTAL_ALIGN_FULLSCREEN VERTICAL_ALIGN_FULLSCREEN
     exp				rect Y( 0 - (ONLINEGAME * ONLINEGAME_OFFSET) );
     fullScreen		0
-    /*visible 		when( !inkillcam() && !ui_active() && ( dvarint( ui_hud_hardcore ) == 0 && dvarint( ui_hud_show_scores ) == 1 ) );*/
+    //visible 		when( !inkillcam() && !ui_active() && ( dvarint( ui_hud_hardcore ) == 0 && dvarint( ui_hud_show_scores ) == 1 ) );
     visible 		when( !inkillcam() && !ui_active() && !isIntermission() && ( ( dvarint( "ui_hud_hardcore" ) == 0 && dvarint( "ui_hud_show_scores" ) > 0 ) || ( dvarint( "ui_hud_hardcore" ) == 1 && dvarint( "ui_hud_show_scores" ) == 2 ) ) );
 
     itemDef
@@ -402,4 +402,4 @@ menuDef
     OBJICON( "TEAM_AXIS", 4, "compass_waypoint_capture_e", "scr_obj_e", "allies" )
     OBJICON( "TEAM_AXIS", 4, "compass_waypoint_defend_e", "scr_obj_e", "axis" )
     */
-}
+//}
