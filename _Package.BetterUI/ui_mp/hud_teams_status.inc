@@ -34,7 +34,6 @@
 #define TS_TEAMCOUNT_AXIS         dvarint( "ui_hud_teams_status_count_axis" )
 #define TS_TEAMCOUNT_ALLIES       dvarint( "ui_hud_teams_status_count_allies" )
 
-#define TS_TEAMCOUNT_BLINK_EXP    ( ( sin ( milliseconds() *0.005 ) + 1 ) / 2 )
 
 #define TS_TEAMSCORE_AXIS         opforfield( score )
 #define TS_TEAMSCORE_ALLIES       marinesfield( score )
@@ -66,13 +65,13 @@
 #define TS_HUD_TEAM_LEFT( isVisibleExp, iconMaterial, count, isCountBlinkingExp, score, isWinExp, isLoseExp, isTieExp ) \
     INV_SLOT_ICON_LEFT( TS_HUD_ALIGN, TS_HUD_POS_X, isVisibleExp, INV_BACK_MAT_DOUBLE, INV_BACK_SIZE_DOUBLE, style WINDOW_STYLE_SHADER, iconMaterial, "", 1 ) \
     INV_SLOT_AMMO_LEFT( TS_HUD_ALIGN, TS_HUD_POS_X, isVisibleExp, exp text( count ), INV_CLR_WHITE, 1, INV_AMMO_POS_FIX_NONE ) \
-    INV_SLOT_AMMO_LEFT( TS_HUD_ALIGN, TS_HUD_POS_X, isVisibleExp && isCountBlinkingExp == 1, exp text( count ), INV_CLR_RED, TS_TEAMCOUNT_BLINK_EXP, INV_AMMO_POS_FIX_NONE ) \
+    INV_SLOT_AMMO_LEFT( TS_HUD_ALIGN, TS_HUD_POS_X, isVisibleExp && isCountBlinkingExp == 1, exp text( count ), INV_CLR_RED, INV_LAST_ALPHA_EXP, INV_AMMO_POS_FIX_NONE ) \
     TS_HUD_TEAM_SCORE( INV_ALIGN_X_OP_LEFT, ITEM_ALIGN_MIDDLE_RIGHT, isVisibleExp, score, isWinExp, isLoseExp, isTieExp )
 
 #define TS_HUD_TEAM_RIGHT( isVisibleExp, iconMaterial, count, isCountBlinkingExp, score, isWinExp, isLoseExp, isTieExp ) \
     INV_SLOT_ICON_RIGHT( TS_HUD_ALIGN, TS_HUD_POS_X, isVisibleExp, INV_BACK_MAT_DOUBLE, INV_BACK_SIZE_DOUBLE, style WINDOW_STYLE_SHADER, iconMaterial, "", 1 ) \
     INV_SLOT_AMMO_RIGHT( TS_HUD_ALIGN, TS_HUD_POS_X, isVisibleExp, exp text( count ), INV_CLR_WHITE, 1, INV_AMMO_POS_FIX_NONE ) \
-    INV_SLOT_AMMO_RIGHT( TS_HUD_ALIGN, TS_HUD_POS_X, isVisibleExp && isCountBlinkingExp == 1, exp text( count ), INV_CLR_RED, TS_TEAMCOUNT_BLINK_EXP, INV_AMMO_POS_FIX_NONE ) \
+    INV_SLOT_AMMO_RIGHT( TS_HUD_ALIGN, TS_HUD_POS_X, isVisibleExp && isCountBlinkingExp == 1, exp text( count ), INV_CLR_RED, INV_LAST_ALPHA_EXP, INV_AMMO_POS_FIX_NONE ) \
     TS_HUD_TEAM_SCORE( INV_ALIGN_X_OP_RIGHT, ITEM_ALIGN_MIDDLE_LEFT, isVisibleExp, score, isWinExp, isLoseExp, isTieExp )
 
 

@@ -136,6 +136,7 @@ onPlayerConnected()
 
     self thread playerAngleWatcher();
     self thread playerSessionWatcher();
+    self thread playerSpectatingWatcher();
 }
 
 
@@ -146,7 +147,7 @@ onPlayerSpawned()
         self thread playerScoreWathcher() ;
     }
 
-    self setClientDvar( "ui_hud_lives_count", self.pers["lives"] );
+    self setClientDvar( "ui_hud_lives_count", getPlayerLivesCount( self ) );
 }
 
 
@@ -156,13 +157,11 @@ playerAngleWatcher()
 
     for( ;; )
     {
-        angles = self getPlayerAngles();
-
-        yaw = 360 - int( angles[1] );
+        yaw = 360 - int( self getPlayerAngles()[1] );
 
         if ( yaw < 0 ) yaw += 360;
         if ( yaw >= 360 ) yaw -= 360;
-            
+
         self setClientDvar( "ui_hud_compass_angle", yaw );
 
         wait( 0.05 );
@@ -170,11 +169,11 @@ playerAngleWatcher()
 }
 
 
-playerSessionWatcher()
+playerSpectatingWatcher()
 {
     self endon( "disconnect" );
 
-    lastSessionstate = "none"; ;
+    lastSessionstate = "none";
 
     for( ;; )
     {
@@ -188,6 +187,42 @@ playerSessionWatcher()
         }
 
         wait ( 0.05 );
+    }
+}
+
+
+playerSessionWatcher()
+{
+    self endon( "disconnect" );
+
+    lastSpectatorClient = -1;
+
+    for( ;; )
+    {
+        wait ( 0.05 );
+
+        if ( self.sessionstate != "spectator") continue;
+
+        if ( lastSpectatorClient != self.spectatorclient )
+        {
+            lastSpectatorClient = self.spectatorclient;
+
+            self iPrintLn( self.name + "spectating changed to: ^2 " + self.spectatorclient );
+
+            if ( lastSpectatorClient == -1 ) continue;
+
+            player = getPlayerByEntityNumber( lastSpectatorClient );
+
+            if ( isDefined( player ) )
+            {
+                self setClientDvar( "ui_hud_lives_count", getPlayerLivesCount ( player ) );
+
+                if ( isDefined( player.totalBandages ) )
+                {
+                    self setClientDvar( "ui_bandages_qty", player.totalBandages );
+                }
+            }
+        }
     }
 }
 
@@ -303,6 +338,29 @@ getBestPlayerOf( playerA, playerB )
 
     return playerA;
 }
+
+
+getPlayerByEntityNumber( entityNumber )
+{
+    for( i = 0; i < level.players.size; i++ )
+    {
+        player = level.players[i];
+
+        if( isDefined( player ) && player getEntityNumber() == entityNumber )
+        {
+            return player;
+        }
+    }
+
+    return undefined;
+}
+
+
+getPlayerLivesCount( player )
+{
+    return ( player.pers["lives"] + ( level.numLives != 0 ) );
+}
+
 
 //  12   7      1.714
 //  10   5      2
