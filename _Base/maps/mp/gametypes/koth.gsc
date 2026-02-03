@@ -224,14 +224,14 @@ HQMainLoop()
 
 	timerDisplay = [];
 	timerDisplay["allies"] = createServerTimer( "objective", 1.4, "allies" );
-	timerDisplay["allies"] setPoint( "TOPRIGHT", "TOPRIGHT", 0, 0 );
+	timerDisplay["allies"] setPoint( "BOTTOM", "BOTTOM", 0, -2 );
 	timerDisplay["allies"].label = hqSpawningInStr;
 	timerDisplay["allies"].alpha = 0;
 	timerDisplay["allies"].archived = false;
 	timerDisplay["allies"].hideWhenInMenu = true;
 
 	timerDisplay["axis"  ] = createServerTimer( "objective", 1.4, "axis" );
-	timerDisplay["axis"  ] setPoint( "TOPRIGHT", "TOPRIGHT", 0, 0 );
+	timerDisplay["axis"  ] setPoint( "BOTTOM", "BOTTOM", 0, -2 );
 	timerDisplay["axis"  ].label = hqSpawningInStr;
 	timerDisplay["axis"  ].alpha = 0;
 	timerDisplay["axis"  ].archived = false;
@@ -274,11 +274,11 @@ HQMainLoop()
 			timerDisplay["allies"].label = hqSpawningInStr;
 			timerDisplay["allies"] setTimer( level.hqSpawnTime );
 			if ( !level.splitscreen )
-				timerDisplay["allies"].alpha = 1;
+				timerDisplay["allies"].alpha =0.715;
 			timerDisplay["axis"  ].label = hqSpawningInStr;
 			timerDisplay["axis"  ] setTimer( level.hqSpawnTime );
 			if ( !level.splitscreen )
-				timerDisplay["axis"  ].alpha = 1;
+				timerDisplay["axis"  ].alpha =0.715;
 
 			finishWait = openwarfare\_timer::getTimePassed() + level.hqSpawnTime * 1000;
 			while ( finishWait > openwarfare\_timer::getTimePassed() ) {
@@ -289,8 +289,8 @@ HQMainLoop()
 					xWait( 0.1 );
 					timerDisplay["allies"] setTimer( ( finishWait - openwarfare\_timer::getTimePassed() ) / 1000 );
 					timerDisplay["axis"  ] setTimer( ( finishWait - openwarfare\_timer::getTimePassed() ) / 1000 );
-					timerDisplay["allies"].alpha = 1;
-					timerDisplay["axis"  ].alpha = 1;
+					timerDisplay["allies"].alpha =0.715;
+					timerDisplay["axis"  ].alpha =0.715;
 				}
 			}
 
@@ -374,10 +374,10 @@ HQMainLoop()
 			{
 				timerDisplay[ownerTeam].label = hqDestroyedInFriendlyStr;
 				if ( !level.splitscreen )
-					timerDisplay[ownerTeam].alpha = 1;
+					timerDisplay[ownerTeam].alpha =0.715;
 				timerDisplay[otherTeam].label = hqDestroyedInEnemyStr;
 				if ( !level.splitscreen )
-					timerDisplay[otherTeam].alpha = 1;
+					timerDisplay[otherTeam].alpha =0.715;
 			}
 
 			level waittill( "hq_destroyed" );

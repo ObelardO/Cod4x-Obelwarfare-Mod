@@ -198,9 +198,9 @@ showCyclingCountDown()
 
 	// Create the timer to show how much is left
 	weaponCyclingCountDown = createServerTimer( "objective", 1.4 );
-	weaponCyclingCountDown setPoint( "TOPRIGHT", "TOPRIGHT", 0, 0 );
+	weaponCyclingCountDown setPoint( "BOTTOM", "BOTTOM", 0, -2 );
 	weaponCyclingCountDown.label = &"OW_SHARPSHOOTER_CLYCLING_IN";
-	weaponCyclingCountDown.alpha = 1;
+	weaponCyclingCountDown.alpha =0.715;
 	weaponCyclingCountDown.archived = false;
 	weaponCyclingCountDown.hideWhenInMenu = true;
 
@@ -230,7 +230,7 @@ showCyclingCountDown()
 				// Wait for the timeout to be over and reset the clock
 				while ( level.inTimeoutPeriod ) wait (0.05);
 				weaponCyclingCountDown setTimer( timeLeft );
-				weaponCyclingCountDown.alpha = 1;
+				weaponCyclingCountDown.alpha =0.715;
 			} else {
 				timeLeft--;
 			}

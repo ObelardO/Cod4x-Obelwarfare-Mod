@@ -469,7 +469,7 @@ createBar( color, width, height, flashFrac )
 	barElemBG.children = [];
 	barElemBG.sort = -3;
 	barElemBG.color = (0,0,0);
-	barElemBG.alpha = 0.5;
+	barElemBG.alpha = 0.33;
 	barElemBG setParent( level.uiParent );
 	barElemBG setShader( "progress_bar_bg", width, height );
 	barElemBG.hidden = false;

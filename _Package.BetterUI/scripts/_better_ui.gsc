@@ -69,10 +69,11 @@ init()
     // Other
 	forceClientDvar( "cg_youinkillcamsize", 1 );
     forceClientDvar( "cg_cursorHints", 4 );
-    forceClientDvar( "cg_chatHeight", 6 );
+    forceClientDvar( "cg_chatHeight", 8 ); 
     forceClientDvar( "cg_drawhealth", 1 );
     forceClientDvar( "cg_hudDamageIconHeight", 64 );
     forceClientDvar( "cg_hudDamageIconWidth", 128 );
+    forceClientDvar( "cg_hudProneY", -52 ); // or +10 for hide this hint
 
     // Apply other player dvars
     openwarfare\_playerdvars::completeForceClientDvarsArray();
@@ -118,6 +119,12 @@ init()
 
     // Better hints
     level.showHintAction = ::showHintAction;
+
+    // Move progress bars
+    level.primaryProgressBarY = 90; // from center
+    level.primaryProgressBarTextY = 76;
+    level.secondaryProgressBarY = 184; // from center
+    level.secondaryProgressBarTextY = 170;
 }
 
 
@@ -183,7 +190,8 @@ playerSpectatingWatcher()
 
             self setClientDvar( "ui_sessionstate", self.sessionstate );
 
-            self iPrintLn( self.name + "^2 state: " + self.sessionstate );
+            //debug info
+            //self iPrintLn( self.name + "^2 state: " + self.sessionstate );
         }
 
         wait ( 0.05 );
@@ -207,7 +215,8 @@ playerSessionWatcher()
         {
             lastSpectatorClient = self.spectatorclient;
 
-            self iPrintLn( self.name + "spectating changed to: ^2 " + self.spectatorclient );
+            //Debug info
+            //self iPrintLn( self.name + "spectating changed to: ^2 " + self.spectatorclient );
 
             if ( lastSpectatorClient == -1 ) continue;
 

@@ -7,13 +7,6 @@
 #define PLAYERINFO_STANCE_SIZE		( 42 )
 #define PLAYERINFO_STANCE_SIZE_HALF	( PLAYERINFO_STANCE_SIZE * 0.5 )
 
-
-//MP_NO_RESPAWN
-//OW_LAST_LIFE
-//OW_LIVES_LEFT
-
-//INV_LAST_ALPHA_EXP
-
 #define PLAYERINFO_LIVES_COUNT( visibleExp, textExp, color, alphaExp ) \
 	itemDef \
 	{ \
@@ -99,10 +92,7 @@ menuDef
 		decoration
 	}
 
-	//PLAYERINFO_LIVES_COUNT( dvarInt( "ui_hud_lives_count" ) == 1, locString( "@MP_NO_RESPAWN" ), INV_CLR_WHITE, 1 - INV_LAST_ALPHA_EXP )
-	//PLAYERINFO_LIVES_COUNT( dvarInt( "ui_hud_lives_count" ) == 1, locString( "@MP_NO_RESPAWN" ), INV_CLR_RED, INV_LAST_ALPHA_EXP )
-
-	//PLAYERINFO_LIVES_COUNT( dvarInt( "ui_hud_lives_count" ) == 0, "--", INV_CLR_WHITE, 0.5 )
+	//MP_NO_RESPAWN, OW_LAST_LIFE, OW_LIVES_LEFT
 
 	PLAYERINFO_LIVES_COUNT( dvarInt( "ui_hud_lives_count" ) == 1, "x1", INV_CLR_WHITE, 1 - INV_LAST_ALPHA_EXP )
 	PLAYERINFO_LIVES_COUNT( dvarInt( "ui_hud_lives_count" ) == 1, "x1", INV_CLR_RED, INV_LAST_ALPHA_EXP )
