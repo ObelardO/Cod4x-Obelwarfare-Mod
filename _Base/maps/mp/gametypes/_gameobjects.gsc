@@ -1329,7 +1329,7 @@ updateProxBar( object, forceRemove )
 
 	if ( self.proxBarText.hidden )
 	{
-		self.proxBarText showElem();
+		self.proxBarText showElemSpecAlpha( 0.715 );
 		self.proxBarText setText( object.useText );
 	}
 
@@ -1604,7 +1604,7 @@ personalUseBar( object )
 			else
 			{
 				useBar showElem();
-				useBarText showElem();
+				useBarText showElemSpecAlpha( 0.715 );
 			}
 		}
 		lastRate = object.useRate;

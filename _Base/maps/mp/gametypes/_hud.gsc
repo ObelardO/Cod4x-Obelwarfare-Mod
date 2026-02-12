@@ -149,13 +149,13 @@ init()
 	// 
 
 	level.primaryProgressBarX = 0;
-	level.primaryProgressBarHeight = 5; //28; // this is the height and width of the whole progress bar, including the outline. the part that actually moves is 2 pixels smaller.
+	level.primaryProgressBarHeight = 3; //28; // this is the height and width of the whole progress bar, including the outline. the part that actually moves is 2 pixels smaller.
 	level.primaryProgressBarWidth = 120;
 	level.primaryProgressBarTextX = 0;
 	level.primaryProgressBarFontSize = 1.4;
 
 	level.secondaryProgressBarX = 0;
-	level.secondaryProgressBarHeight = 5;
+	level.secondaryProgressBarHeight = 3;
 	level.secondaryProgressBarWidth = 120;
 	level.secondaryProgressBarTextX = 0;
 	level.secondaryProgressBarFontSize = 1.4;
