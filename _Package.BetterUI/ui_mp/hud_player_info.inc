@@ -58,7 +58,7 @@ menuDef
 		textfont		UI_FONT_OBJECTIVE
 		exp				forecolor A( HUD_ALPHA * INV_DPAD_ALPHA )
 		visible			when( 1 );
-		textscale		TEXTSIZE_SMALL
+		textscale		( TEXTSIZE_SMALL * 0.6 )
 		textstyle		ITEM_TEXTSTYLE_SHADOWED
 		forecolor		1 1 1 HUD_ALPHA
 		decoration
@@ -93,7 +93,6 @@ menuDef
 	}
 
 	//MP_NO_RESPAWN, OW_LAST_LIFE, OW_LIVES_LEFT
-
 	PLAYERINFO_LIVES_COUNT( dvarInt( "ui_hud_lives_count" ) == 1, "x1", INV_CLR_WHITE, 1 - INV_LAST_ALPHA_EXP )
 	PLAYERINFO_LIVES_COUNT( dvarInt( "ui_hud_lives_count" ) == 1, "x1", INV_CLR_RED, INV_LAST_ALPHA_EXP )
 

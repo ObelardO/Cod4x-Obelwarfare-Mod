@@ -153,8 +153,8 @@ init()
 	switch(game["allies"])
 	{
 		case "sas":
-			setDvar( "g_TeamColor_Allies", ".5 .5 .5" );
-			setDvar( "g_ScoresColor_Allies", "0 0 0" );
+			setDvar( "g_TeamColor_Allies", "0.545 0.678 0.592" );
+			setDvar( "g_ScoresColor_Allies", "0.545 0.678 0.592" ); // "0.376 0.482 0.419"
 			break;
 		
 		default:
@@ -173,7 +173,7 @@ init()
 			break;
 		
 		default:
-			setDvar( "g_TeamColor_Axis", "0.52 0.28 0.28" );		
+			setDvar( "g_TeamColor_Axis", "0.686 0.372 0.372" );		
 			setDvar( "g_ScoresColor_Axis", "0.52 0.28 0.28" );
 			break;
 	}

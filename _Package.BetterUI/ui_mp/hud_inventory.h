@@ -37,7 +37,7 @@
 
 
 #define INV_BACK_PAD            ( 2 )  
-#define INV_BACK_ALPHA          ( HUD_ALPHA * 0.9 )      
+#define INV_BACK_ALPHA          ( HUD_ALPHA * 0.7 )      
 #define INV_BACK_HEIGHT         ( INV_ICON_SIZE + INV_BACK_PAD * 2 )
 #define INV_BACK_HEIGHT_HALF    ( INV_BACK_HEIGHT * 0.5 )
 #define INV_BACK_SIZE           ( INV_BACK_HEIGHT * 1.25 )
@@ -53,7 +53,7 @@
 #define INV_CLR_RED             0.795 0.160 0.012
 #define INV_CLR_YELLOW          1 1 0.5
 
-#define INV_LAST_ALPHA_EXP      ( ( sin ( milliseconds() *0.005 ) + 1 ) / 2 )
+#define INV_LAST_ALPHA_EXP      ( ( sin ( milliseconds() * 0.005 ) + 1 ) / 2 )
 
 #define INV_ALIGN_X_OP_LEFT     ( 0 + 1 )
 #define INV_ALIGN_X_OP_RIGHT    ( 0 - 1 )

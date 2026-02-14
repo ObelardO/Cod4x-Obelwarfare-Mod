@@ -74,6 +74,7 @@ init()
     forceClientDvar( "cg_hudDamageIconHeight", 64 );
     forceClientDvar( "cg_hudDamageIconWidth", 128 );
     forceClientDvar( "cg_hudProneY", -52 ); // or +10 for hide this hint
+    forceClientDvar( "cg_crossHair", ( 1 - level.hardcoreMode ) );
 
     // Apply other player dvars
     openwarfare\_playerdvars::completeForceClientDvarsArray();

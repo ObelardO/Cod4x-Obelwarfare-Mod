@@ -12,16 +12,12 @@
 #include "ui/menudef.h"
 #include "ui_mp/hud_inventory.h"
 
-
-#define RANK_ORIGIN 				0 6
-
 #define ONLINEGAME 					( dvarInt( "onlinegame" ) && !dvarInt( "xblive_privatematch" ) )
 #define ONLINEGAME_OFFSET 			13
 #define ONLINEGAME_OFFSET_EXP 		( ONLINEGAME * ONLINEGAME_OFFSET )
 
 #define HUD_ALPHA 					0.65
 #define HUD_FOREGROUND_ALPHA 		0.75
-
 
 #define CLIENT_IS_DEAD				( dvarString( "ui_sessionstate" ) == "dead" )
 #define CLIENT_IS_PLAYING			( dvarString( "ui_sessionstate" ) == "playing" )
@@ -35,9 +31,6 @@
 #define HUD_MINUS_ONE				( 0 - 1 )
 
 #define HUD_IS_VISIBLE           	( !inkillcam() && !flashbanged() && !isIntermission() && !ui_active() && !scoped() && dvarInt( ui_show_timeout ) == 0 )
-//#define HUD_IS_VISIBLE           	( !inkillcam() && !flashbanged() && !isIntermission() && !ui_active() && !scoped() && team( name ) != "TEAM_SPECTATOR" && ( dvarString( createfx ) != "on" ) && dvarInt( ui_show_timeout ) == 0 )
-
-#define MINIMAP_ORIGIN 				2 11
 
 #define HUD_DEBUG_DOT( xPos, yPos, align ) \
     itemDef \
