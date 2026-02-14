@@ -14,22 +14,32 @@
 #include openwarfare\_eventmanager;
 #include openwarfare\_utils;
 
-//#include openwarfare\_playerdvars;
-
 init()
 {
     // Weapon info HUD
-    scr_hud_show_offhand_items = getdvarx( "scr_hud_show_offhand_items", "int", 1, 0, 2 );
-    setDvar( "ui_hud_show_offhand_items", scr_hud_show_offhand_items );
-    makeDvarServerInfo( "ui_hud_show_offhand_items" );
+    scr_hud_show_offhand_info = getdvarx( "scr_hud_show_offhand_info", "int", 1, 0, 2 );
+    setDvar( "ui_hud_show_offhand_info", scr_hud_show_offhand_info );
+    makeDvarServerInfo( "ui_hud_show_offhand_info" );
 
     //ammodisplay
-    scr_hud_show_ammodisplay = getdvarx( "scr_hud_show_ammodisplay", "int", 1, 0, 2 );
-    setDvar( "ui_hud_show_ammodisplay", scr_hud_show_ammodisplay );
-    makeDvarServerInfo( "ui_hud_show_ammodisplay" );
+    scr_hud_show_weapon_info = getdvarx( "scr_hud_show_weapon_info", "int", 1, 0, 2 );
+    setDvar( "ui_hud_show_weapon_info", scr_hud_show_weapon_info );
+    makeDvarServerInfo( "ui_hud_show_weapon_info" );
 
-    setDvar( "ui_hud_show_weaponinfo", 0 );
-    makeDvarServerInfo( "ui_hud_show_weaponinfo" );
+    //
+    scr_hud_show_player_info = getdvarx( "scr_hud_show_player_info", "int", 1, 0, 2 );
+    setDvar( "ui_hud_show_player_info", scr_hud_show_player_info );
+    makeDvarServerInfo( "ui_hud_show_player_info" );
+
+    //
+    scr_hud_show_abilities_info = getdvarx( "scr_hud_show_abilities_info", "int", 1, 0, 2 );
+    setDvar( "ui_hud_show_abilities_info", scr_hud_show_abilities_info );
+    makeDvarServerInfo( "ui_hud_show_abilities_info" );
+
+    //
+    scr_hud_show_breath_hint = getdvarx( "scr_hud_show_breath_hint", "int", 1, 0, 2 );
+    setDvar( "ui_hud_show_breath_hint", scr_hud_show_breath_hint );
+    makeDvarServerInfo( "ui_hud_show_breath_hint" );
 
     // Fade options
     scr_hud_fade_enabled = getdvarx( "scr_hud_fade_enabled", "int", 1, 0, 1 );
@@ -50,45 +60,56 @@ init()
 	forceClientDvar( "waypointiconwidth", scr_hud_waypoint_size );
 	forceClientDvar( "waypointiconheight", scr_hud_waypoint_size );
 
+    // Waypoints area
+	forceClientDvar( "waypointOffscreenPadLeft", 100 );
+	forceClientDvar( "waypointOffscreenPadRight", 100 );
+	forceClientDvar( "waypointOffscreenPadTop", 30 );
+	forceClientDvar( "waypointOffscreenPadBottom", 60 );
+
     // Other
 	forceClientDvar( "cg_youinkillcamsize", 1 );
     forceClientDvar( "cg_cursorHints", 4 );
-    forceClientDvar( "cg_chatHeight", 6 );
+    forceClientDvar( "cg_chatHeight", 8 ); 
+    forceClientDvar( "cg_drawhealth", 1 );
+    forceClientDvar( "cg_hudDamageIconHeight", 64 );
+    forceClientDvar( "cg_hudDamageIconWidth", 128 );
+    forceClientDvar( "cg_hudProneY", -52 ); // or +10 for hide this hint
+    forceClientDvar( "cg_crossHair", ( 1 - level.hardcoreMode ) );
 
     // Apply other player dvars
     openwarfare\_playerdvars::completeForceClientDvarsArray();
 
     // Team status
-    scr_hud_show_teamstat = getdvarx( "scr_hud_show_teamstat", "int", 1, 0, 2 );
+    scr_hud_show_teams_status = getdvarx( "scr_hud_show_teams_status", "int", 1, 0, 2 );
 
-    if( scr_hud_show_teamstat > 0 )
+    if( scr_hud_show_teams_status > 0 )
     {
-        level.teamStats = spawnStruct();
-        level.teamStats.teamBasedHUD = level.teamBased && level.gametype != "bel";
-        level.teamStats.showHUD = scr_hud_show_teamstat;
+        level.teamsStatus = spawnStruct();
+        level.teamsStatus.teamBasedHUD = level.teamBased && level.gametype != "bel";
+        level.teamsStatus.showHUD = scr_hud_show_teams_status;
     
-        setDvar( "ui_hud_show_teamstat", 0 );
-        makeDvarServerInfo( "ui_hud_show_teamstat" );
+        setDvar( "ui_hud_show_teams_status", scr_hud_show_teams_status );
+        makeDvarServerInfo( "ui_hud_show_teams_status" );
         
-        setDvar( "ui_hud_teamstat_teambased", int( level.teamStats.teamBasedHUD ) );
-        makeDvarServerInfo( "ui_hud_teamstat_teambased" );
+        setDvar( "ui_hud_teams_status_teambased", int( level.teamsStatus.teamBasedHUD ) );
+        makeDvarServerInfo( "ui_hud_teams_status_teambased" );
         
-        setDvar( "ui_hud_teamstat_count_allies", 0 );
-        makeDvarServerInfo( "ui_hud_teamstat_count_allies" );
+        setDvar( "ui_hud_teams_status_count_allies", 0 );
+        makeDvarServerInfo( "ui_hud_teams_status_count_allies" );
 
-        setDvar( "ui_hud_teamstat_count_axis", 0 );
-        makeDvarServerInfo( "ui_hud_teamstat_count_axis" );
+        setDvar( "ui_hud_teams_status_count_axis", 0 );
+        makeDvarServerInfo( "ui_hud_teams_status_count_axis" );
 
-        if ( level.teamStats.teamBasedHUD )
+        if ( level.teamsStatus.teamBasedHUD )
         {
-            level thread updateTeamCountsHUD( "allies" );
-            level thread updateTeamCountsHUD( "axis" );
+            level thread teamCountsWatcher( "allies" );
+            level thread teamCountsWatcher( "axis" );
         }
     }
     else
     {
-        setDvar( "ui_hud_show_teamstat", 0 );
-        makeDvarServerInfo( "ui_hud_show_teamstat" );
+        setDvar( "ui_hud_show_teams_status", 0 );
+        makeDvarServerInfo( "ui_hud_show_teams_status" );
     }
 
 
@@ -99,32 +120,12 @@ init()
 
     // Better hints
     level.showHintAction = ::showHintAction;
-}
 
-
-onPlayerConnected()
-{
-    if( isDefined( level.teamStats ) && !level.teamStats.teamBasedHUD )
-    {
-        self thread addNewEvent( "onPlayerSpawned", ::updatePlayerScoreHUD );
-    }
-
-    self thread addNewEvent( "onPlayerDeath", ::onPlayerDeath );
-}
-
-onPlayerDeath()
-{
-    //TODO Work with player session state
-    if (self maps\mp\gametypes\_globallogic::maySpawn())
-    {
-        self setClientDvar( "ui_hud_has_frags", "0" );
-	    self setClientDvar( "ui_hud_has_spec_gren", "0" );
-        self setClientDvar( "ui_hud_show_weapon", "0" );
-    }
-
-    //self setClientDvar( "ui_hud_has_frags", "0" );
-	//self setClientDvar( "ui_hud_has_spec_gren", "0" );
-    //self setClientDvar( "ui_hud_show_weapon", "0" );
+    // Move progress bars
+    level.primaryProgressBarY = 90; // from center
+    level.primaryProgressBarTextY = 76;
+    level.secondaryProgressBarY = 184; // from center
+    level.secondaryProgressBarTextY = 170;
 }
 
 
@@ -136,33 +137,132 @@ showHintAction( hintText )
 }
 
 
-prematchOverWatcher()
+onPlayerConnected()
 {
+    self thread addNewEvent( "onPlayerSpawned", ::onPlayerSpawned );
+    self thread addNewEvent( "onPlayerDeath", ::onPlayerDeath );
+
+    self thread playerAngleWatcher();
+    self thread playerSessionWatcher();
+    self thread playerSpectatingWatcher();
+}
+
+
+onPlayerSpawned()
+{
+    if( isDefined( level.teamsStatus ) && !level.teamsStatus.teamBasedHUD )
+    {
+        self thread playerScoreWathcher() ;
+    }
+
+    self setClientDvar( "ui_hud_lives_count", getPlayerLivesCount( self ) );
+}
+
+
+playerAngleWatcher()
+{
+    self endon( "disconnect" );
+
+    for( ;; )
+    {
+        yaw = 360 - int( self getPlayerAngles()[1] );
+
+        if ( yaw < 0 ) yaw += 360;
+        if ( yaw >= 360 ) yaw -= 360;
+
+        self setClientDvar( "ui_hud_compass_angle", yaw );
+
+        wait( 0.05 );
+    }
+}
+
+
+playerSpectatingWatcher()
+{
+    self endon( "disconnect" );
+
+    lastSessionstate = "none";
+
+    for( ;; )
+    {
+        if ( lastSessionstate != self.sessionstate )
+        {
+            lastSessionstate = self.sessionstate;
+
+            self setClientDvar( "ui_sessionstate", self.sessionstate );
+
+            //debug info
+            //self iPrintLn( self.name + "^2 state: " + self.sessionstate );
+        }
+
+        wait ( 0.05 );
+    }
+}
+
+
+playerSessionWatcher()
+{
+    self endon( "disconnect" );
+
+    lastSpectatorClient = -1;
+
+    for( ;; )
+    {
+        wait ( 0.05 );
+
+        if ( self.sessionstate != "spectator") continue;
+
+        if ( lastSpectatorClient != self.spectatorclient )
+        {
+            lastSpectatorClient = self.spectatorclient;
+
+            //Debug info
+            //self iPrintLn( self.name + "spectating changed to: ^2 " + self.spectatorclient );
+
+            if ( lastSpectatorClient == -1 ) continue;
+
+            player = getPlayerByEntityNumber( lastSpectatorClient );
+
+            if ( isDefined( player ) )
+            {
+                self setClientDvar( "ui_hud_lives_count", getPlayerLivesCount ( player ) );
+
+                if ( isDefined( player.totalBandages ) )
+                {
+                    self setClientDvar( "ui_bandages_qty", player.totalBandages );
+                }
+            }
+        }
+    }
+}
+
+
+onPlayerDeath() {  }
+
+
+prematchOverWatcher() { }
+/*{
     self waittill( "prematch_over" );
 
-    if( isDefined( level.teamStats ) )
+    if( isDefined( level.teamsStatus ) )
     {   
-        setdvar( "ui_hud_show_teamstat", level.teamStats.showHUD );
+        setdvar( "ui_hud_show_teams_status", level.teamsStatus.showHUD );
     }
-
-    setdvar( "ui_hud_show_weaponinfo", 1 );
-}
+}*/
 
 
-gameOverWatcher()
-{
+gameOverWatcher() { }
+/*{
     self waittill( "game_ended" );
 
-    if( isDefined( level.teamStats ) )
+    if( isDefined( level.teamsStatus ) )
     {   
-        setdvar( "ui_hud_show_teamstat", 0 );
+        //setdvar( "ui_hud_show_teams_status", 0 );
     }
-
-    setdvar( "ui_hud_show_weaponinfo", 0 );
-}
+}*/
 
 
-updateTeamCountsHUD( team )
+teamCountsWatcher( team )
 {
     self endon( "game_ended" );
 
@@ -186,21 +286,21 @@ updateTeamCountsHUD( team )
 
         if( currentCount != previousCount )
         {
-            setdvar( "ui_hud_teamstat_count_" + team, currentCount );
+            setdvar( "ui_hud_teams_status_count_" + team, currentCount );
             previousCount = currentCount;
         }
     }
 }
 
 
-updatePlayerScoreHUD()
+playerScoreWathcher()
 {
 	self endon( "death" );
     self endon( "disconnect" );
     self endon( "joined_spectators" );
     level endon( "game_ended" );
 
-    lastPlayerScoreRank = 0;
+    lastPlayerScoreRank = -1;
 
     //TODO: update eventialy 
     //while( isPlayer( self ) && isAlive( self ) )
@@ -221,14 +321,12 @@ updatePlayerScoreHUD()
         if ( playerScoreRank != lastPlayerScoreRank )
         {
             lastPlayerScoreRank = playerScoreRank;
-            self setClientDvar( "ui_hud_teamstat_player_rank", int( playerScoreRank * -1 + 1 ) );
+            self setClientDvar( "ui_hud_teams_status_player_rank", int( playerScoreRank * -1 + 1 ) );
         }
 
         wait( 1 );
     }
 }
-
-
 
 
 getBestPlayerOf( playerA, playerB )
@@ -250,6 +348,29 @@ getBestPlayerOf( playerA, playerB )
 
     return playerA;
 }
+
+
+getPlayerByEntityNumber( entityNumber )
+{
+    for( i = 0; i < level.players.size; i++ )
+    {
+        player = level.players[i];
+
+        if( isDefined( player ) && player getEntityNumber() == entityNumber )
+        {
+            return player;
+        }
+    }
+
+    return undefined;
+}
+
+
+getPlayerLivesCount( player )
+{
+    return ( player.pers["lives"] + ( level.numLives != 0 ) );
+}
+
 
 //  12   7      1.714
 //  10   5      2

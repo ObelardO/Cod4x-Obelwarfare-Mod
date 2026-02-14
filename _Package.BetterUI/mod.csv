@@ -1,16 +1,20 @@
 #Better UI: Menus
 menufile,ui_mp/hud.menu
-rawfile,ui_mp/hud_visualgide.inc
 rawfile,ui_mp/hud_hints.inc
-rawfile,ui_mp/hud_stance.inc
-rawfile,ui_mp/hud_compass.inc
+rawfile,ui_mp/hud_inventory.h
+rawfile,ui_mp/hud_minimap.inc
 rawfile,ui_mp/hud_stats.inc
+rawfile,ui_mp/hud_abilities_info.inc
 rawfile,ui_mp/hud_scorebar.inc
-rawfile,ui_mp/hud_weaponinfo.inc
+rawfile,ui_mp/hud_weapon_info.inc
 rawfile,ui_mp/hud_locselector.inc
-rawfile,ui_mp/hud_inventory.inc
 rawfile,ui_mp/hud_broadcast.inc
-rawfile,ui_mp/hud_teamstatus.inc
+rawfile,ui_mp/hud_teams_status.inc
+rawfile,ui_mp/hud_player_info.inc
+rawfile,ui_mp/hud_overlay.inc
+rawfile,ui_mp/hud_killcam.inc
+rawfile,ui_mp/hud_messages.inc
+rawfile,ui_mp/hud_compass.inc
 
 #Better UI: Scripts
 rawfile,scripts/_better_ui.gsc
@@ -21,5 +25,6 @@ material,hud_match_cup_gold
 material,hud_suitcase_bomb_item
 material,hud_background_line
 material,hud_background_line_half
+material,hud_background_line_half_inv
 material,hud_background_quad
 material,waypoint_dead

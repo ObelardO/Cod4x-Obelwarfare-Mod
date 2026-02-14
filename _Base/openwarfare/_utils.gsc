@@ -160,7 +160,7 @@ updateSecondaryProgressBar( curProgress, useTime, forceRemove, barText )
 
 	if ( self.proxBarText2.hidden )
 	{
-		self.proxBarText2 showElem();
+		self.proxBarText2 showElemSpecAlpha( 0.715 );
 		self.proxBarText2 setText( barText );
 	}
 
@@ -239,6 +239,7 @@ createSecondaryProgressBarText()
 	else
 		text setPoint("CENTER", undefined, level.secondaryProgressBarTextX, level.secondaryProgressBarTextY);
 
+	text.alpha = 0.715;
 	text.sort = -1;
 	return text;
 }

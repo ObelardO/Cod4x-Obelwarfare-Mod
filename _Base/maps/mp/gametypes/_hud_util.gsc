@@ -239,7 +239,7 @@ updateBarScale( barFrac, rateOfChange ) // rateOfChange is optional and is in "(
 		}
 	}
 	self.bar.rateOfChange = rateOfChange;
-	self.bar.lastUpdateTime = getTime();
+	self.bar.lastUpdateTime = getTime();	
 }
 
 
@@ -469,7 +469,7 @@ createBar( color, width, height, flashFrac )
 	barElemBG.children = [];
 	barElemBG.sort = -3;
 	barElemBG.color = (0,0,0);
-	barElemBG.alpha = 0.5;
+	barElemBG.alpha = 0.33;
 	barElemBG setParent( level.uiParent );
 	barElemBG setShader( "progress_bar_bg", width, height );
 	barElemBG.hidden = false;
@@ -507,6 +507,7 @@ createPrimaryProgressBarText()
 	else
 		text setPoint("CENTER", undefined, level.primaryProgressBarTextX, level.primaryProgressBarTextY);
 	
+	text.alpha = 0.715;
 	text.sort = -1;
 	return text;
 }
@@ -571,23 +572,28 @@ hideElem()
 
 showElem()
 {
+	showElemSpecAlpha( 1 );
+}
+
+showElemSpecAlpha( alphaVal )
+{
 	if ( !self.hidden )
 		return;
 		
 	self.hidden = false;
 
 	if ( self.alpha != 1 )
-		self.alpha = 1;
+		self.alpha = alphaVal;
 	
 	if ( self.elemType == "bar" || self.elemType == "bar_shader" )
 	{
 		self.bar.hidden = false;
 		if ( self.bar.alpha != 1 )
-			self.bar.alpha = 1;
+			self.bar.alpha = alphaVal;
 
 		self.barFrame.hidden = false;
 		if ( self.barFrame.alpha != 1 )
-			self.barFrame.alpha = 1;
+			self.barFrame.alpha = alphaVal;
 	}
 }
 
@@ -716,6 +722,7 @@ showPerk( index, perk, ypos )
 		text.alignX = "right";
 		text.alignY = "middle";
 		text.foreground = true;
+		text.alpha = 0.715;
 
 		self.perkicon[ index ] = icon;
 		self.perkname[ index ] = text;
@@ -743,7 +750,7 @@ showPerk( index, perk, ypos )
 		}
 		
 		if ( isDefined( text ) ) {
-			text.alpha = 1;
+			text.alpha = 0.715;
 			text setText( level.perkNames[perk] );
 		}
 	}

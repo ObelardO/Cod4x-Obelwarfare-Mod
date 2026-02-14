@@ -7,9 +7,9 @@
 menuDef
 {
     name				"amitalking"
-    rect				0 0 640 480 HORIZONTAL_ALIGN_FULLSCREEN VERTICAL_ALIGN_FULLSCREEN
+    rect				FULLSCREEN HORIZONTAL_ALIGN_FULLSCREEN VERTICAL_ALIGN_FULLSCREEN
     fullScreen	0
-    visible 		when( dvarInt( ui_broadcaster ) == 1 && !ui_active() && team( name ) == "TEAM_SPECTATOR" && !isIntermission() );
+    visible 		when( dvarInt( "ui_broadcaster" ) == 1 && !ui_active() && team( name ) == "TEAM_SPECTATOR" && !isIntermission() );
 
     itemDef
     {
@@ -141,7 +141,7 @@ menuDef
         origin		SCOREBAR_OFFSET
         rect			-30 35 60 60 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_TOP
         exp				material( "hud_suitcase_bomb" );
-        visible	when ( dvarBool( ui_bomb_timer ) );
+        visible	when ( dvarBool( "ui_bomb_timer" ) );
         forecolor	1 1 1 0.7
         decoration
     }
@@ -154,7 +154,7 @@ menuDef
         textscale	0.5
         textalign	ITEM_ALIGN_CENTER
         textstyle	ITEM_TEXTSTYLE_SHADOWEDMORE
-        visible 	when ( timeLeft() >= 60 && !dvarBool( ui_bomb_timer ) );
+        visible 	when ( timeLeft() >= 60 && !dvarBool( "ui_bomb_timer" ) );
         decoration
     }
     itemDef
@@ -167,7 +167,7 @@ menuDef
         textalign	ITEM_ALIGN_CENTER
         textstyle	ITEM_TEXTSTYLE_SHADOWEDMORE
         forecolor	1 0.75 0 HUD_FOREGROUND_ALPHA
-        visible 	when ( timeLeft() >= 30 && timeLeft() < 60 && !dvarBool( ui_bomb_timer ) );
+        visible 	when ( timeLeft() >= 30 && timeLeft() < 60 && !dvarBool( "ui_bomb_timer" ) );
         decoration
     }
     itemDef
@@ -180,7 +180,7 @@ menuDef
         textalign	ITEM_ALIGN_CENTER
         textstyle	ITEM_TEXTSTYLE_SHADOWEDMORE
         forecolor	1 0.5 0 1
-        visible 	when ( (timeLeft() >= 0 && timeLeft() < 30) || dvarBool( ui_bomb_timer ) );
+        visible 	when ( (timeLeft() >= 0 && timeLeft() < 30) || dvarBool( "ui_bomb_timer" ) );
         decoration
     }		
 
@@ -242,7 +242,7 @@ menuDef
     {
         rect		0 -25 1 1 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_BOTTOM
         origin		SCOREBAR_OFFSET
-        exp				text( dvarstring(lb_ruleset) );
+        exp				text( dvarstring( "lb_ruleset" ) );
         textfont	UI_FONT_OBJECTIVE
         textscale	0.3
         textalign	ITEM_ALIGN_CENTER
@@ -383,7 +383,7 @@ menuDef
         background	"lb_healthbar"
         forecolor		0 0 1 1
         border			0
-        visible			when (dvarString(lb_allies_p1)=="");
+        visible			when (dvarString("lb_allies_p1")=="");
         decoration
     }
     itemDef
@@ -397,7 +397,7 @@ menuDef
         textAlign		ITEM_ALIGN_MIDDLE_LEFT
         textStyle		ITEM_TEXTSTYLE_SHADOWEDMORE
         forecolor		1 1 1 1
-        visible			when (dvarString(lb_allies_p1)=="");
+        visible			when (dvarString("lb_allies_p1")=="");
         decoration
     }
         
@@ -477,7 +477,7 @@ menuDef
         background	"lb_healthbar"
         forecolor		1 0 0 1
         border			0
-        visible			when (dvarString(lb_axis_p1)=="");
+        visible			when (dvarString("lb_axis_p1")=="");
         decoration
     }
     itemDef
@@ -491,7 +491,7 @@ menuDef
         textAlign		ITEM_ALIGN_MIDDLE_RIGHT
         textStyle		ITEM_TEXTSTYLE_SHADOWEDMORE
         forecolor		1 1 1 1
-        visible			when (dvarString(lb_axis_p1)=="");
+        visible			when (dvarString("lb_axis_p1")=="");
         decoration
     }
         

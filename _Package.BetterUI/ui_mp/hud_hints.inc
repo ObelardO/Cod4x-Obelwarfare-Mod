@@ -1,10 +1,13 @@
+#define HINT_MANTLE_IS_VISIBLE      ( dvarint( "ui_hud_show_mantle_hint" ) >= dvarint( "ui_hud_hardcore" ) + 1 )
+#define HINT_BREATH_IS_VISIBLE      ( dvarint( "ui_hud_show_breath_hint" ) >= dvarint( "ui_hud_hardcore" ) + 1 )
+
 // Mantle hint
 menuDef
 {
     name			"MantleHint"
     rect			0 100 20 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
     fullScreen		0
-    visible			when( ( dvarInt( ui_hud_hardcore ) == 0 && dvarInt( ui_hud_show_mantle_hint ) == 1 ) || dvarInt( ui_hud_show_mantle_hint ) == 2 )
+    visible			when( HUD_IS_VISIBLE )
 
     itemDef
     {
@@ -13,7 +16,7 @@ menuDef
         textscale		(TEXTSIZE_SMALL * 0.6)
         textstyle		ITEM_TEXTSTYLE_SHADOWED
         ownerdraw		CG_MANTLE_HINT
-        visible			when( NOT_SPECTATING && dvarString ( ui_hud_hint_text ) == "" )
+        visible			when( CLIENT_NOT_SPECTATING && HINT_MANTLE_IS_VISIBLE && dvarString ( "ui_hud_hint_text" ) == "" )
         decoration
     }
 }
@@ -24,7 +27,7 @@ menuDef
     name			"Cursorhints"
     rect			0 130 20 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
     fullScreen		0
-    visible			when( !inkillcam() && !flashbanged() && !ui_active() && !scoped() )
+    visible			when( HUD_IS_VISIBLE )
 
     itemDef
     {
@@ -33,7 +36,7 @@ menuDef
         textscale		(TEXTSIZE_SMALL * 0.9)
         textstyle		ITEM_TEXTSTYLE_SHADOWED
         ownerdraw		CG_CURSORHINT
-        visible			when( NOT_SPECTATING && dvarString ( ui_hud_hint_text ) == "" )
+        visible			when( CLIENT_NOT_SPECTATING && dvarString ( "ui_hud_hint_text" ) == "" )
         decoration
     }
 }
@@ -54,7 +57,7 @@ menuDef
         textstyle		ITEM_TEXTSTYLE_SHADOWED
         ownerdraw		CG_INVALID_CMD_HINT
         textfont		UI_FONT_NORMAL
-        visible			when( NOT_SPECTATING )
+        visible			when( CLIENT_NOT_SPECTATING )
         decoration
     }
 }*/
@@ -66,8 +69,7 @@ menuDef
     name			"HoldBreathHint"
     rect			0 110 20 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
     fullScreen		0
-    visible 1
-    //visible when ( !adsjavelin() && dvarInt( ui_hud_hardcore ) == 0 && !inkillcam() && NOT_SPECTATING );
+    visible         when( HUD_IS_VISIBLE )
 
     itemDef
     {
@@ -76,7 +78,7 @@ menuDef
         textscale		TEXTSIZE_SMALL
         textstyle		ITEM_TEXTSTYLE_SHADOWED
         ownerdraw		CG_HOLD_BREATH_HINT
-        visible			0
+        visible			when( HINT_BREATH_IS_VISIBLE )
         decoration
     }
 }

@@ -73,7 +73,7 @@ onPlayerSpawned()
 	self.hud_shield_text setParent( self.hud_healthsystem_icon );
 	self.hud_shield_text setPoint( "RIGHT", "LEFT", -5, 0 );
 	self.hud_shield_text setText( &"OW_SPAWN_PROTECTION" );
-	self.hud_shield_text.alpha = 1;
+	self.hud_shield_text.alpha = 0.715;
 	self.hud_shield_text.archived = false;
 	self.hud_shield_text.foreground = true;
 

@@ -369,7 +369,7 @@ createHudElements()
 	if ( !isDefined( self.hudTimeAlive ) ) {
 		// Total time alive as defender
 		self.hudTimeAlive = createFontString( "objective", 1.4 );
-		self.hudTimeAlive setPoint( "BOTTOMRIGHT", "BOTTOMRIGHT", 0, -105 );
+		self.hudTimeAlive setPoint( "BOTTOMRIGHT", "BOTTOM", 100, -2 );
 		self.hudTimeAlive.glowColor = (0.7, 0.2, 0.2);
 		self.hudTimeAlive.archived = false;
 		self.hudTimeAlive.label = &"OW_BEL_TIME_ALIVE";
@@ -378,25 +378,25 @@ createHudElements()
 	}
 	self.hudTimeAlive.color = (1,1,1);
 	self.hudTimeAlive.glowAlpha = 0;
-	self.hudTimeAlive.alpha = 1;
+	self.hudTimeAlive.alpha =0.715;
 	
 	if ( !isDefined( self.hudPointsEarned ) ) {
 		// Total points gained as defender
 		self.hudPointsEarned = createFontString( "objective", 1.4 );
-		self.hudPointsEarned setPoint( "BOTTOMRIGHT", "BOTTOMRIGHT", 0, -90 );
+		self.hudPointsEarned setPoint( "BOTTOMLEFT", "BOTTOM",-100, -2 );
 		self.hudPointsEarned.glowColor = (0.7, 0.2, 0.2);
 		self.hudPointsEarned.archived = false;
 		self.hudPointsEarned.label = &"OW_BEL_POINTS_EARNED";
 		self.hudPointsEarned setValue(0);
 		if ( level.scr_bel_alive_points_time >= 5 ) {
 			self.hudPointsEarned maps\mp\gametypes\_hud::fontPulseInit();
-			self.maxFontScale = 4.6;
+			self.maxFontScale = 3.6;
 		}
 		self.hudPointsEarned.myValue = 0;
 	}
 	self.hudPointsEarned.color = (1,1,1);
 	self.hudPointsEarned.glowAlpha = 0;
-	self.hudPointsEarned.alpha = 1;
+	self.hudPointsEarned.alpha =0.715;
 
 	// Start giving score to the player and refresh the time alive
 	self thread giveSurvivalScore();
@@ -807,7 +807,7 @@ autoBalanceInformation( textLine, glowColor, autoBalance )
 	}
 
 	// Show the new team information
-	textLineHud = createFontString( "objective", 3.0 );
+	textLineHud = createFontString( "objective", 2.0 );
 	textLineHud.glowAlpha = 1;
 	textLineHud.glowColor = glowColor;
 	textLineHud.archived = true;
@@ -851,7 +851,7 @@ spawnInformation( textLine, glowColor )
 {
 	self endon("disconnect");
 
-	textLineHud = createFontString( "objective", 3.0 );
+	textLineHud = createFontString( "objective", 2.0 );
 	textLineHud.glowAlpha = 1;
 	textLineHud.glowColor = glowColor;
 	textLineHud.archived = true;

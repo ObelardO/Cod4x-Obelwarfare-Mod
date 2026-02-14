@@ -1,6 +1,7 @@
 // Full Screen Map for location selection
 #define FULL_SCREEN_MAP_WIDTH 400
 #define FULL_SCREEN_MAP_HEIGHT 400
+
 menuDef
 {
     name			"FullScreenMap"
@@ -8,7 +9,7 @@ menuDef
     fullScreen		0
     visible			1
 
-    #define FSM_VISIBILITY (selecting_location() && NOT_SPECTATING)
+    #define FSM_VISIBILITY ( selecting_location() && CLIENT_NOT_SPECTATING )
 
     itemDef
     {

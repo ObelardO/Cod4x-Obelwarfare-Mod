@@ -474,13 +474,13 @@ captureAndHold()
 	if ( level.scr_ch_chmode == 0 ) {
 		level.timerDisplay = [];
 		level.timerDisplay["allies"] = createServerTimer( "objective", 1.4, "allies" );
-		level.timerDisplay["allies"] setPoint( "TOPRIGHT", "TOPRIGHT", 0, 0 );
+		level.timerDisplay["allies"] setPoint( "BOTTOM", "BOTTOM", 0, -2 );
 		level.timerDisplay["allies"].alpha = 0;
 		level.timerDisplay["allies"].archived = false;
 		level.timerDisplay["allies"].hideWhenInMenu = true;
 	
 		level.timerDisplay["axis"] = createServerTimer( "objective", 1.4, "axis" );
-		level.timerDisplay["axis"] setPoint( "TOPRIGHT", "TOPRIGHT", 0, 0 );
+		level.timerDisplay["axis"] setPoint( "BOTTOM", "BOTTOM", 0, -2 );
 		level.timerDisplay["axis"].alpha = 0;
 		level.timerDisplay["axis"].archived = false;
 		level.timerDisplay["axis"].hideWhenInMenu = true;
@@ -737,8 +737,8 @@ monitorFlagHoldTime( player )
 		level.timerDisplay["axis"] setTimer( level.scr_ch_holdtime - level.gameStatus[ self.ownerTeam + "_current_holdtime" ] );
 		level.timerDisplay[ self.ownerTeam ].label = &"OW_CH_HAVE_FLAG";
 		level.timerDisplay[ getOtherTeam(self.ownerTeam) ].label = &"OW_CH_DONTHAVE_FLAG";
-		level.timerDisplay["allies"].alpha = 1;
-		level.timerDisplay["axis"].alpha = 1;
+		level.timerDisplay["allies"].alpha =0.715;
+		level.timerDisplay["axis"].alpha =0.715;
 	}
 	
 	giveScore = 0;

@@ -115,11 +115,14 @@ init()
 
 	// Check where the chat should be
 	if ( level.scr_relocate_chat_position == 1 ) {
-		forceClientDvar( "cg_hudChatPosition", "16 440" );
+		forceClientDvar( "cg_hudChatPosition", "16 390" );
+		forceClientDvar( "cg_hudSayPosition", "16 370" );
 	} else if ( level.scr_relocate_chat_position == 2 ) {
 		forceClientDvar( "cg_hudChatPosition", "16 100" );
+		forceClientDvar( "cg_hudSayPosition", "16 80" );
 	} else {
 		forceClientDvar( "cg_hudChatPosition", "16 200" );
+		forceClientDvar( "cg_hudSayPosition", "16 180" );
 	}
 
 	// Dvars that apply to both hardcore and non-hardcore

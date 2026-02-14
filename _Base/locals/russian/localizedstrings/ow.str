@@ -53,7 +53,7 @@ REFERENCE OBJECTIVES_ATTACKERS_BEL
 LANG_RUSSIAN "Зарабатывайте очки уничтожая беглецов"
 
 REFERENCE OBJECTIVES_DEFENDERS_BEL
-LANG_RUSSIAN "Зарабатывайте очки за выживание и уничтожение врагов"
+LANG_RUSSIAN "Зарабатывайте очки за выживание и уничтожение охотников"
 
 REFERENCE OBJECTIVES_ATTACKERS_BEL_SCORE
 LANG_RUSSIAN "Зарабатывайте очки уничтожая беглецов. Выигрывает игрок набравший &&1 очков."
@@ -68,10 +68,10 @@ REFERENCE OBJECTIVES_DEFENDERS_BEL_HINT
 LANG_RUSSIAN "Выживите и уничтожьте охотников."
 
 REFERENCE BEL_TIME_ALIVE
-LANG_RUSSIAN "Живой уже: &&1"
+LANG_RUSSIAN "В живых: &&1"
 
 REFERENCE BEL_POINTS_EARNED
-LANG_RUSSIAN "Очки: &&1"
+LANG_RUSSIAN "Счёт: &&1"
 
 REFERENCE BEL_WILLSPAWN_ATTACKER
 LANG_RUSSIAN "Вы возродитесь как охотник!"
@@ -220,10 +220,10 @@ REFERENCE DOGTAGS_CAPTURED_BY
 LANG_RUSSIAN "^3&&1^7 доставил жетонов: ^3&&2^7"
 
 REFERENCE GR_DROPZONES_RELOCATING_IN
-LANG_RUSSIAN "Точки сбора изменятся через &&1"
+LANG_RUSSIAN "Точки сбора изменятся через: ^3&&1"
 
 REFERENCE GR_DROPZONE_RELOCATING_IN
-LANG_RUSSIAN "Точка сбора изменится через &&1"
+LANG_RUSSIAN "Точка сбора изменится через: ^3&&1"
 
 
 //******************************************************************************
@@ -446,7 +446,7 @@ REFERENCE OBJECTIVES_SHARPSHOOTER_HINT
 LANG_RUSSIAN "Уничтожьте всех других игроков."
 
 REFERENCE SHARPSHOOTER_CLYCLING_IN
-LANG_RUSSIAN "Смена оружия через &&1"
+LANG_RUSSIAN "Смена оружия через: ^3&&1"
 
 
 //******************************************************************************
@@ -868,10 +868,10 @@ LANG_RUSSIAN "У вас нет осколочных гранат для перка Мученик."
 // openwarfare/_numlives.gsc
 //******************************************************************************
 REFERENCE LIVES_LEFT
-LANG_RUSSIAN "У вас осталось ^3&&1^7 жизней..."
+LANG_RUSSIAN "Осталось жизней: ^3&&1"
 
 REFERENCE LAST_LIFE
-LANG_RUSSIAN "У вас последня жизнь!"
+LANG_RUSSIAN "Последня жизнь!"
 
 
 //******************************************************************************
@@ -1286,7 +1286,7 @@ LANG_RUSSIAN "^3Esc.^7 Отмена"
 // maps\mp\gametypes\_finalkillcam.gsc
 //******************************************************************************
 REFERENCE FINALCAM_PLAYER_VS_PLAYER
-LANG_RUSSIAN "&&1 VS. &&2"
+LANG_RUSSIAN "&&1 ^1VS. ^7&&2"
 
 REFERENCE FINALCAM_MATCH_WIN
 LANG_RUSSIAN "ПОБЕДА В МАТЧЕ"

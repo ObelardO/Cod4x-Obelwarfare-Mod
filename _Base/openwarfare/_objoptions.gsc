@@ -426,7 +426,7 @@ allowDefenderExplosiveDestroy()
             self setWeaponAmmoClip( "briefcase_bomb_mp", 0 );
             self switchToWeapon( "briefcase_bomb_mp" );
             self attach( "prop_suitcase_bomb","tag_inhand", true );
-            self setClientDvar( "ui_hud_show_weapon", 0 );
+            self setClientDvar( "ui_hud_has_weapon", 0 );
             while ( self getCurrentWeapon() != "briefcase_bomb_mp" )
             	wait (0.05);
           }
@@ -464,7 +464,7 @@ allowDefenderExplosiveDestroy()
       {
         self detach( "prop_suitcase_bomb", "tag_inhand" ); 
         self switchToWeapon( lastWeapon );
-        self setClientDvar( "ui_hud_show_weapon", 0 );
+        self setClientDvar( "ui_hud_has_weapon", 0 );
         self thread openwarfare\_speedcontrol::setModifierSpeed( "_objpoints", 0 );
       }
       else

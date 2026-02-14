@@ -66,8 +66,8 @@ initNotifyMessage()
 {
 	if ( level.splitscreen )
 	{
-		titleSize = 2.0;
-		textSize = 1.5;
+		titleSize = 1.8;
+		textSize = 1.4;
 		iconSize = 24;
 		font = "default";
 		point = "TOP";
@@ -77,8 +77,8 @@ initNotifyMessage()
 	}
 	else
 	{
-		titleSize = 2.5;
-		textSize = 1.75;
+		titleSize = 2.0;
+		textSize = 1.4;
 		iconSize = 30;
 		font = "objective";
 		point = "TOP";
@@ -409,17 +409,19 @@ teamOutcomeNotify( winner, isRound, endReasonText )
 	
 	if ( level.splitscreen )
 	{
-		titleSize = 2.0;
-		textSize = 1.5;
+		titleSize = 1.8;
+		textSize = 1.4;
 		iconSize = 30;
+		scoreSize = 2.0;
 		spacing = 10;
 		font = "default";
 	}
 	else
 	{
-		titleSize = 3.0;
-		textSize = 2.0;
+		titleSize = 2.0;
+		textSize = 1.4;
 		iconSize = 70;
+		scoreSize = 2.5;
 		spacing = 30;
 		font = "objective";
 	}
@@ -525,7 +527,7 @@ teamOutcomeNotify( winner, isRound, endReasonText )
 	rightIcon fadeOverTime( 0.5 );
 	rightIcon.alpha = 1;
 
-	leftScore = createFontString( font, titleSize );
+	leftScore = createFontString( font, scoreSize );
 	leftScore setParent( leftIcon );
 	leftScore setPoint( "TOP", "BOTTOM", 0, spacing );
 	leftScore.glowColor = game["colors"][team];
@@ -535,7 +537,7 @@ teamOutcomeNotify( winner, isRound, endReasonText )
 	leftScore.archived = false;
 	leftScore setPulseFX( 100, duration, 1000 );
 
-	rightScore = createFontString( font, titleSize );
+	rightScore = createFontString( font, scoreSize );
 	rightScore setParent( rightIcon );
 	rightScore setPoint( "TOP", "BOTTOM", 0, spacing );
 	rightScore.glowColor = game["colors"][level.otherTeam[team]];
@@ -548,7 +550,7 @@ teamOutcomeNotify( winner, isRound, endReasonText )
 	matchBonus = undefined;
 	if ( isDefined( self.matchBonus ) )
 	{
-		matchBonus = createFontString( font, 2.0 );
+		matchBonus = createFontString( font, 1.4 );
 		matchBonus setParent( outcomeText );
 		matchBonus setPoint( "TOP", "BOTTOM", 0, iconSize + (spacing * 3) + leftScore.height );
 		matchBonus.glowAlpha = 1;
@@ -576,17 +578,17 @@ outcomeNotify( winner, endReasonText )
 	if ( level.splitscreen )
 	{
 		titleSize = 2.0;
-		winnerSize = 1.5;
-		otherSize = 1.5;
+		winnerSize = 1.4;
+		otherSize = 1.4;
 		iconSize = 30;
 		spacing = 2;
 		font = "default";
 	}
 	else
 	{
-		titleSize = 3.0;
-		winnerSize = 2.0;
-		otherSize = 1.5;
+		titleSize = 2.0;
+		winnerSize = 1.4;
+		otherSize = 1.4;
 		iconSize = 30;
 		spacing = 20;
 		font = "objective";

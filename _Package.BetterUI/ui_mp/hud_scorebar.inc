@@ -1,18 +1,23 @@
-#define SCOREBAR_ORIGIN 0 -7
-#define ESCOREBAR_ORIGIN 8 -6
+// DISABLED. REWORKED FOR TEAMS STATUS. 
+/*
+#define SCOREBAR_ORIGIN         0 -7
+#define ESCOREBAR_ORIGIN        8 -6
 
-#define SCORE_OFFSET_X	4
-#define SCORE_OFFSET_Y	2
+#define SCORE_OFFSET_X	        4
+#define SCORE_OFFSET_Y	        2
 
-#define TEAM_IS_TIED	(team(score) == otherteam(score))
-#define TEAM_IS_WINNING (team(score) > otherteam(score))
-#define TEAM_IS_LOSING	(team(score) < otherteam(score))
+#define TEAM_IS_MARINES			( localVarString( ui_team ) == "marines" )
+#define TEAM_IS_OPFOR			( localVarString( ui_team ) == "opfor" )
 
-#define PLAYER_IS_TIED		(player(score) == scoreatrank(1) && scoreatrank(1) == scoreatrank(2))
-#define PLAYER_IS_WINNING	(player(score) > scoreatrank(2))
-#define PLAYER_IS_LOSING	(player(score) < scoreatrank(1))
+#define TEAM_IS_TIED	        ( team( score ) == otherteam( score  ))
+#define TEAM_IS_WINNING         ( team( score ) > otherteam( score ) )
+#define TEAM_IS_LOSING	        ( team( score ) < otherteam( score ) )
+ 
+#define PLAYER_IS_TIED		    ( player( score ) == scoreatrank( 1 ) && scoreatrank( 1 ) == scoreatrank( 2 ) )
+#define PLAYER_IS_WINNING	    ( player( score ) > scoreatrank( 2 ) )
+#define PLAYER_IS_LOSING	    ( player( score ) < scoreatrank( 1 ) )
 
-#define SHOULD_DISPLAY_SCOREBAR (team( name ) != "TEAM_SPECTATOR") && !isIntermission()
+#define SHOULD_DISPLAY_SCOREBAR ( team( name ) != "TEAM_SPECTATOR") && !isIntermission()
 
 // Bottom bar
 menuDef
@@ -21,8 +26,8 @@ menuDef
     rect			SCORE_OFFSET_X SCORE_OFFSET_Y 640 480 HORIZONTAL_ALIGN_FULLSCREEN VERTICAL_ALIGN_FULLSCREEN
     exp				rect Y( 0 - (ONLINEGAME * ONLINEGAME_OFFSET) );
     fullScreen		0
-    /*visible 		when( !inkillcam() && !ui_active() && ( dvarint( ui_hud_hardcore ) == 0 && dvarint( ui_hud_show_scores ) == 1 ) );*/
-    visible 		when( !inkillcam() && !ui_active() && !isIntermission() && ( ( dvarint( ui_hud_hardcore ) == 0 && dvarint( ui_hud_show_scores ) > 0 ) || ( dvarint( ui_hud_hardcore ) == 1 && dvarint( ui_hud_show_scores ) == 2 ) ) );
+    //visible 		when( !inkillcam() && !ui_active() && ( dvarint( ui_hud_hardcore ) == 0 && dvarint( ui_hud_show_scores ) == 1 ) );
+    visible 		when( !inkillcam() && !ui_active() && !isIntermission() && ( ( dvarint( "ui_hud_hardcore" ) == 0 && dvarint( "ui_hud_show_scores" ) > 0 ) || ( dvarint( "ui_hud_hardcore" ) == 1 && dvarint( "ui_hud_show_scores" ) == 2 ) ) );
 
     itemDef
     {
@@ -317,7 +322,7 @@ menuDef
         rect			134 -48 32 32 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
         origin			5 6
         exp				material( "hud_suitcase_bomb" );
-        visible			when ( dvarBool( ui_bomb_timer ) && ( team( name ) != "TEAM_SPECTATOR" || dvarInt( ui_broadcaster ) == 0 ) );
+        visible			when ( dvarBool( "ui_bomb_timer" ) && ( team( name ) != "TEAM_SPECTATOR" || dvarInt( "ui_broadcaster" ) == 0 ) );
         forecolor		1 1 1 0.25
         decoration
     }
@@ -330,7 +335,7 @@ menuDef
         textscale	0.35
         textalign	ITEM_ALIGN_RIGHT
         textstyle	ITEM_TEXTSTYLE_SHADOWEDMORE
-        visible 	when ( timeLeft() >= 60 && !dvarBool( ui_bomb_timer ) && ( team( name ) != "TEAM_SPECTATOR" && dvarInt( ui_broadcaster ) == 0 ) );
+        visible 	when ( timeLeft() >= 60 && !dvarBool( "ui_bomb_timer" ) && ( team( name ) != "TEAM_SPECTATOR" && dvarInt( "ui_broadcaster" ) == 0 ) );
         forecolor	1 1 1 HUD_FOREGROUND_ALPHA
         decoration
     }
@@ -344,7 +349,7 @@ menuDef
         textalign	ITEM_ALIGN_RIGHT
         textstyle	ITEM_TEXTSTYLE_SHADOWEDMORE
         forecolor	1 0.75 0 HUD_FOREGROUND_ALPHA
-        visible 	when ( timeLeft() >= 30 && timeLeft() < 60 && !dvarBool( ui_bomb_timer ) && ( team( name ) != "TEAM_SPECTATOR" && dvarInt( ui_broadcaster ) == 0 ) );
+        visible 	when ( timeLeft() >= 30 && timeLeft() < 60 && !dvarBool( "ui_bomb_timer" ) && ( team( name ) != "TEAM_SPECTATOR" && dvarInt( "ui_broadcaster" ) == 0 ) );
         decoration
     }
     itemDef
@@ -357,7 +362,7 @@ menuDef
         textalign	ITEM_ALIGN_RIGHT
         textstyle	ITEM_TEXTSTYLE_SHADOWEDMORE
         forecolor	1 0.5 0 1
-        visible 	when ( ( (timeLeft() >= 0 && timeLeft() < 30) || dvarBool( ui_bomb_timer ) ) && ( team( name ) != "TEAM_SPECTATOR" && dvarInt( ui_broadcaster ) == 0 ) );
+        visible 	when ( ( (timeLeft() >= 0 && timeLeft() < 30) || dvarBool( "ui_bomb_timer" ) ) && ( team( name ) != "TEAM_SPECTATOR" && dvarInt( "ui_broadcaster" ) == 0 ) );
         decoration
     }
     
@@ -397,4 +402,4 @@ menuDef
     OBJICON( "TEAM_AXIS", 4, "compass_waypoint_capture_e", "scr_obj_e", "allies" )
     OBJICON( "TEAM_AXIS", 4, "compass_waypoint_defend_e", "scr_obj_e", "axis" )
     */
-}
+//}

@@ -58,7 +58,7 @@ init()
 	level.scr_show_player_status = getdvarx( "scr_show_player_status", "int", 1, 0, 1 );
 
 	// Progress bars adjustment
-	level.scr_adjust_progress_bars = getdvarx( "scr_adjust_progress_bars", "int", 0, 0, 2 );
+	level.scr_adjust_progress_bars = getdvarx( "scr_adjust_progress_bars", "int", 0, 0, 3 );
 
 	// Hiticon dvars
 	level.scr_enable_hiticon = getdvarx( "scr_enable_hiticon", "int", 1, 0, 2 );
@@ -176,6 +176,7 @@ init()
 	} else {
 		chatPosition = "standard";
 	}
+	
 	setdvar( "ui_chat_position", chatPosition );
 	makeDvarServerInfo( "ui_chat_position" );
 

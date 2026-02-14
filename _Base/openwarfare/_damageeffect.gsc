@@ -38,11 +38,17 @@ init()
 onPlayerConnected()
 {
 	self thread addNewEvent( "onPlayerSpawned", ::onPlayerSpawned );
+	self thread addNewEvent( "onJoinedTeam", ::onPlayerJoinedTeam );
 }
 
 onPlayerSpawned()
 {
 	self thread onDamageTaken();
+}
+
+onPlayerJoinedTeam()
+{
+	self openwarfare\_damageeffect::clearAllDamageEffects();
 }
 
 onDamageTaken()
@@ -143,7 +149,7 @@ onDamageTaken()
 			}
 
 			// Check if we need to shift the player's view
-			if ( level.scr_de_shiftview_on_damage > 0 &&  iDamage > level.scr_de_shiftview_on_damage ) {
+			if ( level.scr_de_shiftview_on_damage > 0 && iDamage > level.scr_de_shiftview_on_damage ) {
 				self shiftPlayerView( iDamage );
 			}
 		}

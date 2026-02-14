@@ -264,7 +264,7 @@ giveOneInTheChamberLoadout()
 	self setWeaponAmmoStock( level.oneInTheChamberWeapon, 0 );
 	self setSpawnWeapon( level.oneInTheChamberWeapon );
 	self switchToWeapon( level.oneInTheChamberWeapon );	
-	self setClientDvar( "ui_hud_show_weapon", 1 );
+	self setClientDvar( "ui_hud_has_weapon", 1 );
 	
 	// Enable the new weapon
 	self thread maps\mp\gametypes\_gameobjects::_enableWeapon();

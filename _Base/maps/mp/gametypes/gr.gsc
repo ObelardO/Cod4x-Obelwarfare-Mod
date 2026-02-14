@@ -269,7 +269,7 @@ greed()
 
 	timerDisplay = [];
 	timerDisplay = createServerTimer( "objective", 1.4 );
-	timerDisplay setPoint( "TOPRIGHT", "TOPRIGHT", 0, 0 );
+	timerDisplay setPoint( "BOTTOM", "BOTTOM", 0, -2 );
 	if ( level.scr_gr_active_drop_zones == 1 ) {
 		timerDisplay.label = &"OW_GR_DROPZONE_RELOCATING_IN";
 	} else {
@@ -313,7 +313,7 @@ greed()
 		timeLeft = level.scr_gr_drop_zones_relocation_time;
 		timerDisplay.color = (1,1,1);
 		timerDisplay setTimer( timeLeft );
-		timerDisplay.alpha = 1;
+		timerDisplay.alpha =0.715;
 		
 		while ( timeLeft > 0 ) {
 			// Do we need to play a tick sound?
@@ -335,7 +335,7 @@ greed()
 				// Wait for the timeout to be over and reset the clock
 				while ( level.inTimeoutPeriod ) wait (0.05);
 				timerDisplay setTimer( timeLeft );
-				timerDisplay.alpha = 1;
+				timerDisplay.alpha =0.715;
 			} else {
 				timeLeft--;
 			}

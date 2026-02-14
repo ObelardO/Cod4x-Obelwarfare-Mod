@@ -11,6 +11,6 @@ FinalMapVoting
 //Event.Spring
 //Event.Victory
 Event.Winter
-Event.Xmas
+//Event.Xmas
 //Event.Autumn
 //Event.HappyBirthday

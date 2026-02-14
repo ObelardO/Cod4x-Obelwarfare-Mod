@@ -1,13 +1,23 @@
-#define PLAYER_HUD_HEALTH_VISIBLE     ( !flashbanged() && !isIntermission() && !ui_active() && !scoped() && team( name ) != "TEAM_SPECTATOR" )
-
 // Low health overlay
 menuDef
 {
     name			"Low Health"
-    rect			0 0 640 480 HORIZONTAL_ALIGN_FULLSCREEN VERTICAL_ALIGN_FULLSCREEN
-    fullScreen		0
+    rect			FULLSCREEN HORIZONTAL_ALIGN_FULLSCREEN VERTICAL_ALIGN_FULLSCREEN
+    fullScreen		1
     visible			1
-    
+
+    itemDef
+    {
+        name			"healthoverlay"
+        rect			FULLSCREEN
+        forecolor		1 1 1 1
+        background		"overlay_low_health"
+        ownerdraw		CG_PLAYER_LOW_HEALTH_OVERLAY
+        visible			when( dvarInt( "ui_healthoverlay" ) == 1 );
+        decoration
+    }
+ 
+    /*
     //PEL VISUAL GUIDE INFO FRAME
     itemDef
     {
@@ -339,7 +349,8 @@ menuDef
         decoration	
     }
     //END VISUAL GUIDE
-
+    */
+    /*
     //CAP INFO
     itemDef
     {
@@ -402,81 +413,6 @@ menuDef
         decoration	
     }
     //END CAP INFO
-    
-    itemDef
-    {
-        name			"healthoverlay"
-        rect			0 0 640 480
-        forecolor		1 1 1 1
-        background		"overlay_low_health"
-        ownerdraw		CG_PLAYER_LOW_HEALTH_OVERLAY
-        visible			when( dvarInt( ui_healthoverlay ) == 1 );
-        decoration
-    }
+    */
 
-    // HEALTH BAR
-    itemDef
-    {
-        name "healthbarback"
-        rect 24 449 124 6
-        forecolor 0.1 0.1 0.1 0.3
-        background "white"
-        ownerdraw CG_PLAYER_BAR_HEALTH_BACK
-        visible when( !dvarInt( "wideScreen" ) && PLAYER_HUD_HEALTH_VISIBLE );
-        decoration
-    }
-    itemDef
-    {
-        name "healthbar"
-        rect 25 450 122 4
-        forecolor 0.7 0.7 0.7 0.3
-        background "white"
-        ownerdraw CG_PLAYER_BAR_HEALTH
-        visible when( !dvarInt( "wideScreen" ) && PLAYER_HUD_HEALTH_VISIBLE );
-        decoration
-    }
-    itemDef
-    {
-        name "healthbarcross"
-        rect 9 446 15 15
-        forecolor 1.0 1.0 1.0 0.3
-        //background "hud_healthbar_heart"
-        background "hint_health"
-        ownerdraw CG_PLAYER_BAR_HEALTH_BACK
-        visible when( !dvarInt( "wideScreen" ) && PLAYER_HUD_HEALTH_VISIBLE );
-        decoration
-    }
-
-    
-    // HEALTH BAR WIDESCREEN
-    itemDef
-    {
-        name "healthbarback"
-        rect 20 449 93 6
-        forecolor 0.1 0.1 0.1 0.3
-        background "white"
-        ownerdraw CG_PLAYER_BAR_HEALTH_BACK
-        visible when( dvarInt( "wideScreen" ) && PLAYER_HUD_HEALTH_VISIBLE );
-        decoration
-    }
-    itemDef
-    {
-        name "healthbar"
-        rect 21 450 91 4
-        forecolor 0.7 0.7 0.7 0.3
-        background "white"
-        ownerdraw CG_PLAYER_BAR_HEALTH
-        visible when( dvarInt( "wideScreen" ) && PLAYER_HUD_HEALTH_VISIBLE );
-        decoration
-    }
-    itemDef
-    {
-        name "healthbarcross"
-        rect 10 446 9 12
-        forecolor 1.0 1.0 1.0 0.3
-        background "hint_health"
-        ownerdraw CG_PLAYER_BAR_HEALTH_BACK
-        visible when( dvarInt( "wideScreen" ) && PLAYER_HUD_HEALTH_VISIBLE );
-        decoration
-    }
 }

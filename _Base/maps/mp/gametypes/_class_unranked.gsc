@@ -321,7 +321,7 @@ giveLoadout( team, class )
 		
 	[[level.onLoadoutGiven]]();
 
-	self setClientDvar( "ui_hud_show_weapon", 1 );
+	self setClientDvar( "ui_hud_has_weapon", 1 );
 }
 
 

@@ -350,8 +350,6 @@ rawfile,openwarfare/_welcomerulesinfo.gsc
 rawfile,openwarfare/_greetings.gsc
 rawfile,openwarfare/_packagesinit.gsc
 
-
-menufile,ui_mp/choices_setup_teams.menu
 menufile,ui_mp/connect.menu
 menufile,ui_mp/controls_multi.menu
 menufile,ui_mp/options_graphics_pc.menu
@@ -383,6 +381,10 @@ rawfile,ui_mp/tactical_map.inc
 rawfile,ui_mp/teamicon.inc
 
 rawfile,ui_mp/controls_multi_slot42.inc
+
+menufile,ui_mp/choices_setup_teams.menu
+menufile,ui_mp/choices_setup_common.menu
+
 
 sound,daycycle,,all_mp
 sound,freezetag,,all_mp
