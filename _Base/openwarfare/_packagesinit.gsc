@@ -9,5 +9,4 @@ init()
 	thread scripts\_iw4anticheat::init();
 	thread scripts\_better_ui::init();
 	thread scripts\_finalmapvoting::init();
-	thread scripts\_winterevent::init();
 }

@@ -153,13 +153,13 @@ init()
 	switch(game["allies"])
 	{
 		case "sas":
-			setDvar( "g_TeamColor_Allies", "0.545 0.678 0.592" );
+			setDvar( "g_TeamColor_Allies", "0.654 0.813 0.710" );
 			setDvar( "g_ScoresColor_Allies", "0.545 0.678 0.592" ); // "0.376 0.482 0.419"
 			break;
 		
 		default:
-			setDvar( "g_TeamColor_Allies", "0.6 0.64 0.69" );
-			setDvar( "g_ScoresColor_Allies", "0.6 0.64 0.69" );
+			setDvar( "g_TeamColor_Allies", "0.53 0.663 0.823" );
+			setDvar( "g_ScoresColor_Allies", "0.44 0.553 0.686" );
 			break;
 	}
 
@@ -168,18 +168,18 @@ init()
 	{
 		case "opfor":
 		case "arab":
-			setDvar( "g_TeamColor_Axis", "0.65 0.57 0.41" );		
+			setDvar( "g_TeamColor_Axis", "0.78 0.68 0.49" );		
 			setDvar( "g_ScoresColor_Axis", "0.65 0.57 0.41" );
 			break;
 		
 		default:
-			setDvar( "g_TeamColor_Axis", "0.686 0.372 0.372" );		
+			setDvar( "g_TeamColor_Axis", "0.823 0.446 0.446" );		
 			setDvar( "g_ScoresColor_Axis", "0.52 0.28 0.28" );
 			break;
 	}
 	
-	setDvar( "g_ScoresColor_Spectator", ".25 .25 .25" );
-	setDvar( "g_ScoresColor_Free", ".76 .78 .10" );
+	setDvar( "g_ScoresColor_Spectator", ".12 .12 .12" );
+	setDvar( "g_ScoresColor_Free", ".25 .25 .25" );
 	setDvar( "g_teamColor_MyTeam", ".6 .8 .6" );
 	setDvar( "g_teamColor_EnemyTeam", "1 .45 .5" );	
 }

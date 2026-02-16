@@ -23,7 +23,7 @@ init()
 
 	// Load the module's dvars
 	level.scr_claymore_show_headicon = getdvarx( "scr_claymore_show_headicon", "int", 1, 0, 1 );
-	level.scr_claymore_show_laser_beams = getdvarx( "scr_claymore_show_laser_beams", "int", 1, 0, 1 );
+	level.scr_claymore_show_laser_beams = getdvarx( "scr_claymore_show_laser_beams", "int", 1, 0, 2 );
 	level.scr_claymore_friendly_fire = getdvarx( "scr_claymore_friendly_fire", "int", 0, 0, 2 );
 	level.scr_claymore_arm_time = getdvarx( "scr_claymore_arm_time", "float", 0, 0, 10 ) * 1000;
 	level.scr_claymore_check_plant_distance = getdvarx( "scr_claymore_check_plant_distance", "int", 0, 0, 1 );
@@ -155,7 +155,16 @@ init()
 		level.C4FXid = loadfx( "misc/light_c4_blink" );
 
 	if ( level.scr_claymore_show_laser_beams == 1 )
-		level.claymoreFXid = loadfx( "misc/claymore_laser" );
+	{
+		level.claymoreFXidRed = loadfx( "misc/claymore_laser_red" );
+	}
+	else if ( level.scr_claymore_show_laser_beams == 2 )
+	{
+		level.claymoreFXidRed = loadfx( "misc/claymore_laser_red" );
+		level.claymoreFXidBlue = loadfx( "misc/claymore_laser_blue" );
+		level.claymoreFXidGreen = loadfx( "misc/claymore_laser_green" );
+		level.claymoreFXidYellow = loadfx( "misc/claymore_laser_yellow" );
+	}
 
 	level thread onPlayerConnect();
 
@@ -893,12 +902,16 @@ watchClaymores()
 			self.claymorearray[self.claymorearray.size] = claymore;
 			claymore.owner = self;
 			claymore.planttime = openwarfare\_timer::getTimePassed();
-			if ( level.teamBased )
+
+			if ( level.teamBased && level.gametype != "bel" )
+			{
 				claymore.targetname = "claymore_mp_" + self.pers["team"];
+			}
+				
 			claymore thread c4Damage();
 			claymore thread claymoreDetonation();
 
-			if ( level.scr_claymore_show_laser_beams == 1 )
+			if ( level.scr_claymore_show_laser_beams != 0 )
 				claymore thread playClaymoreEffects();
 
 			claymore thread claymoreDetectionTrigger_wait( self.pers["team"] );
@@ -1522,7 +1535,26 @@ playClaymoreEffects()
 
 		org = self getTagOrigin( "tag_fx" );
 		ang = self getTagAngles( "tag_fx" );
-		fx = spawnFx( level.claymoreFXid, org, anglesToForward( ang ), anglesToUp( ang ) );
+
+		fxName = level.claymoreFXidRed;
+		dbname = "red";
+
+		if ( ( level.teamBased && level.gametype != "bel" ) && level.scr_claymore_show_laser_beams == 2 )
+		{
+			switch ( ToLower( game[self.owner.pers["team"]] ) )
+			{
+				case "sas":		fxName = level.claymoreFXidGreen; dbname = "^2green"; break;
+				case "marines":	fxName = level.claymoreFXidBlue; dbname = "^4blue"; break;
+
+				case "russian":	fxName = level.claymoreFXidRed; dbname = "^1red"; break;
+				case "opfor":
+				case "arab":	fxName = level.claymoreFXidYellow; dbname = "^3yellow"; break;
+			}
+
+			iPrintLn ("color: " + dbname + "^7 of team " + game[self.owner.pers["team"]] + " - " + game["allies"] + " vs " + game["axis"]);
+		}
+
+		fx = spawnFx( fxName, org, anglesToForward( ang ), anglesToUp( ang ) );
 		triggerfx( fx );
 
 		self thread clearFXOnDeath( fx );
