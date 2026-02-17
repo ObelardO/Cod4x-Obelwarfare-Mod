@@ -10,6 +10,7 @@
 //**************************************************************//
 
 #include openwarfare\_utils;
+#include openwarfare\_eventmanager;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                           INGAME CLASS EDITOR                                           //
@@ -56,7 +57,8 @@ init()
         precacheMenu( level.cacIngame.menu );
     }
 
-    level thread onPlayerConnecting();
+    //level thread onPlayerConnecting();
+    level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
 }
 
 
@@ -82,115 +84,152 @@ initItemInfo( statOffset, dataType, tableSource )
 }
 
 
-onPlayerConnecting()
+onPlayerConnected()
 {
-	for(;;)
-	{
-		level waittill( "connecting", player );
+	//for(;;)
+	//{
+	//	level waittill( "connecting", player );
 
-        player.cacIngame = spawnStruct();
-        player.cacIngame.loadoutDataRef = [];
-        player.cacIngame.classInfoIndex = 0;
-        player.cacIngame.stockResponse = "";
+        self.cacIngame = spawnStruct();
+        self.cacIngame.loadoutDataRef = [];
+        self.cacIngame.classInfoIndex = 0;
+        self.cacIngame.stockResponse = "";
 
-        player openAllClasses();
+        self openAllClasses();
 
-        player thread onMenuResponseThread();
-	}
+        //player thread onMenuResponseThread();
+
+        self thread addNewEvent( "onMenuResponse", ::onMenuResponse );
+
+        //self thread prepareAndOpenMenuThread();
+	//}
 }
 
 
 prepareAndOpenMenuThread()
 {
+    self endon("disconnect");
+
     for( allowIndex = 0; allowIndex < level.cacIngame.allowedItems.size; allowIndex++ )
     {
         self setClientDvar( level.cacIngame.allowedItems[allowIndex].dvarName, level.cacIngame.allowedItems[allowIndex].dvarValue  );
     
-        if ( allowIndex % 10 == 0 && allowIndex > 0 ) 
+        if( allowIndex % 3 == 0 && allowIndex > 0 ) 
         {
             wait 0.05;
         }
     }
+
+    self iPrintLn( "[CAC Ingame] Processed " + level.cacIngame.allowedItems.size + " allowed items" );
 }
 
 
-onMenuResponseThread()
+onMenuResponse( menu, response )
 {
-	self endon("disconnect");
+    self iPrintLn( "RAW RES: " + response );
 
-	for(;;)
-	{
-		self waittill("menuresponse", menu, response);
+    if( menu == game["menu_changeclass"] && response != "back" )
+    {
+        self closeMenu();
+        self closeInGameMenu();
 
-        //self iPrintLn( "RAW RES: " + response );
+        classInfoIndex = undefined;
 
-        if( menu == game["menu_changeclass"] && response != "back" )
+        for( i = 0; i < level.cacIngame.classInfo.size; i++ )
         {
-            self closeMenu();
-			self closeInGameMenu();
-
-            classInfoIndex = undefined;
-
-            for( i = 0; i < level.cacIngame.classInfo.size; i++ )
+            if( level.cacIngame.classInfo[i].stockResponse == response )
             {
-                if( level.cacIngame.classInfo[i].stockResponse == response )
-                {
-                    classInfoIndex = i;
-                    break;
-                }
+                classInfoIndex = i;
+                break;
             }
+        }
 
-            //Override open CAC menu for selected custom class
-            if( isDefined( classInfoIndex ) )
-            {
-                initLoadoutData( classInfoIndex );
-
-                validateLoadoutData();
-
-                self thread prepareAndOpenMenuThread();
-                                
-                self openMenu( "cac_ingame" );
-            }
-            else //Othervise stock logic
-            {
-				self.selectedClass = true;
-				self [[level.class]]( response );
-            }
-
-            continue;
-        } 
-
-        if ( response == "go" && menu == level.cacIngame.menu )
+        //Override open CAC menu for selected custom class
+        if( isDefined( classInfoIndex ) )
         {
+            initLoadoutData( classInfoIndex );
+
             validateLoadoutData();
 
-            saveLoadoutData();
-
-            self closeMenu();
-            self closeInGameMenu();
-
+            //self thread prepareAndOpenMenuThread();
+                            
+            self openMenu( "cac_ingame" );
+        }
+        else //Othervise stock logic
+        {
             self.selectedClass = true;
-            self [[level.class]]( self.cacIngame.stockResponse );
-
-            continue;
+            self [[level.class]]( response );
         }
 
-        if( response == "validate" && menu == level.cacIngame.menu )
+        return;
+    } 
+
+    if( response == "go" && menu == level.cacIngame.menu )
+    {
+        validateLoadoutData();
+
+        saveLoadoutData();
+
+        self closeMenu();
+        self closeInGameMenu();
+
+        self.selectedClass = true;
+        self [[level.class]]( self.cacIngame.stockResponse );
+
+        return;
+    }
+
+    if( response == "validate" && menu == level.cacIngame.menu )
+    {
+        validateLoadoutData();
+    }
+
+    responseTok = strTok( response, ":" );
+
+    if( isdefined( responseTok ) && responseTok.size == 3 )
+    {
+        if( responseTok[0] == "set" )
         {
-            validateLoadoutData();
+            setLoadoutData( responseTok[1], responseTok[2] );
         }
 
-        responseTok = strTok( response, ":" );
-
-    	if( isdefined( responseTok ) && responseTok.size == 3 )
-		{
-            if( responseTok[0] == "set" )
-            {
-                setLoadoutData( responseTok[1], responseTok[2] );
-            }
+        if( responseTok[0] == "allow" )
+        {
+            updateNotAllowedItems( responseTok[1], responseTok[2] );
         }
     }
 }
+
+updateNotAllowedItems( className, tag )
+{
+    //self endon("disconnect");
+
+    for( allowIndex = 0; allowIndex < level.cacIngame.allowedItems.size; allowIndex++ )
+    {
+        allowedItem = level.cacIngame.allowedItems[allowIndex];
+
+        if( allowedItem.className == className && allowedItem.tag == tag )
+        {
+            self setClientDvar( allowedItem.dvarName, allowedItem.dvarValue );
+
+            debugLog = "[CAC Ingame] Item ^3" + allowedItem.itemName + "^7 in group ^3" + allowedItem.tag + "^7 for class ^3" + className + "^7 is";
+
+            if( allowedItem.dvarValue == 1 )
+            {
+                debugLog += "^2 allowed";
+            }
+            else
+            {
+                debugLog += "^1 NOT allowed";
+            }
+
+            self iPrintLn( debugLog );
+        }
+    }
+
+    //self iPrintLn( "[CAC Ingame] Processed " + level.cacIngame.allowedItems.size + " allowed items" );
+}
+
 
 
 getRefByStatValue( tableSource, statValue )
@@ -265,7 +304,7 @@ getPlayerClassName( weaponRef )
     {
         allowedItem = level.cacIngame.allowedItems[allowIndex];
 
-        if ( allowedItem.itemName == weaponRef )
+        if( allowedItem.itemName == weaponRef )
         {
             return allowedItem.className;
         }
@@ -311,13 +350,13 @@ openAllClasses()
 	//menu without having to exit game and edit them
 	//then we need to unlock them on initialization of the menu
 	//so players can edit and then select from any custom class.
-	if ( self getStat( 210 ) < 1 )
+	if( self getStat( 210 ) < 1 )
 		self setStat( 210, 1 );
-	if ( self getStat( 220 ) < 1 )
+	if( self getStat( 220 ) < 1 )
 		self setStat( 220, 1 );
-	if ( self getStat( 230 ) < 1 )
+	if( self getStat( 230 ) < 1 )
 		self setStat( 230, 1 );	
-	if ( self getStat( 240 ) < 1 )
+	if( self getStat( 240 ) < 1 )
 		self setStat( 240, 1 );		
 }
 
@@ -345,7 +384,7 @@ initAllowedItems()
 }
 
 
-initAllowedWeapons( statOffset, className, overrideClassName, overrideWeapTag, overrideAttachTag )
+initAllowedWeapons( statOffset, className, overrideClassName )
 {
     weaponTag = "weap";
     
@@ -353,10 +392,10 @@ initAllowedWeapons( statOffset, className, overrideClassName, overrideWeapTag, o
     {
         //Add allowed weapons
         weaponName = tableLookup( "mp/statsTable.csv", 0, weapIndex, 4 );
-        if ( !isDefined( weaponName ) || weaponName == "" )
+        if( !isDefined( weaponName ) || weaponName == "" )
             continue;
 
-        if ( className == "" )
+        if( className == "" )
             dvarName = "weap_allow_" + weaponName;
         else
             dvarName = "weap_allow_" + className + "_" + weaponName;
@@ -381,14 +420,14 @@ initAllowedAttachments( statOffset, weaponClass )
     if( !isDefined( attachmentsNames ) ) return;
 
     //Add allowed none attachments
-    if ( weaponClass != "" )
+    if( weaponClass != "" )
     {            
         dvarName = "attach_allow_" + weaponClass + "_none";
         addAllowedItem( weaponClass, "none", dvarName, attachTag );
     }
         
     //Only 1 attachment for this weapon
-    if ( attachmentsNames.size == 0 )
+    if( attachmentsNames.size == 0 )
     {
         dvarName = "attach_allow_" + weaponClass + "_" + attachments;
         addAllowedItem( weaponClass, attachments, dvarName, attachTag );
@@ -411,17 +450,17 @@ initAllowedPerks( className )
     for( perkIndex = 150; perkIndex < 190; perkIndex++ )
     {
         perkName = tableLookup( "mp/statsTable.csv", 0, perkIndex, 4 );
-        if ( !isDefined( perkName ) || perkName == "" )
+        if( !isDefined( perkName ) || perkName == "" )
             continue;
 
         perkGroup = tableLookup( "mp/statsTable.csv", 0, perkIndex, 8 );
-        if ( !isDefined( perkGroup ) || perkGroup == "" )
+        if( !isDefined( perkGroup ) || perkGroup == "" )
             continue;
 
         dvarName = undefined;
 
         //Master Option
-        if ( className == "")
+        if( className == "")
         {
             dvarName = "perk_allow_" + perkName;
         }
@@ -438,7 +477,7 @@ initAllowedPerks( className )
 addAllowedItem( className, itemName, dvarName, tag )
 {
     //If not class name defined, use value for all classes (master option)
-    if ( !isDefined( className ) || className == "" ) className = "*all*";
+    if( !isDefined( className ) || className == "" ) className = "*all*";
 
     itemIndex = level.cacIngame.allowedItems.size;
     level.cacIngame.allowedItems[itemIndex] = spawnStruct();
@@ -454,7 +493,7 @@ addAllowedItem( className, itemName, dvarName, tag )
 
 validateAllowedItem( itemName, tag, className )
 {
-    if ( !isDefined( tag ) || tag == "" ) return itemName;
+    if( !isDefined( tag ) || tag == "" ) return itemName;
 
     firstAllowedItem = undefined;
 
@@ -462,14 +501,14 @@ validateAllowedItem( itemName, tag, className )
     {
         allowedItem = level.cacIngame.allowedItems[allowIndex];
 
-        if ( allowedItem.dvarValue > 0 && allowedItem.className == className && allowedItem.tag == tag )
+        if( allowedItem.dvarValue > 0 && allowedItem.className == className && allowedItem.tag == tag )
         {
-            if ( !isDefined( firstAllowedItem ) )
+            if( !isDefined( firstAllowedItem ) )
             {
                 firstAllowedItem = allowedItem;
             }
 
-            if ( allowedItem.itemName == itemName )
+            if( allowedItem.itemName == itemName )
             {
                 //self iPrintLn( "[CAC Ingame] Allowed item: ref ^2" + itemName + "^7 dvar ^2" + allowedItem.dvarName + "^7 in class ^2" + className + "^7 with tag " + tag );
                 return itemName;
@@ -477,7 +516,7 @@ validateAllowedItem( itemName, tag, className )
         }
     }
 
-    if ( isDefined ( firstAllowedItem ) ) 
+    if( isDefined ( firstAllowedItem ) ) 
     {
         //self iPrintLn( "[CAC Ingame]^1 Not allowed:^7 ref ^2" + itemName + "^7 in class ^2" + className + "^7 with tag ^2" + tag + "^7 changed to ^2" + firstAllowedItem.itemName );
         return firstAllowedItem.itemName;
@@ -533,7 +572,7 @@ validateLoadoutSecondaryWeapon( className )
     className = getPlayerClassName( self.cacIngame.loadoutDataRef["loadout_secondary"] );
     //self iPrintLn( "[CAC Ingame] Validating: secondary class ^2" + className);
 
-    if ( self.cacIngame.loadoutDataRef["loadout_perk2"] == "specialty_twoprimaries" )
+    if( self.cacIngame.loadoutDataRef["loadout_perk2"] == "specialty_twoprimaries" )
     {
         validateLoadoutItem( className, "secondary", "weap" );
         validateLoadoutItem( className, "secondary_attachment", "atch" );
