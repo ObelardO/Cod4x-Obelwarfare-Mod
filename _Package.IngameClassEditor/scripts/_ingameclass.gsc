@@ -179,7 +179,7 @@ onMenuResponse( menu, response )
         return;
     }
 
-    if( response == "validate" && menu == level.cacIngame.menu )
+    if( response == "validate" )
     {
         validateLoadoutData();
     }
@@ -190,23 +190,55 @@ onMenuResponse( menu, response )
     {
         if( responseTok[0] == "set" )
         {
-            setLoadoutData( responseTok[1], responseTok[2] );
+            setLoadoutDataRef( responseTok[1], responseTok[2] );
         }
 
         if( responseTok[0] == "allow" )
         {
-            updateNotAllowedItems( responseTok[1], responseTok[2] );
+            className = responseTok[1];
+            tag = responseTok[2];
+
+            if( isSubStr( tag, "perk" ) )
+            {
+                if( isSubStr( className, "current" ) )
+                {
+                    primaryClassName = getPlayerClassName( getLoadoutDataRef( "primary" ) );
+
+                    updateAllowedItems( primaryClassName, tag );
+
+                    if( getLoadoutDataRef("perk2") == "specialty_twoprimaries" )
+                    {
+                        secondaryClassName = getPlayerClassName( getLoadoutDataRef( "secondary" ) );
+
+                        updateAllowedItems( secondaryClassName, tag, true );
+                    }
+                }
+
+                if( isSubStr( className, "all" ) )
+                {
+                    updateAllowedItems( "*all*", tag );
+                }
+            }
+            // if weapon or attachment, only update for current class as they are not used by other classes
+            else 
+            {
+                updateAllowedItems( className, tag );
+            }
         }
     }
 }
 
-updateNotAllowedItems( className, tag )
+updateAllowedItems( className, tag, updateOnlyNotAllowedItems )
 {
     //self endon("disconnect");
+
+    updateOnlyNotAllowedItems = isDefined( updateOnlyNotAllowedItems ) && updateOnlyNotAllowedItems;
 
     for( allowIndex = 0; allowIndex < level.cacIngame.allowedItems.size; allowIndex++ )
     {
         allowedItem = level.cacIngame.allowedItems[allowIndex];
+
+        if ( updateOnlyNotAllowedItems && allowedItem.dvarValue > 0 ) continue;
 
         if( allowedItem.className == className && allowedItem.tag == tag )
         {
@@ -293,7 +325,7 @@ initLoadoutData( classInfoIndex )
     self setClientDvars
     (
          "loadout_class_name", level.cacIngame.classInfo[classInfoIndex].name,
-         "loadout_class", getPlayerClassName( self.cacIngame.loadoutDataRef["loadout_primary"] )
+         "loadout_class", getPlayerClassName( getLoadoutDataRef("primary") )
     );
 }
 
@@ -314,13 +346,21 @@ getPlayerClassName( weaponRef )
 }
 
 
-setLoadoutData( dvarName, valueRef )
+setLoadoutDataRef( dataType, valueRef )
 {
+    dvarName = "loadout_" + dataType;
+
     if( isDefined( self.cacIngame.loadoutDataRef[dvarName] ) )
     {
         self.cacIngame.loadoutDataRef[dvarName] = valueRef;
         //self iPrintLn( "[CAC Ingame] Setting: dvar ^2" + dvarName + "^7  value ^2" + valueRef );
     }
+}
+
+
+getLoadoutDataRef( dataType )
+{
+    return self.cacIngame.loadoutDataRef["loadout_" + dataType];
 }
 
 
@@ -529,21 +569,53 @@ validateAllowedItem( itemName, tag, className )
 
 validateLoadoutData()
 {
-    className = getPlayerClassName( self.cacIngame.loadoutDataRef["loadout_primary"] );
+    validateLoadoutPrimaryWeapon();
+
+    validateLoadoutSecondaryWeapon();
+
+    validateLoadoutItem( "grenade", "grenade", "weap" );
+}
+
+
+validateLoadoutPrimaryWeapon()
+{
+    className = getPlayerClassName( getLoadoutDataRef("primary") );
     //self iPrintLn( "[CAC Ingame] Validating: primary class ^2" + className);
 
     validateLoadoutItem( className, "primary", "weap" );
     validateLoadoutItem( className, "primary_attachment", "atch" );
 
+    validatePerks( className );
+}
+
+
+validateLoadoutSecondaryWeapon()
+{
+    className = getPlayerClassName( getLoadoutDataRef("secondary") );
+    //self iPrintLn( "[CAC Ingame] Validating: secondary class ^2" + className);
+
+    self iPrintLn( "PERK2 IS " + getLoadoutDataRef("perk2"));
+
+    if( getLoadoutDataRef("perk2") == "specialty_twoprimaries" )
+    {
+        validateLoadoutItem( className, "secondary", "weap" );
+        validateLoadoutItem( className, "secondary_attachment", "atch" );
+
+        validatePerks( className );
+    }
+    else
+    {
+        validateLoadoutItem( "pistol", "secondary", "weap" );
+        validateLoadoutItem( "pistol", "secondary_attachment", "atch" );
+    }
+}
+
+
+validatePerks( className )
+{
     validateLoadoutItem( className, "perk1", "perk1" );
     validateLoadoutItem( className, "perk2", "perk2" );
     validateLoadoutItem( className, "perk3", "perk3" );
-
-    validateLoadoutItem( "grenade", "grenade", "weap" );
-
-    validateLoadoutSecondaryWeapon();
-    validateLoadoutPerk1Special( "primary_attachment" );
-    validateLoadoutPerk1Special( "secondary_attachment" );
 }
 
 
@@ -562,26 +634,15 @@ validateLoadoutItem( className, dataType, tag )
     if( itemValueRef != itemValueRefValidated )
     {
         self setClientDvar( dvarName, itemValueRefValidated );
-    }
-    //self iPrintLn( "[CAC Ingame] Validated: ^2" + dvarName + "^7 ref ^2" + itemValueRefValidated + "^7 (from ^2" + itemValueRef + "^7) in class ^2" + className + "^7 with tag ^2" + tag );
-}
 
-
-validateLoadoutSecondaryWeapon( className )
-{
-    className = getPlayerClassName( self.cacIngame.loadoutDataRef["loadout_secondary"] );
-    //self iPrintLn( "[CAC Ingame] Validating: secondary class ^2" + className);
-
-    if( self.cacIngame.loadoutDataRef["loadout_perk2"] == "specialty_twoprimaries" )
-    {
-        validateLoadoutItem( className, "secondary", "weap" );
-        validateLoadoutItem( className, "secondary_attachment", "atch" );
+        debugLog = "[CAC Ingame] Validated: ^2" + dataType + "^7 ref ^2" + itemValueRefValidated + "^7 (from ^1" + itemValueRef + "^7) in class ^2" + className + "^7 with tag ^2" + tag;
     }
     else
     {
-        validateLoadoutItem( "pistol", "secondary", "weap" );
-        validateLoadoutItem( "pistol", "secondary_attachment", "atch" );
+        debugLog = "[CAC Ingame] Validated: ^2" + dataType + "^7 ref ^2" + itemValueRefValidated + "^7 (from ^2" + itemValueRef + "^7) in class ^2" + className + "^7 with tag ^2" + tag;
     }
+
+    self iPrintLn( debugLog );
 }
 
 
