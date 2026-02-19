@@ -322,14 +322,12 @@
 	#define LOCAL_PRIMARY_WEAPON_ACTION( wClass, wRef ) \
 		LOCAL_PRIMARY_WEAPON_SET( wClass, wRef );\
 		setdvar ui_inside_popup_nested 1;\
-		open "nocd_attachment_popup_"wClass;\
-		//scriptMenuResponse "allow:"wClass":atch";
+		open "nocd_attachment_popup_"wClass;
 
 	#define LOCAL_PRIMARY_WEAPON_ACTION_OVERKILL( wClass, wRef ) \
 		LOCAL_SECONDARY_WEAPON_SET( wClass, wRef );\
 		setdvar ui_inside_popup_nested 1;\
-		open "nocd_attachment_popup_"wClass;\
-		//scriptMenuResponse "allow:"wClass":atch";
+		open "nocd_attachment_popup_"wClass;
 
 	#define LOCAL_PRIMARY_WEAPON_ACTION3( wClass, wRef ) \
 		LOCAL_PRIMARY_WEAPON_SET( wClass, wRef );\
@@ -419,7 +417,8 @@
 		play "mouse_click";\
 		/*execnow "set loadout_class "wClass"; set ui_weapon_class_selected "className;*/\
 		execnow "set ui_weapon_class_selected "className;\
-		open "nocd_popup_cac_"wClass;
+		open "nocd_popup_cac_"wClass;\
+		scriptMenuResponse "allow:"wClass":atch";
 
 	#define LOCAL_WEAPON_CLASS_ACTION_OVERKILL( wClass, className ) \
 		LOCAL_WEAPON_CLASS_ACTION( wClass, className )\
@@ -839,22 +838,59 @@
 	// ====================================================================================================
 	// perk selection =====================================================================================
 	// ====================================================================================================
-	#define LOCAL_PERK_INFO_WINDOW( highlight_dvar ) \
-		/* perk information side frame*/ \
-		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH-6) -4 280 CHOICE_POPUP_HEIGHT( 7 ) CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "white", CHOICE_POPUP_BORDER_COLOR, 1, 2, CHOICE_POPUP_BORDER_COLOR ) \
+	
+	#define LOCAL_PERK_INFO_ALLOWED\
+		dvarBool( "perk_allow_" + dvarString( ui_perk_hl_ref ) )
+
+	#define LOCAL_PERK_INFO_ALLOWED_CLASS( weaponSlot )\
+		dvarBool( "perk_" + dvarString( weaponSlot ) + "_allow_" + dvarString( ui_perk_hl_ref ) )
+	
+	#define LOCAL_PERK_INFO_ALLOWED_OVERKILL\
+		( dvarString( loadout_perk2 ) != REF_TWOPRIMARIES || LOCAL_PERK_INFO_ALLOWED_CLASS( loadout_class_secondary ) )
+
+	#define LOCAL_PERK_INFO_NOT_ALLOWED_OVERKILL\
+		( dvarString( ui_perk_hl_ref ) == REF_TWOPRIMARIES && LOCAL_PERK_INFO_ALLOWED_CLASS( loadout_class_secondary ) == 0 )
+
+	#define LOCAL_PERK_INFO_VISIBLE( perkSlot )\
+		/* PERK NOT EQUIPED */\
+		dvarString( "loadout_"perkSlot ) != dvarString( ui_perk_hl_ref ) &&\
+		/* PERK ALLOWED */\  
+		LOCAL_PERK_INFO_ALLOWED &&\
+		/* PERK ALLOWED FOR CLASS */\
+		LOCAL_PERK_INFO_ALLOWED_CLASS( loadout_class ) &&\
+		/* PERK ALLOWED BY GRENADE*/\
+		( dvarString( ui_perk_hl_ref ) != REF_SPECIALGRENADE_X3 || dvarString( loadout_grenade ) != REF_SMOKE_X1 ) &&\
+		/* PERK ALLOWED BY OVERKILL WEAPON CLASS */\
+		LOCAL_PERK_INFO_ALLOWED_OVERKILL
+
+	#define LOCAL_PERK_INFO_WINDOW( perkSlot )\
+		/* perk information side frame*/\
+		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH-6) -4 280 CHOICE_POPUP_HEIGHT( 7 ) CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "white", CHOICE_POPUP_BORDER_COLOR, 1, 2, CHOICE_POPUP_BORDER_COLOR )\
 		LOADOUT_PLATING_RAW( CHOICE_POPUP_WIDTH 8, -2, 0, 280, (CHOICE_POPUP_HEIGHT( 7 )-4), CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0, 0 )\
-		/* perk image*/ \
-		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+6) 30 256 48 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "gradient_bottom", 1 1 1 0.3, 0, 2, CHOICE_POPUP_BORDER_COLOR ) \
-		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+188) -2 64 64 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, tablelookup("mp/statsTable.csv",4,dvarString(highlight_dvar),6), 1 1 1 0.75, 0, 0, 0.2 0.2 0.225 1 ) \
+		/* perk image*/\
+		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+6) 30 256 48 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "gradient_bottom", 1 1 1 0.3, 0, 2, CHOICE_POPUP_BORDER_COLOR )\
+		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+188) -2 64 64 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, tablelookup("mp/statsTable.csv",4,dvarString( ui_perk_hl_ref ),6), 1 1 1 0.75, 0, 0, 0.2 0.2 0.225 1 )\
 		/* perk title*/\
-		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 58 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/statsTable.csv",4,dvarString(highlight_dvar),3), TEXTSIZE_DEFAULT, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE ) \
+		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 58 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/statsTable.csv",4,dvarString( ui_perk_hl_ref ),3), TEXTSIZE_DEFAULT, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE )\
 		/* perk desc unlocked*/\
-		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0,  "@"+tablelookup("mp/statsTable.csv",4,dvarString(highlight_dvar),7), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, CHOICE_TEXTCOLOR \
-		visible when( dvarBool( ui_perk_hl_unlocked ) && dvarBool( "perk_"+dvarString( loadout_class )+"_allow_"+dvarString( highlight_dvar )) && ( dvarString( loadout_grenade )=="smoke_grenade" && dvarString(highlight_dvar)=="specialty_specialgrenade" )==0 ); )\
+		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0,  "@"+tablelookup("mp/statsTable.csv",4,dvarString( ui_perk_hl_ref ),7), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, CHOICE_TEXTCOLOR\
+			visible when( LOCAL_PERK_INFO_VISIBLE( perkSlot ) ); )\
+		/* perk desc locked - global*/\
+		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0,  "Disabled on server", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE \
+			visible when( LOCAL_PERK_INFO_ALLOWED == 0 ); )\
+		/* perk desc locked - class*/\
+		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0,  "Can't use with selected weapon", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE \
+			visible when( LOCAL_PERK_INFO_ALLOWED && ( LOCAL_PERK_INFO_ALLOWED_CLASS( loadout_class ) == 0 || LOCAL_PERK_INFO_NOT_ALLOWED_OVERKILL ) ); )\
+
+/*
+		\
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0,  "@MENU_DISABLED", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE \
-		visible when( !dvarBool( ui_perk_hl_unlocked ) || !dvarBool( "perk_"+dvarString( loadout_class )+"_allow_"+dvarString( highlight_dvar )) || ( dvarString( loadout_grenade )=="smoke_grenade" && dvarString(highlight_dvar)=="specialty_specialgrenade" ) ); )\
+		visible when( !dvarBool( ui_perk_hl_unlocked ) || !dvarBool( "perk_"+dvarString( loadout_class )+"_allow_"+dvarString( ui_perk_hl_ref )) || ( dvarString( loadout_grenade )=="smoke_grenade" && dvarString( ui_perk_hl_ref )=="specialty_specialgrenade" ) ); )\
+		\
 		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+6) 0 (CHOICE_SIZE_Y*2) CHOICE_SIZE_Y CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "specialty_locked", 1 1 1 1, 0, 2, CHOICE_POPUP_BORDER_COLOR \
-		visible when( !dvarBool( ui_perk_hl_unlocked ) || !dvarBool( "perk_"+dvarString( loadout_class )+"_allow_"+dvarString( highlight_dvar )) ); ) \
+		visible when( !dvarBool( ui_perk_hl_unlocked ) || !dvarBool( "perk_"+dvarString( loadout_class )+"_allow_"+dvarString( ui_perk_hl_ref )) ); ) \
+
+*/
 
 	#define LOCAL_PERK_ACTION( perkSlot, perkRef, paction ) \
 			play "mouse_click"; \
@@ -863,19 +899,19 @@
 			scriptMenuResponse "set:"perkSlot":"perkRef;\
 			paction
 		
-	#define LOCAL_PERK_ITEM( itemNum, camoName, perkSlot, perkRef, highlight_dvar, paction )\
-		LOCAL_PERK_ITEM_VIS( itemNum, camoName, perkSlot, perkRef, highlight_dvar, paction, 1 )
+	#define LOCAL_PERK_ITEM( itemNum, camoName, perkSlot, perkRef, paction )\
+		LOCAL_PERK_ITEM_VIS( itemNum, camoName, perkSlot, perkRef, paction, 1 )
 
 	#define PI_FOCUS_ACTION( perkRef ) \
 		execOnDvarStringValue "perk_allow_"perkRef 0 "set ui_perk_hl_unlocked 0";\
 		execOnDvarStringValue "perk_allow_"perkRef 1 "set ui_perk_hl_unlocked 1";\
-		exec "set ui_perk_highlighted "perkRef;
+		exec "set ui_perk_hl_ref "perkRef;
 
 	#define LOCAL_PERK_ALLOWED( perkRef )\
 		dvarBool( "perk_allow_"perkRef )
 
-	#define LOCAL_PERK_ALLOWED_CLASS( wClass, perkRef )\
-		dvarBool( "perk_" + dvarString( wClass ) + "_allow_"perkRef )
+	#define LOCAL_PERK_ALLOWED_CLASS( weaponSlot, perkRef )\
+		dvarBool( "perk_" + dvarString( weaponSlot ) + "_allow_"perkRef )
 
 	#define LOCAL_PERK_ALLOWED_GRENADE( perkRef )\
 		( perkRef != REF_SPECIALGRENADE_X3 || dvarString( loadout_grenade ) != REF_SMOKE_X1 )
@@ -903,7 +939,7 @@
 		( perkRef == REF_SPECIALGRENADE_X3 && dvarString( loadout_grenade ) == REF_SMOKE_X1 ) ||\
 		( perkRef != REF_TWOPRIMARIES && dvarString( loadout_perk2 ) == REF_TWOPRIMARIES && LOCAL_PERK_ALLOWED_CLASS( loadout_class_secondary, perkRef ) == 0 )
 
-	#define LOCAL_PERK_ITEM_VIS( itemNum, camoName, perkSlot, perkRef, highlight_dvar, paction, visArg )\
+	#define LOCAL_PERK_ITEM_VIS( itemNum, camoName, perkSlot, perkRef, paction, visArg )\
 		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, camoName, LOCAL_PERK_ACTION( perkSlot, perkRef, paction );, PI_FOCUS_ACTION( perkRef ), ;, when( LOCAL_PERK_CHOICE_VISIBLE( perkSlot, perkRef ) && visArg );, 0 )\
 		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;,PI_FOCUS_ACTION( perkRef ), ;, when( LOCAL_PERK_CHOICE_NOT_VISIBLE( perkSlot, perkRef ) && visArg ); )\
 		CHOICE_DBUTTON_VIS( itemNum, camoName, when( LOCAL_PERK_CHOICE_NOT_VISIBLE( perkSlot, perkRef ) && visArg ); )
@@ -914,21 +950,21 @@
 
 	// hackaround to work for PC's floating mouse unfocusing
 	#undef  UI_FOCUSFIRST
-	#define UI_FOCUSFIRST "ui_perk_highlighted"
+	#define UI_FOCUSFIRST "ui_perk_hl_ref"
 
 	// perk1 selection for primary weapon popup menu
 	menuDef	
 	{
 		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_perk1", 7, (CHOICE_X( 4 )-2), (CHOICE_Y( 4 )+18), ;, LOCAL_PERK_ONOPEN( REF_C4_X2, "perk1" ), 1 )
 		onClose{ execnow "set ui_inside_popup 0"; }
-		LOCAL_PERK_INFO_WINDOW( "ui_perk_highlighted" )
-		LOCAL_PERK_ITEM( 1, "@PERKS_C4_X_2", "perk1", REF_C4_X2, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 2, "@PERKS_SPECIAL_GRENADES_X_3", "perk1", REF_SPECIALGRENADE_X3, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 3, "@PERKS_RPG7_X_2", "perk1", REF_RPG_X2, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 4, "@PERKS_CLAYMORE_X_2", "perk1", REF_CLAYMORE_X2, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 5, "@PERKS_FRAG_X_3", "perk1", REF_FRAG_X3, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 6, "@PERKS_BANDOLIER", "perk1", REF_EXTRAAMMO, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 7, "@PERKS_BOMB_SQUAD", "perk1", REF_DETECTEXPLOSIVE, "ui_perk_highlighted", ; )
+		LOCAL_PERK_INFO_WINDOW( "perk1" )
+		LOCAL_PERK_ITEM( 1, "@PERKS_C4_X_2", "perk1", REF_C4_X2, ; )
+		LOCAL_PERK_ITEM( 2, "@PERKS_SPECIAL_GRENADES_X_3", "perk1", REF_SPECIALGRENADE_X3, ; )
+		LOCAL_PERK_ITEM( 3, "@PERKS_RPG7_X_2", "perk1", REF_RPG_X2, ; )
+		LOCAL_PERK_ITEM( 4, "@PERKS_CLAYMORE_X_2", "perk1", REF_CLAYMORE_X2, ; )
+		LOCAL_PERK_ITEM( 5, "@PERKS_FRAG_X_3", "perk1", REF_FRAG_X3, ; )
+		LOCAL_PERK_ITEM( 6, "@PERKS_BANDOLIER", "perk1", REF_EXTRAAMMO, ; )
+		LOCAL_PERK_ITEM( 7, "@PERKS_BOMB_SQUAD", "perk1", REF_DETECTEXPLOSIVE, ; )
 	}
 
 	#define LOCAL_RESET_PISTOL \
@@ -953,17 +989,17 @@
 	{
 		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_perk2", 7, (CHOICE_X( 5 )-2), (CHOICE_Y( 5 )+22), ;, LOCAL_PERK_ONOPEN( REF_BULLETDAMAGE, "perk2" ), 1 )
 		onClose{ execnow "set ui_inside_popup 0"; }
-		LOCAL_PERK_INFO_WINDOW( "ui_perk_highlighted" )
-		LOCAL_PERK_ITEM( 1, "@PERKS_STOPPING_POWER", "perk2", REF_BULLETDAMAGE, "ui_perk_highlighted", LOCAL_RESET_PISTOL )
-		LOCAL_PERK_ITEM( 2, "@PERKS_JUGGERNAUT", "perk2", REF_ARMORVEST, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 3, "@PERKS_SLEIGHT_OF_HAND", "perk2", REF_FASTRELOAD, "ui_perk_highlighted", LOCAL_RESET_PISTOL )
-		LOCAL_PERK_ITEM( 4, "@PERKS_DOUBLE_TAP", "perk2", REF_ROF, "ui_perk_highlighted", LOCAL_RESET_PISTOL )
+		LOCAL_PERK_INFO_WINDOW( "perk2" )
+		LOCAL_PERK_ITEM( 1, "@PERKS_STOPPING_POWER", "perk2", REF_BULLETDAMAGE, LOCAL_RESET_PISTOL )
+		LOCAL_PERK_ITEM( 2, "@PERKS_JUGGERNAUT", "perk2", REF_ARMORVEST, LOCAL_RESET_PISTOL )
+		LOCAL_PERK_ITEM( 3, "@PERKS_SLEIGHT_OF_HAND", "perk2", REF_FASTRELOAD, LOCAL_RESET_PISTOL )
+		LOCAL_PERK_ITEM( 4, "@PERKS_DOUBLE_TAP", "perk2", REF_ROF, LOCAL_RESET_PISTOL )
 		/*hacked, init to m16 if not m16*/	
-		LOCAL_PERK_ITEM_VIS( 5, "@PERKS_OVERKILL", "perk2", REF_TWOPRIMARIES, "ui_perk_highlighted", LOCAL_INIT_DUAL_PRIMARY_M16, dvarString ( "loadout_primary" ) != REF_M16 )
+		LOCAL_PERK_ITEM_VIS( 5, "@PERKS_OVERKILL", "perk2", REF_TWOPRIMARIES, LOCAL_INIT_DUAL_PRIMARY_M16, dvarString ( "loadout_primary" ) != REF_M16 )
 		/*hacked, init to ak47 if m16*/		
-		LOCAL_PERK_ITEM_VIS( 5, "@PERKS_OVERKILL", "perk2", REF_TWOPRIMARIES, "ui_perk_highlighted", LOCAL_INIT_DUAL_PRIMARY_AK47, dvarString ( "loadout_primary" ) == REF_M16 )
-		LOCAL_PERK_ITEM( 6, "@PERKS_UAV_JAMMER", "perk2", REF_GPSJAMMER, "ui_perk_highlighted", LOCAL_RESET_PISTOL )
-		LOCAL_PERK_ITEM( 7, "@PERKS_SONIC_BOOM", "perk2", REF_EXPLOSIVEDAMAGE, "ui_perk_highlighted", LOCAL_RESET_PISTOL )
+		LOCAL_PERK_ITEM_VIS( 5, "@PERKS_OVERKILL", "perk2", REF_TWOPRIMARIES, LOCAL_INIT_DUAL_PRIMARY_AK47, dvarString ( "loadout_primary" ) == REF_M16 )
+		LOCAL_PERK_ITEM( 6, "@PERKS_UAV_JAMMER", "perk2", REF_GPSJAMMER, LOCAL_RESET_PISTOL )
+		LOCAL_PERK_ITEM( 7, "@PERKS_SONIC_BOOM", "perk2", REF_EXPLOSIVEDAMAGE, LOCAL_RESET_PISTOL )
 	}
 				
 	// perk3 selection for primary weapon popup menu
@@ -971,13 +1007,13 @@
 	{
 		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_perk3", 8, (CHOICE_X( 6 )-2), (CHOICE_Y( 6 )+26), ;, LOCAL_PERK_ONOPEN( REF_LONGERSPRINT, "perk3" ), 1 )
 		onClose{ execnow "set ui_inside_popup 0"; }
-		LOCAL_PERK_INFO_WINDOW( "ui_perk_highlighted" )
-		LOCAL_PERK_ITEM( 1, "@PERKS_EXTREME_CONDITIONING", "perk3", REF_LONGERSPRINT, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 2, "@PERKS_STEADY_AIM", "perk3", REF_BULLETACCURACY, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 3, "@PERKS_LAST_STAND", "perk3", REF_PISTOLDEATH, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 4, "@PERKS_MARTYRDOM", "perk3", REF_GRENADEPULLDEATH, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 5, "@PERKS_DEEP_IMPACT", "perk3", REF_BULLETPENETRATION, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 6, "@PERKS_IRON_LUNGS", "perk3", REF_HOLDBREATH, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 7, "@PERKS_DEAD_SILENCE", "perk3", REF_QUIETER, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 8, "@PERKS_EAVESDROP", "perk3", REF_PARABOLIC, "ui_perk_highlighted", ; )
+		LOCAL_PERK_INFO_WINDOW( "perk3" )
+		LOCAL_PERK_ITEM( 1, "@PERKS_EXTREME_CONDITIONING", "perk3", REF_LONGERSPRINT, ; )
+		LOCAL_PERK_ITEM( 2, "@PERKS_STEADY_AIM", "perk3", REF_BULLETACCURACY, ; )
+		LOCAL_PERK_ITEM( 3, "@PERKS_LAST_STAND", "perk3", REF_PISTOLDEATH, ; )
+		LOCAL_PERK_ITEM( 4, "@PERKS_MARTYRDOM", "perk3", REF_GRENADEPULLDEATH, ; )
+		LOCAL_PERK_ITEM( 5, "@PERKS_DEEP_IMPACT", "perk3", REF_BULLETPENETRATION, ; )
+		LOCAL_PERK_ITEM( 6, "@PERKS_IRON_LUNGS", "perk3", REF_HOLDBREATH, ; )
+		LOCAL_PERK_ITEM( 7, "@PERKS_DEAD_SILENCE", "perk3", REF_QUIETER, ; )
+		LOCAL_PERK_ITEM( 8, "@PERKS_EAVESDROP", "perk3", REF_PARABOLIC, ; )
 	}
