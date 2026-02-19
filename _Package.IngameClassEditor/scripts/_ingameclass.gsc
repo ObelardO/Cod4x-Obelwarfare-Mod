@@ -222,7 +222,7 @@ onMenuResponse( menu, response )
 
                         secondaryClassName = getPlayerClassName( getLoadoutDataRef( "secondary" ) );
 
-                        updateAllowedItems( secondaryClassName, tag, true );
+                        updateAllowedItems( secondaryClassName, tag );
                     }
                 }
 

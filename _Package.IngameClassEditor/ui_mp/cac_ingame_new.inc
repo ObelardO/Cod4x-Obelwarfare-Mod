@@ -425,19 +425,21 @@
 		LOCAL_WEAPON_CLASS_ACTION( wClass, className )\
 		scriptMenuResponse "allow:"wClass":perk2";
 
-	/*
+	
 	#define LOCAL_WEAPON_CLASS( itemNum, wClass, className ) \
 		CHOICE_BUTTON_EX( itemNum, className, LOCAL_WEAPON_CLASS_ACTION( wClass, className ), name wClass; )
-	*/
+	
 
 	#define LOCAL_WEAPON_ONOPEN\
 		execnow "set ui_inside_popup weapon_class; set ui_show_preview 1";\
 		scriptMenuResponse "allow:twoprimaries";
 
+	/*
 	#define LOCAL_WEAPON_CLASS( itemNum, wClass, className )\
 		CHOICE_BUTTON_FOCUS_VIS( itemNum, className, LOCAL_WEAPON_CLASS_ACTION( wClass, className );, ;, ;, when( dvarString( ui_primary_selected ) == "primary" ) );\
 		CHOICE_BUTTON_FOCUS_VIS( itemNum, className, LOCAL_WEAPON_CLASS_ACTION_OVERKILL( wClass, className );, ;, ;, when( dvarString( ui_primary_selected ) == "secondary" && dvarString( "perk_"wClass"_allow_specialty_twoprimaries" ) > 0 ) );
-		
+	*/	
+
 	// primary weapon class dropdown
 	#define LOCAL_MASTER_CLASS_GROUP( suffix, pos, y_offset )\
 	menuDef {\
@@ -869,19 +871,42 @@
 		execOnDvarStringValue "perk_allow_"perkRef 1 "set ui_perk_hl_unlocked 1";\
 		exec "set ui_perk_highlighted "perkRef;
 
-	#define LOCAL_PERK_VISIBLE( perkRef, visArg ) \
-		dvarBool( "perk_" + dvarString( loadout_class ) + "_allow_"perkRef ) &&\
-		dvarBool( "perk_allow_"perkRef ) &&\
-		( dvarString(loadout_grenade)==REF_SMOKE_X1 && perkRef==REF_SPECIALGRENADE_X3 )==0 && visArg
+	#define LOCAL_PERK_ALLOWED( perkRef )\
+		dvarBool( "perk_allow_"perkRef )
+
+	#define LOCAL_PERK_ALLOWED_CLASS( wClass, perkRef )\
+		dvarBool( "perk_" + dvarString( wClass ) + "_allow_"perkRef )
+
+	#define LOCAL_PERK_ALLOWED_GRENADE( perkRef )\
+		( perkRef != REF_SPECIALGRENADE_X3 || dvarString( loadout_grenade ) != REF_SMOKE_X1 )
+
+	#define LOCAL_PERK_ALLOWED_OVERKILL( perkRef )\
+		( dvarString( loadout_perk2 ) != REF_TWOPRIMARIES || LOCAL_PERK_ALLOWED_CLASS( loadout_class_secondary, perkRef ) )
+
+	#define LOCAL_PERK_EQUIPED( perkSlot, perkRef )\
+		dvarString( "loadout_"perkSlot ) == perkRef
+
+	#define LOCAL_PERK_NOT_EQUIPED( perkSlot, perkRef )\
+		dvarString( "loadout_"perkSlot ) != perkRef
+
+	#define LOCAL_PERK_CHOICE_VISIBLE( perkSlot, perkRef )\
+		LOCAL_PERK_NOT_EQUIPED( perkSlot, perkRef ) &&\
+		LOCAL_PERK_ALLOWED( perkRef ) &&\
+		LOCAL_PERK_ALLOWED_CLASS( loadout_class, perkRef ) &&\
+		LOCAL_PERK_ALLOWED_GRENADE( perkRef ) &&\
+		LOCAL_PERK_ALLOWED_OVERKILL( perkRef )
+
+	#define LOCAL_PERK_CHOICE_NOT_VISIBLE( perkSlot, perkRef )\
+		LOCAL_PERK_EQUIPED( perkSlot, perkRef ) ||\
+		LOCAL_PERK_ALLOWED( perkRef ) == 0 ||\
+		LOCAL_PERK_ALLOWED_CLASS( loadout_class, perkRef ) == 0 ||\
+		( perkRef == REF_SPECIALGRENADE_X3 && dvarString( loadout_grenade ) == REF_SMOKE_X1 ) ||\
+		( perkRef != REF_TWOPRIMARIES && dvarString( loadout_perk2 ) == REF_TWOPRIMARIES && LOCAL_PERK_ALLOWED_CLASS( loadout_class_secondary, perkRef ) == 0 )
 
 	#define LOCAL_PERK_ITEM_VIS( itemNum, camoName, perkSlot, perkRef, highlight_dvar, paction, visArg )\
-		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, camoName, LOCAL_PERK_ACTION( perkSlot, perkRef, paction );, PI_FOCUS_ACTION( perkRef ), ;, \
-		when( LOCAL_PERK_VISIBLE( perkRef, visArg ) );, \
-			  LOCAL_PERK_VISIBLE( perkRef, visArg ) ) \
-		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;,PI_FOCUS_ACTION( perkRef ), ;, \
-		when( ( !dvarBool( "perk_" + dvarString( loadout_class ) + "_allow_"perkRef ) || !dvarBool( "perk_allow_"perkRef ) || ( dvarString(loadout_grenade)==REF_SMOKE_X1 && perkRef==REF_SPECIALGRENADE_X3 ) ) && visArg ); ) \
-		CHOICE_DBUTTON_VIS( itemNum, camoName, \
-		when( ( !dvarBool( "perk_" + dvarString( loadout_class ) + "_allow_"perkRef ) || !dvarBool( "perk_allow_"perkRef ) || ( dvarString(loadout_grenade)==REF_SMOKE_X1 && perkRef==REF_SPECIALGRENADE_X3 ) ) && visArg ); )
+		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, camoName, LOCAL_PERK_ACTION( perkSlot, perkRef, paction );, PI_FOCUS_ACTION( perkRef ), ;, when( LOCAL_PERK_CHOICE_VISIBLE( perkSlot, perkRef ) && visArg );, 0 )\
+		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;,PI_FOCUS_ACTION( perkRef ), ;, when( LOCAL_PERK_CHOICE_NOT_VISIBLE( perkSlot, perkRef ) && visArg ); )\
+		CHOICE_DBUTTON_VIS( itemNum, camoName, when( LOCAL_PERK_CHOICE_NOT_VISIBLE( perkSlot, perkRef ) && visArg ); )
 
 	#define LOCAL_PERK_ONOPEN( perkRef, perkSlot )\
 		execnow "set "UI_FOCUSFIRST" "perkRef"; set ui_inside_popup "perkSlot;\
@@ -934,9 +959,9 @@
 		LOCAL_PERK_ITEM( 3, "@PERKS_SLEIGHT_OF_HAND", "perk2", REF_FASTRELOAD, "ui_perk_highlighted", LOCAL_RESET_PISTOL )
 		LOCAL_PERK_ITEM( 4, "@PERKS_DOUBLE_TAP", "perk2", REF_ROF, "ui_perk_highlighted", LOCAL_RESET_PISTOL )
 		/*hacked, init to m16 if not m16*/	
-		LOCAL_PERK_ITEM_VIS( 5, "@PERKS_OVERKILL", "perk2", REF_TWOPRIMARIES, "ui_perk_highlighted", LOCAL_INIT_DUAL_PRIMARY_M16, dvarString ( "loadout_primary" ) != "m16" )
+		LOCAL_PERK_ITEM_VIS( 5, "@PERKS_OVERKILL", "perk2", REF_TWOPRIMARIES, "ui_perk_highlighted", LOCAL_INIT_DUAL_PRIMARY_M16, dvarString ( "loadout_primary" ) != REF_M16 )
 		/*hacked, init to ak47 if m16*/		
-		LOCAL_PERK_ITEM_VIS( 5, "@PERKS_OVERKILL", "perk2", REF_TWOPRIMARIES, "ui_perk_highlighted", LOCAL_INIT_DUAL_PRIMARY_AK47, dvarString ( "loadout_primary" ) == "m16" )
+		LOCAL_PERK_ITEM_VIS( 5, "@PERKS_OVERKILL", "perk2", REF_TWOPRIMARIES, "ui_perk_highlighted", LOCAL_INIT_DUAL_PRIMARY_AK47, dvarString ( "loadout_primary" ) == REF_M16 )
 		LOCAL_PERK_ITEM( 6, "@PERKS_UAV_JAMMER", "perk2", REF_GPSJAMMER, "ui_perk_highlighted", LOCAL_RESET_PISTOL )
 		LOCAL_PERK_ITEM( 7, "@PERKS_SONIC_BOOM", "perk2", REF_EXPLOSIVEDAMAGE, "ui_perk_highlighted", LOCAL_RESET_PISTOL )
 	}
