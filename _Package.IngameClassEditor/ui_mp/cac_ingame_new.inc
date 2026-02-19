@@ -297,48 +297,48 @@
 		/* pointer icon */ \
 		PREPROC_SHADER_DRAW_ALIGNED( 200 -16 16 8 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "hitech_arrow_down", 0.9 0.9 0.95 0.4, 0, 2, CHOICE_POPUP_BORDER_COLOR )
 
-	#define LOCAL_PRIMARY_WEAPON_SET( wRef ) \
+	#define LOCAL_PRIMARY_WEAPON_SET( wClass, wRef ) \
+		play "mouse_click";\
+		setdvar loadout_class wClass;\
 		setdvar loadout_primary wRef;\
 		setdvar loadout_primary_attachment REF_ATTACHMENT_NONE;\
 		setdvar loadout_camo REF_CAMO_NONE;\
 		scriptMenuResponse "set:primary:"wRef;\
 		scriptMenuResponse "set:primary_attachment:"REF_ATTACHMENT_NONE;\
 		scriptMenuResponse "set:camo:"REF_CAMO_NONE;\
-		scriptMenuResponse "validate";\
+		scriptMenuResponse "validate:perks";\
 		UPDATE_PERK1;
 
-	#define LOCAL_SECONDARY_WEAPON_SET( wRef ) \
+	#define LOCAL_SECONDARY_WEAPON_SET( wClass, wRef ) \
+		play "mouse_click";\
+		setdvar loadout_class_secondary wClass;\
 		setdvar loadout_secondary wRef;\
 		setdvar loadout_secondary_attachment REF_ATTACHMENT_NONE;\
 		scriptMenuResponse "set:secondary:"wRef;\
 		scriptMenuResponse "set:secondary_attachment:"REF_ATTACHMENT_NONE;\
-		scriptMenuResponse "validate";\
+		scriptMenuResponse "validate:perks";\
 		UPDATE_PERK1;
 
-	#define LOCAL_PRIMARY_WEAPON_ACTION( suffix, wClass, wRef ) \
-		play "mouse_click";\
-		LOCAL_PRIMARY_WEAPON_SET(wRef);\
+	#define LOCAL_PRIMARY_WEAPON_ACTION( wClass, wRef ) \
+		LOCAL_PRIMARY_WEAPON_SET( wClass, wRef );\
 		setdvar ui_inside_popup_nested 1;\
 		open "nocd_attachment_popup_"wClass;\
-		scriptMenuResponse "allow:"wClass":atch";
+		//scriptMenuResponse "allow:"wClass":atch";
 
-	#define LOCAL_PRIMARY_WEAPON_ACTION_OVERKILL( suffix, wClass, wRef ) \
-		play "mouse_click";\
-		LOCAL_SECONDARY_WEAPON_SET(wRef);\
+	#define LOCAL_PRIMARY_WEAPON_ACTION_OVERKILL( wClass, wRef ) \
+		LOCAL_SECONDARY_WEAPON_SET( wClass, wRef );\
 		setdvar ui_inside_popup_nested 1;\
 		open "nocd_attachment_popup_"wClass;\
-		scriptMenuResponse "allow:"wClass":atch";
+		//scriptMenuResponse "allow:"wClass":atch";
 
-	#define LOCAL_PRIMARY_WEAPON_ACTION3( suffix, wClass, wRef ) \
-		play "mouse_click"; \
-		LOCAL_PRIMARY_WEAPON_SET(wRef);\
+	#define LOCAL_PRIMARY_WEAPON_ACTION3( wClass, wRef ) \
+		LOCAL_PRIMARY_WEAPON_SET( wClass, wRef );\
 		setdvar ui_inside_popup_nested 1; \
 		open "nocd_attachment_popup_fake"; \
 		open "nocd_popup_cac_camo_no_attach";	
 
-	#define LOCAL_PRIMARY_WEAPON_ACTION3_OVERKILL( suffix, wClass, wRef ) \
-		play "mouse_click"; \
-		LOCAL_SECONDARY_WEAPON_SET(wRef); \
+	#define LOCAL_PRIMARY_WEAPON_ACTION3_OVERKILL( wClass, wRef ) \
+		LOCAL_SECONDARY_WEAPON_SET( wClass, wRef ); \
 		PREPROC_ATTACH_CLOSEALL
 
 	#define WI_FOCUS_ACTION( wClass, wRef ) \
@@ -372,8 +372,7 @@
 		LOCAL_WEAPON_IS_ALLOWED ( wClass, wRef ) && dvarString( loadout_perk2 ) == "specialty_twoprimaries" && \
 		( \
 			( dvarString( ui_primary_selected ) == "primary" && dvarString ( loadout_secondary ) == wRef ) || \
-			( dvarString( ui_primary_selected ) == "secondary" && dvarString ( loadout_primary ) == wRef ) || \
-			( dvarString( "perk_"wClass"_allow_specialty_twoprimaries" ) == "0" )\
+			( dvarString( ui_primary_selected ) == "secondary" && dvarString ( loadout_primary ) == wRef ) \
 		)
 
 	#define LOCAL_WEAPON_IS_ALLOWED( wClass, wRef ) \
@@ -386,48 +385,63 @@
 		exec "set weap_allow_"wClass"_"wRef" 1"
 
 	// hacked to hide the second primary if same weapon is selected in first primary, change weapon description to "Already selected"
-	#define LOCAL_WEAPON_ITEM( suffix, itemNum, wName, wClass, wRef )\
+	#define LOCAL_WEAPON_ITEM( itemNum, wName, wClass, wRef )\
 		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, WI_FOCUS_ACTION( wClass, wRef ), ;, when( ! ( LOCAL_WEAPON_IS_ALLOWED( wClass, wRef ) ) ); )\
 		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, WI_FOCUS_ACTION_OVERKILL( wClass, wRef ), ;, when( LOCAL_WEAPON_DISABLED_OVERKILL( wClass, wRef ) ); )\
 		CHOICE_DBUTTON_VIS( itemNum, wName, when( 1 ); ) \
 		/*Primary*/\
-		CHOICE_BUTTON_FOCUS_VIS_ADV_HK( itemNum, wName, LOCAL_PRIMARY_WEAPON_ACTION( suffix, wClass, wRef ), \
+		CHOICE_BUTTON_FOCUS_VIS_ADV_HK( itemNum, wName, LOCAL_PRIMARY_WEAPON_ACTION( wClass, wRef ), \
 			WI_FOCUS_ACTION( wClass, wRef ), ;, when( \
 			LOCAL_PRIMARY_WEAPON_VISIBLE( wClass, wRef ) );, \
 			LOCAL_PRIMARY_WEAPON_VISIBLE( wClass, wRef ) ) \
 		/*Secondary (overkill perk)*/\
-		CHOICE_BUTTON_FOCUS_VIS_ADV_HK( itemNum, wName, LOCAL_PRIMARY_WEAPON_ACTION_OVERKILL( suffix, wClass, wRef ), \
+		CHOICE_BUTTON_FOCUS_VIS_ADV_HK( itemNum, wName, LOCAL_PRIMARY_WEAPON_ACTION_OVERKILL( wClass, wRef ), \
 			WI_FOCUS_ACTION( wClass, wRef ), ;, when( \
 			LOCAL_SECONDARY_WEAPON_VISIBLE( wClass, wRef ) );, \
 			LOCAL_SECONDARY_WEAPON_VISIBLE( wClass, wRef ) )
 		
-	#define LOCAL_WEAPON_ITEM2( suffix, itemNum, wName, wClass, wRef )\
+	#define LOCAL_WEAPON_ITEM2( itemNum, wName, wClass, wRef )\
 		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, WI_FOCUS_ACTION( wClass, wRef ), ;, when( ! ( LOCAL_WEAPON_IS_ALLOWED( wClass, wRef ) ) ); )\
 		/*CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, WI_FOCUS_ACTION_OVERKILL( wClass, wRef ), ;, when( LOCAL_WEAPON_DISABLED_OVERKILL( wClass, wRef ) ); )*/\
 		CHOICE_DBUTTON_VIS( itemNum, wName, when( 1 ); ) \
 		/*Primary*/\
-		CHOICE_BUTTON_FOCUS_VIS_ADV_HK( itemNum, wName, LOCAL_PRIMARY_WEAPON_ACTION3( suffix, wClass, wRef ), \
+		CHOICE_BUTTON_FOCUS_VIS_ADV_HK( itemNum, wName, LOCAL_PRIMARY_WEAPON_ACTION3( wClass, wRef ), \
 			WI_FOCUS_ACTION( wClass, wRef ), ;, when( \
 			LOCAL_PRIMARY_WEAPON_VISIBLE( wClass, wRef ) );, \
 			LOCAL_PRIMARY_WEAPON_VISIBLE( wClass, wRef ) )\
 		/*Secondary (overkill perk)*/\
-		CHOICE_BUTTON_FOCUS_VIS_ADV_HK( itemNum, wName, LOCAL_PRIMARY_WEAPON_ACTION3_OVERKILL( suffix, wClass, wRef ), \
+		CHOICE_BUTTON_FOCUS_VIS_ADV_HK( itemNum, wName, LOCAL_PRIMARY_WEAPON_ACTION3_OVERKILL( wClass, wRef ), \
 			WI_FOCUS_ACTION( wClass, wRef ), ;, when( \
 			LOCAL_SECONDARY_WEAPON_VISIBLE( wClass, wRef ) );, \
 			LOCAL_SECONDARY_WEAPON_VISIBLE( wClass, wRef ) )
 
 	#define LOCAL_WEAPON_CLASS_ACTION( wClass, className ) \
 		play "mouse_click";\
-		execnow "set loadout_class "wClass"; set ui_weapon_class_selected "className;\
+		/*execnow "set loadout_class "wClass"; set ui_weapon_class_selected "className;*/\
+		execnow "set ui_weapon_class_selected "className;\
 		open "nocd_popup_cac_"wClass;
 
+	#define LOCAL_WEAPON_CLASS_ACTION_OVERKILL( wClass, className ) \
+		LOCAL_WEAPON_CLASS_ACTION( wClass, className )\
+		scriptMenuResponse "allow:"wClass":perk2";
+
+	/*
 	#define LOCAL_WEAPON_CLASS( itemNum, wClass, className ) \
 		CHOICE_BUTTON_EX( itemNum, className, LOCAL_WEAPON_CLASS_ACTION( wClass, className ), name wClass; )
+	*/
 
+	#define LOCAL_WEAPON_ONOPEN\
+		execnow "set ui_inside_popup weapon_class; set ui_show_preview 1";\
+		scriptMenuResponse "allow:twoprimaries";
+
+	#define LOCAL_WEAPON_CLASS( itemNum, wClass, className )\
+		CHOICE_BUTTON_FOCUS_VIS( itemNum, className, LOCAL_WEAPON_CLASS_ACTION( wClass, className );, ;, ;, when( dvarString( ui_primary_selected ) == "primary" ) );\
+		CHOICE_BUTTON_FOCUS_VIS( itemNum, className, LOCAL_WEAPON_CLASS_ACTION_OVERKILL( wClass, className );, ;, ;, when( dvarString( ui_primary_selected ) == "secondary" && dvarString( "perk_"wClass"_allow_specialty_twoprimaries" ) > 0 ) );
+		
 	// primary weapon class dropdown
 	#define LOCAL_MASTER_CLASS_GROUP( suffix, pos, y_offset )\
 	menuDef {\
-		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_primary"suffix, 5, (CHOICE_X( pos )-2), (CHOICE_Y( pos )-4+y_offset), ;, execnow "set ui_inside_popup weapon_class; set ui_show_preview 1";, 1 )\
+		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_primary"suffix, 5, (CHOICE_X( pos )-2), (CHOICE_Y( pos )-4+y_offset), ;, LOCAL_WEAPON_ONOPEN, 1 )\
 		onClose{execnow "set ui_show_preview 0; set ui_primary_highlighted 0; set ui_attachment_highlighted 0";	}\
 		LOCAL_WEAPON_CLASS( 1, "assault", "@MPUI_ASSAULT_RIFLES" )\
 		LOCAL_WEAPON_CLASS( 2, "specops", "@MPUI_SUB_MACHINE_GUNS" )\
@@ -452,44 +466,44 @@
 	menuDef	{\
 		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_assault"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+20+y_offset), ;, LOCAL_WEAPON_CLASS_ONOPEN( REF_M16, "assault" ), 0 )\
 		LOCAL_WEAPON_INFO_WINDOW( "ui_primary_highlighted" )\
-		LOCAL_WEAPON_ITEM( suffix, 1, "@WEAPON_M16", "assault", REF_M16 )\
-		LOCAL_WEAPON_ITEM( suffix, 2, "@WEAPON_AK47", "assault", REF_AK47 )\
-		LOCAL_WEAPON_ITEM( suffix, 3, "@WEAPON_M4_CARBINE", "assault", REF_M4 )\
-		LOCAL_WEAPON_ITEM( suffix, 4, "@WEAPON_G3", "assault", REF_G3 )\
-		LOCAL_WEAPON_ITEM( suffix, 5, "@WEAPON_G36C", "assault", REF_G36C )\
-		LOCAL_WEAPON_ITEM( suffix, 6, "@WEAPON_M14", "assault", REF_M14 )\
-		LOCAL_WEAPON_ITEM2( suffix, 7, "@WEAPON_MP44", "assault", REF_MP44 )\
+		LOCAL_WEAPON_ITEM( 1, "@WEAPON_M16", "assault", REF_M16 )\
+		LOCAL_WEAPON_ITEM( 2, "@WEAPON_AK47", "assault", REF_AK47 )\
+		LOCAL_WEAPON_ITEM( 3, "@WEAPON_M4_CARBINE", "assault", REF_M4 )\
+		LOCAL_WEAPON_ITEM( 4, "@WEAPON_G3", "assault", REF_G3 )\
+		LOCAL_WEAPON_ITEM( 5, "@WEAPON_G36C", "assault", REF_G36C )\
+		LOCAL_WEAPON_ITEM( 6, "@WEAPON_M14", "assault", REF_M14 )\
+		LOCAL_WEAPON_ITEM2( 7, "@WEAPON_MP44", "assault", REF_MP44 )\
 	}\
 	menuDef	{\
 		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_heavygunner"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+20+y_offset), ;, LOCAL_WEAPON_CLASS_ONOPEN( REF_M249SAW, "heavygunner" ), 0 )\
 		LOCAL_WEAPON_INFO_WINDOW( "ui_primary_highlighted" )\
-		LOCAL_WEAPON_ITEM( suffix, 1, "@WEAPON_SAW", "heavygunner", REF_M249SAW )\
-		LOCAL_WEAPON_ITEM( suffix, 2, "@WEAPON_RPD", "heavygunner", REF_RPD )\
-		LOCAL_WEAPON_ITEM( suffix, 3, "@WEAPON_M60E4", "heavygunner", REF_M60E4 )\
+		LOCAL_WEAPON_ITEM( 1, "@WEAPON_SAW", "heavygunner", REF_M249SAW )\
+		LOCAL_WEAPON_ITEM( 2, "@WEAPON_RPD", "heavygunner", REF_RPD )\
+		LOCAL_WEAPON_ITEM( 3, "@WEAPON_M60E4", "heavygunner", REF_M60E4 )\
 	}\
 	menuDef	{\
 		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_specops"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+20+y_offset), ;, LOCAL_WEAPON_CLASS_ONOPEN( REF_MP5, "specops" ), 0 )\
 		LOCAL_WEAPON_INFO_WINDOW( "ui_primary_highlighted" )\
-		LOCAL_WEAPON_ITEM( suffix, 1, "@WEAPON_MP5", "specops", REF_MP5 )\
-		LOCAL_WEAPON_ITEM( suffix, 2, "@WEAPON_SKORPION", "specops", REF_SKORPION )\
-		LOCAL_WEAPON_ITEM( suffix, 3, "@WEAPON_UZI", "specops", REF_UZI )\
-		LOCAL_WEAPON_ITEM( suffix, 4, "@WEAPON_AK74U", "specops", REF_AK74U )\
-		LOCAL_WEAPON_ITEM( suffix, 5, "@WEAPON_P90", "specops", REF_P90 )\
+		LOCAL_WEAPON_ITEM( 1, "@WEAPON_MP5", "specops", REF_MP5 )\
+		LOCAL_WEAPON_ITEM( 2, "@WEAPON_SKORPION", "specops", REF_SKORPION )\
+		LOCAL_WEAPON_ITEM( 3, "@WEAPON_UZI", "specops", REF_UZI )\
+		LOCAL_WEAPON_ITEM( 4, "@WEAPON_AK74U", "specops", REF_AK74U )\
+		LOCAL_WEAPON_ITEM( 5, "@WEAPON_P90", "specops", REF_P90 )\
 	}\
 	menuDef	{\
 		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_demolitions"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+20+y_offset), ;, LOCAL_WEAPON_CLASS_ONOPEN( REF_WINCHESTER1200, "demolitions" ), 0 )\
 		LOCAL_WEAPON_INFO_WINDOW( "ui_primary_highlighted" )\
-		LOCAL_WEAPON_ITEM( suffix, 1, "@WEAPON_WINCHESTER1200", "demolitions", REF_WINCHESTER1200 )\
-		LOCAL_WEAPON_ITEM( suffix, 2, "@WEAPON_BENELLI", "demolitions", REF_BENELLIM4 )\
+		LOCAL_WEAPON_ITEM( 1, "@WEAPON_WINCHESTER1200", "demolitions", REF_WINCHESTER1200 )\
+		LOCAL_WEAPON_ITEM( 2, "@WEAPON_BENELLI", "demolitions", REF_BENELLIM4 )\
 	}\
 	menuDef	{\
 		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_sniper"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+20+y_offset), ;, LOCAL_WEAPON_CLASS_ONOPEN( REF_M40A3, "sniper" ), 0 )\
 		LOCAL_WEAPON_INFO_WINDOW( "ui_primary_highlighted" )\
-		LOCAL_WEAPON_ITEM( suffix, 1, "@WEAPON_M40A3", "sniper", REF_M40A3 )\
-		LOCAL_WEAPON_ITEM( suffix, 2, "@WEAPON_M21", "sniper", REF_M21 )\
-		LOCAL_WEAPON_ITEM( suffix, 3, "@WEAPON_DRAGUNOV", "sniper", REF_DRAGUNOVSVD )\
-		LOCAL_WEAPON_ITEM( suffix, 4, "@WEAPON_REMINGTON700", "sniper", REF_REMINGTON700 )\
-		LOCAL_WEAPON_ITEM( suffix, 5, "@WEAPON_BARRETT", "sniper", REF_BARRETT )\
+		LOCAL_WEAPON_ITEM( 1, "@WEAPON_M40A3", "sniper", REF_M40A3 )\
+		LOCAL_WEAPON_ITEM( 2, "@WEAPON_M21", "sniper", REF_M21 )\
+		LOCAL_WEAPON_ITEM( 3, "@WEAPON_DRAGUNOV", "sniper", REF_DRAGUNOVSVD )\
+		LOCAL_WEAPON_ITEM( 4, "@WEAPON_REMINGTON700", "sniper", REF_REMINGTON700 )\
+		LOCAL_WEAPON_ITEM( 5, "@WEAPON_BARRETT", "sniper", REF_BARRETT )\
 	}
 	
 
@@ -856,8 +870,10 @@
 		exec "set ui_perk_highlighted "perkRef;
 
 	#define LOCAL_PERK_VISIBLE( perkRef, visArg ) \
-		dvarBool( "perk_" + dvarString( loadout_class ) + "_allow_"perkRef ) && dvarBool( "perk_allow_"perkRef ) && ( dvarString(loadout_grenade)==REF_SMOKE_X1 && perkRef==REF_SPECIALGRENADE_X3 )==0 && visArg
-		
+		dvarBool( "perk_" + dvarString( loadout_class ) + "_allow_"perkRef ) &&\
+		dvarBool( "perk_allow_"perkRef ) &&\
+		( dvarString(loadout_grenade)==REF_SMOKE_X1 && perkRef==REF_SPECIALGRENADE_X3 )==0 && visArg
+
 	#define LOCAL_PERK_ITEM_VIS( itemNum, camoName, perkSlot, perkRef, highlight_dvar, paction, visArg )\
 		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, camoName, LOCAL_PERK_ACTION( perkSlot, perkRef, paction );, PI_FOCUS_ACTION( perkRef ), ;, \
 		when( LOCAL_PERK_VISIBLE( perkRef, visArg ) );, \
@@ -892,17 +908,20 @@
 
 	#define LOCAL_RESET_PISTOL \
 		execnowondvarstringvalue ui_dual_primaries 1 "set loadout_secondary "REF_M9BERETTA"; set loadout_secondary_attachment "REF_ATTACHMENT_NONE"; set ui_dual_primaries 0";\
+		scriptMenuResponse "validate:perks";\
 		UPDATE_PERK1;
 
 	#define LOCAL_INIT_DUAL_PRIMARY_M16 \
 		execnow "set loadout_secondary "REF_M16"; set loadout_secondary_attachment "REF_ATTACHMENT_NONE"; set ui_dual_primaries 1";\
 		scriptMenuResponse "set:secondary:"REF_M16;\
-   		scriptMenuResponse "set:secondary_attachment:"REF_ATTACHMENT_NONE;
+   		scriptMenuResponse "set:secondary_attachment:"REF_ATTACHMENT_NONE;\
+		scriptMenuResponse "validate:perks"
 
 	#define LOCAL_INIT_DUAL_PRIMARY_AK47 \
 		execnow "set loadout_secondary "REF_AK47"; set loadout_secondary_attachment "REF_ATTACHMENT_NONE"; set ui_dual_primaries 1";\
 		scriptMenuResponse "set:secondary:"REF_AK47;\
-   		scriptMenuResponse "set:secondary_attachment:"REF_ATTACHMENT_NONE;
+   		scriptMenuResponse "set:secondary_attachment:"REF_ATTACHMENT_NONE;\
+		scriptMenuResponse "validate:perks"
 
 	// perk2 selection for primary weapon popup menu
 	menuDef	

@@ -179,9 +179,16 @@ onMenuResponse( menu, response )
         return;
     }
 
-    if( response == "validate" )
+    if( response == "validate:perks" )
     {
         validateLoadoutData();
+        return;
+    }
+
+    if ( response == "allow:twoprimaries" )
+    {
+        updateAllowedItem( "specialty_twoprimaries", "perk2" );
+        return;
     }
 
     responseTok = strTok( response, ":" );
@@ -200,7 +207,10 @@ onMenuResponse( menu, response )
 
             if( isSubStr( tag, "perk" ) )
             {
-                if( isSubStr( className, "current" ) )
+                isCurrentClass = isSubStr( className, "current" );
+                isAllClasses = isSubStr( className, "all" );
+
+                if( isCurrentClass )
                 {
                     primaryClassName = getPlayerClassName( getLoadoutDataRef( "primary" ) );
 
@@ -208,15 +218,22 @@ onMenuResponse( menu, response )
 
                     if( getLoadoutDataRef("perk2") == "specialty_twoprimaries" )
                     {
+                        self iPrintLn( "PERK2 IS " + getLoadoutDataRef("perk2"));
+
                         secondaryClassName = getPlayerClassName( getLoadoutDataRef( "secondary" ) );
 
                         updateAllowedItems( secondaryClassName, tag, true );
                     }
                 }
 
-                if( isSubStr( className, "all" ) )
+                if( isAllClasses )
                 {
                     updateAllowedItems( "*all*", tag );
+                }
+
+                if( !isCurrentClass && !isAllClasses )
+                {
+                    updateAllowedItems( className, tag );
                 }
             }
             // if weapon or attachment, only update for current class as they are not used by other classes
@@ -227,6 +244,34 @@ onMenuResponse( menu, response )
         }
     }
 }
+
+
+updateAllowedItem( itemName, tag )
+{
+    for( allowIndex = 0; allowIndex < level.cacIngame.allowedItems.size; allowIndex++ )
+    {
+        allowedItem = level.cacIngame.allowedItems[allowIndex];
+
+        if( allowedItem.tag == tag && allowedItem.itemName == itemName )
+        {
+            self setClientDvar( allowedItem.dvarName, allowedItem.dvarValue );
+
+            debugLog = "[CAC Ingame] Item ^3" + itemName + "^7 in group ^3" + tag + "^7 for class ^3" + allowedItem.className + "^7 is";
+
+            if( allowedItem.dvarValue == 1 )
+            {
+                debugLog += "^2 allowed";
+            }
+            else
+            {
+                debugLog += "^1 NOT allowed";
+            }
+
+            self iPrintLn( debugLog + " dvar ^3" + allowedItem.dvarName);
+        }
+    }
+}
+
 
 updateAllowedItems( className, tag, updateOnlyNotAllowedItems )
 {
@@ -244,7 +289,7 @@ updateAllowedItems( className, tag, updateOnlyNotAllowedItems )
         {
             self setClientDvar( allowedItem.dvarName, allowedItem.dvarValue );
 
-            debugLog = "[CAC Ingame] Item ^3" + allowedItem.itemName + "^7 in group ^3" + allowedItem.tag + "^7 for class ^3" + className + "^7 is";
+            debugLog = "[CAC Ingame] Item ^3" + allowedItem.itemName + "^7 in group ^3" + tag + "^7 for class ^3" + className + "^7 is";
 
             if( allowedItem.dvarValue == 1 )
             {
@@ -255,7 +300,7 @@ updateAllowedItems( className, tag, updateOnlyNotAllowedItems )
                 debugLog += "^1 NOT allowed";
             }
 
-            self iPrintLn( debugLog );
+            self iPrintLn( debugLog + " dvar ^3" + allowedItem.dvarName);
         }
     }
 
@@ -325,7 +370,8 @@ initLoadoutData( classInfoIndex )
     self setClientDvars
     (
          "loadout_class_name", level.cacIngame.classInfo[classInfoIndex].name,
-         "loadout_class", getPlayerClassName( getLoadoutDataRef("primary") )
+         "loadout_class", getPlayerClassName( getLoadoutDataRef("primary") ),
+         "loadout_class_secondary", getPlayerClassName( getLoadoutDataRef("secondary") )
     );
 }
 
@@ -598,6 +644,9 @@ validateLoadoutSecondaryWeapon()
 
     if( getLoadoutDataRef("perk2") == "specialty_twoprimaries" )
     {
+        //Todo: validate primary and secondary weapons combination and weapons allowed with twoprimaries perk. 
+        //Now it managed in ui logic.
+
         validateLoadoutItem( className, "secondary", "weap" );
         validateLoadoutItem( className, "secondary_attachment", "atch" );
 
