@@ -446,7 +446,7 @@ REFERENCE OBJECTIVES_SHARPSHOOTER_HINT
 LANG_RUSSIAN "Уничтожьте всех других игроков."
 
 REFERENCE SHARPSHOOTER_CLYCLING_IN
-LANG_RUSSIAN "Смена оружия через: ^3&&1"
+LANG_RUSSIAN "Смена оружия через: &&1"
 
 
 //******************************************************************************

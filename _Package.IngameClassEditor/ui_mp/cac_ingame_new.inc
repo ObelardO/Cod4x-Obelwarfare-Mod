@@ -289,7 +289,7 @@
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 58 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/statstable.csv",4,dvarString(highlight_dvar),3), TEXTSIZE_DEFAULT, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( dvarString(ui_inside_popup) != "attachment" && dvarString(ui_inside_popup) != "camo" ); ) \
 		/* weapon desc unlocked*/\
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/statstable.csv",4,dvarString(highlight_dvar),7), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, CHOICE_TEXTCOLOR visible when( dvarBool( ui_primary_hl_unlocked ) ); )\
-		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@MENU_DISABLED", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( !dvarBool( ui_primary_hl_unlocked ) && !dvarBool( ui_primary_equipped_overkill ) ); )\
+		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@OW_ICE_LOCK_SERVER", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( !dvarBool( ui_primary_hl_unlocked ) && !dvarBool( ui_primary_equipped_overkill ) ); )\
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@OW_ICE_LOCK_EQUIPPED", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( !dvarBool( ui_primary_hl_unlocked ) && dvarBool( ui_primary_equipped_overkill ) ); )\
 		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+6) 0 (CHOICE_SIZE_Y*2) CHOICE_SIZE_Y CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "specialty_locked", 1 1 1 1, 0, 2, CHOICE_POPUP_BORDER_COLOR visible when( !dvarBool( ui_primary_hl_unlocked ) ); ) \
 		PREPROC_SHADER_DRAW_ALIGNED( 0 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "white", 0.15 0.15 0.17 1, 0, 2, CHOICE_POPUP_BORDER_COLOR )\
@@ -522,7 +522,7 @@
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 58 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/attachmentTable.csv",4,dvarString(ui_attachment_highlighted),3), TEXTSIZE_DEFAULT, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( dvarString(ui_inside_popup) != "camo" ); ) \
 		/* attachment desc unlocked*/\
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/attachmentTable.csv",4,dvarString(ui_attachment_highlighted),7), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, CHOICE_TEXTCOLOR visible when( dvarBool( ui_attachment_hl_unlocked ) ); )\
-		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@MENU_DISABLED", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( !dvarBool( ui_attachment_hl_unlocked ) ); )\
+		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@OW_ICE_LOCK_SERVER", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( !dvarBool( ui_attachment_hl_unlocked ) ); )\
 		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+6) 0 (CHOICE_SIZE_Y*2) CHOICE_SIZE_Y CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "specialty_locked", 1 1 1 1, 0, 2, CHOICE_POPUP_BORDER_COLOR visible when( !dvarBool( ui_attachment_hl_unlocked ) && dvarString(ui_inside_popup) != "camo" ); ) \
 		PREPROC_SHADER_DRAW_ALIGNED( 0 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "white", 0.15 0.15 0.17 1, 0, 2, CHOICE_POPUP_BORDER_COLOR visible when( dvarBool( ui_inside_popup_nested ) ); )\
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( 8 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, -32 0, "@"+tablelookup("mp/statstable.csv",4,dvarString(parentDvar),3), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_RIGHT, CHOICE_TEXTCOLOR visible when( dvarBool( ui_inside_popup_nested ) ); )\
@@ -668,7 +668,7 @@
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 58 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/statstable.csv",4,dvarString(highlight_dvar),3), TEXTSIZE_DEFAULT, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( dvarString(ui_inside_popup) != "attachment" ); ) \
 		/* sidearm desc unlocked*/\
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/statstable.csv",4,dvarString(highlight_dvar),7), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, CHOICE_TEXTCOLOR visible when( dvarBool( ui_sidearm_hl_unlocked ) ); )\
-		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@MENU_DISABLED", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( !dvarBool( ui_sidearm_hl_unlocked ) ); )\
+		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@OW_ICE_LOCK_SERVER", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( !dvarBool( ui_sidearm_hl_unlocked ) ); )\
 		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+6) 0 (CHOICE_SIZE_Y*2) CHOICE_SIZE_Y CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "specialty_locked", 1 1 1 1, 0, 2, CHOICE_POPUP_BORDER_COLOR visible when( !dvarBool( ui_sidearm_hl_unlocked ) ); ) \
 
 	#define LOCAL_SIDEARM_ACTION( wRef ) \
@@ -797,7 +797,7 @@
 		/* special grenade desc unlocked*/\
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 56 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/statstable.csv",4,dvarString(highlight_dvar),7), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, CHOICE_TEXTCOLOR \
 		visible when( ( ( dvarString(ui_sgrenade_highlighted)=="smoke_grenade") && (dvarString( loadout_perk1 )=="specialty_specialgrenade") ) == 0 ); )\
-		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 56 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@MENU_DISABLED", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE \
+		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 56 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@OW_ICE_LOCK_PERK", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE \
 		visible when( (dvarString(ui_sgrenade_highlighted)=="smoke_grenade") && (dvarString( loadout_perk1 )=="specialty_specialgrenade") ); )
 
 	#define LOCAL_SGRENADE_ACTION( wRef ) \
@@ -895,11 +895,10 @@
 			visible when( LOCAL_PERK_INFO_EQUIPPED( perkSlot ) ); )\
 		/* perk desc locked - greanade*/\
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0,  "@OW_ICE_LOCK_FRAG", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE \
-			visible when( LOCAL_PERK_INFO_NOT_ALLOWED_GRENADE ); )
-/*
+			visible when( LOCAL_PERK_INFO_NOT_ALLOWED_GRENADE ); )\
+		/* perk desc locked image*/\
 		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+6) 0 (CHOICE_SIZE_Y*2) CHOICE_SIZE_Y CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "specialty_locked", 1 1 1 1, 0, 2, CHOICE_POPUP_BORDER_COLOR \
-		visible when( !dvarBool( ui_perk_hl_unlocked ) || !dvarBool( "perk_"+dvarString( loadout_class )+"_allow_"+dvarString( ui_perk_hl_ref )) ); ) \
-*/
+			visible when( dvarBool( ui_perk_hl_locked ) ); )
 
 	#define LOCAL_PERK_ACTION( perkSlot, perkRef, paction ) \
 			play "mouse_click"; \
@@ -911,10 +910,13 @@
 	#define LOCAL_PERK_ITEM( itemNum, camoName, perkSlot, perkRef, paction )\
 		LOCAL_PERK_ITEM_VIS( itemNum, camoName, perkSlot, perkRef, paction, 1 )
 
-	#define PI_FOCUS_ACTION( perkRef ) \
-		execOnDvarStringValue "perk_allow_"perkRef 0 "set ui_perk_hl_unlocked 0";\
-		execOnDvarStringValue "perk_allow_"perkRef 1 "set ui_perk_hl_unlocked 1";\
-		exec "set ui_perk_hl_ref "perkRef;
+	#define PI_FOCUS_ACTION( perkRef )\
+		exec "set ui_perk_hl_ref "perkRef;\
+		exec "set ui_perk_hl_locked 0";
+
+	#define PI_FOCUS_LOCKED_ACTION( perkRef )\
+		PI_FOCUS_ACTION( perkRef );\
+		exec "set ui_perk_hl_locked 1";
 
 	#define LOCAL_PERK_ALLOWED( perkRef )\
 		dvarBool( "perk_allow_"perkRef )
@@ -934,14 +936,14 @@
 	#define LOCAL_PERK_NOT_EQUIPPED( perkSlot, perkRef )\
 		dvarString( "loadout_"perkSlot ) != perkRef
 
-	#define LOCAL_PERK_CHOICE_VISIBLE( perkSlot, perkRef )\
+	#define LOCAL_PERK_CHOICE_NOT_LOCKED( perkSlot, perkRef )\
 		LOCAL_PERK_NOT_EQUIPPED( perkSlot, perkRef ) &&\
 		LOCAL_PERK_ALLOWED( perkRef ) &&\
 		LOCAL_PERK_ALLOWED_CLASS( loadout_class, perkRef ) &&\
 		LOCAL_PERK_ALLOWED_GRENADE( perkRef ) &&\
 		LOCAL_PERK_ALLOWED_OVERKILL( perkRef )
 
-	#define LOCAL_PERK_CHOICE_NOT_VISIBLE( perkSlot, perkRef )\
+	#define LOCAL_PERK_CHOICE_IS_LOCKED( perkSlot, perkRef )\
 		LOCAL_PERK_EQUIPPED( perkSlot, perkRef ) ||\
 		LOCAL_PERK_ALLOWED( perkRef ) == 0 ||\
 		LOCAL_PERK_ALLOWED_CLASS( loadout_class, perkRef ) == 0 ||\
@@ -949,9 +951,9 @@
 		( perkRef != REF_TWOPRIMARIES && dvarString( loadout_perk2 ) == REF_TWOPRIMARIES && LOCAL_PERK_ALLOWED_CLASS( loadout_class_secondary, perkRef ) == 0 )
 
 	#define LOCAL_PERK_ITEM_VIS( itemNum, camoName, perkSlot, perkRef, paction, visArg )\
-		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, camoName, LOCAL_PERK_ACTION( perkSlot, perkRef, paction );, PI_FOCUS_ACTION( perkRef ), ;, when( LOCAL_PERK_CHOICE_VISIBLE( perkSlot, perkRef ) && visArg );, 0 )\
-		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;,PI_FOCUS_ACTION( perkRef ), ;, when( LOCAL_PERK_CHOICE_NOT_VISIBLE( perkSlot, perkRef ) && visArg ); )\
-		CHOICE_DBUTTON_VIS( itemNum, camoName, when( LOCAL_PERK_CHOICE_NOT_VISIBLE( perkSlot, perkRef ) && visArg ); )
+		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, camoName, LOCAL_PERK_ACTION( perkSlot, perkRef, paction );, PI_FOCUS_ACTION( perkRef ), ;, when( LOCAL_PERK_CHOICE_NOT_LOCKED( perkSlot, perkRef ) && visArg );, 0 )\
+		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;,PI_FOCUS_LOCKED_ACTION( perkRef ), ;, when( LOCAL_PERK_CHOICE_IS_LOCKED( perkSlot, perkRef ) && visArg ); )\
+		CHOICE_DBUTTON_VIS( itemNum, camoName, when( LOCAL_PERK_CHOICE_IS_LOCKED( perkSlot, perkRef ) && visArg ); )
 
 	#define LOCAL_PERK_ONOPEN( perkRef, perkSlot )\
 		execnow "set "UI_FOCUSFIRST" "perkRef"; set ui_inside_popup "perkSlot;\

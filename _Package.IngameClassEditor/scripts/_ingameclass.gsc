@@ -181,7 +181,7 @@ onMenuResponse( menu, response )
 
     if( response == "validate:perks" )
     {
-        validateLoadoutData();
+        validateLoadoutPerks();
         return;
     }
 
@@ -622,6 +622,8 @@ validateLoadoutData()
 
     validateLoadoutSecondaryWeapon();
 
+    validateLoadoutPerks();
+
     validateLoadoutItem( "grenade", "grenade", "weap" );
 }
 
@@ -633,8 +635,6 @@ validateLoadoutPrimaryWeapon()
 
     validateLoadoutItem( className, "primary", "weap" );
     validateLoadoutItem( className, "primary_attachment", "atch" );
-
-    validatePerks( className );
 }
 
 
@@ -650,8 +650,6 @@ validateLoadoutSecondaryWeapon()
 
         validateLoadoutItem( className, "secondary", "weap" );
         validateLoadoutItem( className, "secondary_attachment", "atch" );
-
-        validatePerks( className );
     }
     else
     {
@@ -661,7 +659,19 @@ validateLoadoutSecondaryWeapon()
 }
 
 
-validatePerks( className )
+validateLoadoutPerks()
+{
+    primaryClassName = getPlayerClassName( getLoadoutDataRef("primary") );
+    validateLoadoutClassPerks( primaryClassName );
+
+    if( getLoadoutDataRef("perk2") == "specialty_twoprimaries" )
+    {
+        secondaryClassName = getPlayerClassName( getLoadoutDataRef("secondary") );
+        validateLoadoutClassPerks( secondaryClassName );
+    }
+}
+
+validateLoadoutClassPerks( className )
 {
     validateLoadoutItem( className, "perk1", "perk1" );
     validateLoadoutItem( className, "perk2", "perk2" );

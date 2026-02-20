@@ -25,6 +25,9 @@ LANG_ENGLISH "Incompatible with the selected weapon type."
 REFERENCE LOCK_FRAG
 LANG_ENGLISH "Incompatible with the selected special grenade."
 
+REFERENCE LOCK_PERK
+LANG_ENGLISH "Incompatible with the selected perk: Special grenade x 3"
+
 REFERENCE LOCK_SERVER
 LANG_ENGLISH "Not available on this server."
 
