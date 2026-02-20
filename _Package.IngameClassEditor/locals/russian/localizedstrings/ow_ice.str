@@ -16,8 +16,17 @@ FILENOTES        ""
 //******************************************************************************
 // ui_mp/scriptmenus/cac_ingame.menu
 //******************************************************************************
-REFERENCE EQUIPPED
+REFERENCE LOCK_EQUIPPED
 LANG_RUSSIAN "Экипировано."
+
+REFERENCE LOCK_CLASS
+LANG_RUSSIAN "Несовместимо с выбранным типом оружия."
+
+REFERENCE LOCK_FRAG
+LANG_RUSSIAN "Несовместимо с выбранной спец. гранатой."
+
+REFERENCE LOCK_SERVER
+LANG_RUSSIAN "Недоступно на данном сервере."
 
 REFERENCE TITLE
 LANG_RUSSIAN "ИЗМЕНИТЬ КЛАСС"

@@ -11,7 +11,7 @@
 //            Website: http://openwarfaremod.com/
 //******************************************************************************
 
-#define OPENWARFARE_VERSION "obelwarfare mod v5.1205 (RU)"
+#define OBELWARFARE_VERSION "obelwarfare mod v6.220 (RU)"
 
 #include "ui/menudef.h"
 #include "ui_mp/common_macro.inc"
@@ -114,7 +114,7 @@
 			textstyle		ITEM_TEXTSTYLE_SHADOWED
 			//textAlign		ITEM_ALIGN_MIDDLE_LEFT
 			forecolor		1 1 1 0.1
-			text			OPENWARFARE_VERSION
+			text			OBELWARFARE_VERSION
 			visible			when( !localvarBool( ui_hideBack ) );
 			decoration	
 		}
@@ -156,7 +156,7 @@
 		CHOICE_BUTTON_VIS( 9, "@MENU_QUIT", open quit_popmenu;, when( !localvarBool( ui_hideBack ) ) )
 
 		//CHOICE_FOOTNOTE_VIS( "@MENU_GAME_EXPERIENCE_MAY_CHANGE", 40, 420, when( !localvarBool( ui_hideBack ) ) )
-		//CHOICE_FOOTNOTE_VIS( OPENWARFARE_VERSION, 40, 420, when( !localvarBool( ui_hideBack ) ) )
+		//CHOICE_FOOTNOTE_VIS( OBELWARFARE_VERSION, 40, 420, when( !localvarBool( ui_hideBack ) ) )
 	}
 
 	#include "ui_mp/popupstyle.inc"

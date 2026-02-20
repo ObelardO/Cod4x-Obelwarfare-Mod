@@ -290,7 +290,7 @@
 		/* weapon desc unlocked*/\
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/statstable.csv",4,dvarString(highlight_dvar),7), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, CHOICE_TEXTCOLOR visible when( dvarBool( ui_primary_hl_unlocked ) ); )\
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@MENU_DISABLED", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( !dvarBool( ui_primary_hl_unlocked ) && !dvarBool( ui_primary_equipped_overkill ) ); )\
-		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@OW_ICE_EQUIPPED", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( !dvarBool( ui_primary_hl_unlocked ) && dvarBool( ui_primary_equipped_overkill ) ); )\
+		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@OW_ICE_LOCK_EQUIPPED", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( !dvarBool( ui_primary_hl_unlocked ) && dvarBool( ui_primary_equipped_overkill ) ); )\
 		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+6) 0 (CHOICE_SIZE_Y*2) CHOICE_SIZE_Y CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "specialty_locked", 1 1 1 1, 0, 2, CHOICE_POPUP_BORDER_COLOR visible when( !dvarBool( ui_primary_hl_unlocked ) ); ) \
 		PREPROC_SHADER_DRAW_ALIGNED( 0 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "white", 0.15 0.15 0.17 1, 0, 2, CHOICE_POPUP_BORDER_COLOR )\
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( 8 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, -32 0, dvarString(ui_weapon_class_selected), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_RIGHT, CHOICE_TEXTCOLOR ) \
@@ -423,21 +423,18 @@
 	#define LOCAL_WEAPON_CLASS_ACTION_OVERKILL( wClass, className ) \
 		LOCAL_WEAPON_CLASS_ACTION( wClass, className )\
 		scriptMenuResponse "allow:"wClass":perk2";
-
-	
+	/*
 	#define LOCAL_WEAPON_CLASS( itemNum, wClass, className ) \
 		CHOICE_BUTTON_EX( itemNum, className, LOCAL_WEAPON_CLASS_ACTION( wClass, className ), name wClass; )
-	
-
+	*/
+	#define LOCAL_WEAPON_CLASS( itemNum, wClass, className )\
+		CHOICE_BUTTON_FOCUS_VIS( itemNum, className, LOCAL_WEAPON_CLASS_ACTION( wClass, className );, ;, ;, when( dvarString( ui_primary_selected ) == "primary" ) );\
+		CHOICE_BUTTON_FOCUS_VIS( itemNum, className, LOCAL_WEAPON_CLASS_ACTION_OVERKILL( wClass, className );, ;, ;, when( dvarString( ui_primary_selected ) == "secondary" && dvarString( "perk_"wClass"_allow_specialty_twoprimaries" ) > 0 ) );\
+		CHOICE_DBUTTON_VIS( itemNum, className, when( dvarString( ui_primary_selected ) == "secondary" && dvarString( "perk_"wClass"_allow_specialty_twoprimaries" ) == 0 ); )
+		
 	#define LOCAL_WEAPON_ONOPEN\
 		execnow "set ui_inside_popup weapon_class; set ui_show_preview 1";\
 		scriptMenuResponse "allow:twoprimaries";
-
-	/*
-	#define LOCAL_WEAPON_CLASS( itemNum, wClass, className )\
-		CHOICE_BUTTON_FOCUS_VIS( itemNum, className, LOCAL_WEAPON_CLASS_ACTION( wClass, className );, ;, ;, when( dvarString( ui_primary_selected ) == "primary" ) );\
-		CHOICE_BUTTON_FOCUS_VIS( itemNum, className, LOCAL_WEAPON_CLASS_ACTION_OVERKILL( wClass, className );, ;, ;, when( dvarString( ui_primary_selected ) == "secondary" && dvarString( "perk_"wClass"_allow_specialty_twoprimaries" ) > 0 ) );
-	*/	
 
 	// primary weapon class dropdown
 	#define LOCAL_MASTER_CLASS_GROUP( suffix, pos, y_offset )\
@@ -842,6 +839,18 @@
 	#define LOCAL_PERK_INFO_ALLOWED\
 		dvarBool( "perk_allow_" + dvarString( ui_perk_hl_ref ) )
 
+	#define LOCAL_PERK_INFO_EQUIPPED( perkSlot )\
+		dvarString( "loadout_"perkSlot ) == dvarString( ui_perk_hl_ref )
+
+	#define LOCAL_PERK_INFO_NOT_EQUIPPED( perkSlot )\
+		dvarString( "loadout_"perkSlot ) != dvarString( ui_perk_hl_ref )
+
+	#define LOCAL_PERK_INFO_ALLOWED_GRENADE\
+		( dvarString( ui_perk_hl_ref ) != REF_SPECIALGRENADE_X3 || dvarString( loadout_grenade ) != REF_SMOKE_X1 )
+
+	#define LOCAL_PERK_INFO_NOT_ALLOWED_GRENADE\
+		( dvarString( ui_perk_hl_ref ) == REF_SPECIALGRENADE_X3 && dvarString( loadout_grenade ) == REF_SMOKE_X1 )
+
 	#define LOCAL_PERK_INFO_ALLOWED_CLASS( weaponSlot )\
 		dvarBool( "perk_" + dvarString( weaponSlot ) + "_allow_" + dvarString( ui_perk_hl_ref ) )
 	
@@ -849,17 +858,17 @@
 		( dvarString( loadout_perk2 ) != REF_TWOPRIMARIES || LOCAL_PERK_INFO_ALLOWED_CLASS( loadout_class_secondary ) )
 
 	#define LOCAL_PERK_INFO_NOT_ALLOWED_OVERKILL\
-		( dvarString( ui_perk_hl_ref ) == REF_TWOPRIMARIES && LOCAL_PERK_INFO_ALLOWED_CLASS( loadout_class_secondary ) == 0 )
-
+		( dvarString( ui_perk_hl_ref ) != REF_TWOPRIMARIES && dvarString( loadout_perk2 ) == REF_TWOPRIMARIES && LOCAL_PERK_INFO_ALLOWED_CLASS( loadout_class_secondary ) == 0 )
+	
 	#define LOCAL_PERK_INFO_VISIBLE( perkSlot )\
-		/* PERK NOT EQUIPED */\
-		dvarString( "loadout_"perkSlot ) != dvarString( ui_perk_hl_ref ) &&\
-		/* PERK ALLOWED */\  
+		/* PERK NOT EQUIPPED */\
+		LOCAL_PERK_INFO_NOT_EQUIPPED( perkSlot ) &&\
+		/* PERK ALLOWED */\
 		LOCAL_PERK_INFO_ALLOWED &&\
 		/* PERK ALLOWED FOR CLASS */\
 		LOCAL_PERK_INFO_ALLOWED_CLASS( loadout_class ) &&\
 		/* PERK ALLOWED BY GRENADE*/\
-		( dvarString( ui_perk_hl_ref ) != REF_SPECIALGRENADE_X3 || dvarString( loadout_grenade ) != REF_SMOKE_X1 ) &&\
+		LOCAL_PERK_INFO_ALLOWED_GRENADE &&\
 		/* PERK ALLOWED BY OVERKILL WEAPON CLASS */\
 		LOCAL_PERK_INFO_ALLOWED_OVERKILL
 
@@ -876,20 +885,20 @@
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0,  "@"+tablelookup("mp/statsTable.csv",4,dvarString( ui_perk_hl_ref ),7), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, CHOICE_TEXTCOLOR\
 			visible when( LOCAL_PERK_INFO_VISIBLE( perkSlot ) ); )\
 		/* perk desc locked - global*/\
-		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0,  "Disabled on server", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE \
+		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0,  "@OW_ICE_LOCK_SERVER", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE \
 			visible when( LOCAL_PERK_INFO_ALLOWED == 0 ); )\
 		/* perk desc locked - class*/\
-		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0,  "Can't use with selected weapon", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE \
+		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0,  "@OW_ICE_LOCK_CLASS", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE \
 			visible when( LOCAL_PERK_INFO_ALLOWED && ( LOCAL_PERK_INFO_ALLOWED_CLASS( loadout_class ) == 0 || LOCAL_PERK_INFO_NOT_ALLOWED_OVERKILL ) ); )\
-
+		/* perk desc locked - equipped*/\
+		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0,  "@OW_ICE_LOCK_EQUIPPED", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE \
+			visible when( LOCAL_PERK_INFO_EQUIPPED( perkSlot ) ); )\
+		/* perk desc locked - greanade*/\
+		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0,  "@OW_ICE_LOCK_FRAG", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE \
+			visible when( LOCAL_PERK_INFO_NOT_ALLOWED_GRENADE ); )
 /*
-		\
-		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0,  "@MENU_DISABLED", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE \
-		visible when( !dvarBool( ui_perk_hl_unlocked ) || !dvarBool( "perk_"+dvarString( loadout_class )+"_allow_"+dvarString( ui_perk_hl_ref )) || ( dvarString( loadout_grenade )=="smoke_grenade" && dvarString( ui_perk_hl_ref )=="specialty_specialgrenade" ) ); )\
-		\
 		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+6) 0 (CHOICE_SIZE_Y*2) CHOICE_SIZE_Y CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "specialty_locked", 1 1 1 1, 0, 2, CHOICE_POPUP_BORDER_COLOR \
 		visible when( !dvarBool( ui_perk_hl_unlocked ) || !dvarBool( "perk_"+dvarString( loadout_class )+"_allow_"+dvarString( ui_perk_hl_ref )) ); ) \
-
 */
 
 	#define LOCAL_PERK_ACTION( perkSlot, perkRef, paction ) \
@@ -919,21 +928,21 @@
 	#define LOCAL_PERK_ALLOWED_OVERKILL( perkRef )\
 		( dvarString( loadout_perk2 ) != REF_TWOPRIMARIES || LOCAL_PERK_ALLOWED_CLASS( loadout_class_secondary, perkRef ) )
 
-	#define LOCAL_PERK_EQUIPED( perkSlot, perkRef )\
+	#define LOCAL_PERK_EQUIPPED( perkSlot, perkRef )\
 		dvarString( "loadout_"perkSlot ) == perkRef
 
-	#define LOCAL_PERK_NOT_EQUIPED( perkSlot, perkRef )\
+	#define LOCAL_PERK_NOT_EQUIPPED( perkSlot, perkRef )\
 		dvarString( "loadout_"perkSlot ) != perkRef
 
 	#define LOCAL_PERK_CHOICE_VISIBLE( perkSlot, perkRef )\
-		LOCAL_PERK_NOT_EQUIPED( perkSlot, perkRef ) &&\
+		LOCAL_PERK_NOT_EQUIPPED( perkSlot, perkRef ) &&\
 		LOCAL_PERK_ALLOWED( perkRef ) &&\
 		LOCAL_PERK_ALLOWED_CLASS( loadout_class, perkRef ) &&\
 		LOCAL_PERK_ALLOWED_GRENADE( perkRef ) &&\
 		LOCAL_PERK_ALLOWED_OVERKILL( perkRef )
 
 	#define LOCAL_PERK_CHOICE_NOT_VISIBLE( perkSlot, perkRef )\
-		LOCAL_PERK_EQUIPED( perkSlot, perkRef ) ||\
+		LOCAL_PERK_EQUIPPED( perkSlot, perkRef ) ||\
 		LOCAL_PERK_ALLOWED( perkRef ) == 0 ||\
 		LOCAL_PERK_ALLOWED_CLASS( loadout_class, perkRef ) == 0 ||\
 		( perkRef == REF_SPECIALGRENADE_X3 && dvarString( loadout_grenade ) == REF_SMOKE_X1 ) ||\
@@ -973,13 +982,13 @@
 		UPDATE_PERK1;
 
 	#define LOCAL_INIT_DUAL_PRIMARY_M16 \
-		execnow "set loadout_secondary "REF_M16"; set loadout_secondary_attachment "REF_ATTACHMENT_NONE"; set ui_dual_primaries 1";\
+		execnow "set loadout_class_secondary assault; set loadout_secondary "REF_M16"; set loadout_secondary_attachment "REF_ATTACHMENT_NONE"; set ui_dual_primaries 1";\
 		scriptMenuResponse "set:secondary:"REF_M16;\
    		scriptMenuResponse "set:secondary_attachment:"REF_ATTACHMENT_NONE;\
 		scriptMenuResponse "validate:perks"
 
 	#define LOCAL_INIT_DUAL_PRIMARY_AK47 \
-		execnow "set loadout_secondary "REF_AK47"; set loadout_secondary_attachment "REF_ATTACHMENT_NONE"; set ui_dual_primaries 1";\
+		execnow "set loadout_class_secondary assault; set loadout_secondary "REF_AK47"; set loadout_secondary_attachment "REF_ATTACHMENT_NONE"; set ui_dual_primaries 1";\
 		scriptMenuResponse "set:secondary:"REF_AK47;\
    		scriptMenuResponse "set:secondary_attachment:"REF_ATTACHMENT_NONE;\
 		scriptMenuResponse "validate:perks"

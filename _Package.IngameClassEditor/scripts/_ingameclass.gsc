@@ -120,13 +120,13 @@ prepareAndOpenMenuThread()
         }
     }
 
-    self iPrintLn( "[CAC Ingame] Processed " + level.cacIngame.allowedItems.size + " allowed items" );
+    //self iPrintLn( "[CAC Ingame] Processed " + level.cacIngame.allowedItems.size + " allowed items" );
 }
 
 
 onMenuResponse( menu, response )
 {
-    self iPrintLn( "RAW RES: " + response );
+    //self iPrintLn( "RAW RES: " + response );
 
     if( menu == game["menu_changeclass"] && response != "back" )
     {
@@ -218,7 +218,7 @@ onMenuResponse( menu, response )
 
                     if( getLoadoutDataRef("perk2") == "specialty_twoprimaries" )
                     {
-                        self iPrintLn( "PERK2 IS " + getLoadoutDataRef("perk2"));
+                        //self iPrintLn( "PERK2 IS " + getLoadoutDataRef("perk2"));
 
                         secondaryClassName = getPlayerClassName( getLoadoutDataRef( "secondary" ) );
 
@@ -256,6 +256,7 @@ updateAllowedItem( itemName, tag )
         {
             self setClientDvar( allowedItem.dvarName, allowedItem.dvarValue );
 
+            /*
             debugLog = "[CAC Ingame] Item ^3" + itemName + "^7 in group ^3" + tag + "^7 for class ^3" + allowedItem.className + "^7 is";
 
             if( allowedItem.dvarValue == 1 )
@@ -268,6 +269,7 @@ updateAllowedItem( itemName, tag )
             }
 
             self iPrintLn( debugLog + " dvar ^3" + allowedItem.dvarName);
+            */
         }
     }
 }
@@ -288,9 +290,9 @@ updateAllowedItems( className, tag, updateOnlyNotAllowedItems )
         if( allowedItem.className == className && allowedItem.tag == tag )
         {
             self setClientDvar( allowedItem.dvarName, allowedItem.dvarValue );
-
+            /*
             debugLog = "[CAC Ingame] Item ^3" + allowedItem.itemName + "^7 in group ^3" + tag + "^7 for class ^3" + className + "^7 is";
-
+            
             if( allowedItem.dvarValue == 1 )
             {
                 debugLog += "^2 allowed";
@@ -301,6 +303,7 @@ updateAllowedItems( className, tag, updateOnlyNotAllowedItems )
             }
 
             self iPrintLn( debugLog + " dvar ^3" + allowedItem.dvarName);
+            */
         }
     }
 
@@ -640,8 +643,6 @@ validateLoadoutSecondaryWeapon()
     className = getPlayerClassName( getLoadoutDataRef("secondary") );
     //self iPrintLn( "[CAC Ingame] Validating: secondary class ^2" + className);
 
-    self iPrintLn( "PERK2 IS " + getLoadoutDataRef("perk2"));
-
     if( getLoadoutDataRef("perk2") == "specialty_twoprimaries" )
     {
         //Todo: validate primary and secondary weapons combination and weapons allowed with twoprimaries perk. 
@@ -684,14 +685,14 @@ validateLoadoutItem( className, dataType, tag )
     {
         self setClientDvar( dvarName, itemValueRefValidated );
 
-        debugLog = "[CAC Ingame] Validated: ^2" + dataType + "^7 ref ^2" + itemValueRefValidated + "^7 (from ^1" + itemValueRef + "^7) in class ^2" + className + "^7 with tag ^2" + tag;
+        //debugLog = "[CAC Ingame] Validated: ^2" + dataType + "^7 ref ^2" + itemValueRefValidated + "^7 (from ^1" + itemValueRef + "^7) in class ^2" + className + "^7 with tag ^2" + tag;
     }
     else
     {
-        debugLog = "[CAC Ingame] Validated: ^2" + dataType + "^7 ref ^2" + itemValueRefValidated + "^7 (from ^2" + itemValueRef + "^7) in class ^2" + className + "^7 with tag ^2" + tag;
+        //debugLog = "[CAC Ingame] Validated: ^2" + dataType + "^7 ref ^2" + itemValueRefValidated + "^7 (from ^2" + itemValueRef + "^7) in class ^2" + className + "^7 with tag ^2" + tag;
     }
 
-    self iPrintLn( debugLog );
+    //self iPrintLn( debugLog );
 }
 
 

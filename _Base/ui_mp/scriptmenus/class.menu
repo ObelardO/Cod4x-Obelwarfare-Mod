@@ -151,9 +151,9 @@
 		#define CHOICE_HORIZONTAL_ALIGN HORIZONTAL_ALIGN_CENTER	
 
 		#undef 	MAY_CHOOSE_CLASS
-		#define MAY_CHOOSE_CLASS	( dvarInt( scr_oldschool ) != 1 && !inkillcam() )
+		//#define MAY_CHOOSE_CLASS	( dvarInt( scr_oldschool ) != 1 && !inkillcam() )
+		#define MAY_CHOOSE_CLASS	( dvarInt( scr_oldschool ) != 1 )
 		
-
 		CHOICE_BUTTON_BG( 1, when( (TEAM_IS_MARINES || TEAM_IS_OPFOR) && MAY_CHOOSE_CLASS ) )
 		CHOICE_HIGHLIGHT( 1, (TEAM_IS_MARINES || TEAM_IS_OPFOR) && MAY_CHOOSE_CLASS )
 		CHOICE_BUTTON_VIS_NOHI( 1, "@MPUI_CHOOSE_CLASS", scriptMenuResponse "changeclass_marines", when( TEAM_IS_MARINES && MAY_CHOOSE_CLASS ) )
@@ -168,11 +168,11 @@
 		*/
 		CHOICE_DBUTTON_VIS( 2, "@OW_CAC_TITLE", 1 )
 
-		//CHOICE_BUTTON( 3, "@MPUI_CHANGE_TEAM", scriptMenuResponse "changeteam"; )
-		CHOICE_BUTTON_BG( 3, when( !inkillcam()	) )
-		CHOICE_HIGHLIGHT( 3, !inkillcam() )
-		CHOICE_BUTTON_VIS_NOHI( 3, "@MPUI_CHANGE_TEAM", scriptMenuResponse "changeteam", when( !inkillcam() ) )
-		CHOICE_DBUTTON_VIS( 3, "@MPUI_CHANGE_TEAM", when( inkillcam() ); )
+		CHOICE_BUTTON( 3, "@MPUI_CHANGE_TEAM", scriptMenuResponse "changeteam"; )
+		//CHOICE_BUTTON_BG( 3, when( !inkillcam()	) )
+		//CHOICE_HIGHLIGHT( 3, !inkillcam() )
+		//CHOICE_BUTTON_VIS_NOHI( 3, "@MPUI_CHANGE_TEAM", scriptMenuResponse "changeteam", when( !inkillcam() ) )
+		//CHOICE_DBUTTON_VIS( 3, "@MPUI_CHANGE_TEAM", when( inkillcam() ); )
 
 		CHOICE_SEPARATOR( CHOICE_SEP_1 )
 
