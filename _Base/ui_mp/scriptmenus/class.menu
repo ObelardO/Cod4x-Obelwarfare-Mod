@@ -158,7 +158,7 @@
 		CHOICE_HIGHLIGHT( 1, (TEAM_IS_MARINES || TEAM_IS_OPFOR) && MAY_CHOOSE_CLASS )
 		CHOICE_BUTTON_VIS_NOHI( 1, "@MPUI_CHOOSE_CLASS", scriptMenuResponse "changeclass_marines", when( TEAM_IS_MARINES && MAY_CHOOSE_CLASS ) )
 		CHOICE_BUTTON_VIS_NOHI( 1, "@MPUI_CHOOSE_CLASS", scriptMenuResponse "changeclass_opfor", when( TEAM_IS_OPFOR && MAY_CHOOSE_CLASS ) )
-		CHOICE_DBUTTON_VIS( 1, "@MPUI_CHOOSE_CLASS", when( dvarInt( scr_oldschool ) == 1 || inkillcam() ); )
+		CHOICE_DBUTTON_VIS( 1, "@MPUI_CHOOSE_CLASS", when( dvarInt( scr_oldschool ) == 1 ); )
 
 		/* DISABLED because added ingame class editor for ranked server type ( scr_enable_cac_ingame_ranked ) 
 		CHOICE_BUTTON_FOCUS_VIS_ADV( 2, "@OW_CAC_TITLE", close self;scriptMenuResponse "ow_cac_editor", exec "set ui_hint_text @MPUI_DESC_CREATE_A_CLASS", CLEARUIHINT, when( dvarbool( ui_ranked_game ) && !localvarBool( ui_hideBack ) && stat( 260 ) >= 1 ), dvarbool( ui_ranked_game ) && !localvarBool( ui_hideBack ) && stat( 260 ) >= 1 )

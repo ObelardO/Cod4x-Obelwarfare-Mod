@@ -86,23 +86,14 @@ initItemInfo( statOffset, dataType, tableSource )
 
 onPlayerConnected()
 {
-	//for(;;)
-	//{
-	//	level waittill( "connecting", player );
+    self.cacIngame = spawnStruct();
+    self.cacIngame.loadoutDataRef = [];
+    self.cacIngame.classInfoIndex = 0;
+    self.cacIngame.stockResponse = "";
 
-        self.cacIngame = spawnStruct();
-        self.cacIngame.loadoutDataRef = [];
-        self.cacIngame.classInfoIndex = 0;
-        self.cacIngame.stockResponse = "";
+    self openAllClasses();
 
-        self openAllClasses();
-
-        //player thread onMenuResponseThread();
-
-        self thread addNewEvent( "onMenuResponse", ::onMenuResponse );
-
-        //self thread prepareAndOpenMenuThread();
-	//}
+    self thread addNewEvent( "onMenuResponse", ::onMenuResponse );
 }
 
 
@@ -151,8 +142,6 @@ onMenuResponse( menu, response )
 
             validateLoadoutData();
 
-            //self thread prepareAndOpenMenuThread();
-                            
             self openMenu( "cac_ingame" );
         }
         else //Othervise stock logic
