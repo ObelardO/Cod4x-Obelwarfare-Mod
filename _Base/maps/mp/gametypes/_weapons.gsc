@@ -1551,7 +1551,7 @@ playClaymoreEffects()
 				case "arab":	fxName = level.claymoreFXidYellow; dbname = "^3yellow"; break;
 			}
 
-			iPrintLn ("color: " + dbname + "^7 of team " + game[self.owner.pers["team"]] + " - " + game["allies"] + " vs " + game["axis"]);
+			// iPrintLn ("color: " + dbname + "^7 of team " + game[self.owner.pers["team"]] + " - " + game["allies"] + " vs " + game["axis"]);
 		}
 
 		fx = spawnFx( fxName, org, anglesToForward( ang ), anglesToUp( ang ) );
