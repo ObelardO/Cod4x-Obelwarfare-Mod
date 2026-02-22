@@ -74,6 +74,7 @@ init()
     forceClientDvar( "cg_hudDamageIconHeight", 64 );
     forceClientDvar( "cg_hudDamageIconWidth", 128 );
     forceClientDvar( "cg_hudProneY", -52 ); // or +10 for hide this hint
+    forceClientDvar( "cg_drawSpectatorMessages", 0 );
     forceClientDvar( "cg_crossHair", ( 1 - level.hardcoreMode ) );
 
     // Apply other player dvars
@@ -126,6 +127,8 @@ init()
     level.primaryProgressBarTextY = 76;
     level.secondaryProgressBarY = 184; // from center
     level.secondaryProgressBarTextY = 170;
+
+    level.scr_hud_show_spectator_messages = 0;
 }
 
 
@@ -225,7 +228,10 @@ playerSessionWatcher()
 
             if ( isDefined( player ) )
             {
-                self setClientDvar( "ui_hud_lives_count", getPlayerLivesCount ( player ) );
+                self setClientDvars(
+                    "ui_hud_lives_count",       getPlayerLivesCount ( player ),
+                    "ui_hud_spectating_name",   player.name
+                );
 
                 if ( isDefined( player.totalBandages ) )
                 {

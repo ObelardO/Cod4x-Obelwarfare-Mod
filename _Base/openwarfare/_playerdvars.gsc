@@ -22,6 +22,7 @@ init()
 	level.scr_hud_show_enemy_names = getdvarx( "scr_hud_show_enemy_names", "int", 1, 0, 1 );
 	level.scr_hud_show_friendly_names = getdvarx( "scr_hud_show_friendly_names", "int", 1, 0, 1 );
 	level.scr_hud_show_friendly_names_distance = getdvarx( "scr_hud_show_friendly_names_distance", "int", 10000, 50, 10000 );
+	level.scr_hud_show_spectator_messages = getdvarx( "scr_hud_show_spectator_messages", "int", 1, 0, 1 );
 	level.scr_enable_auto_melee = getdvarx( "scr_enable_auto_melee", "int", 1, 0, 1 );
 	level.scr_show_fog = getdvarx( "scr_show_fog", "int", 1, 0, 1 );
 	level.scr_hud_compass_objectives = getdvarx( "scr_hud_compass_objectives", "int", 0, 0, 1 );
@@ -97,6 +98,7 @@ init()
 	forceClientDvar( "cg_tracerchance", level.scr_fire_tracer_chance );
 	forceClientDvar( "ui_healthoverlay", 1 );
 	forceClientDvar( "ui_ranked_game", ( level.rankedMatch ) );
+	forceClientDvar( "cg_drawSpectatorMessages", level.scr_hud_show_spectator_messages );
 	
 	// If non-hardcore set the non-hardcore variables
 	if ( !level.hardcoreMode ) {

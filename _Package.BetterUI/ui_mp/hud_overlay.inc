@@ -1,3 +1,52 @@
+#define SPECTATE_HUD_IS_VISIBLE        CLIENT_IS_SPECTATING && spectatingClient()
+
+#define SPECTATE_HUD_ALIGN             HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_TOP
+
+#define SPECTATE_HUD_OFFSET_Y          ( COMPASS_HUD_IS_VISIBLE * 18 )
+#define SPECTATE_HUD_HEIGHT            18
+#define SPECTATE_HUD_HEIGHT_HALF       9
+
+#define SPECTATE_HUD_BACK_WIDTH        200
+#define SPECTATE_HUD_BACK_WIDTH_HALF   100
+
+#define SPECTATE_HUD_NAME_TEXT( color, xOffset, isVisibleExp ) \
+    itemDef \
+    { \
+        style			WINDOW_STYLE_SHADER \
+        rect			-SPECTATE_HUD_BACK_WIDTH_HALF 0 SPECTATE_HUD_BACK_WIDTH SPECTATE_HUD_HEIGHT SPECTATE_HUD_ALIGN \
+        exp             rect Y( ONLINEGAME_OFFSET_EXP + SPECTATE_HUD_OFFSET_Y ) \ 
+        background		"line_horizontal" \
+        forecolor		0.4 1 0.6 0.75 \
+        visible 	    when ( isVisibleExp ) \
+        decoration \
+    } \
+    itemDef \
+    { \
+        rect		xOffset 0 0 0 SPECTATE_HUD_ALIGN \
+        exp         text( dvarString( "ui_hud_spectating_name" ) ) \
+        exp         rect Y( ONLINEGAME_OFFSET_EXP + SPECTATE_HUD_OFFSET_Y + SPECTATE_HUD_HEIGHT_HALF - 4 ) \
+        textfont	UI_FONT_OBJECTIVE \
+        textscale	( TEXTSIZE_SMALL * 0.7 ) \
+        textalign	ITEM_ALIGN_MIDDLE_CENTER \
+        textstyle	ITEM_TEXTSTYLE_SHADOWEDMORE \
+        forecolor	color \
+        visible 	when ( isVisibleExp ) \
+        decoration \
+    }\
+    itemDef \
+    { \
+        rect		xOffset 0 0 0 SPECTATE_HUD_ALIGN \
+        text        "@MPUI_SPECTATING_PRE" \
+        exp         rect Y( ONLINEGAME_OFFSET_EXP + SPECTATE_HUD_OFFSET_Y + SPECTATE_HUD_HEIGHT_HALF + 5 ) \
+        textfont	UI_FONT_OBJECTIVE \
+        textscale	( TEXTSIZE_SMALL * 0.5 ) \
+        textalign	ITEM_ALIGN_MIDDLE_CENTER \
+        textstyle	ITEM_TEXTSTYLE_BLINK \
+        forecolor	color \
+        visible 	when ( isVisibleExp ) \
+        decoration \
+    }
+
 // Low health overlay
 menuDef
 {
@@ -16,6 +65,8 @@ menuDef
         visible			when( dvarInt( "ui_healthoverlay" ) == 1 );
         decoration
     }
+
+    SPECTATE_HUD_NAME_TEXT( 1 1 1 1, 0, HUD_IS_VISIBLE && SPECTATE_HUD_IS_VISIBLE )
  
     /*
     //PEL VISUAL GUIDE INFO FRAME
