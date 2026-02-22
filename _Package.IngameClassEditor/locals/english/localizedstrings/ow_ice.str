@@ -16,10 +16,19 @@ FILENOTES        ""
 //******************************************************************************
 // ui_mp/scriptmenus/cac_ingame.menu
 //******************************************************************************
-REFERENCE EQUIPPED
+REFERENCE LOCK_EQUIPPED
 LANG_ENGLISH "Already equipped."
 
-REFERENCE TITLE
-LANG_ENGLISH "EDIT CLASS"
+REFERENCE LOCK_CLASS
+LANG_ENGLISH "Incompatible with the selected weapon type."
+
+REFERENCE LOCK_FRAG
+LANG_ENGLISH "Incompatible with the selected special grenade."
+
+REFERENCE LOCK_PERK
+LANG_ENGLISH "Incompatible with the selected perk: Special grenade x 3"
+
+REFERENCE LOCK_SERVER
+LANG_ENGLISH "Not available on this server."
 
 ENDMARKER

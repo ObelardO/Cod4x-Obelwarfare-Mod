@@ -131,11 +131,12 @@
 			play "mouse_click"; \
 			setdvar ui_primary_selected primary; \
 			setdvar ui_inside_popup_nested 0; \
+			setdvar ui_attachment_weap_slot loadout_primary;\
 			uiScript openMenuOnDvar loadout_class assault "nocd_attachment_popup_assault_not_nested"; \
 			uiScript openMenuOnDvar loadout_class specops "nocd_attachment_popup_specops_not_nested"; \
 			uiScript openMenuOnDvar loadout_class heavygunner "nocd_attachment_popup_heavygunner_not_nested"; \
 			uiScript openMenuOnDvar loadout_class demolitions "nocd_attachment_popup_demolitions_not_nested"; \
-			uiScript openMenuOnDvar loadout_class sniper "nocd_attachment_popup_sniper_not_nested";
+			uiScript openMenuOnDvar loadout_class sniper "nocd_attachment_popup_sniper_not_nested"; \
 
 		CHOICE_BUTTON_BG( 2, 1 )
 		CHOICE_HIGHLIGHT( 2, 1 )		
@@ -151,7 +152,6 @@
 			execnow "set ui_primary_selected secondary"; \
 			play "mouse_click"; \
 			open "nocd_popup_cac_primary";
-			//open "nocd_popup_cac_primary_overkill";
 
 		CHOICE_BUTTON_BG( 3, 1 )
 		CHOICE_HIGHLIGHT( 3, 1 )	
@@ -290,53 +290,57 @@
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 58 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/statstable.csv",4,dvarString(highlight_dvar),3), TEXTSIZE_DEFAULT, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( dvarString(ui_inside_popup) != "attachment" && dvarString(ui_inside_popup) != "camo" ); ) \
 		/* weapon desc unlocked*/\
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/statstable.csv",4,dvarString(highlight_dvar),7), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, CHOICE_TEXTCOLOR visible when( dvarBool( ui_primary_hl_unlocked ) ); )\
-		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@MENU_DISABLED", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( !dvarBool( ui_primary_hl_unlocked ) && !dvarBool( ui_primary_equipped_overkill ) ); )\
-		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@OW_ICE_EQUIPPED", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( !dvarBool( ui_primary_hl_unlocked ) && dvarBool( ui_primary_equipped_overkill ) ); )\
+		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@OW_ICE_LOCK_SERVER", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( !dvarBool( ui_primary_hl_unlocked ) && !dvarBool( ui_primary_equipped_overkill ) ); )\
+		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@OW_ICE_LOCK_EQUIPPED", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( !dvarBool( ui_primary_hl_unlocked ) && dvarBool( ui_primary_equipped_overkill ) ); )\
 		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+6) 0 (CHOICE_SIZE_Y*2) CHOICE_SIZE_Y CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "specialty_locked", 1 1 1 1, 0, 2, CHOICE_POPUP_BORDER_COLOR visible when( !dvarBool( ui_primary_hl_unlocked ) ); ) \
 		PREPROC_SHADER_DRAW_ALIGNED( 0 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "white", 0.15 0.15 0.17 1, 0, 2, CHOICE_POPUP_BORDER_COLOR )\
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( 8 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, -32 0, dvarString(ui_weapon_class_selected), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_RIGHT, CHOICE_TEXTCOLOR ) \
 		/* pointer icon */ \
 		PREPROC_SHADER_DRAW_ALIGNED( 200 -16 16 8 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "hitech_arrow_down", 0.9 0.9 0.95 0.4, 0, 2, CHOICE_POPUP_BORDER_COLOR )
 
-	#define LOCAL_PRIMARY_WEAPON_SET( weapRef ) \
-		setdvar loadout_primary weapRef;\
+	#define LOCAL_PRIMARY_WEAPON_SET( wClass, wRef ) \
+		play "mouse_click";\
+		setdvar loadout_class wClass;\
+		setdvar loadout_primary wRef;\
 		setdvar loadout_primary_attachment REF_ATTACHMENT_NONE;\
 		setdvar loadout_camo REF_CAMO_NONE;\
-		scriptMenuResponse "set:loadout_primary:"weapRef;\
-		scriptMenuResponse "set:loadout_primary_attachment:"REF_ATTACHMENT_NONE;\
-		scriptMenuResponse "set:loadout_camo:"REF_CAMO_NONE;\
-		scriptMenuResponse "validate";\
+		scriptMenuResponse "set:primary:"wRef;\
+		scriptMenuResponse "set:primary_attachment:"REF_ATTACHMENT_NONE;\
+		scriptMenuResponse "set:camo:"REF_CAMO_NONE;\
+		scriptMenuResponse "validate:perks";\
 		UPDATE_PERK1;
 
-	#define LOCAL_SECONDARY_WEAPON_SET( weapRef ) \
-		setdvar loadout_secondary weapRef;\
+	#define LOCAL_SECONDARY_WEAPON_SET( wClass, wRef ) \
+		play "mouse_click";\
+		setdvar loadout_class_secondary wClass;\
+		setdvar loadout_secondary wRef;\
 		setdvar loadout_secondary_attachment REF_ATTACHMENT_NONE;\
-		scriptMenuResponse "set:loadout_secondary:"weapRef;\
-		scriptMenuResponse "set:loadout_secondary_attachment:"REF_ATTACHMENT_NONE;\
+		scriptMenuResponse "set:secondary:"wRef;\
+		scriptMenuResponse "set:secondary_attachment:"REF_ATTACHMENT_NONE;\
+		scriptMenuResponse "validate:perks";\
 		UPDATE_PERK1;
 
-	#define LOCAL_PRIMARY_WEAPON_ACTION( suffix, weapClass, weapRef ) \
-		play "mouse_click";\
-		LOCAL_PRIMARY_WEAPON_SET(weapRef);\
+	#define LOCAL_PRIMARY_WEAPON_ACTION( wClass, wRef ) \
+		LOCAL_PRIMARY_WEAPON_SET( wClass, wRef );\
 		setdvar ui_inside_popup_nested 1;\
-		open "nocd_attachment_popup_"weapClass
+		setdvar ui_attachment_weap_slot loadout_primary;\
+		open "nocd_attachment_popup_"wClass;
 
-	#define LOCAL_PRIMARY_WEAPON_ACTION_OVERKILL( suffix, weapClass, weapRef ) \
-		play "mouse_click";\
-		LOCAL_SECONDARY_WEAPON_SET(weapRef);\
+	#define LOCAL_PRIMARY_WEAPON_ACTION_OVERKILL( wClass, wRef ) \
+		LOCAL_SECONDARY_WEAPON_SET( wClass, wRef );\
 		setdvar ui_inside_popup_nested 1;\
-		open "nocd_attachment_popup_"weapClass
+		setdvar ui_attachment_weap_slot loadout_secondary;\
+		open "nocd_attachment_popup_"wClass;
 
-	#define LOCAL_PRIMARY_WEAPON_ACTION3( suffix, weapClass, weapRef ) \
-		play "mouse_click"; \
-		LOCAL_PRIMARY_WEAPON_SET(weapRef);\
+	#define LOCAL_PRIMARY_WEAPON_ACTION3( wClass, wRef ) \
+		LOCAL_PRIMARY_WEAPON_SET( wClass, wRef );\
 		setdvar ui_inside_popup_nested 1; \
+		setdvar ui_attachment_weap_slot loadout_primary;\
 		open "nocd_attachment_popup_fake"; \
 		open "nocd_popup_cac_camo_no_attach";	
 
-	#define LOCAL_PRIMARY_WEAPON_ACTION3_OVERKILL( suffix, weapClass, weapRef ) \
-		play "mouse_click"; \
-		LOCAL_SECONDARY_WEAPON_SET(weapRef); \
+	#define LOCAL_PRIMARY_WEAPON_ACTION3_OVERKILL( wClass, wRef ) \
+		LOCAL_SECONDARY_WEAPON_SET( wClass, wRef ); \
 		PREPROC_ATTACH_CLOSEALL
 
 	#define WI_FOCUS_ACTION( wClass, wRef ) \
@@ -355,74 +359,102 @@
 		/*execKey itemIndex { actionArg }*/
 
 	#define LOCAL_PRIMARY_WEAPON_VISIBLE( wClass, wRef ) \
-		LOCAL_WEAPON_ALLOWED ( wClass, wRef ) && LOCAL_PRIMARY_WEAPON_ALLOWED_OVERKILL ( wRef )
+		LOCAL_WEAPON_IS_ALLOWED ( wClass, wRef ) && LOCAL_PRIMARY_WEAPON_ALLOWED_OVERKILL ( wRef )
 
 	#define LOCAL_SECONDARY_WEAPON_VISIBLE( wClass, wRef ) \
-		LOCAL_WEAPON_ALLOWED ( wClass, wRef ) && LOCAL_SECONDARY_WEAPON_ALLOWED_OVERKILL ( wRef )
+		LOCAL_WEAPON_IS_ALLOWED ( wClass, wRef ) && LOCAL_SECONDARY_WEAPON_ALLOWED_OVERKILL ( wClass, wRef )
 
 	#define LOCAL_PRIMARY_WEAPON_ALLOWED_OVERKILL( wRef ) \
 		dvarString( ui_primary_selected ) == "primary" && dvarString ( loadout_secondary ) != wRef
 
-	#define LOCAL_SECONDARY_WEAPON_ALLOWED_OVERKILL( wRef ) \
-		dvarString( ui_primary_selected ) == "secondary" && dvarString ( loadout_primary ) != wRef
+	#define LOCAL_SECONDARY_WEAPON_ALLOWED_OVERKILL( wClass, wRef ) \
+		dvarString( ui_primary_selected ) == "secondary" && dvarString ( loadout_primary ) != wRef && dvarString( "perk_"wClass"_allow_specialty_twoprimaries" ) > 0
 
 	#define LOCAL_WEAPON_DISABLED_OVERKILL( wClass, wRef ) \
-		LOCAL_WEAPON_ALLOWED ( wClass, wRef ) && dvarString( loadout_perk2 ) == "specialty_twoprimaries" && \
+		LOCAL_WEAPON_IS_ALLOWED ( wClass, wRef ) && dvarString( loadout_perk2 ) == "specialty_twoprimaries" && \
 		( \
 			( dvarString( ui_primary_selected ) == "primary" && dvarString ( loadout_secondary ) == wRef ) || \
 			( dvarString( ui_primary_selected ) == "secondary" && dvarString ( loadout_primary ) == wRef ) \
 		)
 
-	#define LOCAL_WEAPON_ALLOWED( wClass, wRef ) \
+	#define LOCAL_WEAPON_IS_ALLOWED( wClass, wRef ) \
 		dvarBool( "weap_allow_"wClass"_"wRef )
 
+	//#define LOCAL_WEAPON_IS_ALLOWED_OVERKILL( wClass, wRef )\
+	//	LOCAL_WEAPON_IS_ALLOWED ( wClass, wRef ) && dvarString( "perk_"wClass"_allow_specialty_twoprimaries" ) == "1";
+
+	#define LOCAL_WEAPON_RESET_ALLOWED( wClass, wRef ) \
+		exec "set weap_allow_"wClass"_"wRef" 1"
+
 	// hacked to hide the second primary if same weapon is selected in first primary, change weapon description to "Already selected"
-	#define LOCAL_WEAPON_ITEM( suffix, itemNum, wName, wClass, wRef )\
-		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, WI_FOCUS_ACTION( wClass, wRef ), ;, when( ! ( LOCAL_WEAPON_ALLOWED( wClass, wRef ) ) ); )\
+	#define LOCAL_WEAPON_ITEM( itemNum, wName, wClass, wRef )\
+		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, WI_FOCUS_ACTION( wClass, wRef ), ;, when( ! ( LOCAL_WEAPON_IS_ALLOWED( wClass, wRef ) ) ); )\
 		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, WI_FOCUS_ACTION_OVERKILL( wClass, wRef ), ;, when( LOCAL_WEAPON_DISABLED_OVERKILL( wClass, wRef ) ); )\
 		CHOICE_DBUTTON_VIS( itemNum, wName, when( 1 ); ) \
 		/*Primary*/\
-		CHOICE_BUTTON_FOCUS_VIS_ADV_HK( itemNum, wName, LOCAL_PRIMARY_WEAPON_ACTION( suffix, wClass, wRef ), \
+		CHOICE_BUTTON_FOCUS_VIS_ADV_HK( itemNum, wName, LOCAL_PRIMARY_WEAPON_ACTION( wClass, wRef ), \
 			WI_FOCUS_ACTION( wClass, wRef ), ;, when( \
-			LOCAL_PRIMARY_WEAPON_VISIBLE( wClass, wRef ) ) ;, \
+			LOCAL_PRIMARY_WEAPON_VISIBLE( wClass, wRef ) );, \
 			LOCAL_PRIMARY_WEAPON_VISIBLE( wClass, wRef ) ) \
 		/*Secondary (overkill perk)*/\
-		CHOICE_BUTTON_FOCUS_VIS_ADV_HK( itemNum, wName, LOCAL_PRIMARY_WEAPON_ACTION_OVERKILL( suffix, wClass, wRef ), \
+		CHOICE_BUTTON_FOCUS_VIS_ADV_HK( itemNum, wName, LOCAL_PRIMARY_WEAPON_ACTION_OVERKILL( wClass, wRef ), \
 			WI_FOCUS_ACTION( wClass, wRef ), ;, when( \
 			LOCAL_SECONDARY_WEAPON_VISIBLE( wClass, wRef ) );, \
 			LOCAL_SECONDARY_WEAPON_VISIBLE( wClass, wRef ) )
 		
-	#define LOCAL_WEAPON_ITEM2( suffix, itemNum, wName, wClass, wRef )\
-		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, WI_FOCUS_ACTION( wClass, wRef ), ;, when( ! ( LOCAL_WEAPON_ALLOWED( wClass, wRef ) ) ); )\
+	#define LOCAL_WEAPON_ITEM2( itemNum, wName, wClass, wRef )\
+		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, WI_FOCUS_ACTION( wClass, wRef ), ;, when( ! ( LOCAL_WEAPON_IS_ALLOWED( wClass, wRef ) ) ); )\
 		/*CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, WI_FOCUS_ACTION_OVERKILL( wClass, wRef ), ;, when( LOCAL_WEAPON_DISABLED_OVERKILL( wClass, wRef ) ); )*/\
 		CHOICE_DBUTTON_VIS( itemNum, wName, when( 1 ); ) \
 		/*Primary*/\
-		CHOICE_BUTTON_FOCUS_VIS_ADV_HK( itemNum, wName, LOCAL_PRIMARY_WEAPON_ACTION3( suffix, wClass, wRef ), \
+		CHOICE_BUTTON_FOCUS_VIS_ADV_HK( itemNum, wName, LOCAL_PRIMARY_WEAPON_ACTION3( wClass, wRef ), \
 			WI_FOCUS_ACTION( wClass, wRef ), ;, when( \
 			LOCAL_PRIMARY_WEAPON_VISIBLE( wClass, wRef ) );, \
 			LOCAL_PRIMARY_WEAPON_VISIBLE( wClass, wRef ) )\
 		/*Secondary (overkill perk)*/\
-		CHOICE_BUTTON_FOCUS_VIS_ADV_HK( itemNum, wName, LOCAL_PRIMARY_WEAPON_ACTION3_OVERKILL( suffix, wClass, wRef ), \
+		CHOICE_BUTTON_FOCUS_VIS_ADV_HK( itemNum, wName, LOCAL_PRIMARY_WEAPON_ACTION3_OVERKILL( wClass, wRef ), \
 			WI_FOCUS_ACTION( wClass, wRef ), ;, when( \
 			LOCAL_SECONDARY_WEAPON_VISIBLE( wClass, wRef ) );, \
 			LOCAL_SECONDARY_WEAPON_VISIBLE( wClass, wRef ) )
 
+	#define LOCAL_WEAPON_CLASS_ACTION( wClass, className ) \
+		play "mouse_click";\
+		/*execnow "set loadout_class "wClass"; set ui_weapon_class_selected "className;*/\
+		execnow "set ui_weapon_class_selected "className;\
+		open "nocd_popup_cac_"wClass;\
+		scriptMenuResponse "allow:"wClass":atch";
 
-
-	#define LOCAL_WEAPON_CLASS( itemNum, ptext, plabel ) \
-		CHOICE_BUTTON_EX( itemNum, plabel, play "mouse_click"; execnow "set loadout_class "ptext"; set ui_weapon_class_selected "plabel; open "nocd_popup_cac_"ptext;, name ptext )
+	#define LOCAL_WEAPON_CLASS_ACTION_OVERKILL( wClass, className ) \
+		LOCAL_WEAPON_CLASS_ACTION( wClass, className )\
+		scriptMenuResponse "allow:"wClass":perk2";
+	/*
+	#define LOCAL_WEAPON_CLASS( itemNum, wClass, className ) \
+		CHOICE_BUTTON_EX( itemNum, className, LOCAL_WEAPON_CLASS_ACTION( wClass, className ), name wClass; )
+	*/
+	#define LOCAL_WEAPON_CLASS( itemNum, wClass, className )\
+		CHOICE_BUTTON_FOCUS_VIS( itemNum, className, LOCAL_WEAPON_CLASS_ACTION( wClass, className );, ;, ;, when( dvarString( ui_primary_selected ) == "primary" ) );\
+		CHOICE_BUTTON_FOCUS_VIS( itemNum, className, LOCAL_WEAPON_CLASS_ACTION_OVERKILL( wClass, className );, ;, ;, when( dvarString( ui_primary_selected ) == "secondary" && dvarString( "perk_"wClass"_allow_specialty_twoprimaries" ) > 0 ) );\
+		CHOICE_DBUTTON_VIS( itemNum, className, when( dvarString( ui_primary_selected ) == "secondary" && dvarString( "perk_"wClass"_allow_specialty_twoprimaries" ) == 0 ); )
+		
+	#define LOCAL_WEAPON_ONOPEN\
+		execnow "set ui_inside_popup weapon_class; set ui_show_preview 1";\
+		scriptMenuResponse "allow:twoprimaries";
 
 	// primary weapon class dropdown
 	#define LOCAL_MASTER_CLASS_GROUP( suffix, pos, y_offset )\
 	menuDef {\
-		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_primary"suffix, 5, (CHOICE_X( pos )-2), (CHOICE_Y( pos )-4+y_offset), ;, execnow "set ui_inside_popup weapon_class; set ui_show_preview 1";, 1 )\
-		onClose{	execnow "set ui_show_preview 0; set ui_primary_highlighted 0; set ui_attachment_highlighted 0";	}\
+		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_primary"suffix, 5, (CHOICE_X( pos )-2), (CHOICE_Y( pos )-4+y_offset), ;, LOCAL_WEAPON_ONOPEN, 1 )\
+		onClose{execnow "set ui_show_preview 0; set ui_primary_highlighted 0; set ui_attachment_highlighted 0";	}\
 		LOCAL_WEAPON_CLASS( 1, "assault", "@MPUI_ASSAULT_RIFLES" )\
 		LOCAL_WEAPON_CLASS( 2, "specops", "@MPUI_SUB_MACHINE_GUNS" )\
 		LOCAL_WEAPON_CLASS( 3, "heavygunner", "@MPUI_LIGHT_MACHINE_GUNS" )\
 		LOCAL_WEAPON_CLASS( 4, "demolitions", "@MPUI_SHOTGUNS" )\
 		LOCAL_WEAPON_CLASS( 5, "sniper", "@MPUI_SNIPER_RIFLES" )\	
 	}
+
+	#define LOCAL_WEAPON_CLASS_ONOPEN( wRef, wClass )\
+		execnow "set "UI_FOCUSFIRST" "wRef"; set ui_inside_popup "wClass;\
+		scriptMenuResponse "allow:"wClass":weap";\
 
 	// primary and second primary class selection popup menus
 	LOCAL_MASTER_CLASS_GROUP( "", 1, 0)
@@ -434,46 +466,46 @@
 	// primary weapon items
 	#define LOCAL_MASTER_WEAPON_GROUP( suffix, pos, y_offset )\
 	menuDef	{\
-		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_assault"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+20+y_offset), ;, execnow "set "UI_FOCUSFIRST" "REF_M16"; set ui_inside_popup assault";, 0 )\
+		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_assault"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+20+y_offset), ;, LOCAL_WEAPON_CLASS_ONOPEN( REF_M16, "assault" ), 0 )\
 		LOCAL_WEAPON_INFO_WINDOW( "ui_primary_highlighted" )\
-		LOCAL_WEAPON_ITEM( suffix, 1, "@WEAPON_M16", "assault", REF_M16 )\
-		LOCAL_WEAPON_ITEM( suffix, 2, "@WEAPON_AK47", "assault", REF_AK47 )\
-		LOCAL_WEAPON_ITEM( suffix, 3, "@WEAPON_M4_CARBINE", "assault", REF_M4 )\
-		LOCAL_WEAPON_ITEM( suffix, 4, "@WEAPON_G3", "assault", REF_G3 )\
-		LOCAL_WEAPON_ITEM( suffix, 5, "@WEAPON_G36C", "assault", REF_G36C )\
-		LOCAL_WEAPON_ITEM( suffix, 6, "@WEAPON_M14", "assault", REF_M14 )\
-		LOCAL_WEAPON_ITEM2( suffix, 7, "@WEAPON_MP44", "assault", REF_MP44 )\
+		LOCAL_WEAPON_ITEM( 1, "@WEAPON_M16", "assault", REF_M16 )\
+		LOCAL_WEAPON_ITEM( 2, "@WEAPON_AK47", "assault", REF_AK47 )\
+		LOCAL_WEAPON_ITEM( 3, "@WEAPON_M4_CARBINE", "assault", REF_M4 )\
+		LOCAL_WEAPON_ITEM( 4, "@WEAPON_G3", "assault", REF_G3 )\
+		LOCAL_WEAPON_ITEM( 5, "@WEAPON_G36C", "assault", REF_G36C )\
+		LOCAL_WEAPON_ITEM( 6, "@WEAPON_M14", "assault", REF_M14 )\
+		LOCAL_WEAPON_ITEM2( 7, "@WEAPON_MP44", "assault", REF_MP44 )\
 	}\
 	menuDef	{\
-		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_heavygunner"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+20+y_offset), ;, execnow "set "UI_FOCUSFIRST" "REF_M249SAW"; set ui_inside_popup heavygunner";, 0 )\
+		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_heavygunner"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+20+y_offset), ;, LOCAL_WEAPON_CLASS_ONOPEN( REF_M249SAW, "heavygunner" ), 0 )\
 		LOCAL_WEAPON_INFO_WINDOW( "ui_primary_highlighted" )\
-		LOCAL_WEAPON_ITEM( suffix, 1, "@WEAPON_SAW", "heavygunner", REF_M249SAW )\
-		LOCAL_WEAPON_ITEM( suffix, 2, "@WEAPON_RPD", "heavygunner", REF_RPD )\
-		LOCAL_WEAPON_ITEM( suffix, 3, "@WEAPON_M60E4", "heavygunner", REF_M60E4 )\
+		LOCAL_WEAPON_ITEM( 1, "@WEAPON_SAW", "heavygunner", REF_M249SAW )\
+		LOCAL_WEAPON_ITEM( 2, "@WEAPON_RPD", "heavygunner", REF_RPD )\
+		LOCAL_WEAPON_ITEM( 3, "@WEAPON_M60E4", "heavygunner", REF_M60E4 )\
 	}\
 	menuDef	{\
-		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_specops"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+20+y_offset), ;, execnow "set "UI_FOCUSFIRST" "REF_MP5";set ui_inside_popup specops";, 0 )\
+		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_specops"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+20+y_offset), ;, LOCAL_WEAPON_CLASS_ONOPEN( REF_MP5, "specops" ), 0 )\
 		LOCAL_WEAPON_INFO_WINDOW( "ui_primary_highlighted" )\
-		LOCAL_WEAPON_ITEM( suffix, 1, "@WEAPON_MP5", "specops", REF_MP5 )\
-		LOCAL_WEAPON_ITEM( suffix, 2, "@WEAPON_SKORPION", "specops", REF_SKORPION )\
-		LOCAL_WEAPON_ITEM( suffix, 3, "@WEAPON_UZI", "specops", REF_UZI )\
-		LOCAL_WEAPON_ITEM( suffix, 4, "@WEAPON_AK74U", "specops", REF_AK74U )\
-		LOCAL_WEAPON_ITEM( suffix, 5, "@WEAPON_P90", "specops", REF_P90 )\
+		LOCAL_WEAPON_ITEM( 1, "@WEAPON_MP5", "specops", REF_MP5 )\
+		LOCAL_WEAPON_ITEM( 2, "@WEAPON_SKORPION", "specops", REF_SKORPION )\
+		LOCAL_WEAPON_ITEM( 3, "@WEAPON_UZI", "specops", REF_UZI )\
+		LOCAL_WEAPON_ITEM( 4, "@WEAPON_AK74U", "specops", REF_AK74U )\
+		LOCAL_WEAPON_ITEM( 5, "@WEAPON_P90", "specops", REF_P90 )\
 	}\
 	menuDef	{\
-		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_demolitions"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+20+y_offset), ;, execnow "set "UI_FOCUSFIRST" "REF_WINCHESTER1200"; set ui_inside_popup demolitions";, 0 )\
+		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_demolitions"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+20+y_offset), ;, LOCAL_WEAPON_CLASS_ONOPEN( REF_WINCHESTER1200, "demolitions" ), 0 )\
 		LOCAL_WEAPON_INFO_WINDOW( "ui_primary_highlighted" )\
-		LOCAL_WEAPON_ITEM( suffix, 1, "@WEAPON_WINCHESTER1200", "demolitions", REF_WINCHESTER1200 )\
-		LOCAL_WEAPON_ITEM( suffix, 2, "@WEAPON_BENELLI", "demolitions", REF_BENELLIM4 )\
+		LOCAL_WEAPON_ITEM( 1, "@WEAPON_WINCHESTER1200", "demolitions", REF_WINCHESTER1200 )\
+		LOCAL_WEAPON_ITEM( 2, "@WEAPON_BENELLI", "demolitions", REF_BENELLIM4 )\
 	}\
 	menuDef	{\
-		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_sniper"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+20+y_offset), ;, execnow "set "UI_FOCUSFIRST" "REF_M40A3"; set ui_inside_popup sniper";, 0 )\
+		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_sniper"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+20+y_offset), ;, LOCAL_WEAPON_CLASS_ONOPEN( REF_M40A3, "sniper" ), 0 )\
 		LOCAL_WEAPON_INFO_WINDOW( "ui_primary_highlighted" )\
-		LOCAL_WEAPON_ITEM( suffix, 1, "@WEAPON_M40A3", "sniper", REF_M40A3 )\
-		LOCAL_WEAPON_ITEM( suffix, 2, "@WEAPON_M21", "sniper", REF_M21 )\
-		LOCAL_WEAPON_ITEM( suffix, 3, "@WEAPON_DRAGUNOV", "sniper", REF_DRAGUNOVSVD )\
-		LOCAL_WEAPON_ITEM( suffix, 4, "@WEAPON_REMINGTON700", "sniper", REF_REMINGTON700 )\
-		LOCAL_WEAPON_ITEM( suffix, 5, "@WEAPON_BARRETT", "sniper", REF_BARRETT )\
+		LOCAL_WEAPON_ITEM( 1, "@WEAPON_M40A3", "sniper", REF_M40A3 )\
+		LOCAL_WEAPON_ITEM( 2, "@WEAPON_M21", "sniper", REF_M21 )\
+		LOCAL_WEAPON_ITEM( 3, "@WEAPON_DRAGUNOV", "sniper", REF_DRAGUNOVSVD )\
+		LOCAL_WEAPON_ITEM( 4, "@WEAPON_REMINGTON700", "sniper", REF_REMINGTON700 )\
+		LOCAL_WEAPON_ITEM( 5, "@WEAPON_BARRETT", "sniper", REF_BARRETT )\
 	}
 	
 
@@ -483,7 +515,7 @@
 	// ====================================================================================================
 	// primary and second primary attachment selection ====================================================
 	// ====================================================================================================
-	#define LOCAL_ATTACHMENT_INFO_WINDOW( parentDvar ) \
+	#define LOCAL_ATTACHMENT_INFO_WINDOW\
 		/* attachment information side frame*/ \
 		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH-6) -4 280 CHOICE_POPUP_HEIGHT( 7 ) CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "white", CHOICE_POPUP_BORDER_COLOR, 1, 2, CHOICE_POPUP_BORDER_COLOR visible when( dvarString(ui_inside_popup) != "camo" ); ) \
 		LOADOUT_PLATING_RAW( CHOICE_POPUP_WIDTH 8, -2, 0, 280, (CHOICE_POPUP_HEIGHT( 7 )-4), CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN visible when( dvarString(ui_inside_popup) != "camo" );, 0, 0 ) \
@@ -494,111 +526,115 @@
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 58 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/attachmentTable.csv",4,dvarString(ui_attachment_highlighted),3), TEXTSIZE_DEFAULT, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( dvarString(ui_inside_popup) != "camo" ); ) \
 		/* attachment desc unlocked*/\
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/attachmentTable.csv",4,dvarString(ui_attachment_highlighted),7), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, CHOICE_TEXTCOLOR visible when( dvarBool( ui_attachment_hl_unlocked ) ); )\
-		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@MENU_DISABLED", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( !dvarBool( ui_attachment_hl_unlocked ) ); )\
+		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@OW_ICE_LOCK_SERVER", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( !dvarBool( ui_attachment_hl_unlocked ) ); )\
 		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+6) 0 (CHOICE_SIZE_Y*2) CHOICE_SIZE_Y CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "specialty_locked", 1 1 1 1, 0, 2, CHOICE_POPUP_BORDER_COLOR visible when( !dvarBool( ui_attachment_hl_unlocked ) && dvarString(ui_inside_popup) != "camo" ); ) \
 		PREPROC_SHADER_DRAW_ALIGNED( 0 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "white", 0.15 0.15 0.17 1, 0, 2, CHOICE_POPUP_BORDER_COLOR visible when( dvarBool( ui_inside_popup_nested ) ); )\
-		PREPROC_TEXT_DRAW_ALIGNED_EXP( 8 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, -32 0, "@"+tablelookup("mp/statstable.csv",4,dvarString(parentDvar),3), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_RIGHT, CHOICE_TEXTCOLOR visible when( dvarBool( ui_inside_popup_nested ) ); )\
+		PREPROC_TEXT_DRAW_ALIGNED_EXP( 8 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, -32 0, "@"+tablelookup("mp/statstable.csv",4,dvarString( dvarString( ui_attachment_weap_slot ) ),3), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_RIGHT, CHOICE_TEXTCOLOR visible when( dvarBool( ui_inside_popup_nested ) ); )\
 		/* pointer icon */ \
 		PREPROC_SHADER_DRAW_ALIGNED( 200 -16 16 8 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "hitech_arrow_right", 0.55 0.95 0.55 0.7, 0, 2, CHOICE_POPUP_BORDER_COLOR visible when( dvarBool( ui_inside_popup_nested ) ); )
 
 
-	#define LOCAL_ATTACHMENT_ACTION( attachmentName, paction, groupArg ) \
+	#define LOCAL_ATTACHMENT_ACTION( attachmentName, wClass ) \
 		setdvar loadout_primary_attachment attachmentName; \
-		scriptMenuResponse "set:loadout_primary_attachment:"attachmentName;\
+		scriptMenuResponse "set:primary_attachment:"attachmentName;\
 		UPDATE_PERK1 \
 		close self;\
-		uiScript openMenuOnDvar ui_inside_popup_nested 1 "nocd_attachment_popup_"groupArg;\
+		uiScript openMenuOnDvar ui_inside_popup_nested 1 "nocd_attachment_popup_"wClass;\
 		execOnDvarStringValue ui_inside_popup_nested 1 "set loadout_camo camo_none";\
 		uiScript openMenuOnDvar ui_inside_popup_nested 1 "nocd_popup_cac_camo";
 		
-	#define LOCAL_ATTACHMENT_ACTION_OVERKILL( attachmentName, paction, groupArg ) \
+	#define LOCAL_ATTACHMENT_ACTION_OVERKILL( attachmentName, wClass ) \
 		setdvar loadout_secondary_attachment attachmentName; \
-		scriptMenuResponse "set:loadout_secondary_attachment:"attachmentName;\
+		scriptMenuResponse "set:secondary_attachment:"attachmentName;\
 		UPDATE_PERK1 \
 		PREPROC_ATTACH_CLOSEALL
 
-	#define LOCAL_PISTOL_ATTACHMENT_ACTION( attachmentName, paction, groupArg ) \
+	#define LOCAL_PISTOL_ATTACHMENT_ACTION( attachmentName, wClass ) \
 		setdvar loadout_secondary_attachment attachmentName; \
-		scriptMenuResponse "set:loadout_secondary_attachment:"attachmentName;\
+		scriptMenuResponse "set:secondary_attachment:"attachmentName;\
 		PREPROC_ATTACH_CLOSEALL
 
-	#define AI_FOCUS_ACTION( groupArg, weaponRef ) \
-		execOnDvarStringValue "attach_allow_"groupArg"_"weaponRef 0 "set ui_attachment_hl_unlocked 0";\
-		execOnDvarStringValue "attach_allow_"groupArg"_"weaponRef 1 "set ui_attachment_hl_unlocked 1";\
-		exec "set ui_attachment_highlighted "weaponRef;
+	#define AI_FOCUS_ACTION( wClass, wRef ) \
+		execOnDvarStringValue "attach_allow_"wClass"_"wRef 0 "set ui_attachment_hl_unlocked 0";\
+		execOnDvarStringValue "attach_allow_"wClass"_"wRef 1 "set ui_attachment_hl_unlocked 1";\
+		exec "set ui_attachment_highlighted "wRef;
 
-	#define LOCAL_ATTACHMENT_ITEM( itemNum, groupArg ,p_numref, pname, paction, ptype, bitMask )\
+	#define LOCAL_ATTACHMENT_ITEM( itemNum, wClass ,p_numref, wRef )\
 		/*Primary attachment*/\
-		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,pname,3), LOCAL_ATTACHMENT_ACTION( pname, paction, groupArg );, \
-			AI_FOCUS_ACTION(groupArg,pname), ;, when( dvarString( ui_primary_selected ) == "primary" && dvarBool( "attach_allow_"groupArg"_"pname ) ), dvarString( ui_primary_selected ) == "primary" && dvarBool( "attach_allow_"groupArg"_"pname ) ) \
+		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,wRef,3), LOCAL_ATTACHMENT_ACTION( wRef, wClass );, \
+			AI_FOCUS_ACTION(wClass,wRef), ;, when( dvarString( ui_primary_selected ) == "primary" && dvarBool( "attach_allow_"wClass"_"wRef ) ), dvarString( ui_primary_selected ) == "primary" && dvarBool( "attach_allow_"wClass"_"wRef ) ) \
 		/*Secondary attachment (overkill perk)*/\
-		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,pname,3), LOCAL_ATTACHMENT_ACTION_OVERKILL( pname, paction, groupArg );, \
-			AI_FOCUS_ACTION(groupArg,pname), ;, when( dvarString( ui_primary_selected ) == "secondary" && dvarBool( "attach_allow_"groupArg"_"pname ) ), dvarString( ui_primary_selected ) == "secondary" && dvarBool( "attach_allow_"groupArg"_"pname ) ) \
+		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,wRef,3), LOCAL_ATTACHMENT_ACTION_OVERKILL( wRef, wClass );, \
+			AI_FOCUS_ACTION(wClass,wRef), ;, when( dvarString( ui_primary_selected ) == "secondary" && dvarBool( "attach_allow_"wClass"_"wRef ) ), dvarString( ui_primary_selected ) == "secondary" && dvarBool( "attach_allow_"wClass"_"wRef ) ) \
 		/*Disabled*/\
-		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, AI_FOCUS_ACTION(groupArg,pname), ;, when( !dvarBool( "attach_allow_"groupArg"_"pname ) ); ) \
-		CHOICE_DBUTTON_VIS( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,pname,3), when( !dvarBool( "attach_allow_"groupArg"_"pname ) ); ) \
+		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, AI_FOCUS_ACTION(wClass,wRef), ;, when( !dvarBool( "attach_allow_"wClass"_"wRef ) ); ) \
+		CHOICE_DBUTTON_VIS( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,wRef,3), when( !dvarBool( "attach_allow_"wClass"_"wRef ) ); ) \
 		
-	#define LOCAL_PISTOL_ATTACHMENT_ITEM( itemNum, groupArg ,p_numref, pname, paction, ptype, bitMask )\
+	#define LOCAL_PISTOL_ATTACHMENT_ITEM( itemNum, wClass ,p_numref, wRef )\
 		/*Pistol attachment*/\
-		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,pname,3), LOCAL_PISTOL_ATTACHMENT_ACTION( pname, paction, groupArg ), \
-			AI_FOCUS_ACTION(groupArg,pname), ;, when( dvarBool( "attach_allow_"groupArg"_"pname ) ), dvarBool( "attach_allow_"groupArg"_"pname ) ) \
+		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,wRef,3), LOCAL_PISTOL_ATTACHMENT_ACTION( wRef, wClass ), \
+			AI_FOCUS_ACTION(wClass,wRef), ;, when( dvarBool( "attach_allow_"wClass"_"wRef ) ), dvarBool( "attach_allow_"wClass"_"wRef ) ) \
 		/*Disabled*/\
-		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, AI_FOCUS_ACTION(groupArg,pname), ;, when( !dvarBool( "attach_allow_"groupArg"_"pname ) ); ) \
-		CHOICE_DBUTTON_VIS( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,pname,3), when( !dvarBool( "attach_allow_"groupArg"_"pname ) ); ) \
+		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, AI_FOCUS_ACTION(wClass,wRef), ;, when( !dvarBool( "attach_allow_"wClass"_"wRef ) ); ) \
+		CHOICE_DBUTTON_VIS( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,wRef,3), when( !dvarBool( "attach_allow_"wClass"_"wRef ) ); ) \
 		
 
 	#undef  UI_FOCUSFIRST
 	#define UI_FOCUSFIRST "ui_attachment_highlighted"
 
+	#define LOCAL_ATTACHMENT_ONOPEN( wClass )\
+		execnow "set "UI_FOCUSFIRST" "REF_ATTACHMENT_NONE"; set ui_inside_popup attachment";\
+		scriptMenuResponse "allow:"wClass":atch";
+	
 	// primary and second primary attachment items
-	#define LOCAL_MASTER_ATTACHMENT_GROUP( suffix, pos, ptype, y_offset )\
-	menuDef { /* assault attachments*/ \
-		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_attachment_popup_assault"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+44+y_offset), ;, execnow "set "UI_FOCUSFIRST" "REF_ATTACHMENT_NONE"; set ui_inside_popup attachment";, !dvarBool( ui_inside_popup_nested ) )\
-		onClose{execnow "set ui_inside_popup 0";} \
-		LOCAL_ATTACHMENT_INFO_WINDOW( "loadout_"ptype )\
-		LOCAL_ATTACHMENT_ITEM( 1, "assault", NUM_NONE, "none", ;, ptype, 0 )\
-		LOCAL_ATTACHMENT_ITEM( 2, "assault", NUM_GL, "gl", play "mouse_click"; ;, ptype, GL_NEW_BITMASK )\
-		LOCAL_ATTACHMENT_ITEM( 3, "assault", NUM_SUPPRESSOR, "silencer", ;, ptype, SILENCER_NEW_BITMASK )\
-		LOCAL_ATTACHMENT_ITEM( 4, "assault", NUM_REFLEX, "reflex", ;, ptype, REDDOT_NEW_BITMASK )\
-		LOCAL_ATTACHMENT_ITEM( 5, "assault", NUM_ACOG, "acog", ;, ptype, ACOG_NEW_BITMASK )\
+	#define LOCAL_MASTER_ATTACHMENT_GROUP( suffix, pos, y_offset )\
+	menuDef { /* assault attachments*/\
+		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_attachment_popup_assault"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+44+y_offset), ;, LOCAL_ATTACHMENT_ONOPEN( "assault" ) , !dvarBool( ui_inside_popup_nested ) )\
+		onClose{execnow "set ui_inside_popup 0";}\
+		LOCAL_ATTACHMENT_INFO_WINDOW\
+		LOCAL_ATTACHMENT_ITEM( 1, "assault", NUM_NONE, "none" )\
+		LOCAL_ATTACHMENT_ITEM( 2, "assault", NUM_GL, "gl" )\
+		LOCAL_ATTACHMENT_ITEM( 3, "assault", NUM_SUPPRESSOR, "silencer" )\
+		LOCAL_ATTACHMENT_ITEM( 4, "assault", NUM_REFLEX, "reflex" )\
+		LOCAL_ATTACHMENT_ITEM( 5, "assault", NUM_ACOG, "acog" )\
 	}\
 	menuDef { /* LMG attachments*/\
-		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_attachment_popup_heavygunner"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+44+y_offset), ;, execnow "set "UI_FOCUSFIRST" "REF_ATTACHMENT_NONE"; set ui_inside_popup attachment";, !dvarBool( ui_inside_popup_nested ) )\
-		onClose{execnow "set ui_inside_popup 0";} \
-		LOCAL_ATTACHMENT_INFO_WINDOW( "loadout_"ptype )\
-		LOCAL_ATTACHMENT_ITEM( 1, "heavygunner", NUM_NONE, "none", ;, ptype, 0 )\
-		LOCAL_ATTACHMENT_ITEM( 2, "heavygunner", NUM_REFLEX, "reflex", ;, ptype, REDDOT_NEW_BITMASK )\
-		LOCAL_ATTACHMENT_ITEM( 3, "heavygunner", NUM_GRIP, "grip", ;, ptype, GRIP_NEW_BITMASK )\
-		LOCAL_ATTACHMENT_ITEM( 4, "heavygunner", NUM_ACOG, "acog", ;, ptype, ACOG_NEW_BITMASK )\
+		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_attachment_popup_heavygunner"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+44+y_offset), ;, LOCAL_ATTACHMENT_ONOPEN( "heavygunner" ) , !dvarBool( ui_inside_popup_nested ) )\
+		onClose{execnow "set ui_inside_popup 0";}\
+		LOCAL_ATTACHMENT_INFO_WINDOW\
+		LOCAL_ATTACHMENT_ITEM( 1, "heavygunner", NUM_NONE, "none" )\
+		LOCAL_ATTACHMENT_ITEM( 2, "heavygunner", NUM_REFLEX, "reflex" )\
+		LOCAL_ATTACHMENT_ITEM( 3, "heavygunner", NUM_GRIP, "grip" )\
+		LOCAL_ATTACHMENT_ITEM( 4, "heavygunner", NUM_ACOG, "acog" )\
 	}\
 	menuDef	{ /* SMG attachments*/\
-		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_attachment_popup_specops"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+44+y_offset), ;, execnow "set "UI_FOCUSFIRST" "REF_ATTACHMENT_NONE"; set ui_inside_popup attachment";, !dvarBool( ui_inside_popup_nested ) )\
-		onClose{execnow "set ui_inside_popup 0";} \
-		LOCAL_ATTACHMENT_INFO_WINDOW( "loadout_"ptype )\
-		LOCAL_ATTACHMENT_ITEM( 1, "specops", NUM_NONE, "none", ;, ptype, 0 )\
-		LOCAL_ATTACHMENT_ITEM( 2, "specops", NUM_SUPPRESSOR, "silencer", ;, ptype, SILENCER_NEW_BITMASK )\
-		LOCAL_ATTACHMENT_ITEM( 3, "specops", NUM_REFLEX, "reflex", ;, ptype, REDDOT_NEW_BITMASK )\
-		LOCAL_ATTACHMENT_ITEM( 4, "specops", NUM_ACOG, "acog", ;, ptype, ACOG_NEW_BITMASK )\
+		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_attachment_popup_specops"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+44+y_offset), ;, LOCAL_ATTACHMENT_ONOPEN( "specops" ) , !dvarBool( ui_inside_popup_nested ) )\
+		onClose{execnow "set ui_inside_popup 0";}\
+		LOCAL_ATTACHMENT_INFO_WINDOW\
+		LOCAL_ATTACHMENT_ITEM( 1, "specops", NUM_NONE, "none" )\
+		LOCAL_ATTACHMENT_ITEM( 2, "specops", NUM_SUPPRESSOR, "silencer" )\
+		LOCAL_ATTACHMENT_ITEM( 3, "specops", NUM_REFLEX, "reflex" )\
+		LOCAL_ATTACHMENT_ITEM( 4, "specops", NUM_ACOG, "acog" )\
 	}\
 	menuDef { /* demolitions attachments*/\
-		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_attachment_popup_demolitions"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+44+y_offset), ;, execnow "set "UI_FOCUSFIRST" "REF_ATTACHMENT_NONE"; set ui_inside_popup attachment";, !dvarBool( ui_inside_popup_nested ) )\
-		onClose{execnow "set ui_inside_popup 0";} \
-		LOCAL_ATTACHMENT_INFO_WINDOW( "loadout_"ptype )\
-		LOCAL_ATTACHMENT_ITEM( 1, "demolitions", NUM_NONE, "none", ;, ptype, 0 )\
-		LOCAL_ATTACHMENT_ITEM( 2, "demolitions", NUM_REFLEX, "reflex", ;, ptype, REDDOT_NEW_BITMASK )\
-		LOCAL_ATTACHMENT_ITEM( 3, "demolitions", NUM_GRIP, "grip", ;, ptype, GRIP_NEW_BITMASK )\
+		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_attachment_popup_demolitions"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+44+y_offset), ;, LOCAL_ATTACHMENT_ONOPEN( "demolitions" ) , !dvarBool( ui_inside_popup_nested ) )\
+		onClose{execnow "set ui_inside_popup 0";}\
+		LOCAL_ATTACHMENT_INFO_WINDOW\
+		LOCAL_ATTACHMENT_ITEM( 1, "demolitions", NUM_NONE, "none" )\
+		LOCAL_ATTACHMENT_ITEM( 2, "demolitions", NUM_REFLEX, "reflex" )\
+		LOCAL_ATTACHMENT_ITEM( 3, "demolitions", NUM_GRIP, "grip" )\
 	}\
 	menuDef	{ /* sniper attachments*/\
-		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_attachment_popup_sniper"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+44+y_offset), ;, execnow "set "UI_FOCUSFIRST" "REF_ATTACHMENT_NONE"; set ui_inside_popup attachment";, !dvarBool( ui_inside_popup_nested ) )\
-		onClose{execnow "set ui_inside_popup 0";} \		
-		LOCAL_ATTACHMENT_INFO_WINDOW( "loadout_"ptype )\
-		LOCAL_ATTACHMENT_ITEM( 1, "sniper", NUM_NONE, "none", ;, ptype, 0 )\
-		LOCAL_ATTACHMENT_ITEM( 2, "sniper", NUM_ACOG, "acog", ;, ptype, ACOG_NEW_BITMASK )\
+		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_attachment_popup_sniper"suffix, 7, (CHOICE_X( pos )-2), (CHOICE_Y( pos )+44+y_offset), ;, LOCAL_ATTACHMENT_ONOPEN( "sniper" ) , !dvarBool( ui_inside_popup_nested ) )\
+		onClose{execnow "set ui_inside_popup 0";}\		
+		LOCAL_ATTACHMENT_INFO_WINDOW\
+		LOCAL_ATTACHMENT_ITEM( 1, "sniper", NUM_NONE, "none" )\
+		LOCAL_ATTACHMENT_ITEM( 2, "sniper", NUM_ACOG, "acog" )\
 	}
 
 	menuDef	{ /* fake attachment heading for weapons without attachments to be displayed on top of camo popup */
 		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_attachment_popup_fake", 7, (CHOICE_X( 1 )-2), (CHOICE_Y( 1 ) + 44), ;, execnow "set ui_inside_popup attachment";, 0 )
-		LOCAL_ATTACHMENT_INFO_WINDOW( "loadout_primary" )
+		LOCAL_ATTACHMENT_INFO_WINDOW
 		PREPROC_SHADER_DRAW_ALIGNED( 0 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "white", 0.15 0.15 0.17 1, 0, 2, CHOICE_POPUP_BORDER_COLOR )
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( 8 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, -32 0, "@"+tablelookup("mp/statstable.csv",4,dvarString(loadout_primary),3), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_RIGHT, CHOICE_TEXTCOLOR )
 		/* pointer icon */
@@ -609,17 +645,17 @@
 	menuDef	{ /* pistol attachments*/
 		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_attachment_popup_pistol", 7, (CHOICE_X( 2 )-2), (CHOICE_Y( 2 )+24), ;, execnow "set "UI_FOCUSFIRST" "REF_ATTACHMENT_NONE"; set ui_inside_popup attachment";, 0 )
 		onClose{execnow "set ui_inside_popup 0";}
-		LOCAL_ATTACHMENT_INFO_WINDOW( "loadout_secondary" )
+		LOCAL_ATTACHMENT_INFO_WINDOW
 		//LOCAL_ATTACHMENT_ITEM( 1, CAC_SECONDARY_ATTACHMENT, "pistol", NUM_NONE, "none", ;, "secondary", "ui_secondary_weapon", 0 )
 		//LOCAL_ATTACHMENT_ITEM( 2, CAC_SECONDARY_ATTACHMENT, "pistol", NUM_SUPPRESSOR, "silencer", ;, "secondary", "ui_secondary_weapon", SILENCER_NEW_BITMASK )
-		LOCAL_PISTOL_ATTACHMENT_ITEM( 1, "pistol", NUM_NONE, "none", ;, "secondary", 0 )
-		LOCAL_PISTOL_ATTACHMENT_ITEM( 2, "pistol", NUM_SUPPRESSOR, "silencer", ;, "secondary", SILENCER_NEW_BITMASK )
+		LOCAL_PISTOL_ATTACHMENT_ITEM( 1, "pistol", NUM_NONE, "none" )
+		LOCAL_PISTOL_ATTACHMENT_ITEM( 2, "pistol", NUM_SUPPRESSOR, "silencer" )
 	}
 	
 	// primary and second primary attachment popup menus
 	//LOCAL_MASTER_ATTACHMENT_GROUP( CAC_PRIMARY_ATTACHMENT, "", 1, "primary", 0, "loadout_primary_attachment" )
-	LOCAL_MASTER_ATTACHMENT_GROUP( "", 1, "primary", 0 )
-	LOCAL_MASTER_ATTACHMENT_GROUP( "_not_nested", 1, "primary", -48)
+	LOCAL_MASTER_ATTACHMENT_GROUP( "", 1, 0 )
+	LOCAL_MASTER_ATTACHMENT_GROUP( "_not_nested", 1, -48)
 	//LOCAL_MASTER_ATTACHMENT_GROUP( "_secondary", 1, "secondary", 0 )
 
 	// ====================================================================================================
@@ -636,42 +672,48 @@
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 58 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/statstable.csv",4,dvarString(highlight_dvar),3), TEXTSIZE_DEFAULT, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( dvarString(ui_inside_popup) != "attachment" ); ) \
 		/* sidearm desc unlocked*/\
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/statstable.csv",4,dvarString(highlight_dvar),7), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, CHOICE_TEXTCOLOR visible when( dvarBool( ui_sidearm_hl_unlocked ) ); )\
-		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@MENU_DISABLED", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( !dvarBool( ui_sidearm_hl_unlocked ) ); )\
+		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@OW_ICE_LOCK_SERVER", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( !dvarBool( ui_sidearm_hl_unlocked ) ); )\
 		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+6) 0 (CHOICE_SIZE_Y*2) CHOICE_SIZE_Y CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "specialty_locked", 1 1 1 1, 0, 2, CHOICE_POPUP_BORDER_COLOR visible when( !dvarBool( ui_sidearm_hl_unlocked ) ); ) \
 
-	#define LOCAL_SIDEARM_ACTION( weaponRef ) \
+	#define LOCAL_SIDEARM_ACTION( wRef ) \
 			play "mouse_click"; \
-			setdvar	loadout_secondary weaponRef; \
+			setdvar	loadout_secondary wRef; \
 			setdvar	loadout_secondary_attachment none; \
-			scriptMenuResponse "set:loadout_secondary:"weaponRef;\
+			scriptMenuResponse "set:secondary:"wRef;\
 			PREPROC_ATTACH_CLOSEALL
 
-	#define LOCAL_SIDEARM_ACTION2( weaponRef ) \		
+	#define LOCAL_SIDEARM_ACTION2( wRef ) \		
 			play "mouse_click"; \
-			setdvar	loadout_secondary weaponRef; \
+			setdvar	loadout_secondary wRef; \
 			setdvar	loadout_secondary_attachment none; \
-			scriptMenuResponse "set:loadout_secondary:"weaponRef;\
-			scriptMenuResponse "set:loadout_secondary_attachment:"REF_NONE;\
-			setdvar	ui_inside_popup_nested 1; \
-			open "nocd_attachment_popup_pistol";
+			scriptMenuResponse "set:secondary:"wRef;\
+			scriptMenuResponse "set:secondary_attachment:"REF_NONE;\
+			setdvar	ui_inside_popup_nested 1;\
+			setdvar ui_attachment_weap_slot loadout_secondary;\
+			open "nocd_attachment_popup_pistol";\
+			scriptMenuResponse "allow:pistol:atch";
 	
-	#define SI_FOCUS_ACTION( weaponRef ) \
-		execOnDvarStringValue "weap_allow_"weaponRef 0 "set ui_sidearm_hl_unlocked 0";\
-		execOnDvarStringValue "weap_allow_"weaponRef 1 "set ui_sidearm_hl_unlocked 1";\
-		exec "set ui_sidearm_highlighted "weaponRef;
+	#define SI_FOCUS_ACTION( wRef ) \
+		execOnDvarStringValue "weap_allow_"wRef 0 "set ui_sidearm_hl_unlocked 0";\
+		execOnDvarStringValue "weap_allow_"wRef 1 "set ui_sidearm_hl_unlocked 1";\
+		exec "set ui_sidearm_highlighted "wRef;
 
 
-	#define LOCAL_SIDEARM_ITEM( itemNum, wName, weaponRef, highlight_dvar )\
-		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, wName, LOCAL_SIDEARM_ACTION( weaponRef ), SI_FOCUS_ACTION( weaponRef ), ;, \
-		when( dvarBool( "weap_allow_"weaponRef ) && ( weaponRef == REF_DESERTEAGLE || weaponRef == REF_DESERTEAGLEGOLD ) );, \
-			  dvarBool( "weap_allow_"weaponRef ) && ( weaponRef == REF_DESERTEAGLE || weaponRef == REF_DESERTEAGLEGOLD ) ) \
-		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, wName, LOCAL_SIDEARM_ACTION2( weaponRef ), SI_FOCUS_ACTION( weaponRef ), ;, \
-		when( dvarBool( "weap_allow_"weaponRef ) && weaponRef != REF_DESERTEAGLE && weaponRef != REF_DESERTEAGLEGOLD );, \
-			  dvarBool( "weap_allow_"weaponRef ) && weaponRef != REF_DESERTEAGLE && weaponRef != REF_DESERTEAGLEGOLD ) \
-		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, SI_FOCUS_ACTION( weaponRef ), ;, when( !dvarBool( "weap_allow_"weaponRef ) ); ) \
-		CHOICE_DBUTTON_VIS( itemNum, wName, when( !dvarBool( "weap_allow_"weaponRef ) ); )
+	#define LOCAL_SIDEARM_ITEM( itemNum, wName, wRef, highlight_dvar )\
+		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, wName, LOCAL_SIDEARM_ACTION( wRef ), SI_FOCUS_ACTION( wRef ), ;, \
+		when( dvarBool( "weap_allow_"wRef ) && ( wRef == REF_DESERTEAGLE || wRef == REF_DESERTEAGLEGOLD ) );, \
+			  dvarBool( "weap_allow_"wRef ) && ( wRef == REF_DESERTEAGLE || wRef == REF_DESERTEAGLEGOLD ) ) \
+		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, wName, LOCAL_SIDEARM_ACTION2( wRef ), SI_FOCUS_ACTION( wRef ), ;, \
+		when( dvarBool( "weap_allow_"wRef ) && wRef != REF_DESERTEAGLE && wRef != REF_DESERTEAGLEGOLD );, \
+			  dvarBool( "weap_allow_"wRef ) && wRef != REF_DESERTEAGLE && wRef != REF_DESERTEAGLEGOLD ) \
+		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, SI_FOCUS_ACTION( wRef ), ;, when( !dvarBool( "weap_allow_"wRef ) ); ) \
+		CHOICE_DBUTTON_VIS( itemNum, wName, when( !dvarBool( "weap_allow_"wRef ) ); )
 	// side arm selection popup menu
 	
+	#define LOCAL_SIDEARM_ITEM_ONOPEN( wclass )\
+		execnow "set "UI_FOCUSFIRST" "REF_M9BERETTA"; set selected_weapon_class "wclass"; set ui_inside_popup "wclass;\
+		scriptMenuResponse "allow:"wclass":weap";
+
 	// hackaround to work for PC's floating mouse unfocusing
 	#undef  UI_FOCUSFIRST
 	#ifdef PC
@@ -682,7 +724,7 @@
 	
 	menuDef	
 	{
-		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_secondary", 7, (CHOICE_X( 2 )-2), (CHOICE_Y( 2 )), ;, execnow "set "UI_FOCUSFIRST" "REF_M9BERETTA"; set selected_weapon_class pistol; set ui_inside_popup pistol";, 1 )
+		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_secondary", 7, (CHOICE_X( 2 )-2), (CHOICE_Y( 2 )), ;, LOCAL_SIDEARM_ITEM_ONOPEN( "pistol" ), 1 )
 		onClose{execnow "set ui_inside_popup 0";}
 		LOCAL_SIDEARM_INFO_WINDOW( "ui_sidearm_highlighted" )
 		LOCAL_SIDEARM_ITEM( 1, "@WEAPON_BERETTA", REF_M9BERETTA, "ui_sidearm_highlighted" )
@@ -714,7 +756,7 @@
 	#define LOCAL_CAMO_ACTION( camoRef ) \
 			play "mouse_click"; \
 			setdvar loadout_camo camoRef;\
-			scriptMenuResponse "set:loadout_camo:"camoRef;\
+			scriptMenuResponse "set:camo:"camoRef;\
 			PREPROC_ATTACH_CLOSEALL
 
 	#define LOCAL_CAMO_ITEM( itemNum, camoName, pnum, camoRef, highlight_dvar, bitMask, visArg )\
@@ -760,22 +802,26 @@
 		/* special grenade desc unlocked*/\
 		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 56 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/statstable.csv",4,dvarString(highlight_dvar),7), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, CHOICE_TEXTCOLOR \
 		visible when( ( ( dvarString(ui_sgrenade_highlighted)=="smoke_grenade") && (dvarString( loadout_perk1 )=="specialty_specialgrenade") ) == 0 ); )\
-		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 56 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@MENU_DISABLED", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE \
+		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 56 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@OW_ICE_LOCK_PERK", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE \
 		visible when( (dvarString(ui_sgrenade_highlighted)=="smoke_grenade") && (dvarString( loadout_perk1 )=="specialty_specialgrenade") ); )
 
-	#define LOCAL_SGRENADE_ACTION( weaponRef ) \
-			play "mouse_click"; \
-			setdvar loadout_grenade weaponRef; \
-			scriptMenuResponse "set:loadout_grenade:"weaponRef;\
-			close "nocd_popup_cac_extra"
+	#define LOCAL_SGRENADE_ACTION( wRef ) \
+		play "mouse_click"; \
+		setdvar loadout_grenade wRef; \
+		scriptMenuResponse "set:grenade:"wRef;\
+		close "nocd_popup_cac_extra"
 		
-	#define LOCAL_SGRENADE_ITEM( itemNum, wName, weaponRef, highlight_dvar )\
-		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, wName, LOCAL_SGRENADE_ACTION( weaponRef ), execnow "set "highlight_dvar" "weaponRef, ;, \
-		when( ( weaponRef == REF_SMOKE_X1 && (dvarString(loadout_perk1)=="specialty_specialgrenade") ) == 0 && dvarBool("weap_allow_"weaponRef) );, \
-			  ( weaponRef == REF_SMOKE_X1 && (dvarString(loadout_perk1)=="specialty_specialgrenade") ) == 0 && dvarBool("weap_allow_"weaponRef) ) \
-		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, execnow "set "highlight_dvar" "weaponRef, ;, when( weaponRef == REF_SMOKE_X1 && (dvarString(loadout_perk1)=="specialty_specialgrenade") && dvarBool("weap_allow_"weaponRef)); ) \
-		CHOICE_DBUTTON_VIS( itemNum, wName, when( (weaponRef == REF_SMOKE_X1 && (dvarString(loadout_perk1)=="specialty_specialgrenade")) || !dvarBool("weap_allow_"weaponRef) ); )
+	#define LOCAL_SGRENADE_ITEM( itemNum, wName, wRef, highlight_dvar )\
+		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, wName, LOCAL_SGRENADE_ACTION( wRef ), execnow "set "highlight_dvar" "wRef, ;, \
+		when( ( wRef == REF_SMOKE_X1 && (dvarString(loadout_perk1)=="specialty_specialgrenade") ) == 0 && dvarBool("weap_allow_"wRef) );, \
+			  ( wRef == REF_SMOKE_X1 && (dvarString(loadout_perk1)=="specialty_specialgrenade") ) == 0 && dvarBool("weap_allow_"wRef) ) \
+		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, execnow "set "highlight_dvar" "wRef, ;, when( wRef == REF_SMOKE_X1 && (dvarString(loadout_perk1)=="specialty_specialgrenade") && dvarBool("weap_allow_"wRef)); ) \
+		CHOICE_DBUTTON_VIS( itemNum, wName, when( (wRef == REF_SMOKE_X1 && (dvarString(loadout_perk1)=="specialty_specialgrenade")) || !dvarBool("weap_allow_"wRef) ); )
 	
+	#define LOCAL_SGRENADE_ONOPEN\
+		execnow "set "UI_FOCUSFIRST" "REF_FLASH_X1"; set ui_inside_popup sgrenade";\
+		scriptMenuResponse "allow:grenade:weap";
+
 	// hackaround to work for PC's floating mouse unfocusing
 	#undef  UI_FOCUSFIRST
 	#define UI_FOCUSFIRST "ui_sgrenade_highlighted"
@@ -783,7 +829,7 @@
 	// special grenade selection popup menus
 	menuDef	
 	{
-		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_extra", 6, (CHOICE_X( 3 )-2), (CHOICE_Y( 3 )+4), ;, execnow "set "UI_FOCUSFIRST" "REF_FLASH_X1"; set ui_inside_popup sgrenade";, 1 )
+		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_extra", 6, (CHOICE_X( 3 )-2), (CHOICE_Y( 3 )+4), ;, LOCAL_SGRENADE_ONOPEN, 1 )
 		onClose{ execnow "set ui_inside_popup 0"; }
 		LOCAL_SGRENADE_INFO_WINDOW( "ui_sgrenade_highlighted" )
 		LOCAL_SGRENADE_ITEM( 1, "@WEAPON_FLASH_GRENADE", REF_FLASH_X1, "ui_sgrenade_highlighted" )
@@ -794,113 +840,196 @@
 	// ====================================================================================================
 	// perk selection =====================================================================================
 	// ====================================================================================================
-	#define LOCAL_PERK_INFO_WINDOW( highlight_dvar ) \
-		/* perk information side frame*/ \
-		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH-6) -4 280 CHOICE_POPUP_HEIGHT( 7 ) CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "white", CHOICE_POPUP_BORDER_COLOR, 1, 2, CHOICE_POPUP_BORDER_COLOR ) \
-		LOADOUT_PLATING_RAW( CHOICE_POPUP_WIDTH 8, -2, 0, 280, (CHOICE_POPUP_HEIGHT( 7 )-4), CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0, 0 )\
-		/* perk image*/ \
-		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+6) 30 256 48 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "gradient_bottom", 1 1 1 0.3, 0, 2, CHOICE_POPUP_BORDER_COLOR ) \
-		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+188) -2 64 64 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, tablelookup("mp/statsTable.csv",4,dvarString(highlight_dvar),6), 1 1 1 0.75, 0, 0, 0.2 0.2 0.225 1 ) \
-		/* perk title*/\
-		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 58 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/statsTable.csv",4,dvarString(highlight_dvar),3), TEXTSIZE_DEFAULT, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE ) \
-		/* perk desc unlocked*/\
-		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0,  "@"+tablelookup("mp/statsTable.csv",4,dvarString(highlight_dvar),7), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, CHOICE_TEXTCOLOR \
-		visible when( dvarBool( ui_perk_hl_unlocked ) && dvarBool( "perk_"+dvarString( loadout_class )+"_allow_"+dvarString( highlight_dvar )) && ( dvarString( loadout_grenade )=="smoke_grenade" && dvarString(highlight_dvar)=="specialty_specialgrenade" )==0 ); )\
-		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0,  "@MENU_DISABLED", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE \
-		visible when( !dvarBool( ui_perk_hl_unlocked ) || !dvarBool( "perk_"+dvarString( loadout_class )+"_allow_"+dvarString( highlight_dvar )) || ( dvarString( loadout_grenade )=="smoke_grenade" && dvarString(highlight_dvar)=="specialty_specialgrenade" ) ); )\
-		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+6) 0 (CHOICE_SIZE_Y*2) CHOICE_SIZE_Y CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "specialty_locked", 1 1 1 1, 0, 2, CHOICE_POPUP_BORDER_COLOR \
-		visible when( !dvarBool( ui_perk_hl_unlocked ) || !dvarBool( "perk_"+dvarString( loadout_class )+"_allow_"+dvarString( highlight_dvar )) ); ) \
+	
+	#define LOCAL_PERK_INFO_ALLOWED\
+		dvarBool( "perk_allow_" + dvarString( ui_perk_hl_ref ) )
 
-	#define LOCAL_PERK_ACTION( perkDvar, perkRef, paction ) \
+	#define LOCAL_PERK_INFO_EQUIPPED( perkSlot )\
+		dvarString( "loadout_"perkSlot ) == dvarString( ui_perk_hl_ref )
+
+	#define LOCAL_PERK_INFO_NOT_EQUIPPED( perkSlot )\
+		dvarString( "loadout_"perkSlot ) != dvarString( ui_perk_hl_ref )
+
+	#define LOCAL_PERK_INFO_ALLOWED_GRENADE\
+		( dvarString( ui_perk_hl_ref ) != REF_SPECIALGRENADE_X3 || dvarString( loadout_grenade ) != REF_SMOKE_X1 )
+
+	#define LOCAL_PERK_INFO_NOT_ALLOWED_GRENADE\
+		( dvarString( ui_perk_hl_ref ) == REF_SPECIALGRENADE_X3 && dvarString( loadout_grenade ) == REF_SMOKE_X1 )
+
+	#define LOCAL_PERK_INFO_ALLOWED_CLASS( weaponSlot )\
+		dvarBool( "perk_" + dvarString( weaponSlot ) + "_allow_" + dvarString( ui_perk_hl_ref ) )
+	
+	#define LOCAL_PERK_INFO_ALLOWED_OVERKILL\
+		( dvarString( loadout_perk2 ) != REF_TWOPRIMARIES || LOCAL_PERK_INFO_ALLOWED_CLASS( loadout_class_secondary ) )
+
+	#define LOCAL_PERK_INFO_NOT_ALLOWED_OVERKILL\
+		( dvarString( ui_perk_hl_ref ) != REF_TWOPRIMARIES && dvarString( loadout_perk2 ) == REF_TWOPRIMARIES && LOCAL_PERK_INFO_ALLOWED_CLASS( loadout_class_secondary ) == 0 )
+	
+	#define LOCAL_PERK_INFO_VISIBLE( perkSlot )\
+		/* PERK NOT EQUIPPED */\
+		LOCAL_PERK_INFO_NOT_EQUIPPED( perkSlot ) &&\
+		/* PERK ALLOWED */\
+		LOCAL_PERK_INFO_ALLOWED &&\
+		/* PERK ALLOWED FOR CLASS */\
+		LOCAL_PERK_INFO_ALLOWED_CLASS( loadout_class ) &&\
+		/* PERK ALLOWED BY GRENADE*/\
+		LOCAL_PERK_INFO_ALLOWED_GRENADE &&\
+		/* PERK ALLOWED BY OVERKILL WEAPON CLASS */\
+		LOCAL_PERK_INFO_ALLOWED_OVERKILL
+
+	#define LOCAL_PERK_INFO_WINDOW( perkSlot )\
+		/* perk information side frame*/\
+		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH-6) -4 280 CHOICE_POPUP_HEIGHT( 7 ) CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "white", CHOICE_POPUP_BORDER_COLOR, 1, 2, CHOICE_POPUP_BORDER_COLOR )\
+		LOADOUT_PLATING_RAW( CHOICE_POPUP_WIDTH 8, -2, 0, 280, (CHOICE_POPUP_HEIGHT( 7 )-4), CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0, 0 )\
+		/* perk image*/\
+		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+6) 30 256 48 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "gradient_bottom", 1 1 1 0.3, 0, 2, CHOICE_POPUP_BORDER_COLOR )\
+		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+188) -2 64 64 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, tablelookup("mp/statsTable.csv",4,dvarString( ui_perk_hl_ref ),6), 1 1 1 0.75, 0, 0, 0.2 0.2 0.225 1 )\
+		/* perk title*/\
+		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 58 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/statsTable.csv",4,dvarString( ui_perk_hl_ref ),3), TEXTSIZE_DEFAULT, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE )\
+		/* perk desc unlocked*/\
+		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0,  "@"+tablelookup("mp/statsTable.csv",4,dvarString( ui_perk_hl_ref ),7), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, CHOICE_TEXTCOLOR\
+			visible when( LOCAL_PERK_INFO_VISIBLE( perkSlot ) ); )\
+		/* perk desc locked - global*/\
+		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0,  "@OW_ICE_LOCK_SERVER", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE \
+			visible when( LOCAL_PERK_INFO_ALLOWED == 0 ); )\
+		/* perk desc locked - class*/\
+		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0,  "@OW_ICE_LOCK_CLASS", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE \
+			visible when( LOCAL_PERK_INFO_ALLOWED && ( LOCAL_PERK_INFO_ALLOWED_CLASS( loadout_class ) == 0 || LOCAL_PERK_INFO_NOT_ALLOWED_OVERKILL ) ); )\
+		/* perk desc locked - equipped*/\
+		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0,  "@OW_ICE_LOCK_EQUIPPED", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE \
+			visible when( LOCAL_PERK_INFO_EQUIPPED( perkSlot ) ); )\
+		/* perk desc locked - greanade*/\
+		PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0,  "@OW_ICE_LOCK_FRAG", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE \
+			visible when( LOCAL_PERK_INFO_NOT_ALLOWED_GRENADE ); )\
+		/* perk desc locked image*/\
+		PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+6) 0 (CHOICE_SIZE_Y*2) CHOICE_SIZE_Y CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "specialty_locked", 1 1 1 1, 0, 2, CHOICE_POPUP_BORDER_COLOR \
+			visible when( dvarBool( ui_perk_hl_locked ) ); )
+
+	#define LOCAL_PERK_ACTION( perkSlot, perkRef, paction ) \
 			play "mouse_click"; \
 			close self \
-			exec "set "perkDvar" "perkRef;\
-			scriptMenuResponse "set:"perkDvar":"perkRef;\
+			exec "set loadout_"perkSlot" "perkRef;\
+			scriptMenuResponse "set:"perkSlot":"perkRef;\
 			paction
 		
-	#define LOCAL_PERK_ITEM( itemNum, camoName, perkDvar, perkRef, highlight_dvar, paction )\
-		LOCAL_PERK_ITEM_VIS( itemNum, camoName, perkDvar, perkRef, highlight_dvar, paction, 1 )
+	#define LOCAL_PERK_ITEM( itemNum, camoName, perkSlot, perkRef, paction )\
+		LOCAL_PERK_ITEM_VIS( itemNum, camoName, perkSlot, perkRef, paction, 1 )
 
-	#define PI_FOCUS_ACTION( perkRef ) \
-		execOnDvarStringValue "perk_allow_"perkRef 0 "set ui_perk_hl_unlocked 0";\
-		execOnDvarStringValue "perk_allow_"perkRef 1 "set ui_perk_hl_unlocked 1";\
-		exec "set ui_perk_highlighted "perkRef;
+	#define PI_FOCUS_ACTION( perkRef )\
+		exec "set ui_perk_hl_ref "perkRef;\
+		exec "set ui_perk_hl_locked 0";
 
-	#define LOCAL_PERK_VISIBLE( perkRef, visArg ) \
-		dvarBool( "perk_" + dvarString( loadout_class ) + "_allow_"perkRef ) && dvarBool( "perk_allow_"perkRef ) && ( dvarString(loadout_grenade)==REF_SMOKE_X1 && perkRef==REF_SPECIALGRENADE_X3 )==0 && visArg
-		
-	#define LOCAL_PERK_ITEM_VIS( itemNum, camoName, perkDvar, perkRef, highlight_dvar, paction, visArg )\
-		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, camoName, LOCAL_PERK_ACTION( perkDvar, perkRef, paction );, PI_FOCUS_ACTION( perkRef ), ;, \
-		when( LOCAL_PERK_VISIBLE( perkRef, visArg ) );, \
-			  LOCAL_PERK_VISIBLE( perkRef, visArg ) ) \
-		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;,PI_FOCUS_ACTION( perkRef ), ;, \
-		when( ( !dvarBool( "perk_" + dvarString( loadout_class ) + "_allow_"perkRef ) || !dvarBool( "perk_allow_"perkRef ) || ( dvarString(loadout_grenade)==REF_SMOKE_X1 && perkRef==REF_SPECIALGRENADE_X3 ) ) && visArg ); ) \
-		CHOICE_DBUTTON_VIS( itemNum, camoName, \
-		when( ( !dvarBool( "perk_" + dvarString( loadout_class ) + "_allow_"perkRef ) || !dvarBool( "perk_allow_"perkRef ) || ( dvarString(loadout_grenade)==REF_SMOKE_X1 && perkRef==REF_SPECIALGRENADE_X3 ) ) && visArg ); )
+	#define PI_FOCUS_LOCKED_ACTION( perkRef )\
+		PI_FOCUS_ACTION( perkRef );\
+		exec "set ui_perk_hl_locked 1";
+
+	#define LOCAL_PERK_ALLOWED( perkRef )\
+		dvarBool( "perk_allow_"perkRef )
+
+	#define LOCAL_PERK_ALLOWED_CLASS( weaponSlot, perkRef )\
+		dvarBool( "perk_" + dvarString( weaponSlot ) + "_allow_"perkRef )
+
+	#define LOCAL_PERK_ALLOWED_GRENADE( perkRef )\
+		( perkRef != REF_SPECIALGRENADE_X3 || dvarString( loadout_grenade ) != REF_SMOKE_X1 )
+
+	#define LOCAL_PERK_ALLOWED_OVERKILL( perkRef )\
+		( dvarString( loadout_perk2 ) != REF_TWOPRIMARIES || LOCAL_PERK_ALLOWED_CLASS( loadout_class_secondary, perkRef ) )
+
+	#define LOCAL_PERK_EQUIPPED( perkSlot, perkRef )\
+		dvarString( "loadout_"perkSlot ) == perkRef
+
+	#define LOCAL_PERK_NOT_EQUIPPED( perkSlot, perkRef )\
+		dvarString( "loadout_"perkSlot ) != perkRef
+
+	#define LOCAL_PERK_CHOICE_NOT_LOCKED( perkSlot, perkRef )\
+		LOCAL_PERK_NOT_EQUIPPED( perkSlot, perkRef ) &&\
+		LOCAL_PERK_ALLOWED( perkRef ) &&\
+		LOCAL_PERK_ALLOWED_CLASS( loadout_class, perkRef ) &&\
+		LOCAL_PERK_ALLOWED_GRENADE( perkRef ) &&\
+		LOCAL_PERK_ALLOWED_OVERKILL( perkRef )
+
+	#define LOCAL_PERK_CHOICE_IS_LOCKED( perkSlot, perkRef )\
+		LOCAL_PERK_EQUIPPED( perkSlot, perkRef ) ||\
+		LOCAL_PERK_ALLOWED( perkRef ) == 0 ||\
+		LOCAL_PERK_ALLOWED_CLASS( loadout_class, perkRef ) == 0 ||\
+		( perkRef == REF_SPECIALGRENADE_X3 && dvarString( loadout_grenade ) == REF_SMOKE_X1 ) ||\
+		( perkRef != REF_TWOPRIMARIES && dvarString( loadout_perk2 ) == REF_TWOPRIMARIES && LOCAL_PERK_ALLOWED_CLASS( loadout_class_secondary, perkRef ) == 0 )
+
+	#define LOCAL_PERK_ITEM_VIS( itemNum, camoName, perkSlot, perkRef, paction, visArg )\
+		CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, camoName, LOCAL_PERK_ACTION( perkSlot, perkRef, paction );, PI_FOCUS_ACTION( perkRef ), ;, when( LOCAL_PERK_CHOICE_NOT_LOCKED( perkSlot, perkRef ) && visArg );, 0 )\
+		CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;,PI_FOCUS_LOCKED_ACTION( perkRef ), ;, when( LOCAL_PERK_CHOICE_IS_LOCKED( perkSlot, perkRef ) && visArg ); )\
+		CHOICE_DBUTTON_VIS( itemNum, camoName, when( LOCAL_PERK_CHOICE_IS_LOCKED( perkSlot, perkRef ) && visArg ); )
+
+	#define LOCAL_PERK_ONOPEN( perkRef, perkSlot )\
+		execnow "set "UI_FOCUSFIRST" "perkRef"; set ui_inside_popup "perkSlot;\
+		scriptMenuResponse "allow:*current&all*:"perkSlot;
 
 	// hackaround to work for PC's floating mouse unfocusing
 	#undef  UI_FOCUSFIRST
-	#define UI_FOCUSFIRST "ui_perk_highlighted"
+	#define UI_FOCUSFIRST "ui_perk_hl_ref"
 
 	// perk1 selection for primary weapon popup menu
 	menuDef	
 	{
-		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_perk1", 7, (CHOICE_X( 4 )-2), (CHOICE_Y( 4 )+18), ;, execnow "set "UI_FOCUSFIRST" "REF_C4_X2"; set ui_inside_popup perk1";, 1 )
+		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_perk1", 7, (CHOICE_X( 4 )-2), (CHOICE_Y( 4 )+18), ;, LOCAL_PERK_ONOPEN( REF_C4_X2, "perk1" ), 1 )
 		onClose{ execnow "set ui_inside_popup 0"; }
-		LOCAL_PERK_INFO_WINDOW( "ui_perk_highlighted" )
-		LOCAL_PERK_ITEM( 1, "@PERKS_C4_X_2", "loadout_perk1", REF_C4_X2, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 2, "@PERKS_SPECIAL_GRENADES_X_3", "loadout_perk1", REF_SPECIALGRENADE_X3, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 3, "@PERKS_RPG7_X_2", "loadout_perk1", REF_RPG_X2, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 4, "@PERKS_CLAYMORE_X_2", "loadout_perk1", REF_CLAYMORE_X2, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 5, "@PERKS_FRAG_X_3", "loadout_perk1", REF_FRAG_X3, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 6, "@PERKS_BANDOLIER", "loadout_perk1", REF_EXTRAAMMO, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 7, "@PERKS_BOMB_SQUAD", "loadout_perk1", REF_DETECTEXPLOSIVE, "ui_perk_highlighted", ; )
+		LOCAL_PERK_INFO_WINDOW( "perk1" )
+		LOCAL_PERK_ITEM( 1, "@PERKS_C4_X_2", "perk1", REF_C4_X2, ; )
+		LOCAL_PERK_ITEM( 2, "@PERKS_SPECIAL_GRENADES_X_3", "perk1", REF_SPECIALGRENADE_X3, ; )
+		LOCAL_PERK_ITEM( 3, "@PERKS_RPG7_X_2", "perk1", REF_RPG_X2, ; )
+		LOCAL_PERK_ITEM( 4, "@PERKS_CLAYMORE_X_2", "perk1", REF_CLAYMORE_X2, ; )
+		LOCAL_PERK_ITEM( 5, "@PERKS_FRAG_X_3", "perk1", REF_FRAG_X3, ; )
+		LOCAL_PERK_ITEM( 6, "@PERKS_BANDOLIER", "perk1", REF_EXTRAAMMO, ; )
+		LOCAL_PERK_ITEM( 7, "@PERKS_BOMB_SQUAD", "perk1", REF_DETECTEXPLOSIVE, ; )
 	}
 
 	#define LOCAL_RESET_PISTOL \
 		execnowondvarstringvalue ui_dual_primaries 1 "set loadout_secondary "REF_M9BERETTA"; set loadout_secondary_attachment "REF_ATTACHMENT_NONE"; set ui_dual_primaries 0";\
+		scriptMenuResponse "validate:perks";\
 		UPDATE_PERK1;
 
 	#define LOCAL_INIT_DUAL_PRIMARY_M16 \
-		execnow "set loadout_secondary "REF_M16"; set loadout_secondary_attachment "REF_ATTACHMENT_NONE"; set ui_dual_primaries 1";\
-		scriptMenuResponse "set:loadout_secondary:"REF_M16;\
-   		scriptMenuResponse "set:loadout_secondary_attachment:"REF_ATTACHMENT_NONE;
+		execnow "set loadout_class_secondary assault; set loadout_secondary "REF_M16"; set loadout_secondary_attachment "REF_ATTACHMENT_NONE"; set ui_dual_primaries 1";\
+		scriptMenuResponse "set:secondary:"REF_M16;\
+   		scriptMenuResponse "set:secondary_attachment:"REF_ATTACHMENT_NONE;\
+		scriptMenuResponse "validate:perks"
 
 	#define LOCAL_INIT_DUAL_PRIMARY_AK47 \
-		execnow "set loadout_secondary "REF_AK47"; set loadout_secondary_attachment "REF_ATTACHMENT_NONE"; set ui_dual_primaries 1";\
-		scriptMenuResponse "set:loadout_secondary:"REF_AK47;\
-   		scriptMenuResponse "set:loadout_secondary_attachment:"REF_ATTACHMENT_NONE;
+		execnow "set loadout_class_secondary assault; set loadout_secondary "REF_AK47"; set loadout_secondary_attachment "REF_ATTACHMENT_NONE"; set ui_dual_primaries 1";\
+		scriptMenuResponse "set:secondary:"REF_AK47;\
+   		scriptMenuResponse "set:secondary_attachment:"REF_ATTACHMENT_NONE;\
+		scriptMenuResponse "validate:perks"
 
 	// perk2 selection for primary weapon popup menu
 	menuDef	
 	{
-		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_perk2", 7, (CHOICE_X( 5 )-2), (CHOICE_Y( 5 )+22), ;, execnow "set "UI_FOCUSFIRST" "REF_BULLETDAMAGE"; set ui_inside_popup perk2";, 1 )
+		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_perk2", 7, (CHOICE_X( 5 )-2), (CHOICE_Y( 5 )+22), ;, LOCAL_PERK_ONOPEN( REF_BULLETDAMAGE, "perk2" ), 1 )
 		onClose{ execnow "set ui_inside_popup 0"; }
-		LOCAL_PERK_INFO_WINDOW( "ui_perk_highlighted" )
-		LOCAL_PERK_ITEM( 1, "@PERKS_STOPPING_POWER", "loadout_perk2", REF_BULLETDAMAGE, "ui_perk_highlighted", LOCAL_RESET_PISTOL )
-		LOCAL_PERK_ITEM( 2, "@PERKS_JUGGERNAUT", "loadout_perk2", REF_ARMORVEST, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 3, "@PERKS_SLEIGHT_OF_HAND", "loadout_perk2", REF_FASTRELOAD, "ui_perk_highlighted", LOCAL_RESET_PISTOL )
-		LOCAL_PERK_ITEM( 4, "@PERKS_DOUBLE_TAP", "loadout_perk2", REF_ROF, "ui_perk_highlighted", LOCAL_RESET_PISTOL )
+		LOCAL_PERK_INFO_WINDOW( "perk2" )
+		LOCAL_PERK_ITEM( 1, "@PERKS_STOPPING_POWER", "perk2", REF_BULLETDAMAGE, LOCAL_RESET_PISTOL )
+		LOCAL_PERK_ITEM( 2, "@PERKS_JUGGERNAUT", "perk2", REF_ARMORVEST, LOCAL_RESET_PISTOL )
+		LOCAL_PERK_ITEM( 3, "@PERKS_SLEIGHT_OF_HAND", "perk2", REF_FASTRELOAD, LOCAL_RESET_PISTOL )
+		LOCAL_PERK_ITEM( 4, "@PERKS_DOUBLE_TAP", "perk2", REF_ROF, LOCAL_RESET_PISTOL )
 		/*hacked, init to m16 if not m16*/	
-		LOCAL_PERK_ITEM_VIS( 5, "@PERKS_OVERKILL", "loadout_perk2", REF_TWOPRIMARIES, "ui_perk_highlighted", LOCAL_INIT_DUAL_PRIMARY_M16, dvarString ( "loadout_primary" ) != "m16" )
+		LOCAL_PERK_ITEM_VIS( 5, "@PERKS_OVERKILL", "perk2", REF_TWOPRIMARIES, LOCAL_INIT_DUAL_PRIMARY_M16, dvarString ( "loadout_primary" ) != REF_M16 )
 		/*hacked, init to ak47 if m16*/		
-		LOCAL_PERK_ITEM_VIS( 5, "@PERKS_OVERKILL", "loadout_perk2", REF_TWOPRIMARIES, "ui_perk_highlighted", LOCAL_INIT_DUAL_PRIMARY_AK47, dvarString ( "loadout_primary" ) == "m16" )
-		LOCAL_PERK_ITEM( 6, "@PERKS_UAV_JAMMER", "loadout_perk2", REF_GPSJAMMER, "ui_perk_highlighted", LOCAL_RESET_PISTOL )
-		LOCAL_PERK_ITEM( 7, "@PERKS_SONIC_BOOM", "loadout_perk2", REF_EXPLOSIVEDAMAGE, "ui_perk_highlighted", LOCAL_RESET_PISTOL )
+		LOCAL_PERK_ITEM_VIS( 5, "@PERKS_OVERKILL", "perk2", REF_TWOPRIMARIES, LOCAL_INIT_DUAL_PRIMARY_AK47, dvarString ( "loadout_primary" ) == REF_M16 )
+		LOCAL_PERK_ITEM( 6, "@PERKS_UAV_JAMMER", "perk2", REF_GPSJAMMER, LOCAL_RESET_PISTOL )
+		LOCAL_PERK_ITEM( 7, "@PERKS_SONIC_BOOM", "perk2", REF_EXPLOSIVEDAMAGE, LOCAL_RESET_PISTOL )
 	}
 				
 	// perk3 selection for primary weapon popup menu
 	menuDef	
 	{
-		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_perk3", 8, (CHOICE_X( 6 )-2), (CHOICE_Y( 6 )+26), ;, execnow "set "UI_FOCUSFIRST" "REF_LONGERSPRINT"; set ui_inside_popup perk3";, 1 )
+		IMPROVED_POPUP_SETUP_ONOPEN( "nocd_popup_cac_perk3", 8, (CHOICE_X( 6 )-2), (CHOICE_Y( 6 )+26), ;, LOCAL_PERK_ONOPEN( REF_LONGERSPRINT, "perk3" ), 1 )
 		onClose{ execnow "set ui_inside_popup 0"; }
-		LOCAL_PERK_INFO_WINDOW( "ui_perk_highlighted" )
-		LOCAL_PERK_ITEM( 1, "@PERKS_EXTREME_CONDITIONING", "loadout_perk3", REF_LONGERSPRINT, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 2, "@PERKS_STEADY_AIM", "loadout_perk3", REF_BULLETACCURACY, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 3, "@PERKS_LAST_STAND", "loadout_perk3", REF_PISTOLDEATH, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 4, "@PERKS_MARTYRDOM", "loadout_perk3", REF_GRENADEPULLDEATH, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 5, "@PERKS_DEEP_IMPACT", "loadout_perk3", REF_BULLETPENETRATION, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 6, "@PERKS_IRON_LUNGS", "loadout_perk3", REF_HOLDBREATH, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 7, "@PERKS_DEAD_SILENCE", "loadout_perk3", REF_QUIETER, "ui_perk_highlighted", ; )
-		LOCAL_PERK_ITEM( 8, "@PERKS_EAVESDROP", "loadout_perk3", REF_PARABOLIC, "ui_perk_highlighted", ; )
+		LOCAL_PERK_INFO_WINDOW( "perk3" )
+		LOCAL_PERK_ITEM( 1, "@PERKS_EXTREME_CONDITIONING", "perk3", REF_LONGERSPRINT, ; )
+		LOCAL_PERK_ITEM( 2, "@PERKS_STEADY_AIM", "perk3", REF_BULLETACCURACY, ; )
+		LOCAL_PERK_ITEM( 3, "@PERKS_LAST_STAND", "perk3", REF_PISTOLDEATH, ; )
+		LOCAL_PERK_ITEM( 4, "@PERKS_MARTYRDOM", "perk3", REF_GRENADEPULLDEATH, ; )
+		LOCAL_PERK_ITEM( 5, "@PERKS_DEEP_IMPACT", "perk3", REF_BULLETPENETRATION, ; )
+		LOCAL_PERK_ITEM( 6, "@PERKS_IRON_LUNGS", "perk3", REF_HOLDBREATH, ; )
+		LOCAL_PERK_ITEM( 7, "@PERKS_DEAD_SILENCE", "perk3", REF_QUIETER, ; )
+		LOCAL_PERK_ITEM( 8, "@PERKS_EAVESDROP", "perk3", REF_PARABOLIC, ; )
 	}

@@ -39,7 +39,6 @@ onPlayerConnected()
 onMenuResponse( menu, response )
 {
 	if( menu == "-1" && response == "ping" ) pingRightNow();
-		
 }
 
 

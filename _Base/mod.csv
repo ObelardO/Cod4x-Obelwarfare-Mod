@@ -202,6 +202,10 @@ fx,greed/ui_pickup_yellow
 fx,greed/ui_pickup_purple
 fx,greed/ui_pickup_red
 #fx,props/american_smoke_grenade_mp
+fx,misc/claymore_laser_red
+fx,misc/claymore_laser_blue
+fx,misc/claymore_laser_green
+fx,misc/claymore_laser_yellow
 
 
 material,allies_custom_logo

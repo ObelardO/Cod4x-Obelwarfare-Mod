@@ -626,9 +626,9 @@ setPlayerModels()
 	else
 	{
 		// assert( game["allies"] == "sas" );
-		if ( game["allies"] != "marines" ) {
-			iprintln( "WARNING: game[\"allies\"] == "+game["allies"]+", expected \"marines\"." );
-			game["allies"] = "marines";
+		if ( game["allies"] != "sas" ) {
+			iprintln( "WARNING: game[\"allies\"] == "+game["allies"]+", expected \"sas\"." );
+			game["allies"] = "sas";
 		}
 		
 		mptype\mptype_ally_woodland_assault::precache();
