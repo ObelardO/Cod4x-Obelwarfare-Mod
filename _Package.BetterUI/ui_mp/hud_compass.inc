@@ -1,7 +1,7 @@
 #define COMPASS_HUD_IS_VISIBLE        ( dvarint( "ui_hud_hardcore" ) == 0 || dvarint( "ui_hud_hardcore_show_compass" ) == 1 )
  
 #define COMPASS_HUD_ALIGN             HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_TOP
-#define COMPASS_HUD_OFFSET_Y          ( spectatingClient() * 32 )
+#define COMPASS_HUD_OFFSET_Y          0
 #define COMPASS_HUD_HEIGHT            10
 
 #define COMPASS_HUD_TAPE_WIDTH        160
@@ -70,5 +70,5 @@ menuDef
         decoration
     }
 
-    COMPASS_HUD_ANGLE( 1 1 1 HUD_FOREGROUND_ALPHA, 0, 1 )
+    COMPASS_HUD_ANGLE( 1 1 1 1, 0, 1 )
 }

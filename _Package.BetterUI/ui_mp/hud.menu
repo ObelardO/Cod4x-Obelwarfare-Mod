@@ -125,8 +125,6 @@
 
 	#include "ui_mp/hud_broadcast.inc"
 
-	#include "ui_mp/hud_overlay.inc"
-
 	#include "ui_mp/hud_killcam.inc"
 
 	#include "ui_mp/hud_messages.inc"
@@ -134,6 +132,8 @@
 	#include "ui_mp/hud_voicechat.inc"
 
 	#include "ui_mp/hud_compass.inc"
+
+	#include "ui_mp/hud_overlay.inc"
 
 	// Safe area
 	/*

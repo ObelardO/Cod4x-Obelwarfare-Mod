@@ -1181,6 +1181,15 @@ forceClientDvar( varName, varValue )
 	if ( !isDefined( level.forcedDvars ) )
 		level.forcedDvars = [];
 
+	for ( i = 0; i < level.forcedDvars.size; i++ )
+	{
+		if ( level.forcedDvars[i]["name"] == varName )
+		{
+			level.forcedDvars[i]["value"] = varValue;
+			return;
+		}
+	}
+
 	// Store the new variable in the array
 	newElement = level.forcedDvars.size;
 	level.forcedDvars[newElement]["name"] = varName;
@@ -1420,7 +1429,7 @@ showHUD()
 {
 	self setClientDvars(
 		"ui_hud_hardcore", level.hardcoreMode,
-		"cg_drawSpectatorMessages", 1,
+		"cg_drawSpectatorMessages", level.scr_hud_show_spectator_messages,
 		"ui_hud_hardcore_show_minimap", level.scr_hud_hardcore_show_minimap,
 		"ui_hud_hardcore_show_compass", level.scr_hud_hardcore_show_compass,
 		"ui_hud_show_inventory", level.scr_hud_show_inventory
