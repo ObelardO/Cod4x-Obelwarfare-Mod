@@ -129,6 +129,18 @@ init()
     level.secondaryProgressBarTextY = 170;
 
     level.scr_hud_show_spectator_messages = 0;
+
+    // Set high res icons for teams (used in scripts)
+    if ( !isDefined( level.betterUITeamIconsUpdated ) )
+    {
+        level.betterUITeamIconsUpdated = true;
+
+        if ( isDefined( game["icons"]["axis"] ) ) game["icons"]["axis"] += "_big";
+        if ( isDefined( game["icons"]["allies"] ) ) game["icons"]["allies"] += "_big";
+
+        preCacheShader( game["icons"]["axis"] );
+        preCacheShader( game["icons"]["allies"] );
+    }
 }
 
 

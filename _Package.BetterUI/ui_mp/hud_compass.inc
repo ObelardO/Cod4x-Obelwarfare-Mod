@@ -70,5 +70,5 @@ menuDef
         decoration
     }
 
-    COMPASS_HUD_ANGLE( 1 1 1 1, 0, 1 )
+    COMPASS_HUD_ANGLE( 1 1 1 0.95, 0, 1 )
 }

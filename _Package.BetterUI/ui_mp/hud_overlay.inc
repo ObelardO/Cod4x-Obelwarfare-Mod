@@ -9,7 +9,7 @@
 #define SPECTATE_HUD_BACK_WIDTH        200
 #define SPECTATE_HUD_BACK_WIDTH_HALF   100
 
-#define SPECTATE_HUD_NAME_TEXT( color, xOffset, isVisibleExp ) \
+#define SPECTATE_HUD_VIS( color, xOffset, isVisibleExp ) \
     itemDef \
     { \
         style			WINDOW_STYLE_SHADER \
@@ -28,7 +28,7 @@
         textfont	UI_FONT_OBJECTIVE \
         textscale	( TEXTSIZE_SMALL * 0.7 ) \
         textalign	ITEM_ALIGN_MIDDLE_CENTER \
-        textstyle	ITEM_TEXTSTYLE_SHADOWEDMORE \
+        textstyle	ITEM_TEXTSTYLE_SHADOWED \
         forecolor	color \
         visible 	when ( isVisibleExp ) \
         decoration \
@@ -41,7 +41,7 @@
         textfont	UI_FONT_OBJECTIVE \
         textscale	( TEXTSIZE_SMALL * 0.5 ) \
         textalign	ITEM_ALIGN_MIDDLE_CENTER \
-        textstyle	ITEM_TEXTSTYLE_BLINK \
+        textstyle	ITEM_TEXTSTYLE_SHADOWED \
         forecolor	color \
         visible 	when ( isVisibleExp ) \
         decoration \
@@ -66,7 +66,7 @@ menuDef
         decoration
     }
 
-    SPECTATE_HUD_NAME_TEXT( 1 1 1 1, 0, HUD_IS_VISIBLE && SPECTATE_HUD_IS_VISIBLE )
+    SPECTATE_HUD_VIS( 1 1 1 1, 0, HUD_IS_VISIBLE && SPECTATE_HUD_IS_VISIBLE )
  
     /*
     //PEL VISUAL GUIDE INFO FRAME

@@ -28,3 +28,11 @@ material,hud_background_line_half
 material,hud_background_line_half_inv
 material,hud_background_quad
 material,waypoint_dead
+material,faction_128_arab_big
+material,faction_128_arab_small
+material,faction_128_sas_big
+material,faction_128_sas_small
+material,faction_128_usmc_big
+material,faction_128_usmc_small
+material,faction_128_ussr_big
+material,faction_128_ussr_small

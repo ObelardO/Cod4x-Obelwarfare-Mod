@@ -130,7 +130,7 @@
         textfont	UI_FONT_OBJECTIVE \
         textscale	0.18 \
         textalign	ITEM_ALIGN_MIDDLE_CENTER \
-        textstyle	ITEM_TEXTSTYLE_SHADOWED \
+        textstyle	ITEM_TEXTSTYLE_SHADOWEDMORE \
         visible 	when ( isVisibleExp && keyBinding != "" ) \
         decoration \
     }

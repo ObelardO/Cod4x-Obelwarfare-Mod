@@ -7,9 +7,8 @@
 
 #define TS_HUD_POS_X              ( TS_HUD_SPACING_X_HALF * HUD_MINUS_ONE - INV_BACK_SIZE )
 
-#define TS_HUD_ICON_TEAM_AXIS     dvarString( "g_TeamIcon_Axis" )
-#define TS_HUD_ICON_TEAM_ALLIES   dvarString( "g_TeamIcon_Allies" )
-
+#define TS_HUD_ICON_TEAM_AXIS     ( dvarString( "g_TeamIcon_Axis" ) + "_small" )
+#define TS_HUD_ICON_TEAM_ALLIES   ( dvarString( "g_TeamIcon_Allies" ) + "_small" )
 
 #define TS_IS_FREE                ( int( team( name ) == "TEAM_SPECTATOR" ) )
 #define TS_IS_AXIS                ( int( team( name ) == "TEAM_AXIS" ) )
