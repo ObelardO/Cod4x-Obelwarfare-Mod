@@ -7,6 +7,9 @@
 #define PLAYERINFO_STANCE_SIZE		( 42 )
 #define PLAYERINFO_STANCE_SIZE_HALF	( PLAYERINFO_STANCE_SIZE * 0.5 )
 
+#undef HUD_ORIGIN_BOTTOM_LEFT_Y
+#define HUD_ORIGIN_BOTTOM_LEFT_Y	( PLAYERINFO_HEALTH_POS_Y )
+
 #define PLAYERINFO_LIVES_COUNT( visibleExp, textExp, color, alphaExp ) \
 	itemDef \
 	{ \

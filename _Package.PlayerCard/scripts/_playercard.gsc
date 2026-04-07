@@ -230,7 +230,7 @@ onPlayerSpawned()
                 {
 	                self.playercard.hudNameHp = newClientHudElem( self );
 	                self.playercard.hudNameHp.x = -210; 
-                        self.playercard.hudNameHp.y = 113;
+                        self.playercard.hudNameHp.y = 16;
 	                self.playercard.hudNameHp.alignX = "left";
 	                self.playercard.hudNameHp.alignY = "top";
 	                self.playercard.hudNameHp.horzAlign = "right";
@@ -249,7 +249,7 @@ onPlayerSpawned()
 	                // Create the HUD element to display the playercard
 	                self.playercard.hudImageHp = newClientHudElem( self );
 	                self.playercard.hudImageHp.x = -213;
-	                self.playercard.hudImageHp.y = 110;
+	                self.playercard.hudImageHp.y = 13;
 	                self.playercard.hudImageHp.sort = -2;
                         self.playercard.hudImageHp.alignX = "left";
 	                self.playercard.hudImageHp.alignY = "top";
@@ -264,7 +264,7 @@ onPlayerSpawned()
 	        if( !isDefined( self.playercard.hudRankIconHp ) )
                 {
 		        self.playercard.hudRankIconHp = self createIcon( "white", 25, 25 );
-		        self.playercard.hudRankIconHp setPoint( "CENTER", "TOP RIGHT", -195, 144 );
+		        self.playercard.hudRankIconHp setPoint( "CENTER", "TOP RIGHT", -195, 47 );
 		        self.playercard.hudRankIconHp.sort = -1;
 		        self.playercard.hudRankIconHp.alpha = 0;
 		        self.playercard.hudRankIconHp.archived = true;
@@ -276,7 +276,7 @@ onPlayerSpawned()
                 {
 	                self.playercard.hudTitleHp = newClientHudElem( self );
 	                self.playercard.hudTitleHp.x = -210; 
-                        self.playercard.hudTitleHp.y = 161;
+                        self.playercard.hudTitleHp.y = 64;
 	                self.playercard.hudTitleHp.alignX = "left";
 	                self.playercard.hudTitleHp.alignY = "top";
 	                self.playercard.hudTitleHp.horzAlign = "right";
@@ -293,7 +293,7 @@ onPlayerSpawned()
                 if( !isDefined( self.playercard.hudWeapIconHp ) )
                 {
 		        self.playercard.hudWeapIconHp = self createIcon( "white", 25, 25 );
-		        self.playercard.hudWeapIconHp setPoint( "RIGHT", "TOP RIGHT", -16, 144 );
+		        self.playercard.hudWeapIconHp setPoint( "RIGHT", "TOP RIGHT", -16, 47 );
 		        self.playercard.hudWeapIconHp.sort = -1;
 		        self.playercard.hudWeapIconHp.alpha = 0;
 		        self.playercard.hudWeapIconHp.archived = true;

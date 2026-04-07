@@ -32,6 +32,8 @@
 
 #define HUD_IS_VISIBLE           	( !inkillcam() && !flashbanged() && !isIntermission() && !ui_active() && !scoped() && dvarInt( ui_show_timeout ) == 0 )
 
+#define HUD_ORIGIN_BOTTOM_LEFT_Y	0
+
 #define HUD_DEBUG_DOT( xPos, yPos, align ) \
     itemDef \
 	{ \

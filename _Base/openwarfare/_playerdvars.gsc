@@ -123,8 +123,8 @@ init()
 		forceClientDvar( "cg_hudChatPosition", "16 100" );
 		forceClientDvar( "cg_hudSayPosition", "16 80" );
 	} else {
-		forceClientDvar( "cg_hudChatPosition", "16 200" );
-		forceClientDvar( "cg_hudSayPosition", "16 180" );
+		forceClientDvar( "cg_hudChatPosition", "16 220" );
+		forceClientDvar( "cg_hudSayPosition", "16 200" );
 	}
 
 	// Dvars that apply to both hardcore and non-hardcore

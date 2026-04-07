@@ -8,9 +8,9 @@ IW4MAdmin
 BetterUI
 FinalMapVoting
 //TrashRemover // Not worked (1000 xmodels limit)
-//Event.Spring
+Event.Spring
 //Event.Victory
-Event.Winter
+//Event.Winter
 //Event.Xmas
 //Event.Autumn
 //Event.HappyBirthday
