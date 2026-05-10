@@ -158,7 +158,7 @@ onPlayerSpawned()
 	        self.playercard.hudTitle.alignY = "top";
 	        self.playercard.hudTitle.horzAlign = "center";
 	        self.playercard.hudTitle.vertAlign = "bottom";
-	        self.playercard.hudTitle.fontScale = 1.6;
+	        self.playercard.hudTitle.fontScale = 1.4;
 	        self.playercard.hudTitle.sort = 1002;
 	        self.playercard.hudTitle.glowAlpha = 0;
                 self.playercard.hudTitle.alpha = 0;
