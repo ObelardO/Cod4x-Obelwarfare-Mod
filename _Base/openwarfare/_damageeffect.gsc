@@ -149,8 +149,12 @@ onDamageTaken()
 			}
 
 			// Check if we need to shift the player's view
-			if ( level.scr_de_shiftview_on_damage > 0 && iDamage > level.scr_de_shiftview_on_damage ) {
-				self shiftPlayerView( iDamage );
+			if ( level.scr_de_shiftview_on_damage > 0 && iDamage > level.scr_de_shiftview_on_damage )
+			{
+				if ( ! ( self hasPerk( "specialty_bulletaccuracy" ) || self hasPerk( "specialty_armorvest" ) ) )
+				{
+					self shiftPlayerView( iDamage );
+				}
 			}
 		}
 	}

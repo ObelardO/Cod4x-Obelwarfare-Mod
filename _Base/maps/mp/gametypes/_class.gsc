@@ -21,6 +21,7 @@ init()
 	// Load some OpenWarfare variables
 	level.specialty_fraggrenade_ammo_count = getdvarx( "specialty_fraggrenade_ammo_count", "int", 2, 1, 3 );
 	level.specialty_specialgrenade_ammo_count = getdvarx( "specialty_specialgrenade_ammo_count", "int", 2, 1, 3 );
+	level.perk_permanent_assigned = getdvarx( "perk_permanent_assigned", "string", "specialty_null" );
 
 	level.classMap["assault_mp"] = "CLASS_ASSAULT";
 	level.classMap["specops_mp"] = "CLASS_SPECOPS";
@@ -617,6 +618,8 @@ logClassChoice( class, primaryWeapon, specialType, perks )
 	self.lastClass = class;
 }
 
+
+
 // distributes the specialties into the corrent slots; inventory, grenades, special grenades, generic specialties
 get_specialtydata( class_num, specialty )
 {
@@ -628,41 +631,6 @@ get_specialtydata( class_num, specialty )
 
 	assertex( isdefined( cac_group ), "Missing "+specialty+"'s group name" );
 
-	// grenade classification and distribution ==================
-	if( specialty == "specialty1" )
-	{
-		if( isSubstr( cac_group, "grenade" ) )
-		{
-			self.custom_class[class_num]["grenades"] = level.weapons["frag"];
-			self.custom_class[class_num]["grenades_count"] = game["loadout_" + class + "_frags"];
-
-			// if user selected 3 frags, then give 3 count, else always give 1
-			if( cac_reference == "specialty_fraggrenade" )
-			{
-				self.custom_class[class_num]["grenades_count"] += level.specialty_fraggrenade_ammo_count;
-			}
-
-			// if user selected 3 special grenades, then give 3 count to the selected special grenade type, else always give 1
-			assertex( isdefined( self.custom_class[class_num]["special_grenade"] ) && isdefined( self.custom_class[class_num]["special_grenade_count"] ), "Special grenade missing from custom class loadout" );
-			self.custom_class[class_num]["specialgrenades"] = self.custom_class[class_num]["special_grenade"];
-			self.custom_class[class_num]["specialgrenades_count"] = game["loadout_" + class + "_special"];
-
-			if( cac_reference == "specialty_specialgrenade" )
-			{
-				self.custom_class[class_num]["specialgrenades_count"] += level.specialty_specialgrenade_ammo_count;
-			}
-			return;
-		}
-		else
-		{
-			assertex( isdefined( self.custom_class[class_num]["special_grenade"] ), "Special grenade missing from custom class loadout" );
-			self.custom_class[class_num]["grenades"] = level.weapons["frag"];
-			self.custom_class[class_num]["grenades_count"] = game["loadout_" + class + "_frags"];
-			self.custom_class[class_num]["specialgrenades"] = self.custom_class[class_num]["special_grenade"];
-			self.custom_class[class_num]["specialgrenades_count"] = game["loadout_" + class + "_special"];
-		}
-	}
-
 	// if user selected inventory items
 	if( cac_group == "inventory" )
 	{
@@ -671,11 +639,20 @@ get_specialtydata( class_num, specialty )
 		self.custom_class[class_num]["inventory"] = cac_weaponref;		// loads inventory into action slot 3
 		self.custom_class[class_num]["inventory_count"] = cac_count;	// loads ammo count
 	}
-	else if( cac_group == "specialty" )
+	else 
 	{
-		// building player's specialty, variable size array with size 3 max
-		if( self.custom_class[class_num][specialty] != "" )
-			self.specialty[self.specialty.size] = self.custom_class[class_num][specialty];
+		switch ( cac_group )
+		{
+			case "specialty":
+			case "grenade":
+			case "specialgrenade":
+
+				// building player's specialty, variable size array with size 3 max
+				if( cac_reference != "" )
+					self.specialty[self.specialty.size] = cac_reference;
+
+				break;
+		}
 	}
 }
 
@@ -743,6 +720,8 @@ giveLoadout( team, class )
 	self setClientDvar( "ui_hud_has_frags", "0" );
 	self setClientDvar( "ui_hud_has_spec_gren", "0" );
 
+
+
 	// ============= custom class selected ==============
 	if( isSubstr( class, "CLASS_CUSTOM" ) )
 	{
@@ -769,6 +748,8 @@ giveLoadout( team, class )
 		self register_perks();
 		// at this stage, the specialties are loaded into the correct weapon slots, and special slots
 
+		self register_extra_perks();
+
 		// weapon override for round based gametypes
 		// TODO: if they switched to a sidearm, we shouldn't give them that as their primary!
 		if ( isDefined( self.pers["weapon"] ) && self.pers["weapon"] != "none" )
@@ -784,6 +765,8 @@ giveLoadout( team, class )
 
 		// give primary weapon
 		primaryWeapon = weapon;
+
+		baseClass = getPlayerCustomClass( primaryWeapon );
 
 		assertex( isdefined( self.custom_class[class_num]["camo_num"] ), "Player's camo skin is not defined, it should be at least initialized to 0" );
 
@@ -819,34 +802,46 @@ giveLoadout( team, class )
 			self SetActionSlot( 4, "" );
 		}
 
+
+
+		fragGrenadeCount = game["loadout_" + baseClass + "_frags"];
+
+		if ( self hasPerk ( "specialty_fraggrenade" ) )
+		{
+			fragGrenadeCount += level.specialty_fraggrenade_ammo_count;
+		}
+
 		// give frag for all no matter what
-		grenadeTypePrimary = self.custom_class[class_num]["grenades"];
+		grenadeTypePrimary = level.weapons["frag"];
 		if ( grenadeTypePrimary != "" )
 		{
 			self.primarynade = grenadeTypePrimary;
-			grenadeCount = self.custom_class[class_num]["grenades_count"];
 
 			// Give grenades after a dvar specified delay
-			if ( isdefined ( grenadeCount ) && grenadeCount ) {
-				self.primarynadecount = grenadeCount;
-				self thread giveNadesAfterDelay( grenadeTypePrimary, grenadeCount, true );
+			if ( isdefined ( fragGrenadeCount ) && fragGrenadeCount ) {
+				self.primarynadecount = fragGrenadeCount;
+				self thread giveNadesAfterDelay( grenadeTypePrimary, fragGrenadeCount, true );
 			}
 		}
 
+
+		specGrenadeCount = game["loadout_" + baseClass + "_special"];
+
+		if ( self hasPerk ( "specialty_specialgrenade" ) )
+			specGrenadeCount += level.specialty_specialgrenade_ammo_count;
+
 		// give special grenade
-		grenadeTypeSecondary = self.custom_class[class_num]["specialgrenades"];
+		grenadeTypeSecondary = self.custom_class[class_num]["special_grenade"];
 		if ( grenadeTypeSecondary != "" )
 		{
-			grenadeCount = self.custom_class[class_num]["specialgrenades_count"];
-
 			if ( grenadeTypeSecondary == level.weapons["flash"])
 				self setOffhandSecondaryClass("flash");
 			else
 				self setOffhandSecondaryClass("smoke");
 
 			// Give grenades after a dvar specified delay
-			if ( isdefined ( grenadeCount ) && grenadeCount )
-				self thread giveNadesAfterDelay( grenadeTypeSecondary, grenadeCount, false );
+			if ( isdefined ( specGrenadeCount ) && specGrenadeCount )
+				self thread giveNadesAfterDelay( grenadeTypeSecondary, specGrenadeCount, false );
 		}
 
 		self thread logClassChoice( class, primaryWeapon, grenadeTypeSecondary, self.specialty );
@@ -854,6 +849,8 @@ giveLoadout( team, class )
 	else
 	{
 		// ============= selected one of the default classes ==============
+		
+		
 
 		// load the selected default class's specialties
 		assertex( isdefined(class), "Player during spawn and loadout got no class!" );
@@ -869,6 +866,8 @@ giveLoadout( team, class )
 
 		// re-registering perks to code since perks are cleared after respawn in case if players switch classes
 		self register_perks();
+
+		self register_extra_perks();
 
 		// weapon override for round based gametypes
 		// TODO: if they switched to a sidearm, we shouldn't give them that as their primary!
@@ -892,6 +891,7 @@ giveLoadout( team, class )
 		if ( self.pers["primaryWeapon"] == "m14" )
 			self.pers["primaryWeapon"] = "m21";
 
+		//TODO: Player skins
 		self maps\mp\gametypes\_teams::playerModelForWeapon( self.pers["primaryWeapon"] );
 
 		self GiveWeapon( weapon );
@@ -919,32 +919,41 @@ giveLoadout( team, class )
 			self SetActionSlot( 4, "" );
 		}
 
+
+		fragGrenadeCount = game["loadout_" + class + "_frags"];
+
+		if ( self hasPerk ( "specialty_fraggrenade" ) )
+			fragGrenadeCount += level.specialty_fraggrenade_ammo_count;
+
 		grenadeTypePrimary = level.classGrenades[class]["primary"]["type"];
 		if ( grenadeTypePrimary != "" )
 		{
 			self.primarynade = grenadeTypePrimary;
-			grenadeCount = level.classGrenades[class]["primary"]["count"];
 
 			// Give grenades after a dvar specified delay
-			if ( isdefined ( grenadeCount ) && grenadeCount ) {
-				self.primarynadecount = grenadeCount;
-				self thread giveNadesAfterDelay( grenadeTypePrimary, grenadeCount, true );
+			if ( isdefined ( fragGrenadeCount ) && fragGrenadeCount ) {
+				self.primarynadecount = fragGrenadeCount;
+				self thread giveNadesAfterDelay( grenadeTypePrimary, fragGrenadeCount, true );
 			}
 		}
+
+
+		specGrenadeCount = game["loadout_" + class + "_special"];
+
+		if ( self hasPerk ( "specialty_specialgrenade" ) )
+			specGrenadeCount += level.specialty_specialgrenade_ammo_count;
 
 		grenadeTypeSecondary = level.classGrenades[class]["secondary"]["type"];
 		if ( grenadeTypeSecondary != "" )
 		{
-			grenadeCount = level.classGrenades[class]["secondary"]["count"];
-
 			if ( grenadeTypeSecondary == level.weapons["flash"])
 				self setOffhandSecondaryClass("flash");
 			else
 				self setOffhandSecondaryClass("smoke");
 
 			// Give grenades after a dvar specified delay
-			if ( isdefined ( grenadeCount ) && grenadeCount )
-				self thread giveNadesAfterDelay( grenadeTypeSecondary, grenadeCount, false );
+			if ( isdefined ( specGrenadeCount ) && specGrenadeCount )
+				self thread giveNadesAfterDelay( grenadeTypeSecondary, specGrenadeCount, false );
 		}
 
 		self thread logClassChoice( class, primaryWeapon, grenadeTypeSecondary, self.specialty );
@@ -1106,11 +1115,32 @@ register_perks()
 			continue;
 
 		self setPerk( perk );
+
+		//self iPrintLn ( "Add perk: " + perk );
 	}
 
 	/#
 	maps\mp\gametypes\_dev::giveExtraPerks();
 	#/
+}
+
+register_extra_perks()
+{
+	extraPerksRaw = strtok( level.perk_permanent_assigned, "," );
+	
+	for ( i = 0; i < extraPerksRaw.size; i++ )
+	{
+		perk_ref = extraPerksRaw[i];
+
+		if ( self hasPerk( perk_ref ) ) continue;
+	
+		if ( perk_ref == "specialty_null" || perk_ref == "specialty_none" || perk_ref == "specialty_twoprimaries" || isSubStr( perk_ref, "specialty_weapon_" ) )
+			continue;
+
+		self setPerk( perk_ref );
+
+		//self iPrintLn ( "Add extra perk: " + perk_ref );
+	}
 }
 
 // returns dvar value in int
