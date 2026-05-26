@@ -374,7 +374,7 @@ initAllowedItems()
 {
     level.cacIngame.allowedItems = [];
     level.cacIngame.allowedItemsIndexesLookup = [];    //Helper index arrays: [className][itemType] = [indexes]
-    level.cacIngame.weaponClassByWeaponRef = [];         //Helper direct lookup for weapons only: [weaponName] = index
+    level.cacIngame.weaponClassByWeaponRef = [];         //Helper direct lookup for weapons only: [weaponName] = className
 
     //Initialize allowed weapons (primary weapons and attachments for each weapon class and pistols and grenades))
     initAllowedWeapons( 20,  "assault",     "" );
@@ -528,6 +528,15 @@ addAllowedItem( className, itemName, dvarName, itemType )
     //logPrint("[CAC Ingame] Init: class " + className + ", item " + itemName + ", itemType " + itemType + ", dvar " + dvarName + ", val " + level.cacIngame.allowedItems[itemIndex].dvarValue + "\n");
 }
 
+//Get allowed items indexes in global allowed items list for weapon class and item type from helper lookup array
+getAllowedItemsIndexes( className, itemType )
+{
+    classLookup = level.cacIngame.allowedItemsIndexesLookup[className];
+    if( !isDefined( classLookup ) ) return undefined;
+
+    return classLookup[itemType];
+}
+
 //Update allowed items in UI based on weapon class and item type (perk, weapon or attachment) 
 //className can be specific weapon class (assault, specops, etc), "current" for current primary weapon class or "all" for all classes (master option)
 updateAllowedItemsInMenu( className, itemType )
@@ -582,10 +591,10 @@ updateAllowedItem( itemName, itemType )
     for( classIndex = 0; classIndex < classNames.size; classIndex++ )
     {
         className = classNames[classIndex];
-        if( !isDefined( level.cacIngame.allowedItemsIndexesLookup[className][itemType] ) ) continue;
+        allowedItemsIndexes = getAllowedItemsIndexes( className, itemType );
 
-        allowedItemsIndexes = level.cacIngame.allowedItemsIndexesLookup[className][itemType];
-        
+        if( !isDefined( allowedItemsIndexes ) ) continue;
+
         for( i = 0; i < allowedItemsIndexes.size; i++ )
         {
             allowedItemIndex = allowedItemsIndexes[i];
@@ -605,10 +614,8 @@ updateAllowedItems( className, itemType, updateOnlyNotAllowedItems )
     updateOnlyNotAllowedItems = isDefined( updateOnlyNotAllowedItems ) && updateOnlyNotAllowedItems;
 
     //Use helper index array - O(m) where m is items in class+itemType, not O(n)
-    if( !isDefined( level.cacIngame.allowedItemsIndexesLookup[className] ) ) return;
-    if( !isDefined( level.cacIngame.allowedItemsIndexesLookup[className][itemType] ) ) return;
-
-    allowedItemsIndexes = level.cacIngame.allowedItemsIndexesLookup[className][itemType];
+    allowedItemsIndexes = getAllowedItemsIndexes( className, itemType );
+    if( !isDefined( allowedItemsIndexes ) ) return;
 
     for( i = 0; i < allowedItemsIndexes.size; i++ )
     {
@@ -775,10 +782,9 @@ validateAllowedItem( itemName, itemType, className )
     if( !isDefined( itemType ) || itemType == "" ) return itemName;
 
     //Use helper index array - O(m) where m is items in class+itemType, not O(n)
-    if( !isDefined( level.cacIngame.allowedItemsIndexesLookup[className] ) ) return itemName;
-    if( !isDefined( level.cacIngame.allowedItemsIndexesLookup[className][itemType] ) ) return itemName;
+    allowedItemsIndexes = getAllowedItemsIndexes( className, itemType );
+    if( !isDefined( allowedItemsIndexes ) ) return itemName;
 
-    allowedItemsIndexes = level.cacIngame.allowedItemsIndexesLookup[className][itemType];
     firstAllowedItem = undefined;
 
     for( i = 0; i < allowedItemsIndexes.size; i++ )
