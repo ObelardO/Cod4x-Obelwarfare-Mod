@@ -5,5 +5,5 @@ localize,ow_ice
 rawfile,scripts/_ingameclass.gsc
 
 #IngameClassEditor: menu files
-menufile,ui_mp/scriptmenus/cac_ingame.menu
-rawfile,ui_mp/cac_ingame_new.inc
+menufile,ui_mp/scriptmenus/ice_main.menu
+rawfile,ui_mp/ice_main.inc

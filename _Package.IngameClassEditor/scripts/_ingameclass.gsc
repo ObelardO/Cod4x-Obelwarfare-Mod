@@ -60,11 +60,10 @@ init()
         initItemInfo( 9, "camo", camoTableRef );
 
         //Initialize allowed items list that will be used for validating loadout selections and updating allowed items in UI based on selected weapons and perks
-        level.cacIngame.allowedItems = [];
         initAllowedItems();
 
         //Precache menu used for editing custom classes loadout
-        level.cacIngame.menu = "cac_ingame";
+        level.cacIngame.menu = "ice_main";
         precacheMenu( level.cacIngame.menu );
     }
 
@@ -114,7 +113,7 @@ onPlayerConnected()
 onMenuResponse( menu, response )
 {
     //Debug
-    //self iPrintLn( "RAW RES: " + response );
+    //self iprintLn( "RAW RES: " + response + " from " + menu );
 
     //Hook into class selection menu response to open create a class menu when selecting class
     if( menu == game["menu_changeclass"] && response != "back" )
@@ -144,7 +143,7 @@ onMenuResponse( menu, response )
             validateLoadoutData();
 
             //Open custom create a class menu
-            self openMenu( "cac_ingame" );
+            self openMenu( level.cacIngame.menu );
         }
         //Othervise stock logic (default class selected)
         else
@@ -156,8 +155,18 @@ onMenuResponse( menu, response )
         return;
     } 
 
+    //Ignore all other responses that are not from create a class menu
+    if ( isStrStart( response, "ice_" ) )
+    {
+        response = getSubStr( response, 4, response.size ); //Remove "ice_" prefix from response to separate it from stock responses and identify it as coming from ingame class editor menu
+    }
+    else
+    {
+        return;
+    }
+
     //Create a class menu responses: editing done, start game with selected class and loadout
-    if( response == "go" && menu == level.cacIngame.menu )
+    if( response == "go" )
     {
         //Final vaildation (client can cheat with dvars so validate everything)
         validateLoadoutData();
@@ -176,6 +185,15 @@ onMenuResponse( menu, response )
         return;
     }
 
+    //Update allowed weapon classes in UI for secondary weapon as a primary weapon (only for specialty_twoprimaries perk) 
+    if ( response == "allow:secondary" )
+    {
+        updateAllowedItem( "specialty_twoprimaries", "perk2" );
+
+        return;
+    }
+
+    //Split response into tokens to determine action, data type and value reference
     responseTok = strTok( response, ":" );
 
     //Some menu callbacks for updating elements
@@ -207,9 +225,9 @@ onMenuResponse( menu, response )
             case "allow":
 
                 className = responseTok[1];
-                tag = responseTok[2];
+                itemType = responseTok[2];
 
-                updateAllowedItemsInMenu( className, tag );
+                updateAllowedItemsInMenu( className, itemType );
 
                 break;
         }
@@ -287,14 +305,10 @@ initLoadoutData( classInfoIndex )
 //Get weapon class name (assault, specops, heavygunner, demolitions or sniper) based on weapon reference and allowed items list
 getPlayerClassName( weaponRef )
 {
-    for( allowIndex = 0; allowIndex < level.cacIngame.allowedItems.size; allowIndex++ )
+    //Direct lookup by weapon name using helper array - O(1) instead of O(n)
+    if( isDefined( level.cacIngame.weaponClassByWeaponRef[weaponRef] ) )
     {
-        allowedItem = level.cacIngame.allowedItems[allowIndex];
-
-        if( allowedItem.itemName == weaponRef )
-        {
-            return allowedItem.className;
-        }
+        return level.cacIngame.weaponClassByWeaponRef[weaponRef];
     }
 
     return "none";
@@ -358,6 +372,10 @@ openAllClasses()
 //Initialize allowed items list based on dvars values
 initAllowedItems()
 {
+    level.cacIngame.allowedItems = [];
+    level.cacIngame.allowedItemsIndexesLookup = [];    //Helper index arrays: [className][itemType] = [indexes]
+    level.cacIngame.weaponClassByWeaponRef = [];         //Helper direct lookup for weapons only: [weaponName] = index
+
     //Initialize allowed weapons (primary weapons and attachments for each weapon class and pistols and grenades))
     initAllowedWeapons( 20,  "assault",     "" );
     initAllowedWeapons( 10,  "specops",     "" );
@@ -379,8 +397,8 @@ initAllowedItems()
 //Initialize allowed weapons in weapon class
 initAllowedWeapons( statOffset, className, overrideClassName )
 {
-    //Tag for global allowed items list
-    weaponTag = "weap";
+    //Item type for global allowed items list
+    weaponItemType = "weap";
     
     //Read all weapon names from stock table
     for( weapIndex = statOffset; weapIndex < statOffset + 10; weapIndex++ )
@@ -397,7 +415,7 @@ initAllowedWeapons( statOffset, className, overrideClassName )
             dvarName = "weap_allow_" + className + "_" + weaponName;
 
         //Add allowed weapon to the global allowed items list
-        addAllowedItem( className + overrideClassName, weaponName, dvarName, weaponTag );
+        addAllowedItem( className + overrideClassName, weaponName, dvarName, weaponItemType );
     }
 
     //Initialize allowed attachments for each weapon in weapon class
@@ -407,14 +425,14 @@ initAllowedWeapons( statOffset, className, overrideClassName )
 //Initialize allowed attachments for weapon class (each weapon class has unified attachments list for all weapons in that class)
 initAllowedAttachments( statOffset, weaponClass )
 {
-    //Tag for global allowed items list
-    attachTag = "atch";
+    //Item type for global allowed items list
+    attachItemType = "atch";
 
     //Add allowed none attachments (weapon without attachments)
     if( weaponClass != "" )
     {            
         dvarName = "attach_allow_" + weaponClass + "_none";
-        addAllowedItem( weaponClass, "none", dvarName, attachTag );
+        addAllowedItem( weaponClass, "none", dvarName, attachItemType );
     }
 
     //Get attachment names from stock table for weapon class
@@ -431,7 +449,7 @@ initAllowedAttachments( statOffset, weaponClass )
     if( attachmentsNames.size == 0 )
     {
         dvarName = "attach_allow_" + weaponClass + "_" + attachments;
-        addAllowedItem( weaponClass, attachments, dvarName, attachTag );
+        addAllowedItem( weaponClass, attachments, dvarName, attachItemType );
     }
     //Weapon has multiple attachment options
     else
@@ -439,7 +457,7 @@ initAllowedAttachments( statOffset, weaponClass )
         for( attachIndex = 0; attachIndex < attachmentsNames.size; attachIndex++ )
         {
             dvarName = "attach_allow_" + weaponClass + "_" + attachmentsNames[attachIndex];
-            addAllowedItem( weaponClass, attachmentsNames[attachIndex], dvarName, attachTag );
+            addAllowedItem( weaponClass, attachmentsNames[attachIndex], dvarName, attachItemType );
         }
     }
 }
@@ -479,7 +497,7 @@ initAllowedPerks( className )
 }
 
 //Add item to the global allowed items list
-addAllowedItem( className, itemName, dvarName, tag )
+addAllowedItem( className, itemName, dvarName, itemType )
 {
     //If not class name defined, use value for all classes (master option)
     if( !isDefined( className ) || className == "" ) className = "*all*";
@@ -491,17 +509,31 @@ addAllowedItem( className, itemName, dvarName, tag )
     level.cacIngame.allowedItems[itemIndex].dvarValue = getdvarx( dvarName, "int", 1, 0, 2 );
     level.cacIngame.allowedItems[itemIndex].className = className;
     level.cacIngame.allowedItems[itemIndex].itemName = itemName;
-    level.cacIngame.allowedItems[itemIndex].tag = tag;
+    level.cacIngame.allowedItems[itemIndex].itemType = itemType;
 
-    //logPrint("[CAC Ingame] Init: class " + className + ", item " + itemName + ", tag " + tag + ", dvar " + dvarName + ", val " + level.cacIngame.allowedItems[itemIndex].dvarValue + "\n");
+    //Add index to helper lookup arrays for fast searching without loops
+    if( !isDefined( level.cacIngame.allowedItemsIndexesLookup[className] ) )
+        level.cacIngame.allowedItemsIndexesLookup[className] = [];
+
+    if( !isDefined( level.cacIngame.allowedItemsIndexesLookup[className][itemType] ) )
+        level.cacIngame.allowedItemsIndexesLookup[className][itemType] = [];
+
+    lookupIndex = level.cacIngame.allowedItemsIndexesLookup[className][itemType].size;
+    level.cacIngame.allowedItemsIndexesLookup[className][itemType][lookupIndex] = itemIndex;
+
+    //Direct weapon lookup by name for O(1) class search
+    if( itemType == "weap" )
+        level.cacIngame.weaponClassByWeaponRef[itemName] = className;
+
+    //logPrint("[CAC Ingame] Init: class " + className + ", item " + itemName + ", itemType " + itemType + ", dvar " + dvarName + ", val " + level.cacIngame.allowedItems[itemIndex].dvarValue + "\n");
 }
 
 //Update allowed items in UI based on weapon class and item type (perk, weapon or attachment) 
 //className can be specific weapon class (assault, specops, etc), "current" for current primary weapon class or "all" for all classes (master option)
-updateAllowedItemsInMenu( className, tag )
+updateAllowedItemsInMenu( className, itemType )
 {
     //Update allowed perks in UI based on weapon class and perk group (perk1, perk2 or perk3)
-    if( isSubStr( tag, "perk" ) )
+    if( isSubStr( itemType, "perk" ) )
     {
         isCurrentClass = isSubStr( className, "current" );
         isAllClasses = isSubStr( className, "all" );
@@ -511,96 +543,97 @@ updateAllowedItemsInMenu( className, tag )
         {
             primaryClassName = getPlayerClassName( getLoadoutDataRef( "primary" ) );
 
-            updateAllowedItems( primaryClassName, tag );
+            updateAllowedItems( primaryClassName, itemType );
 
             if( getLoadoutDataRef("perk2") == "specialty_twoprimaries" )
             {
                 secondaryClassName = getPlayerClassName( getLoadoutDataRef( "secondary" ) );
 
-                updateAllowedItems( secondaryClassName, tag );
+                updateAllowedItems( secondaryClassName, itemType );
             }
         }
 
         //Updates perks allowed state for all classes (master option above individual weapon class options)
         if( isAllClasses )
         {
-            updateAllowedItems( "*all*", tag );
+            updateAllowedItems( "*all*", itemType );
         }
 
         //Update perks allowed state for specific weapon class (not used because isCurrentClass is used instead)
         if( !isCurrentClass && !isAllClasses )
         {
-            updateAllowedItems( className, tag );
+            updateAllowedItems( className, itemType );
         }
     }
     //Update allowed weapons or attacmhments in UI based on weapon class
     else 
     {
-        updateAllowedItems( className, tag );
+        updateAllowedItems( className, itemType );
     }
 }
 
 //Update client allowed dvars for specific item
-updateAllowedItem( itemName, tag )
+//Iterates through all classes to find all items with matching itemName and itemType
+updateAllowedItem( itemName, itemType )
 {
-    for( allowIndex = 0; allowIndex < level.cacIngame.allowedItems.size; allowIndex++ )
+    //Use helper index array to iterate only relevant items - O(m) where m is items in class+itemType, not O(n)
+    classNames = GetArrayKeys( level.cacIngame.allowedItemsIndexesLookup );
+
+    for( classIndex = 0; classIndex < classNames.size; classIndex++ )
     {
-        allowedItem = level.cacIngame.allowedItems[allowIndex];
+        className = classNames[classIndex];
+        if( !isDefined( level.cacIngame.allowedItemsIndexesLookup[className][itemType] ) ) continue;
 
-        if( allowedItem.tag == tag && allowedItem.itemName == itemName )
+        allowedItemsIndexes = level.cacIngame.allowedItemsIndexesLookup[className][itemType];
+        
+        for( i = 0; i < allowedItemsIndexes.size; i++ )
         {
-            self setClientDvar( allowedItem.dvarName, allowedItem.dvarValue );
+            allowedItemIndex = allowedItemsIndexes[i];
+            allowedItem = level.cacIngame.allowedItems[allowedItemIndex];
 
-            /*
-            debugLog = "[CAC Ingame] Item ^3" + itemName + "^7 in group ^3" + tag + "^7 for class ^3" + allowedItem.className + "^7 is";
-
-            if( allowedItem.dvarValue == 1 )
+            if( allowedItem.itemName == itemName )
             {
-                debugLog += "^2 allowed";
+                self setClientDvar( allowedItem.dvarName, allowedItem.dvarValue );
             }
-            else
-            {
-                debugLog += "^1 NOT allowed";
-            }
-
-            self iPrintLn( debugLog + " dvar ^3" + allowedItem.dvarName);
-            */
         }
     }
 }
 
 //Update client allowed dvars for items group in weapon class
-updateAllowedItems( className, tag, updateOnlyNotAllowedItems )
+updateAllowedItems( className, itemType, updateOnlyNotAllowedItems )
 {
     updateOnlyNotAllowedItems = isDefined( updateOnlyNotAllowedItems ) && updateOnlyNotAllowedItems;
 
-    for( allowIndex = 0; allowIndex < level.cacIngame.allowedItems.size; allowIndex++ )
+    //Use helper index array - O(m) where m is items in class+itemType, not O(n)
+    if( !isDefined( level.cacIngame.allowedItemsIndexesLookup[className] ) ) return;
+    if( !isDefined( level.cacIngame.allowedItemsIndexesLookup[className][itemType] ) ) return;
+
+    allowedItemsIndexes = level.cacIngame.allowedItemsIndexesLookup[className][itemType];
+
+    for( i = 0; i < allowedItemsIndexes.size; i++ )
     {
-        allowedItem = level.cacIngame.allowedItems[allowIndex];
+        allowedItemIndex = allowedItemsIndexes[i];
+        allowedItem = level.cacIngame.allowedItems[allowedItemIndex];
 
         if ( updateOnlyNotAllowedItems && allowedItem.dvarValue > 0 ) continue;
 
-        if( allowedItem.className == className && allowedItem.tag == tag )
+        self setClientDvar( allowedItem.dvarName, allowedItem.dvarValue );
+        
+        debugLog = "[CAC Ingame] Item ^3" + allowedItem.itemName + "^7 in group ^3" + itemType + "^7 for class ^3" + className + "^7 is";
+        
+        if( allowedItem.dvarValue == 1 )
         {
-            self setClientDvar( allowedItem.dvarName, allowedItem.dvarValue );
-            /*
-            debugLog = "[CAC Ingame] Item ^3" + allowedItem.itemName + "^7 in group ^3" + tag + "^7 for class ^3" + className + "^7 is";
-            
-            if( allowedItem.dvarValue == 1 )
-            {
-                debugLog += "^2 allowed";
-            }
-            else
-            {
-                debugLog += "^1 NOT allowed";
-            }
-
-            self iPrintLn( debugLog + " dvar ^3" + allowedItem.dvarName);
-            */
+            debugLog += "^2 allowed";
         }
+        else
+        {
+            debugLog += "^1 NOT allowed";
+        }
+
+        //self iprintLn( debugLog + " dvar ^3" + allowedItem.dvarName);
     }
 
-    //self iPrintLn( "[CAC Ingame] Processed " + level.cacIngame.allowedItems.size + " allowed items" );
+    //self iprintLn( "[CAC Ingame] Processed " + allowedItemsIndexes.size + " allowed items" );
 }
 
 //Validate all loadout data (primary and secondary weapon, attachments, perks and grenade)
@@ -609,11 +642,7 @@ validateLoadoutData()
 {
     validateLoadoutPrimaryWeapon();
 
-    //validateLoadoutPerks();
-
     validateLoadoutSecondaryWeapon();
-
-    //validateLoadoutPerks();
 
     validateLoadoutItem( "grenade", "grenade", "weap" );
 
@@ -710,7 +739,7 @@ validateLoadoutClassPerks( className )
 }
 
 //Validate item in loadout based on weapon class
-validateLoadoutItem( className, dataType, tag )
+validateLoadoutItem( className, dataType, itemType )
 {   
     dvarName = "loadout_" + dataType;
 
@@ -718,9 +747,9 @@ validateLoadoutItem( className, dataType, tag )
     itemValueRefValidated = itemValueRef;
 
     //First iteraton: validate based on weapon class 
-    itemValueRefValidated = validateAllowedItem( itemValueRefValidated, tag, className );
+    itemValueRefValidated = validateAllowedItem( itemValueRefValidated, itemType, className );
     //Second iteration: validate based on master option for all classes to override class specific options
-    itemValueRefValidated = validateAllowedItem( itemValueRefValidated, tag, "*all*" );
+    itemValueRefValidated = validateAllowedItem( itemValueRefValidated, itemType, "*all*" );
 
     self.cacIngame.loadoutDataRef[dvarName] = itemValueRefValidated;
 
@@ -729,29 +758,35 @@ validateLoadoutItem( className, dataType, tag )
     {
         self setClientDvar( dvarName, itemValueRefValidated );
 
-        //debugLog = "[CAC Ingame] Validated: ^2" + dataType + "^7 ref ^2" + itemValueRefValidated + "^7 (from ^1" + itemValueRef + "^7) in class ^2" + className + "^7 with tag ^2" + tag;
+        debugLog = "[CAC Ingame] Validated: ^2" + dataType + "^7 ref ^2" + itemValueRefValidated + "^7 (from ^1" + itemValueRef + "^7) in class ^2" + className + "^7 with itemType ^2" + itemType;
     }
     else
     {
-        //debugLog = "[CAC Ingame] Validated: ^2" + dataType + "^7 ref ^2" + itemValueRefValidated + "^7 (from ^2" + itemValueRef + "^7) in class ^2" + className + "^7 with tag ^2" + tag;
+        debugLog = "[CAC Ingame] Validated: ^2" + dataType + "^7 ref ^2" + itemValueRefValidated + "^7 (from ^2" + itemValueRef + "^7) in class ^2" + className + "^7 with itemType ^2" + itemType;
     }
 
-    //self iPrintLn( debugLog );
+    //self iprintLn( debugLog );
 }
 
 //Get validted item reference based on allowed items list, weapon class and item type (perk, weapon or attachment)
 //If item is not allowed then it will be replaced with first allowed item in weapon class
-validateAllowedItem( itemName, tag, className )
+validateAllowedItem( itemName, itemType, className )
 {
-    if( !isDefined( tag ) || tag == "" ) return itemName;
+    if( !isDefined( itemType ) || itemType == "" ) return itemName;
 
+    //Use helper index array - O(m) where m is items in class+itemType, not O(n)
+    if( !isDefined( level.cacIngame.allowedItemsIndexesLookup[className] ) ) return itemName;
+    if( !isDefined( level.cacIngame.allowedItemsIndexesLookup[className][itemType] ) ) return itemName;
+
+    allowedItemsIndexes = level.cacIngame.allowedItemsIndexesLookup[className][itemType];
     firstAllowedItem = undefined;
 
-    for( allowIndex = 0; allowIndex < level.cacIngame.allowedItems.size; allowIndex++ )
+    for( i = 0; i < allowedItemsIndexes.size; i++ )
     {
-        allowedItem = level.cacIngame.allowedItems[allowIndex];
+        allowedItemIndex = allowedItemsIndexes[i];
+        allowedItem = level.cacIngame.allowedItems[allowedItemIndex];
 
-        if( allowedItem.dvarValue > 0 && allowedItem.className == className && allowedItem.tag == tag )
+        if( allowedItem.dvarValue > 0 )
         {
             if( !isDefined( firstAllowedItem ) )
             {
@@ -760,19 +795,19 @@ validateAllowedItem( itemName, tag, className )
 
             if( allowedItem.itemName == itemName )
             {
-                //self iPrintLn( "[CAC Ingame] Allowed item: ref ^2" + itemName + "^7 dvar ^2" + allowedItem.dvarName + "^7 in class ^2" + className + "^7 with tag " + tag );
+                //self iPrintLn( "[CAC Ingame] Allowed item: ref ^2" + itemName + "^7 dvar ^2" + allowedItem.dvarName + "^7 in class ^2" + className + "^7 with itemType " + itemType );
                 return itemName;
             }
         }
     }
 
-    if( isDefined ( firstAllowedItem ) ) 
+    if( isDefined( firstAllowedItem ) ) 
     {
-        //self iPrintLn( "[CAC Ingame]^1 Not allowed:^7 ref ^2" + itemName + "^7 in class ^2" + className + "^7 with tag ^2" + tag + "^7 changed to ^2" + firstAllowedItem.itemName );
+        //self iPrintLn( "[CAC Ingame]^1 Not allowed:^7 ref ^2" + itemName + "^7 in class ^2" + className + "^7 with itemType ^2" + itemType + "^7 changed to ^2" + firstAllowedItem.itemName );
         return firstAllowedItem.itemName;
     }
 
-    //self iPrintLn( "[CAC Ingame] Not stored: ^2" + itemName + "^7 in class ^2" + className + "^7 with tag ^2" + tag );
+    //self iPrintLn( "[CAC Ingame] Not stored: ^2" + itemName + "^7 in class ^2" + className + "^7 with itemType ^2" + itemType );
     return itemName;
 }
 
