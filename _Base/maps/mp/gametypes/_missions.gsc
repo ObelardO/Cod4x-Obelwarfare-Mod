@@ -108,11 +108,6 @@ getChallengeLevels( baseName )
 	return level.challengeInfo[baseName + "1"]["levels"];
 }
 
-isStrStart( string1, subStr )
-{
-	return ( getSubStr( string1, 0, subStr.size ) == subStr );
-}
-
 processChallenge( baseName, progressInc )
 {
 	if ( !mayProcessChallenges() )

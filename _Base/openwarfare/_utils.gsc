@@ -532,6 +532,12 @@ trim( stringToTrim )
 }
 
 
+isStrStart( string1, subStr )
+{
+	return ( getSubStr( string1, 0, subStr.size ) == subStr );
+}
+
+
 // As we cannot reference native engine functions we have to use a wrapper to do this.
 // This way we can easily attach it to an event, which is useful for debugging.
 iPrintLnWrapper( message )
