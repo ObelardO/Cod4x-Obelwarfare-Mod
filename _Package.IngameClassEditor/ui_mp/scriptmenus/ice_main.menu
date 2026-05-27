@@ -1,5 +1,282 @@
+//**************************************************************//
+//  _____ _          _    _    _             __                 //
+// |  _  | |        | |  | |  | |           / _|                //
+// | | | | |__   ___| |  | |  | | __ _ _ __| |_ __ _ _ __ ___   //
+// | | | | '_ \ / _ \ |  | |/\| |/ _` | '__|  _/ _` | '__/ _ \  //
+// \ \_/ / |_) |  __/ |__\  /\  / (_| | |  | || (_| | | |  __/  //
+//  \___/|_.__/ \___|____/\/  \/ \__,_|_|  |_| \__,_|_|  \___|  //
+//                                                              //
+//            Website: http://cod4.obelardo.ru                  //
+//**************************************************************//
+
+#define MENU_FONT_COLOR2		1 1 1 0.5
+#define TEXTSIZE_INFO_DESC		0.3
+#define REF_NONE "none"
+
+#define CHOICE_X_START			0
+#define CHOICE_Y_START			34
+
+#define CHOICE_SEP_1			4
+#define CHOICE_SEP_2			7
+
 #include "ui/menudef.h"
-
 #include "ui_mp/common_macro.inc"
+#include "ui_mp/menustyle.inc"
+#include "ui/choices_setup_common.menu"
 
-#include "ui_mp/ice_main.inc"
+// including stats and weapons data
+#include "ui_mp/stats_info.inc"
+#include "ui_mp/weaponinfo.menu"
+ 
+// Perk 1 special cases
+#define ICE_UPDATE_PERK1_LOCKSTATE \
+    \
+    /*Primary not blocking attachments*/\
+    execOnDvarStringValue loadout_primary_attachment none "set loadout_perk1_locked 0"; \
+    execOnDvarStringValue loadout_primary_attachment acog "set loadout_perk1_locked 0"; \
+    execOnDvarStringValue loadout_primary_attachment silencer "set loadout_perk1_locked 0"; \
+    execOnDvarStringValue loadout_primary_attachment reflex "set loadout_perk1_locked 0"; \
+    \
+    /*Secondary not blocking attachments*/\
+    execOnDvarStringValue loadout_secondary_attachment gl "set loadout_perk1_locked 1; set loadout_perk1 specialty_null"; \
+    execOnDvarStringValue loadout_secondary_attachment grip "set loadout_perk1_locked 1; set loadout_perk1 specialty_null"; \
+    execOnDvarStringValue loadout_secondary_attachment none "set loadout_perk1_locked 0"; \
+    execOnDvarStringValue loadout_secondary_attachment acog "set loadout_perk1_locked 0"; \
+    \
+    /*Primary blocking attachments*/\
+    execOnDvarStringValue loadout_primary_attachment gl "set loadout_perk1_locked 1; set loadout_perk1 specialty_null"; \
+    execOnDvarStringValue loadout_primary_attachment grip "set loadout_perk1_locked 1; set loadout_perk1 specialty_null"; \
+    \
+    /*Secondary blocking attachments*/\
+    execOnDvarStringValue loadout_secondary_attachment gl "set loadout_perk1_locked 1; set loadout_perk1 specialty_null"; \
+    execOnDvarStringValue loadout_secondary_attachment grip "set loadout_perk1_locked 1; set loadout_perk1 specialty_null";
+
+menuDef
+{
+    name			"ice_main"
+    rect			0 0 640 480
+    focuscolor		COLOR_FOCUSED
+    style			WINDOW_STYLE_EMPTY
+    blurWorld		7.0
+    onOpen
+    {		
+        ICE_UPDATE_PERK1_LOCKSTATE;
+        execNowOnDvarStringValue loadout_perk2 specialty_twoprimaries "set ui_dual_primaries 1";
+        setfocus "ice_button_go";
+    }
+    onEsc
+    {
+        close self;
+        open "changeclass";
+    }
+
+    // background overlay
+    itemDef
+    {
+        style			WINDOW_STYLE_FILLED
+        rect			FULLSCREEN_WIDE
+        backcolor		0 0 0 .75 //0 0.05 0.15 0.5
+        visible			1
+        decoration
+    }
+    // gradient_top
+    itemDef
+    {
+        style			WINDOW_STYLE_SHADER
+        rect			0 0 854 75 HORIZONTAL_ALIGN_FULLSCREEN 0
+        background		"gradient_top"
+        visible			1
+        decoration
+    }
+    // gradient_bottom
+    itemDef
+    {
+        style			WINDOW_STYLE_SHADER
+        rect			0 405 854 75 HORIZONTAL_ALIGN_FULLSCREEN 0
+        background		"gradient_bottom"
+        visible			1
+        decoration
+    }
+    
+    // MENU TITLE
+    CHOICE_MENU_TITLE( "@OW_ICE_TITLE" )	
+
+    // BACK BUTTON			
+    #define BACK_OPEN close self; open "changeclass";
+    #include "ui_mp/navcontrols.inc"
+    
+    /* ================================================================================= */
+    /* ================================= MENU SELECTION ================================ */
+    /* ================================================================================= */
+    
+    // PRIMARY WEAPON BUTTON =========================================================== //
+    #define ICE_SELECT_PRIMARY_ACTION \
+        execnow "set ui_primary_selected primary"; \
+        play "mouse_click"; \
+        open "ice_class_popup_primary";
+    
+    CHOICE_BUTTON_EX( 1, "@MPUI_PRIMARY_WEAPON1", ICE_SELECT_PRIMARY_ACTION, name "primary_weapon_selection" )
+
+    #define ICE_SELECT_ATTACHMENT_ACTION \
+        play "mouse_click"; \
+        setdvar ui_primary_selected primary; \
+        setdvar ui_inside_popup_nested 0; \
+        setdvar ui_attachment_weap_slot loadout_primary;\
+        uiScript openMenuOnDvar loadout_class assault "ice_attachment_popup_assault_not_nested"; \
+        uiScript openMenuOnDvar loadout_class specops "ice_attachment_popup_specops_not_nested"; \
+        uiScript openMenuOnDvar loadout_class heavygunner "ice_attachment_popup_heavygunner_not_nested"; \
+        uiScript openMenuOnDvar loadout_class demolitions "ice_attachment_popup_demolitions_not_nested"; \
+        uiScript openMenuOnDvar loadout_class sniper "ice_attachment_popup_sniper_not_nested"; \
+
+    CHOICE_BUTTON_BG( 2, 1 )
+    CHOICE_HIGHLIGHT( 2, 1 )		
+    CHOICE_BUTTON_VIS_NOHI( 2, "@PERKS_ATTACHMENT", ICE_SELECT_ATTACHMENT_ACTION, when( !dvarBool( "lock_primary_attachment" ) && dvarString( "loadout_primary" ) != "mp44" ) )
+    CHOICE_DBUTTON_VIS_NOHI( 2, "@PERKS_ATTACHMENT", when( dvarBool( "lock_primary_attachment" ) || dvarString( "loadout_primary" ) == "mp44" ) )
+
+    // SECONDARY WEAPON/SIDE ARM BUTTON ================================================ //
+    #define ICE_SELECT_SECONDARY_ACTION \
+        play "mouse_click"; \
+        open "ice_class_popup_secondary";
+
+    #define ICE_SELECT_SECONDARY_ACTION_OVERKILL \
+        execnow "set ui_primary_selected secondary"; \
+        play "mouse_click"; \
+        open "ice_class_popup_primary";
+
+    CHOICE_BUTTON_BG( 3, 1 )
+    CHOICE_HIGHLIGHT( 3, 1 )	
+    
+    //Pistol	
+    CHOICE_BUTTON_VIS_NOHI( 3, "@MPUI_SIDE_ARM1", ICE_SELECT_SECONDARY_ACTION, when( dvarString( "loadout_perk2" ) != "specialty_twoprimaries" && !dvarBool( "lock_secondary" ) ) )
+    CHOICE_DBUTTON_VIS_NOHI( 3, "@MPUI_SIDE_ARM1", when( dvarString( "loadout_perk2" ) != "specialty_twoprimaries" && dvarBool( "lock_secondary" ) ) )
+    
+    //Second primary (overkill perk)
+    CHOICE_BUTTON_VIS_NOHI( 3, "@MPUI_SECONDARY_WEAPON", ICE_SELECT_SECONDARY_ACTION_OVERKILL, when( dvarString( "loadout_perk2" ) == "specialty_twoprimaries" && !dvarBool( "lock_secondary" ) ) )
+    CHOICE_DBUTTON_VIS_NOHI( 3, "@MPUI_SECONDARY_WEAPON", when( dvarString( "loadout_perk2" ) == "specialty_twoprimaries" && dvarBool( "lock_secondary" ) ) )
+    
+    // SPECIAL GRENADE BUTTON ========================================================== //
+    #define ICE_SELECT_SPECIAL_GRANADE_ACTION \
+        play "mouse_click"; \
+        open "ice_weapon_popup_extra";
+
+    CHOICE_BUTTON_BG( 4, 1 )
+    CHOICE_HIGHLIGHT( 4, 1 )		
+    CHOICE_BUTTON_VIS_NOHI( 4, "@MPUI_SPECIAL_GRENADE", ICE_SELECT_SPECIAL_GRANADE_ACTION, when( !dvarBool( "lock_grenade" ) ) )
+    CHOICE_DBUTTON_VIS_NOHI( 4, "@MPUI_SPECIAL_GRENADE", when( dvarBool( "lock_grenade" ) ) )	
+
+    // SEPARATOR BAR =================================================================== //
+    CHOICE_SEPARATOR( CHOICE_SEP_1 )
+    
+    // PERK 1 BUTTON =================================================================== //
+    #define ICE_SELECT_PERK1_ACTION \
+        play "mouse_click"; \
+        open "ice_perk1_popup";	
+    
+    // perk 1 empty warning
+    CHOICE_BUTTON_BG_RAW( 5, "gradient_fadein", 0.0 0.5 0.15 0.5, when( !dvarBool( "lock_perk1" ) && dvarString( "loadout_perk1" ) == "specialty_null" && !dvarBool( "loadout_perk1_locked" ) ); )
+    
+    CHOICE_BUTTON_FOCUS_VIS_ADV( 5, "@MPUI_PERK_1", ICE_SELECT_PERK1_ACTION, ;, ;, when( !dvarBool( "lock_perk1" ) && !dvarBool( "loadout_perk1_locked" ) ), !dvarBool( "loadout_perk1_locked" ) )
+    CHOICE_BUTTON_FOCUS_VIS_NOHI( 5, "", ;, ;, ;, when( dvarBool( "lock_perk1" ) || dvarBool( "loadout_perk1_locked" ) ) )
+    CHOICE_DBUTTON_VIS( 5, "@MPUI_PERK_1", when( dvarBool( "lock_perk1" ) || dvarBool( "loadout_perk1_locked" ) ) )
+
+    // PERK 2 BUTTON =================================================================== //
+    #define ICE_SELECT_PERK2_ACTION \		
+        play "mouse_click"; \
+        open "ice_perk2_popup";		
+
+    CHOICE_BUTTON_BG_RAW( 6, "gradient_fadein", 0.5 0.15 0 0.5, when( !dvarBool( "lock_perk2" ) && dvarString( "loadout_perk2" ) == "specialty_null" ); )
+    CHOICE_BUTTON_BG( 6, 1 )
+    CHOICE_HIGHLIGHT( 6, 1 )		
+
+    CHOICE_BUTTON_VIS_NOHI( 6, "@MPUI_PERK_2", ICE_SELECT_PERK2_ACTION, when( !dvarBool( "lock_perk2" ) ) )
+    CHOICE_DBUTTON_VIS_NOHI( 6, "@MPUI_PERK_2", when( dvarBool( "lock_perk2" ) ) )
+
+    // PERK 3 BUTTON =================================================================== //
+    #define ICE_SELECT_PERK3_ACTION \		
+        play "mouse_click"; \
+        open "ice_perk3_popup";		
+
+    CHOICE_BUTTON_BG_RAW( 7, "gradient_fadein", 0.5 0.15 0 0.5, when( !dvarBool( "lock_perk3" ) && dvarString( "loadout_perk3" ) == "specialty_null" ); )
+    CHOICE_BUTTON_BG( 7, 1 )
+    CHOICE_HIGHLIGHT( 7, 1 )	
+
+    CHOICE_BUTTON_VIS_NOHI( 7, "@MPUI_PERK_3", ICE_SELECT_PERK3_ACTION, when( !dvarBool( "lock_perk3" ) ) )
+    CHOICE_DBUTTON_VIS_NOHI( 7, "@MPUI_PERK_3", when( dvarBool( "lock_perk3" ) ) )
+    
+    // SEPARATOR BAR =================================================================== //
+    CHOICE_SEPARATOR( CHOICE_SEP_2 )
+
+    // START BUTTON ==================================================================== //
+    #define ICE_START_ACTION \		
+        play "mouse_click"; \
+        scriptMenuResponse "ice_go";
+
+    CHOICE_BUTTON_EX( 8, "@MENU_ACCEPT", ICE_START_ACTION, name "ice_button_go" )
+    
+    /* ================================================================================= */
+    /* ================================ LOADOUT DISPLAY ================================ */
+    /* ================================================================================= */
+
+    #define STAT_CAC_PRIMARY				tableLookup("mp/statstable.csv", 4, dvarString( "loadout_primary" ), 0)
+    #define STAT_CAC_PRIMARY_ATTACHMENT		tableLookup("mp/attachmentTable.csv", 4, dvarString( "loadout_primary_attachment" ), 9)
+    #define STAT_CAC_SECONDARY				tableLookup("mp/statstable.csv", 4, dvarString( "loadout_secondary" ), 0)
+    #define STAT_CAC_SECONDARY_ATTACHMENT	tableLookup("mp/attachmentTable.csv", 4, dvarString( "loadout_secondary_attachment" ), 9)
+    #define STAT_CAC_SPECIALTY_EQUIPMENT	tableLookup("mp/statstable.csv", 4, dvarString( "loadout_perk1" ), 0)
+    #define STAT_CAC_SPECIALTY_WEAPON		tableLookup("mp/statstable.csv", 4, dvarString( "loadout_perk2" ), 0)
+    #define STAT_CAC_SPECIALTY_ABILITY		tableLookup("mp/statstable.csv", 4, dvarString( "loadout_perk3" ), 0)
+    #define STAT_CAC_SPECIAL_GRENADE		tableLookup("mp/statstable.csv", 4, dvarString( "loadout_grenade" ), 0)
+    #define STAT_CAC_CAMO					tableLookup("mp/attachmentTable.csv", 4, dvarString( "loadout_camo" ), 11)
+    
+    #include "ui_mp/cac_loadout_ingame.inc"
+
+    #include "ui/safearea.menu"
+}
+
+// close all 2nd and 3rd layer popup menus on end action
+#define ICE_CLOSE_ALL_POPUPS_ACTION \
+    close "ice_class_popup_primary"; \
+    close "ice_class_popup_secondary"; \
+    close "ice_weapon_popup_assault"; \
+    close "ice_weapon_popup_specops"; \
+    close "ice_weapon_popup_heavygunner"; \
+    close "ice_weapon_popup_sniper"; \
+    close "ice_weapon_popup_demolitions"; \
+    close "ice_attachment_popup_assault"; \
+    close "ice_attachment_popup_specops"; \
+    close "ice_attachment_popup_heavygunner"; \
+    close "ice_attachment_popup_sniper"; \
+    close "ice_attachment_popup_demolitions"; \
+    close "ice_attachment_popup_assault_not_nested"; \
+    close "ice_attachment_popup_specops_not_nested"; \
+    close "ice_attachment_popup_heavygunner_not_nested"; \
+    close "ice_attachment_popup_sniper_not_nested"; \
+    close "ice_attachment_popup_demolitions_not_nested"; \
+    close "ice_attachment_popup_pistol"; \
+    close "ice_attachment_popup_no_attach";	\
+    close "ice_camo_popup"; \
+    close "ice_camo_popup_no_attach";
+
+// Pupup menus
+#include "ui_mp/popupstyle.inc"	
+#include "ui/choices_setup_popmenu.menu"
+
+#undef CHOICE_SIZE_X
+#define CHOICE_SIZE_X			216
+
+#undef NEW_X_OFFSET			
+#define NEW_X_OFFSET	(0-CHOICE_SIZE_X)
+
+#undef NEW_Y_OFFSET			
+#define NEW_Y_OFFSET	(0-2)
+
+#include "ui_mp/ice/ice_primary_popup.inc"
+
+#include "ui_mp/ice/ice_primary_attachment_popup.inc"
+
+#include "ui_mp/ice/ice_sidearm_popup.inc"
+
+#include "ui_mp/ice/ice_camoskin_popup.inc"
+
+#include "ui_mp/ice/ice_sgrenade_popup.inc"
+
+#include "ui_mp/ice/ice_perks_popup.inc"

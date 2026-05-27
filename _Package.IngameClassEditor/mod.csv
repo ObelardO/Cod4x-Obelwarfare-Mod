@@ -6,4 +6,9 @@ rawfile,scripts/_ingameclass.gsc
 
 #IngameClassEditor: menu files
 menufile,ui_mp/scriptmenus/ice_main.menu
-rawfile,ui_mp/ice_main.inc
+rawfile,ui_mp/ice/ice_primary_popup.inc
+rawfile,ui_mp/ice/ice_primary_attachment_popup.inc
+rawfile,ui_mp/ice/ice_sidearm_popup.inc
+rawfile,ui_mp/ice/ice_camoskin_popup.inc
+rawfile,ui_mp/ice/ice_sgrenade_popup.inc
+rawfile,ui_mp/ice/ice_perks_popup.inc
