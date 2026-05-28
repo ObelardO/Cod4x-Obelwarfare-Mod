@@ -1532,7 +1532,7 @@ endGame( winner, endReasonText )
 			roundEndWait( level.halftimeRoundEndDelay, !(hitRoundLimit() || hitScoreLimit()) );
 		}
 
-		if(level.players.size > 0 && level.gametype == "sd" && !hitScoreLimit())
+		if(level.players.size > 0 && ( level.gametype == "sd" || level.gametype == "sab" ) && !hitScoreLimit())
 		{
         	maps\mp\gametypes\_finalkillcam::SetKillcamStyle( 1 );
 		    thread maps\mp\gametypes\_finalkillcam::startFK( winner );
@@ -1541,20 +1541,19 @@ endGame( winner, endReasonText )
 		if(level.fk)
 			level waittill("end_killcam");
 
-
-    if ( !hitRoundLimit() && !hitScoreLimit() )
-    {
-    	game["state"] = "playing";
-			if ( level.teamBalance )
-			{
-				level notify ( "roundSwitching" );
-				wait 1;
-			}               	
-    	level notify ( "restarting" );
-      
-      map_restart( true );
-      return;
-    }
+		if ( !hitRoundLimit() && !hitScoreLimit() )
+		{
+			game["state"] = "playing";
+				if ( level.teamBalance )
+				{
+					level notify ( "roundSwitching" );
+					wait 1;
+				}               	
+			level notify ( "restarting" );
+		
+			map_restart( true );
+			return;
+		}
 
 		if ( hitRoundLimit() )
 			endReasonText = game["strings"]["round_limit_reached"];
@@ -1636,9 +1635,15 @@ endGame( winner, endReasonText )
 		}
 	}
 
-	wait 6;
+	wait 4;
 
-    if(level.players.size > 0 && level.gametype != "sd")
+	if(level.players.size > 0)
+    {
+        maps\mp\gametypes\_finalkillcam::SetKillcamStyle( 0 );
+        thread maps\mp\gametypes\_finalkillcam::startFK( winner );
+    }
+	/*
+    if(level.players.size > 0 && level.gametype == "sd")
     {
         maps\mp\gametypes\_finalkillcam::SetKillcamStyle( 0 );
         thread maps\mp\gametypes\_finalkillcam::startFK( winner );
@@ -1649,6 +1654,7 @@ endGame( winner, endReasonText )
         maps\mp\gametypes\_finalkillcam::SetKillcamStyle( 0 );
         thread maps\mp\gametypes\_finalkillcam::startFK( winner );
     }
+	*/
 
     if(level.fk)
         level waittill("end_killcam");
