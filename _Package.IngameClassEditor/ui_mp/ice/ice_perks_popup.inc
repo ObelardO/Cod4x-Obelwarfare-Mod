@@ -132,7 +132,7 @@
 // perk1 selection for primary weapon popup menu
 menuDef	
 {
-    IMPROVED_POPUP_SETUP_ONOPEN( "ice_perk1_popup", 7, (CHOICE_X( 4 )-2), (CHOICE_Y( 4 )+18), ;, LOCAL_PERK_POPUP_ONOPEN( REF_C4_X2, "perk1" ), 1 )
+    IMPROVED_POPUP_SETUP_ONOPEN( "ice_perk1_popup", 7, ICE_POPUP_X_START, (CHOICE_Y( 4 )+18), ;, LOCAL_PERK_POPUP_ONOPEN( REF_C4_X2, "perk1" ), 1 )
     onClose{ execnow "set ui_inside_popup 0"; }
     LOCAL_PERK_INFO_WINDOW( "perk1" )
     LOCAL_PERK_ITEM( 1, "@PERKS_C4_X_2", "perk1", REF_C4_X2, ; )
@@ -164,7 +164,7 @@ menuDef
 // perk2 selection for primary weapon popup menu
 menuDef	
 {
-    IMPROVED_POPUP_SETUP_ONOPEN( "ice_perk2_popup", 7, (CHOICE_X( 5 )-2), (CHOICE_Y( 5 )+22), ;, LOCAL_PERK_POPUP_ONOPEN( REF_BULLETDAMAGE, "perk2" ), 1 )
+    IMPROVED_POPUP_SETUP_ONOPEN( "ice_perk2_popup", 7, ICE_POPUP_X_START, (CHOICE_Y( 5 )+22), ;, LOCAL_PERK_POPUP_ONOPEN( REF_BULLETDAMAGE, "perk2" ), 1 )
     onClose{ execnow "set ui_inside_popup 0"; }
     LOCAL_PERK_INFO_WINDOW( "perk2" )
     LOCAL_PERK_ITEM( 1, "@PERKS_STOPPING_POWER", "perk2", REF_BULLETDAMAGE, LOCAL_RESET_PISTOL_ACTION )
@@ -182,7 +182,7 @@ menuDef
 // perk3 selection for primary weapon popup menu
 menuDef	
 {
-    IMPROVED_POPUP_SETUP_ONOPEN( "ice_perk3_popup", 8, (CHOICE_X( 6 )-2), (CHOICE_Y( 6 )+26), ;, LOCAL_PERK_POPUP_ONOPEN( REF_LONGERSPRINT, "perk3" ), 1 )
+    IMPROVED_POPUP_SETUP_ONOPEN( "ice_perk3_popup", 8, ICE_POPUP_X_START, (CHOICE_Y( 6 )+26), ;, LOCAL_PERK_POPUP_ONOPEN( REF_LONGERSPRINT, "perk3" ), 1 )
     onClose{ execnow "set ui_inside_popup 0"; }
     LOCAL_PERK_INFO_WINDOW( "perk3" )
     LOCAL_PERK_ITEM( 1, "@PERKS_EXTREME_CONDITIONING", "perk3", REF_LONGERSPRINT, ; )

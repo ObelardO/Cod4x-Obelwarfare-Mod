@@ -1,6 +1,7 @@
 // ====================================================================================================
 // side arm selection ===============================================================================
 // ====================================================================================================
+
 #define LOCAL_SIDEARM_INFO_WINDOW( highlight_dvar ) \
     /* sidearm information side frame*/ \
     PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH-6) -4 280 CHOICE_POPUP_HEIGHT( 7 ) CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "white", CHOICE_POPUP_BORDER_COLOR, 1, 2, CHOICE_POPUP_BORDER_COLOR visible when( dvarString( "ui_inside_popup" ) != "attachment" ); ) \
@@ -62,7 +63,7 @@
 
 menuDef	
 {
-    IMPROVED_POPUP_SETUP_ONOPEN( "ice_class_popup_secondary", 7, (CHOICE_X( 2 )-2), (CHOICE_Y( 2 )), ;, LOCAL_SIDEARM_POPUP_ONOPEN( "pistol" ), 1 )
+    IMPROVED_POPUP_SETUP_ONOPEN( "ice_class_popup_secondary", 7, ICE_POPUP_X_START, (CHOICE_Y( 2 )), ;, LOCAL_SIDEARM_POPUP_ONOPEN( "pistol" ), 1 )
     onClose{execnow "set ui_inside_popup 0";}
     LOCAL_SIDEARM_INFO_WINDOW( "ui_sidearm_highlighted" )
     LOCAL_SIDEARM_ITEM( 1, "@WEAPON_BERETTA", REF_M9BERETTA, "ui_sidearm_highlighted" )

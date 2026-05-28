@@ -1,6 +1,7 @@
 // ====================================================================================================
 // camo skin selection ================================================================================
 // ====================================================================================================
+
 #define LOCAL_CAMO_INFO_WINDOW( highlight_dvar ) \
 	/* camo information side frame*/ \
 	PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH-6) -4 280 CHOICE_POPUP_HEIGHT( 8 ) CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "white", CHOICE_POPUP_BORDER_COLOR, 1, 2, CHOICE_POPUP_BORDER_COLOR ) \
@@ -15,7 +16,7 @@
 	PREPROC_SHADER_DRAW_ALIGNED( 0 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "white", 0.15 0.15 0.17 1, 0, 2, CHOICE_POPUP_BORDER_COLOR )\
 	PREPROC_TEXT_DRAW_ALIGNED_EXP( 8 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, -32 0, "@"+tablelookup("mp/attachmenttable.csv",4,dvarString( "loadout_primary_attachment" ),3), TEXTSIZE_INFO_DESC, 0, 0, ITEM_ALIGN_MIDDLE_RIGHT, CHOICE_TEXTCOLOR )\
 	/* pointer icon */ \
-	PREPROC_SHADER_DRAW_ALIGNED( 200 -16 16 8 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "hitech_arrow_right", 0.55 0.95 0.55 0.7, 0, 2, CHOICE_POPUP_BORDER_COLOR )
+	PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_SIZE_X - 16) -16 16 8 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "hitech_arrow_right", 0.55 0.95 0.55 0.7, 0, 2, CHOICE_POPUP_BORDER_COLOR )
 
 #define LOCAL_CAMO_ACTION( camoRef ) \
 		play "mouse_click"; \
@@ -37,7 +38,7 @@
 #define LOCAL_CAMO_POPUPS_GROUP( prefix, onLeave )\
 menuDef	\
 {\
-	IMPROVED_POPUP_SETUP_ONOPEN( "ice_camo_popup"prefix, 8, (CHOICE_X( 1 )-2), (CHOICE_Y( 1 )+68), ;, LOCAL_CAMO_POPUP_ONOPEN, 0 )\
+	IMPROVED_POPUP_SETUP_ONOPEN( "ice_camo_popup"prefix, 8, ICE_POPUP_X_START, (CHOICE_Y( 1 )+68), ;, LOCAL_CAMO_POPUP_ONOPEN, 0 )\
 	onClose{onLeave;} \
 	LOCAL_CAMO_INFO_WINDOW( "ui_camo_highlighted" )\
 	LOCAL_CAMO_ITEM( 1, "@MPUI_NONE", CAMO_NONE, REF_CAMO_NONE, "ui_camo_highlighted", 0, 1 )\
