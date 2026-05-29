@@ -630,7 +630,7 @@ spawnbomb( origin, angles )
 deleteAfterTime( time )
 {
 	self endon ( "death" );
-	wait ( 10.0 );
+	wait ( time );
 
 	self delete();
 }

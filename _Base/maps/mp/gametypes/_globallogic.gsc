@@ -5821,7 +5821,7 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 	}
 
 	//Killcam for c4, claymore, grenade
-	if(sMeansOfDeath != "MOD_MELEE" && isDefined(eInflictor) && (sWeapon == "c4_mp" || sWeapon == "claymore_mp" || sWeapon == "rpg_mp" || sWeapon == "frag_grenade_mp"))
+	if(sMeansOfDeath != "MOD_MELEE" && isDefined(eInflictor) && (sWeapon == "c4_mp" || sWeapon == "claymore_mp" || sWeapon == "rpg_mp" || sWeapon == "frag_grenade_mp" || sWeapon == "artillery_mp" || sWeapon == "airstrike_mp"))
 	{
 		dokillcam = true;
 		

@@ -43,23 +43,23 @@ killcam(
 	{
 		if (sWeapon == "artillery_mp")
 		{
-			camtime = 1.3;
+			camtime = 3;
 			camdist = 60;
 		}
 		else if (sWeapon == "airstrike_mp")
 		{
-			camtime = 1.3;
-			camdist = 128;
+			camtime = 3;
+			camdist = 60;
 		}
 		else if (sWeapon == "claymore_mp")
 		{
 			camtime = 3.0;
-			camdist = 0;
+			camdist = 10;
 		}
 		else if (sWeapon == "frag_grenade_mp")
 		{
 			camtime = 4.0; // show long enough to see grenade thrown
-			camdist = 160;
+			camdist = 60;
 		}
 		else if ( !respawn ) // if we're not going to respawn, we can take more time to watch what happened
 		{
@@ -80,7 +80,7 @@ killcam(
 	
 	// time after player death that killcam continues for
 	if (getdvar("scr_killcam_posttime") == "")
-		postdelay = 2;
+		postdelay = 1;
 	else {
 		postdelay = getdvarfloat("scr_killcam_posttime");
 		if (postdelay < 0.05)

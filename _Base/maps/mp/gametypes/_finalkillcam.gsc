@@ -73,30 +73,30 @@ finalkillcam( attacker, attackerNum, deathtime, victim, weapon, killcamentity)
 
     if (weapon == "artillery_mp")
     {
-        camtime = 1.3;
+        camtime = 3;
         camdist = 60;
     }
 
     else if (weapon == "airstrike_mp")
     {
-        camtime = 1.3;
-        camdist = 128;
+        camtime = 3;
+        camdist = 60;
     }
 
     else if (weapon == "claymore_mp")
     {
         camtime = 3.0;
-        camdist = 0;
+        camdist = 10;
     }
 
     else if (weapon == "frag_grenade_mp")
     {
         camtime = 4.0; // show long enough to see grenade thrown
-        camdist = 160;
+        camdist = 60;
     }
 
     predelay = getTime()/1000 - deathTime;
-    postdelay = 3;
+    postdelay = 1;
     killcamlength = camtime + postdelay;
     killcamoffset = camtime + predelay;
     
