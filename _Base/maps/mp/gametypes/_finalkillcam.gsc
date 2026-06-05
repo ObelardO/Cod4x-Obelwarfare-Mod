@@ -86,7 +86,7 @@ finalkillcam( attacker, attackerNum, deathtime, victim, weapon, killcamentity)
     else if (weapon == "claymore_mp")
     {
         camtime = 3.0;
-        camdist = 10;
+        camdist = 20;
     }
 
     else if (weapon == "frag_grenade_mp")
