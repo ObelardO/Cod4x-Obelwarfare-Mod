@@ -1111,6 +1111,8 @@ explosiveKillcamThread()
 	
 	self thread explosiveKillcamTriggerThread();
 
+	waittillframeend; //Fix: resolve race condition in next frame (array and trigger)
+
 	self thread explosiveKillcamTrackingEntitiesThread();
 
 	self waittill( "activated", player );
