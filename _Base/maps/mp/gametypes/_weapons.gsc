@@ -196,7 +196,7 @@ onPlayerSpawned()
 		self.concussionEndTime = 0;
 		self.hasDoneCombat = false;
 		self thread watchWeaponUsage();
-		self thread watchGrenadeUsage();
+		self thread watchExplosivesUsageThread();
 		self thread watchWeaponChange();
 
 		self.droppedDeathWeapon = undefined;
@@ -733,8 +733,10 @@ friendlyFireCheck( owner, attacker, forcedFriendlyFireRule )
 	return false; // disallow it
 }
 
-watchGrenadeUsage()
+watchExplosivesUsageThread()
 {
+	//self is player
+
 	self endon( "death" );
 	self endon( "disconnect" );
 
@@ -756,8 +758,10 @@ watchGrenadeUsage()
 	thread watchC4();
 	thread watchC4Detonation();
 	thread watchC4AltDetonation();
+
 	thread watchClaymores();
-	thread deleteC4AndClaymoresOnDisconnect();
+	
+	thread deleteExplosivesOnDisconnect();
 
 	self thread watchForThrowbacks();
 
@@ -877,7 +881,7 @@ watchC4()
 
 			c4 thread maps\mp\gametypes\_shellshock::c4_earthQuake();
 			c4 thread c4Activate();
-			c4 thread c4Damage();
+			c4 thread explosiveDemageThread();
 
 			if ( level.scr_show_c4_blink_effect == 1 )
 			c4 thread playC4Effects();
@@ -899,25 +903,7 @@ watchClaymores()
 		self waittill( "grenade_fire", claymore, weapname );
 		if ( weapname == "claymore" || weapname == "claymore_mp" )
 		{
-			self.claymorearray[self.claymorearray.size] = claymore;
-			claymore.owner = self;
-			claymore.planttime = openwarfare\_timer::getTimePassed();
-
-			if ( level.teamBased && level.gametype != "bel" )
-			{
-				claymore.targetname = "claymore_mp_" + self.pers["team"];
-			}
-				
-			claymore thread c4Damage();
-			claymore thread claymoreDetonation();
-
-			if ( level.scr_claymore_show_laser_beams != 0 )
-				claymore thread playClaymoreEffects();
-
-			claymore thread claymoreDetectionTrigger_wait( self.pers["team"] );
-
-			if ( level.scr_claymore_show_headicon == 1 )
-				claymore maps\mp\_entityheadicons::setEntityHeadIcon(self.pers["team"], (0,0,20));
+			claymore thread claymoreSpawnThread( self );
 
 			/#
 			if ( getdvarint("scr_claymoredebug") )
@@ -927,6 +913,54 @@ watchClaymores()
 			#/
 		}
 	}
+}
+
+claymoreSpawnThread( owner )
+{
+	//self is claymore
+
+	self waitTillNotMoving();
+
+	// Should we check the planting distance?
+	if ( level.scr_claymore_check_plant_distance == 1 ) {
+		// Check if this is an invalid plant
+		if ( distance( self.origin, owner.origin ) > 50 ) {
+			// Remove the claymore and give it back to the player
+			currentAmmo = owner getAmmoCount( "claymore_mp" );
+			if ( currentAmmo == 0 ) {
+				owner giveWeapon( "claymore_mp" );
+			}
+			currentAmmo++;
+
+			owner setWeaponAmmoStock( "claymore_mp", currentAmmo );
+			owner switchToWeapon( "claymore_mp" );
+			self delete();
+
+			return;
+		}
+	}
+
+	ownerTeam = owner.pers["team"];
+
+	self.owner = owner;
+	self.owner.claymorearray[owner.claymorearray.size] = self;
+	self.planttime = openwarfare\_timer::getTimePassed();
+
+	if ( level.teamBased && level.gametype != "bel" )
+	{
+		self.targetname = "claymore_mp_" + ownerTeam;
+	}
+		
+	self thread explosiveDemageThread();
+	self thread explosiveKillcamThread();
+
+	self thread claymoreDetonationThread();
+	self thread claymoreDetectionThread( ownerTeam );
+
+	self claymorePlayEffects();
+
+	if ( level.scr_claymore_show_headicon == 1 )
+		self maps\mp\_entityheadicons::setEntityHeadIcon( ownerTeam, (0,0,20) );
 }
 
 /#
@@ -986,45 +1020,11 @@ waitTillNotMoving()
 	}
 }
 
-claymoreDetonation()
+claymoreDetonationThread()
 {
+	//self is claymore
+
 	self endon("death");
-
-	self waitTillNotMoving();
-
-	// Should we check the planting distance?
-	if ( level.scr_claymore_check_plant_distance == 1 ) {
-		// Check if this is an invalid plant
-		if ( distance( self.origin, self.owner.origin ) > 35 ) {
-			// Remove the claymore and give it back to the player
-			currentAmmo = self.owner getAmmoCount( "claymore_mp" );
-			if ( currentAmmo == 0 ) {
-				self.owner giveWeapon( "claymore_mp" );
-			}
-			currentAmmo++;
-
-			self.owner setWeaponAmmoStock( "claymore_mp", currentAmmo );
-			self.owner switchToWeapon( "claymore_mp" );
-			self delete();
-
-			return;
-		}
-	}
-
-	if ( !isDefined( self.killCamEnt ) )
-	{
-		/*camPos = self.origin + vector_scale( anglesToForward( self.angles ), -20 ) + (0,0,30);
-		killCamEnt = spawn( "script_model", camPos );
-		killCamEnt setModel( "tag_origin" );
-		killCamEnt.angles = (0, self.angles[1], 0);
-		killCamEnt.isKillcamEnt = true;
-		//self thread deleteOnDeath( killCamEnt );
-		self.killCamEnt = killCamEnt;
-		*/
-		self.killCamTrackingEntities = [];
-
-		self thread claymoreKillcamEntityTargetingThread();
-	}
 
 	damagearea = spawn("trigger_radius", self.origin + (0,0,0-level.claymoreDetonateRadius), 0, level.claymoreDetonateRadius, level.claymoreDetonateRadius*2);
 	self thread deleteOnDeath( damagearea );
@@ -1036,20 +1036,18 @@ claymoreDetonation()
 		if ( !isPlaying( player ) )
 			continue;
 
-		if ( openwarfare\_timer::getTimePassed() - self.planttime < level.scr_claymore_arm_time )
-			continue;
-
-		if ( getdvarint("scr_claymoredebug") != 1 )
-		{
-			if ( isdefined( self.owner ) && player == self.owner && level.scr_claymore_friendly_fire != 2 )
-				continue;
-			if ( !friendlyFireCheck( self.owner, player, level.scr_claymore_friendly_fire ) )
-				continue;
-		}
 		if ( lengthsquared( player getVelocity() ) < 10 )
 			continue;
 
-		if ( !player shouldAffectClaymore( self ) )
+		if ( openwarfare\_timer::getTimePassed() - self.planttime < level.scr_claymore_arm_time )
+			continue;
+		//if ( getdvarint("scr_claymoredebug") != 1 )
+		//{
+		if ( !player isPlayerEnemyForExplosive( self ) )
+			continue;
+		//}
+
+		if ( !player isPlayerVisibleForClaymore( self ) )
 			continue;
 
 		if ( player damageConeTrace( self.origin, self ) > 0 )
@@ -1058,12 +1056,7 @@ claymoreDetonation()
 
 	self playsound ("claymore_activated");
 
-	self notify("activated");
-
-	if ( isDefined( player ) && isDefined( self.killCamTrackingEntities ) )
-	{
-		self thread claymoreKillcamEntityFinalize( player );
-	}
+	self notify( "activated", player );
 
 	wait level.claymoreDetectionGracePeriod;
 
@@ -1074,7 +1067,26 @@ claymoreDetonation()
 	self detonate();
 }
 
-shouldAffectClaymore( claymore )
+
+isPlayerEnemyForExplosive( explosive )
+{
+	//self is player
+
+	if ( !isPlaying( self ) )
+		return false;
+
+	isTeamBased = level.teamBased && level.gametype != "bel";
+	isFriendlyFireAllowed = level.scr_claymore_friendly_fire != 0;
+	isSelfDamageAllowed = level.scr_claymore_friendly_fire == 2;
+
+	if ( explosive.owner == self )
+		return isSelfDamageAllowed;
+	else
+		return !isTeamBased || ( self.pers["team"] != explosive.owner.pers["team"] || isFriendlyFireAllowed );
+}
+
+
+isPlayerVisibleForClaymore( claymore )
 {
 	pos = self.origin + (0,0,32);
 
@@ -1091,117 +1103,123 @@ shouldAffectClaymore( claymore )
 	return ( dot > level.claymoreDetectionDot );
 }
 
-isEntityBehind( entity )
+
+explosiveKillcamThread()
 {
-	dirToEntity = vectorNormalize( entity.origin - self.origin );
-	entityForward = anglesToForward( self.angles );
-	dot = vectorDot( entityForward, dirToEntity );
+	if ( !level.killcam )
+		return;
+	
+	self thread explosiveKillcamTriggerThread();
 
-	return ( dot < 0 );
-}
+	self thread explosiveKillcamTrackingEntitiesThread();
 
-claymoreKillcamEntityTargetingThread()
-{
-	self endon("death");
-	self endon("activated");
-	level endon("game_ended");
+	self waittill( "activated", player );
 
-	//while( isDefined( self.killCamTrackingEntitiesTrigger ) )
-	while( !level.gameEnded )
+	playerId = player getEntityNumber();
+	trackingEntities = self.killCamTrackingEntities;
+	trackingEntity = trackingEntities[playerId];
+	trackingTime = level.claymoreDetectionGracePeriod / 2;
+
+	if ( isDefined( trackingEntity ) )
 	{
-		while ( !isDefined( self.killCamTrackingEntitiesTrigger ) )
+		//trackingAngles = vectorToAngles( player.origin - trackingEntity.origin );
+		trackingAngles = self.angles;
+		trackingEntity rotateTo ( (0, trackingAngles[1], 0) , trackingTime, 0.05, 0.1 );
+
+		self.killCamEnt = trackingEntity;
+		self.killCamEnt.isKillcamEnt = true;
+		
+		//player iPrintLn ( "[CKC] Last time updating killcam target angles to " + player.name );
+	
+		player waittill( "end_killcam" );
+
+		for ( i = 0; i < trackingEntities.size; i++ )
 		{
-			wait 0.05;
+			if ( isDefined( trackingEntities[i] ) )
+				trackingEntities[i] delete();
 		}
 
+		//player iPrintLn ( "[CKC] All tracked entities deleted" );
+	}
+}
+
+
+explosiveKillcamTriggerThread()
+{
+	//self is explosive
+
+	self endon ( "death" );
+	self endon ( "activated" );
+	level endon ( "game_ended" );
+
+	killcamDetectionTrigger = spawn( "trigger_radius", self.origin-(0,0,128), 0, 512, 256 );
+	killcamDetectionTrigger.detectId = "trigger" + getTime() + randomInt( 1000000 );
+
+	self.killcamDetectionTrigger = killcamDetectionTrigger;
+	self.killcamTrackingEntities = [];
+
+	self thread deleteOnDeath( killcamDetectionTrigger );
+
+	while(1)
+	{
+		killcamDetectionTrigger waittill( "trigger", player );
+	
+		if ( player isPlayerEnemyForExplosive( self ) )
+		{
+			playerId = player getEntityNumber();
+
+			if ( !isDefined( self.killcamTrackingEntities[playerId] ) )
+			{
+				//camPos = self.origin + vector_scale( anglesToForward( self.angles ), -10 ) ;//+ ( 0, 0, 10 );
+				killcamTrackingEntity = spawn( "script_model", self.origin );
+				killcamTrackingEntity setModel( "tag_origin" );
+				killcamTrackingEntity.angles = (0, self.angles[1], 0);
+
+				self.killcamTrackingEntities[playerId] = killcamTrackingEntity;
+
+				//Disabled: removing after killcam ends
+				//self thread deleteOnDeath( killcamTrackingEntity );
+
+				//player iPrintln( "[CKC] Player " + player.name + " ^2entered ^7claymore detection trigger" );
+			}
+		}
+	}
+}
+
+
+explosiveKillcamTrackingEntitiesThread()
+{
+	//self is explosive
+
+	self endon( "death" );
+	self endon( "activated" );
+	level endon( "game_ended" );
+
+	trackingTime = 0.5;
+
+	while(1)
+	{
 		trackedPlayersIds = getArrayKeys( self.killCamTrackingEntities );
-		trackedTime = 0.5;
 
 		for ( i = 0; i < trackedPlayersIds.size; i++ )
 		{
 			playerId = trackedPlayersIds[i];
 			trackedPlayer = getEntByNum( playerId );
 			trackingEntity = self.killCamTrackingEntities[playerId];
-			
-			if ( isDefined( trackedPlayer ) && isPlaying( trackedPlayer ) && trackedPlayer isTouching( self.killCamTrackingEntitiesTrigger ) )
-			{
-				claymoreAngles = vectorToAngles( trackedPlayer.origin - trackingEntity.origin );
-				trackingEntity rotateTo ( (0, claymoreAngles[1], 0) , trackedTime, 0.1, 0.1 );
 
-				trackedPlayer iPrintLn ( "[CKC] Updating killcam target angles to " + trackedPlayer.name );
+			if ( isDefined( trackedPlayer ) && isPlaying( trackedPlayer ) && trackedPlayer isTouching( self.killcamDetectionTrigger ) )
+			{
+				trackingAngles = vectorToAngles( trackedPlayer.origin - trackingEntity.origin );
+				trackingEntity rotateTo ( (0, trackingAngles[1], 0) , trackingTime, 0.1, 0.1 );
+
+				//trackedPlayer iPrintLn ( "[CKC] Updating killcam target angles to " + trackedPlayer.name );
 			}
 		}
 
-		wait trackedTime;
+		wait trackingTime;
 	}
 }
 
-claymoreKillcamEntityFinalize( player )
-{
-	trackedPlayersIds = getArrayKeys( self.killCamTrackingEntities );
-	trackedTime = level.claymoreDetectionGracePeriod;
-
-	for ( i = 0; i < trackedPlayersIds.size; i++ )
-	{
-		playerId = trackedPlayersIds[i];
-		trackedPlayer = getEntByNum( playerId );
-		trackingEntity = self.killCamTrackingEntities[playerId];
-
-		if ( trackedPlayer == player )
-		{
-			targetRotation = self.angles;
-			trackingEntity rotateTo ( (0, targetRotation[1], 0) , trackedTime, 0.1, 0.1 );
-
-			player iPrintLn ( "[CKC] Last time updating killcam target angles to " + player.name );
-
-			self.killCamEnt = trackingEntity;
-			self.killCamEnt.isKillcamEnt = true;
-		}
-		else
-		{
-			trackingEntity delete();
-		}
-	}
-
-	if ( !isDefined( self.killCamEnt ) )
-	{
-		player iPrintLn ( "[CKC] ^1Error:^7 No killcam target found!" );
-		return;
-	}
-
-	killCamEnt = self.killCamEnt;
-
-	//if ( player isEntityBehind( self ) )
-	//{
-	//	//killCamEnt.origin = self.origin + vector_scale( anglesToForward( self.angles ), 200 ) + (0,0,40);
-	//	killCamEnt moveTo( self.origin + vector_scale( anglesToForward( self.angles ), 250 ) + (0,0,100), 0.25, 0, 0.125 );
-	//	//killCamEnt.angles = (0, self.angles[1] + 180, 0);
-	//	killCamEnt rotateTo ( (0, self.angles[1] + 180, 0) , 0.25, 0, 0.125 );
-	//}
-	//else
-	//{
-	//	killCamEnt.origin = self.origin + vector_scale( anglesToForward( self.angles ), -20 ) + (0,0,50);
-	//	//killCamEnt.angles = (0, self.angles[1], 0);
-	//	killCamEnt rotateTo ( (0, self.angles[1], 0) , 1, 0, 0.125 );
-	//
-	//}
-
-	player waittill( "begin_killcam", kcTime );
-
-	player iPrintln( "[CKC] Killcam started " + kcTime );
-
-	//claymoreTarget = killCamEnt.origin;
-	//claymoreAngles = vectorToAngles( claymoreTarget - victim.origin );
-	//killCamEnt moveTo( killCamEnt.origin + (0, 1000, 0), 2.5, 0.25, 0.25 );
-
-	player waittill( "end_killcam" );
-
-	wait 0.05;
-
-	player iPrintln( "[CKC] Killcam done " + getTime() );
-
-	killCamEnt delete();
-}
 
 deleteAfterTime( time )
 {
@@ -1210,6 +1228,7 @@ deleteAfterTime( time )
 
 	self delete();
 }
+
 
 deleteOnDeath(ent)
 {
@@ -1342,7 +1361,7 @@ waitAndDetonate( delay )
 	self detonate();
 }
 
-deleteC4AndClaymoresOnDisconnect()
+deleteExplosivesOnDisconnect()
 {
 	self endon("death");
 	self waittill("disconnect");
@@ -1364,8 +1383,10 @@ deleteC4AndClaymoresOnDisconnect()
 	}
 }
 
-c4Damage()
+explosiveDemageThread()
 {
+	//self if explosive
+
 	self endon( "death" );
 
 	self setcandamage(true);
@@ -1523,30 +1544,17 @@ c4DetectionTrigger( ownerTeam )
 }
 
 
-claymoreDetectionTrigger_wait( ownerTeam )
+claymoreDetectionThread( ownerTeam )
 {
-	self endon ( "death" );
-	waitTillNotMoving();
-
 	if ( level.oldschool )
 		return;
 
-	self thread claymoreDetectionTrigger( ownerTeam );
-}
-
-claymoreDetectionTrigger( ownerTeam )
-{
 	detectRadius = level.scr_claymore_detect_perk_distance;
 
 	trigger = spawn( "trigger_radius", self.origin-(0,0,128), 0, detectRadius, 256 );
 	trigger.detectId = "trigger" + getTime() + randomInt( 1000000 );
 
 	trigger thread detectIconWaiter( level.otherTeam[ownerTeam] );
-
-	//TODO: Make targeting to neares player with killcam entity rotateTo
-	self.killCamTrackingEntitiesTrigger = trigger;
-	trigger thread claymoreKillCamEntityTargetWaiter( self, ownerTeam );
-	//trigger thread claymoreKillCamEntityTargetFlusher( self );
 
 	self waittill( "death" );
 	trigger notify ( "end_detection" );
@@ -1557,63 +1565,6 @@ claymoreDetectionTrigger( ownerTeam )
 	self.killCamTrackingEntitiesTrigger = undefined;
 	trigger delete();
 }
-
-
-claymoreKillCamEntityTargetWaiter( claymore, ownerTeam )
-{
-	self endon ( "end_detection" );
-	level endon ( "game_ended" );
-
-	isTeamBased = level.teamBased && level.gametype != "bel";
-	isFriendlyFireOn = level.scr_claymore_friendly_fire != 0;
-
-	while( !level.gameEnded )
-	{
-		self waittill( "trigger", player );
-	
-		if ( isDefined( player ) && player != claymore.owner && isPlaying( player ) && ( !isTeamBased || ( player.team != ownerTeam || isFriendlyFireOn ) ) )
-		{
-			playerId = player getEntityNumber();
-
-			if ( !isDefined( claymore.killCamTrackingEntities[playerId] ) )
-			{
-				//camPos = claymore.origin + vector_scale( anglesToForward( claymore.angles ), -20 ) + (0,0,30);
-				//camPos = claymore.origin + vector_scale( anglesToForward( claymore.angles ), 1 ) ;//+ ( 0, 0, 10 );
-				//camPos = claymore.origin + vector_scale( anglesToForward( claymore.angles ), -10 ) ;//+ ( 0, 0, 10 );
-				camPos = claymore.origin;// + vector_scale( anglesToForward( claymore.angles ), -10 ) ;//+ ( 0, 0, 10 );
-				killCamtrackingEntity = spawn( "script_model", claymore.origin );
-				killCamtrackingEntity setModel( "tag_origin" );
-				killCamtrackingEntity.angles = (0, claymore.angles[1], 0);
-
-				claymore.killCamTrackingEntities[playerId] = killCamtrackingEntity;
-
-				player iPrintln( "[CKC] Player " + player.name + " ^2entered ^7claymore detection trigger" );
-			}
-		}
-	}
-}
-
-/*
-claymoreKillCamEntityTargetFlusher( claymore )
-{
-	self endon ( "end_detection" );
-	level endon ( "game_ended" );
-
-	while( !level.gameEnded )
-	{
-		player = claymore.killCamEntTarget;
-
-		if ( isDefined( player ) && !( isAlive( player ) && player isTouching( self ) ) )
-		{
-			player iPrintln( "[CKC] Player " + player.name + " ^1leave ^7claymore detection trigger" );
-			
-			claymore.killCamEntTarget = undefined;
-		}
-
-		wait ( 0.05 );
-	}
-}
-*/
 
 
 detectIconWaiter( detectTeam )
@@ -1731,52 +1682,38 @@ showHeadIcon( trigger )
 }
 
 
-playClaymoreEffects()
+claymorePlayEffects()
 {
-	self endon("death");
+	if ( level.scr_claymore_show_laser_beams == 0 )
+		return;
 
-	while(1)
+	org = self getTagOrigin( "tag_fx" );
+	ang = self getTagAngles( "tag_fx" );
+
+	fxName = level.claymoreFXidRed;
+	dbname = "red";
+
+	if ( ( level.teamBased && level.gametype != "bel" ) && level.scr_claymore_show_laser_beams == 2 )
 	{
-		self waittillNotMoving();
-
-		org = self getTagOrigin( "tag_fx" );
-		ang = self getTagAngles( "tag_fx" );
-
-		fxName = level.claymoreFXidRed;
-		dbname = "red";
-
-		if ( ( level.teamBased && level.gametype != "bel" ) && level.scr_claymore_show_laser_beams == 2 )
+		switch ( ToLower( game[self.owner.pers["team"]] ) )
 		{
-			switch ( ToLower( game[self.owner.pers["team"]] ) )
-			{
-				case "sas":		fxName = level.claymoreFXidGreen; dbname = "^2green"; break;
-				case "marines":	fxName = level.claymoreFXidBlue; dbname = "^4blue"; break;
+			case "sas":		fxName = level.claymoreFXidGreen; dbname = "^2green"; break;
+			case "marines":	fxName = level.claymoreFXidBlue; dbname = "^4blue"; break;
 
-				case "russian":	fxName = level.claymoreFXidRed; dbname = "^1red"; break;
-				case "opfor":
-				case "arab":	fxName = level.claymoreFXidYellow; dbname = "^3yellow"; break;
-			}
-
-			// iPrintLn ("color: " + dbname + "^7 of team " + game[self.owner.pers["team"]] + " - " + game["allies"] + " vs " + game["axis"]);
+			case "russian":	fxName = level.claymoreFXidRed; dbname = "^1red"; break;
+			case "opfor":
+			case "arab":	fxName = level.claymoreFXidYellow; dbname = "^3yellow"; break;
 		}
 
-		fx = spawnFx( fxName, org, anglesToForward( ang ), anglesToUp( ang ) );
-		triggerfx( fx );
-
-		self thread clearFXOnDeath( fx );
-
-		originalOrigin = self.origin;
-
-		while(1)
-		{
-			wait .25;
-			if ( self.origin != originalOrigin )
-				break;
-		}
-
-		fx delete();
+		// iPrintLn ("color: " + dbname + "^7 of team " + game[self.owner.pers["team"]] + " - " + game["allies"] + " vs " + game["axis"]);
 	}
+
+	fx = spawnFx( fxName, org, anglesToForward( ang ), anglesToUp( ang ) );
+	triggerfx( fx );
+
+	self thread clearFXOnDeath( fx );
 }
+
 
 clearFXOnDeath( fx )
 {
