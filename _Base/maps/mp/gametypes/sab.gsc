@@ -287,6 +287,18 @@ onOvertime()
 	}
 }
 
+resetPlantedBombState()
+{
+	level.bombPlanted = false;
+	level.timeLimitOverride = false;
+	setDvar( "ui_bomb_timer", 0 );
+}
+
+handlePlantedBombElimination( winningTeam, endReason )
+{
+	[[level._setTeamScore]]( winningTeam, [[level._getTeamScore]]( winningTeam ) + 1 );
+	thread maps\mp\gametypes\_globallogic::endGame( winningTeam, endReason );
+}
 
 onDeadEvent( team )
 {
@@ -297,8 +309,9 @@ onDeadEvent( team )
 	{
 		if ( level.bombPlanted )
 		{
-			[[level._setTeamScore]]( level.bombPlantedBy, [[level._getTeamScore]]( level.bombPlantedBy ) + 1 );
-			thread maps\mp\gametypes\_globallogic::endGame( level.bombPlantedBy, game["strings"][level.bombPlantedBy+"_mission_accomplished"] );
+			resetPlantedBombState();
+
+			handlePlantedBombElimination( level.bombPlantedBy, game["strings"][level.bombPlantedBy+"_mission_accomplished"] );
 		}
 		else
 		{
@@ -313,8 +326,9 @@ onDeadEvent( team )
 			return;
 		}
 
-		[[level._setTeamScore]]( level.bombPlantedBy, [[level._getTeamScore]]( level.bombPlantedBy ) + 1 );
-		thread maps\mp\gametypes\_globallogic::endGame( level.bombPlantedBy, game["strings"][level.otherTeam[level.bombPlantedBy]+"_eliminated"] );
+		resetPlantedBombState();
+
+		handlePlantedBombElimination( level.bombPlantedBy, game["strings"][level.otherTeam[level.bombPlantedBy]+"_eliminated"] );
 	}
 	else
 	{
@@ -788,6 +802,7 @@ playSoundinSpace( alias, origin )
 bombTimerWait()
 {
 	level endon("bomb_defused");
+	level endon("game_ended");
 	wait level.bombTimer;
 }
 
