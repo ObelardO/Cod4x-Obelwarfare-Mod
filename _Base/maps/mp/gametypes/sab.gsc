@@ -51,6 +51,7 @@ main()
 	level.scr_sab_suddendeath_timelimit = getdvarx( "scr_sab_suddendeath_timelimit", "int", 90, 0, 600 );
 	level.scr_sab_show_briefcase = getdvarx( "scr_sab_show_briefcase", "int", 1, 0, 1 );
 	level.scr_sab_planting_sound = getdvarx( "scr_sab_planting_sound", "int", 1, 0, 1 );
+	level.scr_sab_defusing_sound = getdvarx( "scr_sab_defusing_sound", "int", 1, 0, 1 );
 	level.scr_sab_show_bomb_carrier_time = getdvarx( "scr_sab_show_bomb_carrier_time", "int", 5, 5, 600 );
 	level.scr_sab_show_bomb_carrier_distance = getdvarx( "scr_sab_show_bomb_carrier_distance", "int", 0, 0, 1000 );
 	
@@ -476,6 +477,9 @@ onBeginUse( player )
 
 		player.isPlanting = true;
 	} else {
+		if( level.scr_sab_defusing_sound == 1 )
+			player playSound( "mp_bomb_defuse" );
+
 		player.isDefusing = true;
 	}
 }
