@@ -819,9 +819,42 @@ beginGrenadeTracking()
 	{
 		grenade thread maps\mp\gametypes\_shellshock::grenade_earthQuake();
 		grenade.originalOwner = self;
+
+		grenade.killCamEnt = spawn( "script_model", grenade.origin );
+		grenade.killCamEnt setModel( "tag_origin" );
+		grenade.killCamEnt.angles = self GetPlayerAngles();
+		grenade.killCamEnt.isKillcamEnt = true;
+		grenade.killCamEnt thread fragGrenadeKillcamTrackingThread( grenade );
+		grenade.killCamEnt thread deleteAfterTime( 5.0 );
 	}
 
 	self.throwingGrenade = false;
+}
+
+
+fragGrenadeKillcamTrackingThread( grenade )
+{
+	if ( !level.killcam )
+		return;
+
+	lastOrigin = self.origin;
+	trackingTime = 0.3;
+
+	while ( isDefined( grenade ) && isDefined( self ) )
+	{
+		newOrigin = grenade.origin;
+		moveVec = newOrigin - self.origin;
+		
+		if ( abs( moveVec[0] ) + abs( moveVec[1] ) + abs( moveVec[2] ) > 0.1 )
+		{
+			trackingAngles = vectorToAngles( moveVec );
+			trackingAngles = ( 0, trackingAngles[1], 0 );
+			self rotateTo( trackingAngles, trackingTime, 0.01, 0.01 );
+			self moveTo( newOrigin, trackingTime, 0.01, 0.01 );
+		}
+
+		wait trackingTime;
+	}
 }
 
 
@@ -1110,6 +1143,8 @@ explosiveKillcamThread()
 		return;
 	
 	self thread explosiveKillcamTriggerThread();
+
+	waittillframeend; //Fix: resolve race condition in next frame (array and trigger)
 
 	self thread explosiveKillcamTrackingEntitiesThread();
 
