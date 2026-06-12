@@ -54,7 +54,7 @@ killcam(
 		else if (sWeapon == "claymore_mp")
 		{
 			camtime = 3.0;
-			camdist = 10;
+			camdist = 20;
 		}
 		else if (sWeapon == "frag_grenade_mp")
 		{

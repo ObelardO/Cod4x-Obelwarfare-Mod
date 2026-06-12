@@ -1006,5 +1006,5 @@ isMG( weapon )
 
 isPlaying( player )
 {
-	return ( isDefined( player.sessionstate ) && isPlayer( player ) && player.sessionstate == "playing" );
+	return ( isPlayer( player ) && isDefined( player.sessionstate ) && player.sessionstate == "playing" );
 }
