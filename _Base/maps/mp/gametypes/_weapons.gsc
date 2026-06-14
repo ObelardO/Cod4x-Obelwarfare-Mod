@@ -954,6 +954,9 @@ claymoreSpawnThread( owner )
 
 	self waitTillNotMoving();
 
+	if ( !isDefined ( owner ) )
+		return;
+
 	// Should we check the planting distance?
 	if ( level.scr_claymore_check_plant_distance == 1 ) {
 		// Check if this is an invalid plant
@@ -1105,7 +1108,7 @@ isPlayerEnemyForExplosive( explosive )
 {
 	//self is player
 
-	if ( !isPlaying( self ) )
+	if ( !isDefined( self ) || !isPlaying( self ) || !isDefined( explosive.owner ) )
 		return false;
 
 	isTeamBased = level.teamBased && level.gametype != "bel";
