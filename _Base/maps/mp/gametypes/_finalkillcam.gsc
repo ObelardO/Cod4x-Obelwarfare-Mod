@@ -4,7 +4,6 @@
 
 init()
 {
-    level.killcam_style = 0;
     level.fk = false;
     level.showFinalKillcam = false;
 
@@ -23,10 +22,6 @@ init()
     //self SetClientDvar( "ui_ShowMenuOnly", "" );    
 }
 
-SetKillcamStyle( style )
-{
-    level.killcam_style = style;
-}
         
 beginFK()
 {
@@ -34,7 +29,7 @@ beginFK()
     
     for( ;; )
     {
-        self waittill( "beginFK", winner );
+        self waittill( "beginFK", winner, mode );
         
         self notify( "reset_outcome" );
         
@@ -46,7 +41,8 @@ beginFK()
                 level.KillInfo[winner]["deathTime"], 
                 level.KillInfo[winner]["victim"], 
                 level.KillInfo[winner]["weapon"],
-                level.KillInfo[winner]["killcamentity"]);
+                level.KillInfo[winner]["killcamentity"],
+                mode);
         }
         else
         {
@@ -56,12 +52,13 @@ beginFK()
                 winner.KillInfo["deathTime"], 
                 winner.KillInfo["victim"], 
                 winner.KillInfo["weapon"], 
-                winner.KillInfo["killcamentity"]);
+                winner.KillInfo["killcamentity"],
+                mode);
         }
     }
 }
 
-finalkillcam( attacker, attackerNum, deathtime, victim, weapon, killcamentity)
+finalkillcam( attacker, attackerNum, deathtime, victim, weapon, killcamentity, mode )
 {
     self endon("disconnect");
     level endon("end_killcam");
@@ -100,7 +97,7 @@ finalkillcam( attacker, attackerNum, deathtime, victim, weapon, killcamentity)
     killcamlength = camtime + postdelay;
     killcamoffset = camtime + predelay;
     
-    visionSetNaked( maps\mp\gametypes\_globallogic::GetNakedVision() );
+    visionSetNaked( maps\mp\gametypes\_globallogic::GetNakedVision(), 0.5 );
     
     self notify ( "begin_killcam", getTime() );
     
@@ -144,7 +141,7 @@ finalkillcam( attacker, attackerNum, deathtime, victim, weapon, killcamentity)
     }
     else
     {
-        self CreateFKHUD( victim, attacker );
+        self CreateFKHUD( victim, attacker, mode );
     }
     
     self thread WaitEnd( killcamlength );
@@ -200,7 +197,7 @@ WaitEnd( killcamlength )
     self notify("end_killcam");
 }
 
-CreateFKHUD( victim, attacker )
+CreateFKHUD( victim, attacker, mode )
 {
     self.fk_title_low = createFontString( "default", 1.4 );
     self.fk_title_low setPoint( "CENTER", "BOTTOM", 0, -30 );
@@ -209,10 +206,15 @@ CreateFKHUD( victim, attacker )
     self.fk_title_low.alpha = 1;
     self.fk_title_low setText( &"OW_FINALCAM_PLAYER_VS_PLAYER", attacker.name, victim.name );
     
-    if( level.killcam_style )
-        self setClientDvar ("ui_hud_killcam_title", "OW_FINALCAM_ROUND_WIN" );
-    else
-        self setClientDvar ("ui_hud_killcam_title", "OW_FINALCAM_MATCH_WIN" );
+    switch ( mode )
+    {
+        case "round":
+            self setClientDvar ("ui_hud_killcam_title", "OW_FINALCAM_ROUND_WIN" );
+            break;
+        case "match":
+            self setClientDvar ("ui_hud_killcam_title", "OW_FINALCAM_MATCH_WIN" );
+            break;
+    }
 }
 
 onPlayerKilled( eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, killcamentity )
@@ -247,7 +249,7 @@ onPlayerKilled( eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHi
 }
 
 
-startFK( winner )
+StartFinalKillcam( winner, mode )
 {
     level endon("end_killcam");
     
@@ -263,7 +265,7 @@ startFK( winner )
     {
         player = level.players[i];
         
-        player notify("beginFK", winner);
+        player notify("beginFK", winner, mode );
     }
     
     //Disabled cas slow motion calls MAX PACKETS network issues

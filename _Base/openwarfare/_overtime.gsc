@@ -91,6 +91,8 @@ checkGameState()
 	}
 	if ( players[ "allies" ] == 0 || players[ "axis" ] == 0 )
 		return;
+
+	//iprintLn ( "Overtime triggered!" );
 	
 	// Add one more round
 	game["_overtime"] = true;	

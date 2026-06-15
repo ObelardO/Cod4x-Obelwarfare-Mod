@@ -61,6 +61,8 @@ main()
 	maps\mp\gametypes\_globallogic::registerScoreLimitDvar( level.gameType, 3, 0, 5000 );
 	maps\mp\gametypes\_globallogic::registerTimeLimitDvar( level.gameType, 15, 0, 1440 );
 
+	game["tiebreaker"] = isDefined( game["_overtime"] ) && game["_overtime"];
+
 	if ( !game["tiebreaker"] )
 	{
 		level.onPrecacheGameType = ::onPrecacheGameType;
@@ -81,6 +83,8 @@ main()
 		level.onStartGameType = ::onStartGameType;
 		level.onSpawnPlayer = ::onSpawnPlayer;
 		level.onEndGame = ::onEndGame;
+		level.onTimeLimit = ::onTimeLimit; //?
+
 
 		level.endGameOnScoreLimit = false;
 
@@ -146,11 +150,14 @@ onRoundSwitch()
 	if ( !isdefined( game["switchedsides"] ) )
 		game["switchedsides"] = false;
 
-	if ( game["teamScores"]["allies"] == level.scorelimit - 1 && game["teamScores"]["axis"] == level.scorelimit - 1 )
+	//iprintln( "SAB ROUND SWITCH:  score = " + game["teamScores"]["allies"] + ":" + game["teamScores"]["axis"] + "; roundsplayed = " + game["roundsplayed"] + "; roundslimit = " + level.roundLimit );
+
+	//if ( game["teamScores"]["allies"] == game["teamScores"]["axis"] && game["roundsplayed"] == level.roundLimit - 1 )
+	if ( isDefined( game["_overtime"] ) && game["_overtime"] )
 	{
-		level.halftimeType = "overtime";
+		level.halftimeType = "overtime";		
 		level.halftimeSubCaption = &"MP_TIE_BREAKER";
-		game["tiebreaker"] = true;
+		//game["tiebreaker"] = true;
 	}
 	else
 	{

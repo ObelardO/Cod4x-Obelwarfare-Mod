@@ -1481,7 +1481,7 @@ endGame( winner, endReasonText )
 
 			roundEndWait( level.halftimeRoundEndDelay, false );
 		}
-		else if ( !hitRoundLimit() && !hitScoreLimit() && !level.displayRoundEndText && level.teamBased )
+		else if ( !hitRoundLimit() && !hitScoreLimit() && level.displayRoundEndText && level.teamBased )
 		{
 			players = level.players;
 			for ( index = 0; index < players.size; index++ )
@@ -1532,10 +1532,9 @@ endGame( winner, endReasonText )
 			roundEndWait( level.halftimeRoundEndDelay, !(hitRoundLimit() || hitScoreLimit()) );
 		}
 
-		if(level.players.size > 0 && ( level.gametype == "sd" || level.gametype == "sab" ) && !hitScoreLimit())
+		if(level.players.size > 0 && ( level.gametype == "sd" || level.gametype == "sab" ) && !hitScoreLimit() && !hitRoundLimit())
 		{
-        	maps\mp\gametypes\_finalkillcam::SetKillcamStyle( 1 );
-		    thread maps\mp\gametypes\_finalkillcam::startFK( winner );
+		    thread maps\mp\gametypes\_finalkillcam::StartFinalKillcam( winner, "round" );
 		}
 
 		if(level.fk)
@@ -1635,26 +1634,12 @@ endGame( winner, endReasonText )
 		}
 	}
 
-	wait 4;
+	wait 3.5;
 
-	if(level.players.size > 0)
+	if( level.players.size > 0 && winner != "tie" )
     {
-        maps\mp\gametypes\_finalkillcam::SetKillcamStyle( 0 );
-        thread maps\mp\gametypes\_finalkillcam::startFK( winner );
+        thread maps\mp\gametypes\_finalkillcam::StartFinalKillcam( winner, "match" );
     }
-	/*
-    if(level.players.size > 0 && level.gametype == "sd")
-    {
-        maps\mp\gametypes\_finalkillcam::SetKillcamStyle( 0 );
-        thread maps\mp\gametypes\_finalkillcam::startFK( winner );
-    }
-
-    if(level.gametype == "sd" && hitScoreLimit() && level.players.size > 0)
-    {
-        maps\mp\gametypes\_finalkillcam::SetKillcamStyle( 0 );
-        thread maps\mp\gametypes\_finalkillcam::startFK( winner );
-    }
-	*/
 
     if(level.fk)
         level waittill("end_killcam");
@@ -1732,7 +1717,6 @@ endGame( winner, endReasonText )
 	for ( index = 0; index < players.size; index++ )
 	{
 		player = players[index];
-		//iPrintLnBold( "closing eog summary!" );
 		player closeMenu();
 		player closeInGameMenu();
 	}
