@@ -27,6 +27,7 @@ material,hud_background_line
 material,hud_background_line_half
 material,hud_background_line_half_inv
 material,hud_background_quad
+material,hud_explosive_locked
 material,waypoint_dead
 material,faction_128_arab_big
 material,faction_128_arab_small

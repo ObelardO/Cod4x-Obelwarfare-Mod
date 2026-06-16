@@ -64,6 +64,11 @@ onPlayerSpawned()
 {
 	if ( level.scr_sd_allow_quickdefuse == 1 )
 		self.didQuickDefuse = false;
+
+  if ( level.scr_objective_safezone_enable == 1 )
+    self thread monitorExplosiveUsageInSafeZones();
+  else
+    self setClientDvar( "ui_explosive_locked", 0 );
 	
 	if ( level.scr_sd_allow_defender_explosivepickup && level.scr_sd_allow_defender_explosivedestroy && self.pers["team"] == game["defenders"] && getDvar( "g_gametype" ) == "sd" )
 		self thread allowDefenderExplosiveDestroy();
@@ -537,4 +542,60 @@ explosivePlacementCheckSafeArea()
 	}
 
 	return true;
+}
+
+monitorExplosiveUsageInSafeZones()
+{
+  //self is player
+
+	self endon( "death" );
+	self endon( "disconnect" );
+	level endon( "game_ended" );
+
+  wait 0.5;
+
+  self setClientDvar( "ui_explosive_locked", 0 );
+
+  explosiveUsageLocked = false;
+
+  while ( 1 )
+  {
+    while ( ! isDefined( level.safeZone ) )
+      wait 0.5;
+
+    playerInSafeZone = false;
+
+    for( i = 0; i < level.safeZone.size; i++ )
+    {
+      if ( isDefined( level.safeZone[i] ) && self isTouching( level.safeZone[i] ) )
+      if ( isDefined( level.safeZone[i] ) && self isTouching( level.safeZone[i] ) )
+      {
+        playerInSafeZone = true;
+        break;
+      }
+    }
+
+    playerHasExplosive = self hasWeapon( "claymore_mp" ) || self hasWeapon( "c4_mp" );  
+
+    if ( explosiveUsageLocked )
+    {
+      if ( ! playerInSafeZone )
+      {
+        explosiveUsageLocked = false;
+
+        self setClientDvar( "ui_explosive_locked", 0 );
+      }
+    }
+    else if ( playerHasExplosive )
+    {
+      if ( playerInSafeZone )
+      {
+        explosiveUsageLocked = true;
+
+        self setClientDvar( "ui_explosive_locked", 1 );
+      }
+    }
+
+    wait 0.1;
+  }
 }

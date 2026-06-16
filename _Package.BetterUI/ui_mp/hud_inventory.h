@@ -71,38 +71,38 @@
 
 
 #define INV_SLOT_ICON_L1( iconDrawerDef, iconMaterial, keyBinding, alphaExp ) \
-    INV_SLOT_ICON_LEFT( INV_ALIGN_L, INV_SLOT_L1_POS_X, INV_SLOT_L1_IS_VISIBLE, INV_BACK_MAT, INV_BACK_SIZE, iconDrawerDef, iconMaterial, keyBinding, alphaExp )
+    INV_SLOT_ICON_LEFT( INV_ALIGN_L, INV_SLOT_L1_POS_X, INV_SLOT_L1_IS_VISIBLE, INV_BACK_MAT, INV_BACK_SIZE, INV_BACK_ALPHA, iconDrawerDef, iconMaterial, keyBinding, alphaExp )
 
 #define INV_SLOT_ICON_L2( iconDrawerDef, iconMaterial, keyBinding, alphaExp ) \
-    INV_SLOT_ICON_LEFT( INV_ALIGN_L, INV_SLOT_L2_POS_X, INV_SLOT_L2_IS_VISIBLE, INV_BACK_MAT, INV_BACK_SIZE, iconDrawerDef, iconMaterial, keyBinding, alphaExp )
+    INV_SLOT_ICON_LEFT( INV_ALIGN_L, INV_SLOT_L2_POS_X, INV_SLOT_L2_IS_VISIBLE, INV_BACK_MAT, INV_BACK_SIZE, INV_BACK_ALPHA, iconDrawerDef, iconMaterial, keyBinding, alphaExp )
 
 #define INV_SLOT_ICON_L3( iconDrawerDef, iconMaterial, keyBinding, alphaExp ) \
-    INV_SLOT_ICON_LEFT( INV_ALIGN_L, INV_SLOT_L3_POS_X, INV_SLOT_L3_IS_VISIBLE, INV_BACK_MAT, INV_BACK_SIZE, iconDrawerDef, iconMaterial, keyBinding, alphaExp )
+    INV_SLOT_ICON_LEFT( INV_ALIGN_L, INV_SLOT_L3_POS_X, INV_SLOT_L3_IS_VISIBLE, INV_BACK_MAT, INV_BACK_SIZE, INV_BACK_ALPHA, iconDrawerDef, iconMaterial, keyBinding, alphaExp )
 
-#define INV_SLOT_ICON_LEFT( align, xPos, isVisibleExp, backMat, backWidth, iconDrawerDef, iconMaterial, keyBinding, alphaExp ) \
-	INV_SLOT_ICON( INV_ALIGN_X_OP_LEFT, INV_ALIGN_W_MOD_LEFT, align, xPos, isVisibleExp, backMat, backWidth, iconDrawerDef, iconMaterial, keyBinding, alphaExp )
+#define INV_SLOT_ICON_LEFT( align, xPos, isVisibleExp, backMat, backWidth, backAlpha, iconDrawerDef, iconMaterial, keyBinding, alphaExp ) \
+	INV_SLOT_ICON( INV_ALIGN_X_OP_LEFT, INV_ALIGN_W_MOD_LEFT, align, xPos, isVisibleExp, backMat, backWidth, backAlpha, iconDrawerDef, iconMaterial, keyBinding, alphaExp )
 
 
 #define INV_SLOT_ICON_R1( iconDrawerDef, iconMaterial, keyBinding, alphaExp ) \
-    INV_SLOT_ICON_RIGHT( INV_ALIGN_R, INV_SLOT_R1_POS_X, INV_SLOT_R1_IS_VISIBLE, INV_BACK_MAT, INV_BACK_SIZE, iconDrawerDef, iconMaterial, keyBinding, alphaExp )
+    INV_SLOT_ICON_RIGHT( INV_ALIGN_R, INV_SLOT_R1_POS_X, INV_SLOT_R1_IS_VISIBLE, INV_BACK_MAT, INV_BACK_SIZE, INV_BACK_ALPHA, iconDrawerDef, iconMaterial, keyBinding, alphaExp )
 
 #define INV_SLOT_ICON_R2( iconDrawerDef, iconMaterial, keyBinding, alphaExp ) \
-    INV_SLOT_ICON_RIGHT( INV_ALIGN_R, INV_SLOT_R2_POS_X, INV_SLOT_R2_IS_VISIBLE, INV_BACK_MAT, INV_BACK_SIZE, iconDrawerDef, iconMaterial, keyBinding, alphaExp )
+    INV_SLOT_ICON_RIGHT( INV_ALIGN_R, INV_SLOT_R2_POS_X, INV_SLOT_R2_IS_VISIBLE, INV_BACK_MAT, INV_BACK_SIZE, INV_BACK_ALPHA, iconDrawerDef, iconMaterial, keyBinding, alphaExp )
 
 #define INV_SLOT_ICON_R3( iconDrawerDef, iconMaterial, keyBinding, alphaExp ) \
-    INV_SLOT_ICON_RIGHT( INV_ALIGN_R, INV_SLOT_R3_POS_X, INV_SLOT_R3_IS_VISIBLE, INV_BACK_MAT, INV_BACK_SIZE, iconDrawerDef, iconMaterial, keyBinding, alphaExp )
+    INV_SLOT_ICON_RIGHT( INV_ALIGN_R, INV_SLOT_R3_POS_X, INV_SLOT_R3_IS_VISIBLE, INV_BACK_MAT, INV_BACK_SIZE, INV_BACK_ALPHA, iconDrawerDef, iconMaterial, keyBinding, alphaExp )
 
-#define INV_SLOT_ICON_RIGHT( align, xPos, isVisibleExp, backMat, backWidth, iconDrawerDef, iconMaterial, keyBinding, alphaExp ) \
-	INV_SLOT_ICON( INV_ALIGN_X_OP_RIGHT, INV_ALIGN_W_MOD_RIGHT, align, xPos, isVisibleExp, backMat, backWidth, iconDrawerDef, iconMaterial, keyBinding, alphaExp )
+#define INV_SLOT_ICON_RIGHT( align, xPos, isVisibleExp, backMat, backWidth, backAlpha, iconDrawerDef, iconMaterial, keyBinding, alphaExp ) \
+	INV_SLOT_ICON( INV_ALIGN_X_OP_RIGHT, INV_ALIGN_W_MOD_RIGHT, align, xPos, isVisibleExp, backMat, backWidth, backAlpha, iconDrawerDef, iconMaterial, keyBinding, alphaExp )
 
 
-#define INV_SLOT_ICON( xOffsetOp, widthMod, align, xPos, isVisibleExp, backMat, backWidth, iconDrawerDef, iconMaterial, keyBinding, alphaExp ) \
+#define INV_SLOT_ICON( xOffsetOp, widthMod, align, xPos, isVisibleExp, backMat, backWidth, backAlpha, iconDrawerDef, iconMaterial, keyBinding, alphaExp ) \
     itemDef \
 	{ \
         rect			0 ( INV_OFFSET_Y - INV_BACK_PAD ) ( backWidth * xOffsetOp ) INV_BACK_SIZE align \
         forecolor		INV_CLR_WHITE 1 \
         exp	            rect X( xOffsetOp * ( xPos - INV_BACK_PAD + backWidth - INV_BACK_SIZE ) - widthMod * backWidth ) \
-		exp             forecolor A( alphaExp * INV_BACK_ALPHA ) \
+		exp             forecolor A( alphaExp * backAlpha ) \
         background      backMat \ 
         style			WINDOW_STYLE_SHADER \
         visible			when ( isVisibleExp ) \
