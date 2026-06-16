@@ -56,7 +56,7 @@
 #define TS_HUD_SCORECOLOR_TIE     1.00 1.00 1.00 1.00
 
 
-#define TS_HUD_TIMER_VISIBLE      ( ( dvarInt( "ui_timelimit" ) == 0 || ( dvarInt( "ui_timelimit" ) * 60 - timeLeft() > 5 ) ) )
+#define TS_HUD_TIMER_VISIBLE      1
 #define TS_HUD_BOMB_SIZE          36
 #define TS_HUD_BOMB_SIZE_HALF     18
 
@@ -72,7 +72,6 @@
     INV_SLOT_AMMO_RIGHT( TS_HUD_ALIGN, TS_HUD_POS_X, isVisibleExp, exp text( count ), INV_CLR_WHITE, 1, INV_AMMO_POS_FIX_NONE ) \
     INV_SLOT_AMMO_RIGHT( TS_HUD_ALIGN, TS_HUD_POS_X, isVisibleExp && isCountBlinkingExp == 1, exp text( count ), INV_CLR_RED, INV_LAST_ALPHA_EXP, INV_AMMO_POS_FIX_NONE ) \
     TS_HUD_TEAM_SCORE( INV_ALIGN_X_OP_RIGHT, ITEM_ALIGN_MIDDLE_LEFT, isVisibleExp, score, isWinExp, isLoseExp, isTieExp )
-
 
 #define TS_HUD_TEAM_SCORE( xOffsetOp, textAlign, isVisibleExp, score, isWinExp, isLoseExp, isTieExp ) \
     TS_HUD_ITEM_SCORE( xOffsetOp, textAlign, TS_HUD_SCORECOLOR_BASE, score, isVisibleExp ) \
