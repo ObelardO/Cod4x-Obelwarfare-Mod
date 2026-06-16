@@ -46,6 +46,8 @@ init()
   }      
 
   level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
+  if ( level.scr_objective_safezone_enable )
+    level thread getSafeZoneGametype();
 }
 
 onPlayerConnected()
@@ -58,10 +60,6 @@ onPlayerSpawned()
 	if ( level.scr_sd_allow_quickdefuse == 1 )
 		self.didQuickDefuse = false;
 	
-  //TODO: spawn safezones on level start for teams, not for each player (wtf...)
-	if ( level.scr_objective_safezone_enable )
-		self thread getSafeZoneGametype();
-	
 	if ( level.scr_sd_allow_defender_explosivepickup && level.scr_sd_allow_defender_explosivedestroy && self.pers["team"] == game["defenders"] && getDvar( "g_gametype" ) == "sd" )
 		self thread allowDefenderExplosiveDestroy();
 } 
@@ -69,42 +67,37 @@ onPlayerSpawned()
 onPlayerKilled()
 { 
   self waittill( "death" );
-
-  for( index = 0; index < self.safeZone.size; index++ )
-  {       
-      self.safeZone[index] delete();
-  }
 }
 
 getSafeZoneGametype()
 {
+  if ( isDefined( level.safeZone ) )
+    return;
+
   gametype = getDvar( "g_gametype" );
   switch( gametype )
   {
     case "ctf":    
-      self thread objSafeZones1( "ctf" );
+      level thread objSafeZones1( "ctf" );
       break;
     case "dom":
-      self thread objSafeZones1( "dom" );
+      level thread objSafeZones1( "dom" );
       break;  
     case "sab":
-      self thread objSafeZones1( "sab" );
+      level thread objSafeZones1( "sab" );
       break;         
     case "sd":
-      self thread objSafeZones1( "sd" );
+      level thread objSafeZones1( "sd" );
       break;      
     case "koth":
-      self thread objSafeZones2();
+      level thread objSafeZones2();
       break;
   }
 }
 
 objSafeZones1( gametype )
 {
-  self endon( "death" );
-  self endon( "disconnect" );
-  
-  self.safeZone = [];
+  level.safeZone = [];
   objZones = undefined;
   if ( gametype == "sd" )
     objZones = getEntArray( "bombzone", "targetname" );
@@ -134,24 +127,19 @@ objSafeZones1( gametype )
     
   for ( index = 0; index < objZones.size; index++ )
   {     
-    self.safeZone[index] = spawn( "trigger_radius", objZones[index].origin + ( 0, 0, -48 ), 0, level.scr_objective_safezone_radius, 200 );
+    level.safeZone[index] = spawn( "trigger_radius", objZones[index].origin + ( 0, 0, -48 ), 0, level.scr_objective_safezone_radius, 200 );
   }
-  self thread onPlayerKilled();
-  self thread monitorSafeZone();
 } 
 
 
 objSafeZones2()
 {
-  self endon( "death" );
-  self endon( "disconnect" );
- 
-  self.safeZone = undefined;
+  level.safeZone = undefined;
   currentRadio = undefined; 
   origin = undefined; 
   radios = getEntArray( "hq_hardpoint", "targetname" );
 
-  while ( isAlive( self ) )
+  while ( 1 )
   {
     if ( isDefined( level.prevradio ) && !isDefined( currentRadio ) )
     {
@@ -165,8 +153,7 @@ objSafeZones2()
           break;
         }  
       } 
-      self.safeZone[0] = spawn( "trigger_radius", radios[origin].origin + ( 0, 0, -100 ), 0, level.scr_objective_safezone_radius, 200 );
-      self thread monitorSafeZone( );
+      level.safeZone[0] = spawn( "trigger_radius", radios[origin].origin + ( 0, 0, -100 ), 0, level.scr_objective_safezone_radius, 200 );
     }      
     else if ( isDefined( level.prevradio ) && isDefined( currentRadio ) && currentRadio != level.prevradio )
     {
@@ -181,52 +168,13 @@ objSafeZones2()
           break;
         }  
       }
-      self.safeZone[0].origin = radios[origin].origin + ( 0, 0, -100 );
+      level.safeZone[0].origin = radios[origin].origin + ( 0, 0, -100 );
     }
     
     wait 1;
   }   
-  self thread onPlayerKilled();
 } 
  
-  
-monitorSafeZone()
-{  
-  self endon( "death" );
-  self endon( "disconnect" );
-
-  return; //Disabled: removed logic to _weapons.gsc explosive checks
-
-  /*
-  for (;;)
-  {    
-    self waittill( "grenade_fire", explosive, weaponName );
-  
-    if ( weaponName == "c4_mp" || weaponName == "claymore_mp" )
-    {  
-      explosive.weaponName = weaponName;
-      explosive maps\mp\gametypes\_weapons::waitTillNotMoving();
-      
-      for ( index = 0; index < self.safeZone.size; index++ )
-    {
-        if ( explosive isTouching( self.safeZone[index] ) )
-        {
-          stockCount = self getWeaponAmmoStock( explosive.weaponName );
-          maxStock = weaponMaxAmmo( explosive.weaponName );
-        
-          if ( stockCount < maxStock ) 
-            self setWeaponAmmoStock( explosive.weaponName, stockCount + 1 );
-
-          self iprintlnbold( &"OW_EXPLOSIVES_IN_SAFEZONE" );
-
-          explosive delete();
-          break;  
-        } 
-      }
-    }      
-  }
-  */
-}
 
 createDamageArea()
 {

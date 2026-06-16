@@ -253,10 +253,10 @@ StartFinalKillcam( winner, mode )
 {
     level endon("end_killcam");
     
-    if(!level.showFinalKillcam)
+    if( !level.showFinalKillcam)
         return;
     
-    if(!isPlayer(Winner) && !level.doFK[winner])
+    if( !isPlayer(winner) && ( !isDefined( level.doFK[winner] || !level.doFK[winner] ) ) )
         return;
     
     level.fk = true;

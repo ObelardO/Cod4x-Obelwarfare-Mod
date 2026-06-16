@@ -1217,8 +1217,6 @@ explosiveKillcamTriggerThread( spawnOrigin )
 
 			if ( !isDefined( self.killcamTrackingEntities[playerId] ) )
 			{
-				//camPos = self.origin + vector_scale( anglesToForward( self.angles ), -10 ) ;//+ ( 0, 0, 10 );
-
 				killcamTrackingEntity = spawn( "script_model", spawnOrigin );
 				killcamTrackingEntity setModel( "tag_origin" );
 				killcamTrackingEntity.angles = (0, self.angles[1], 0);
@@ -1283,12 +1281,12 @@ isExplosiveInSafeArea()
 {
 	//self is explosive
 
-	if ( level.scr_objective_safezone_enable == 0 || !isDefined( self.owner ) || !isDefined( self.owner.safeZone ) )
+	if ( level.scr_objective_safezone_enable == 0 || !isDefined( self.owner ) || !isDefined( level.safeZone ) )
 		return false;
 
-    for ( index = 0; index < self.owner.safeZone.size; index++ )
+    for ( index = 0; index < level.safeZone.size; index++ )
     {
-		if ( isDefined( self.owner.safeZone[index] ) && self isTouching( self.owner.safeZone[index] ) )
+		if ( isDefined( level.safeZone[index] ) && self isTouching( level.safeZone[index] ) )
 			return true;
 	}
 
