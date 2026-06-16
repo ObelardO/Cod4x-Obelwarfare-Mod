@@ -15,7 +15,6 @@
 #include maps\mp\_utility;
 #include openwarfare\_utils;
 
-
 init()
 {
 	// assigns weapons with stat numbers from 0-149
@@ -169,6 +168,10 @@ init()
 	level thread onPlayerConnect();
 
 	level.c4explodethisframe = false;
+
+	preCacheString( &"OW_EXPLOSIVES_IS_TOO_FAR" );
+
+	level explosiveRegisterPlacementChecker( "claymore_mp", "distance", ::explosivePlacementCheckDistance );
 }
 
 onPlayerConnect()
@@ -932,9 +935,9 @@ c4SpawnThread( owner )
 		return;
 	}
 
-	if ( self isExplosiveInSafeArea() )
+	if ( ! self isExplosivePlacementValid( "c4_mp" ) )
 	{
-		self returnExplosiveToOwner( "c4_mp", &"OW_EXPLOSIVES_IN_SAFEZONE" );
+		self returnExplosiveToOwner( "c4_mp" );
 		return;
 	}
 
@@ -981,15 +984,9 @@ claymoreSpawnThread( owner )
 
 	self.owner = owner;
 
-	if ( self isExplosiveInValidPlantDistance() )
+	if ( ! self isExplosivePlacementValid( "claymore_mp" ) )
 	{
 		self returnExplosiveToOwner( "claymore_mp" );
-		return; 
-	}
-
-	if ( self isExplosiveInSafeArea() )
-	{
-		self returnExplosiveToOwner( "claymore_mp", &"OW_EXPLOSIVES_IN_SAFEZONE" );
 		return;
 	}
 
@@ -1274,34 +1271,6 @@ explosiveKillcamTrackingEntitiesUpdate( trackingTime, trackingToSelf )
 			//trackedPlayer iPrintLn ( "[CKC] Updating killcam target angles to " + trackedPlayer.name );
 		}
 	}
-}
-
-
-isExplosiveInSafeArea()
-{
-	//self is explosive
-
-	if ( level.scr_objective_safezone_enable == 0 || !isDefined( self.owner ) || !isDefined( level.safeZone ) )
-		return false;
-
-    for ( index = 0; index < level.safeZone.size; index++ )
-    {
-		if ( isDefined( level.safeZone[index] ) && self isTouching( level.safeZone[index] ) )
-			return true;
-	}
-
-	return false;
-}
-
-
-isExplosiveInValidPlantDistance()
-{
-	//self is explosive
-
-	if ( level.scr_claymore_check_plant_distance == 0 )
-		return false;
-
-	return distanceSquared( self.origin, self.owner.origin ) > 50 * 50;
 }
 
 
@@ -1846,6 +1815,68 @@ clearFXOnDeath( fx )
 	fx endon("death");
 	self waittill("death");
 	fx delete();
+}
+
+
+explosiveRegisterPlacementChecker( explosiveName, checkId, checkFunc )
+{
+	if ( ! isDefined( level.explosivePlacamentCheckers ) )
+	{
+		level.explosivePlacamentCheckers = [];
+	}
+
+	if ( ! isDefined( level.explosivePlacamentCheckers[explosiveName] ) )
+	{
+		level.explosivePlacamentCheckers[explosiveName] = [];
+	}
+
+	if ( ! isDefined( level.explosivePlacamentCheckers[explosiveName][checkId] ) )
+	{
+		level.explosivePlacamentCheckers[explosiveName][checkId] = checkFunc;
+	}
+}
+
+
+explosivePlacementCheckDistance()
+{
+	//self is explosive
+
+	if ( level.scr_claymore_check_plant_distance == 0 )
+		return true;
+
+	if ( distanceSquared( self.origin, self.owner.origin ) > 50 * 50 )
+	{
+		self.owner iprintlnbold( &"OW_EXPLOSIVES_IS_TOO_FAR" );
+		
+		return false;
+	}
+
+	return true;
+}
+
+
+isExplosivePlacementValid( explosiveName )
+{
+	if( !isDefined( level.explosivePlacamentCheckers[explosiveName] ) )
+	{
+		return true;
+	}
+
+	checkers = level.explosivePlacamentCheckers[explosiveName];
+	checkIds = getArrayKeys( checkers );
+
+	for( i = 0; i < checkIds.size; i++ )
+	{
+		checkId = checkIds[i];
+		checker = checkers[checkId];
+
+		if ( ! self [[checker]]() )
+		{
+			return false;
+		}
+	}
+
+	return true;
 }
 
 

@@ -48,6 +48,11 @@ init()
   level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
   if ( level.scr_objective_safezone_enable )
     level thread getSafeZoneGametype();
+
+	preCacheString( &"OW_EXPLOSIVES_IN_SAFEZONE" );
+  
+	level maps\mp\gametypes\_weapons::explosiveRegisterPlacementChecker( "claymore_mp", "safearea", ::explosivePlacementCheckSafeArea );
+	level maps\mp\gametypes\_weapons::explosiveRegisterPlacementChecker( "c4_mp", "safearea", ::explosivePlacementCheckSafeArea );
 }
 
 onPlayerConnected()
@@ -512,4 +517,24 @@ quickDefuseResults( playerChoice, correctWire )
   } else if ( playerChoice != correctWire && isAlive( self ) && !level.gameEnded && !level.bombExploded ) {
   	level notify( "wrong_wire" );
   }
+}
+
+explosivePlacementCheckSafeArea()
+{
+	//self is explosive
+
+	if ( level.scr_objective_safezone_enable == 0 || !isDefined( self.owner ) || !isDefined( level.safeZone ) )
+		return true;
+
+    for ( index = 0; index < level.safeZone.size; index++ )
+    {
+		if ( isDefined( level.safeZone[index] ) && self isTouching( level.safeZone[index] ) )
+		{
+			self.owner iprintlnbold( &"OW_EXPLOSIVES_IN_SAFEZONE" );
+
+			return false;
+		}
+	}
+
+	return true;
 }

@@ -256,7 +256,7 @@ StartFinalKillcam( winner, mode )
     if( !level.showFinalKillcam)
         return;
     
-    if( !isPlayer(winner) && ( !isDefined( level.doFK[winner] || !level.doFK[winner] ) ) )
+    if( ( !isDefined(winner) || !isPlayer(winner) ) && ( !isDefined( level.doFK[winner] || !level.doFK[winner] ) ) )
         return;
     
     level.fk = true;

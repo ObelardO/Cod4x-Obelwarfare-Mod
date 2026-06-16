@@ -916,6 +916,8 @@ LANG_RUSSIAN "Удерживайте ^3[{+melee}]^7 чтобы уничтожить бомбу\nНажмите ^3[{ope
 REFERENCE EXPLOSIVES_IN_SAFEZONE
 LANG_RUSSIAN "Здесь нельзя установить взрывчатку"
 
+REFERENCE EXPLOSIVES_IS_TOO_FAR
+LANG_RUSSIAN "Не удалось активировать взрывчатку"
 
 
 //******************************************************************************
