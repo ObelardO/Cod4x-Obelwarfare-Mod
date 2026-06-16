@@ -903,25 +903,46 @@ watchC4()
 		self waittill( "grenade_fire", c4, weapname );
 		if ( weapname == "c4" || weapname == "c4_mp" )
 		{
-			if ( !self.c4array.size )
-				self thread watchC4AltDetonate();
-
-			self.c4array[self.c4array.size] = c4;
-			c4.owner = self;
-			if ( level.teamBased )
-				c4.targetname = "c4_mp_" + self.pers["team"];
-			c4.activated = false;
-
-			c4 thread maps\mp\gametypes\_shellshock::c4_earthQuake();
-			c4 thread c4Activate();
-			c4 thread explosiveDemageThread();
-
-			if ( level.scr_show_c4_blink_effect == 1 )
-			c4 thread playC4Effects();
-
-			c4 thread c4DetectionTrigger( self.pers["team"] );
+			c4 thread c4SpawnThread( self );
 		}
 	}
+}
+
+c4SpawnThread( owner )
+{
+	//self is c4
+
+	self.owner = owner;
+
+	if ( !owner.c4array.size )
+		owner thread watchC4AltDetonate();
+
+	owner.c4array[owner.c4array.size] = self;
+	if ( level.teamBased )
+		self.targetname = "c4_mp_" + owner.pers["team"];
+	self.activated = false;
+
+	self thread maps\mp\gametypes\_shellshock::c4_earthQuake();
+	self thread explosiveDemageThread();
+
+	self waitTillNotMoving();
+
+	if ( !isDefined( self ) || !isDefined( owner ) )
+	{
+		return;
+	}
+
+	if ( self isExplosiveInSafeArea() )
+	{
+		self returnExplosiveToOwner( "c4_mp", &"OW_EXPLOSIVES_IN_SAFEZONE" );
+		return;
+	}
+
+	if ( level.scr_show_c4_blink_effect == 1 )
+		self thread playC4Effects();
+
+	self thread c4Activate();
+	self thread c4DetectionTrigger( owner.pers["team"] );
 }
 
 
@@ -957,28 +978,22 @@ claymoreSpawnThread( owner )
 	if ( !isDefined ( owner ) )
 		return;
 
-	// Should we check the planting distance?
-	if ( level.scr_claymore_check_plant_distance == 1 ) {
-		// Check if this is an invalid plant
-		if ( distance( self.origin, owner.origin ) > 50 ) {
-			// Remove the claymore and give it back to the player
-			currentAmmo = owner getAmmoCount( "claymore_mp" );
-			if ( currentAmmo == 0 ) {
-				owner giveWeapon( "claymore_mp" );
-			}
-			currentAmmo++;
+	self.owner = owner;
 
-			owner setWeaponAmmoStock( "claymore_mp", currentAmmo );
-			owner switchToWeapon( "claymore_mp" );
-			self delete();
+	if ( self isExplosiveInValidPlantDistance() )
+	{
+		self returnExplosiveToOwner( "claymore_mp" );
+		return; 
+	}
 
-			return;
-		}
+	if ( self isExplosiveInSafeArea() )
+	{
+		self returnExplosiveToOwner( "claymore_mp", &"OW_EXPLOSIVES_IN_SAFEZONE" );
+		return;
 	}
 
 	ownerTeam = owner.pers["team"];
 
-	self.owner = owner;
 	self.owner.claymorearray[owner.claymorearray.size] = self;
 	self.planttime = openwarfare\_timer::getTimePassed();
 
@@ -1147,7 +1162,7 @@ explosiveKillcamThread()
 	
 	self thread explosiveKillcamTriggerThread();
 
-	waittillframeend; //Fix: resolve race condition in next frame (array and trigger)
+	waittillframeend; //Fixed: resolve race condition in next frame (array and trigger)
 
 	self thread explosiveKillcamTrackingEntitiesThread();
 
@@ -1259,6 +1274,54 @@ explosiveKillcamTrackingEntitiesThread()
 }
 
 
+isExplosiveInSafeArea()
+{
+	//self is explosive
+
+	if ( level.scr_objective_safezone_enable == 0 || !isDefined( self.owner ) || !isDefined( self.owner.safeZone ) )
+		return false;
+
+    for ( index = 0; index < self.owner.safeZone.size; index++ )
+    {
+		if ( isDefined( self.owner.safeZone[index] ) && self isTouching( self.owner.safeZone[index] ) )
+			return true;
+	}
+
+	return false;
+}
+
+
+isExplosiveInValidPlantDistance()
+{
+	//self is explosive
+
+	if ( level.scr_claymore_check_plant_distance == 0 )
+		return false;
+
+	return distanceSquared( self.origin, self.owner.origin ) > 50 * 50;
+}
+
+
+returnExplosiveToOwner( weaponName, reasonLocString )
+{
+	//self is explosive
+
+	currentAmmo = self.owner getAmmoCount( weaponName );
+	if ( currentAmmo == 0 ) {
+		self.owner giveWeapon( weaponName );
+	}
+	currentAmmo++;
+
+	self.owner setWeaponAmmoStock( weaponName, currentAmmo );
+	self.owner switchToWeapon( weaponName );
+
+	if ( isDefined( reasonLocString ) )
+        self.owner iprintlnbold( reasonLocString );
+
+	self delete();
+}
+
+
 deleteAfterTime( time )
 {
 	self endon ( "death" );
@@ -1279,8 +1342,6 @@ deleteOnDeath(ent)
 c4Activate()
 {
 	self endon("death");
-
-	self waittillNotMoving();
 
 	wait 0.05;
 

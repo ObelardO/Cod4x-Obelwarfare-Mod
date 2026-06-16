@@ -58,6 +58,7 @@ onPlayerSpawned()
 	if ( level.scr_sd_allow_quickdefuse == 1 )
 		self.didQuickDefuse = false;
 	
+  //TODO: spawn safezones on level start for teams, not for each player (wtf...)
 	if ( level.scr_objective_safezone_enable )
 		self thread getSafeZoneGametype();
 	
@@ -191,9 +192,14 @@ objSafeZones2()
   
 monitorSafeZone()
 {  
+
+  
   self endon( "death" );
   self endon( "disconnect" );
-    
+
+  return; //Disabled: removed logic to _weapons.gsc explosive checks
+
+  /*
   for (;;)
   {    
     self waittill( "grenade_fire", explosive, weaponName );
@@ -204,7 +210,7 @@ monitorSafeZone()
       explosive maps\mp\gametypes\_weapons::waitTillNotMoving();
       
       for ( index = 0; index < self.safeZone.size; index++ )
-      {
+    {
         if ( explosive isTouching( self.safeZone[index] ) )
         {
           stockCount = self getWeaponAmmoStock( explosive.weaponName );
@@ -221,6 +227,7 @@ monitorSafeZone()
       }
     }      
   }
+  */
 }
 
 createDamageArea()
