@@ -710,9 +710,9 @@ onUse( player )
 
 		level thread bombDefused( self );
 
-		if ( level.inOverTime && isDefined( level.plantingTeamDead ) )
+		if ( isDefined( level.plantingTeamDead ) )
 		{
-			thread maps\mp\gametypes\_globallogic::endGame( player.pers["team"], game["strings"][level.bombPlantedBy+"_eliminated"] );
+			handlePlantedBombElimination( player.pers["team"], game["strings"][level.bombPlantedBy+"_eliminated"] );
 			return;
 		}
 
