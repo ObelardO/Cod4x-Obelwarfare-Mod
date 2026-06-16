@@ -192,8 +192,6 @@ objSafeZones2()
   
 monitorSafeZone()
 {  
-
-  
   self endon( "death" );
   self endon( "disconnect" );
 

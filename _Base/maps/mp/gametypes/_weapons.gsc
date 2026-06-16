@@ -755,13 +755,13 @@ watchExplosivesUsageThread()
 			self.claymorearray = [];
 	}
 
-	thread watchC4();
-	thread watchC4Detonation();
-	thread watchC4AltDetonation();
+	self thread watchC4();
+	self thread watchC4Detonation();
+	self thread watchC4AltDetonation();
 
-	thread watchClaymores();
+	self thread watchClaymores();
 	
-	thread deleteExplosivesOnDisconnect();
+	self thread deleteExplosivesOnDisconnect();
 
 	self thread watchForThrowbacks();
 
@@ -938,11 +938,12 @@ c4SpawnThread( owner )
 		return;
 	}
 
-	if ( level.scr_show_c4_blink_effect == 1 )
-		self thread playC4Effects();
-
+	self thread c4PlayEffects();
 	self thread c4Activate();
 	self thread c4DetectionTrigger( owner.pers["team"] );
+	
+	entitiesSpawnOrigin = self.origin + vector_scale( anglesToUp( self.angles ), 40 );
+	self thread explosiveKillcamThread( entitiesSpawnOrigin );
 }
 
 
@@ -1003,12 +1004,12 @@ claymoreSpawnThread( owner )
 	}
 		
 	self thread explosiveDemageThread();
-	self thread explosiveKillcamThread();
+	self thread explosiveKillcamThread( self.origin );
 
 	self thread claymoreDetonationThread();
 	self thread claymoreDetectionThread( ownerTeam );
 
-	self claymorePlayEffects();
+	self thread claymorePlayEffects();
 
 	if ( level.scr_claymore_show_headicon == 1 )
 		self maps\mp\_entityheadicons::setEntityHeadIcon( ownerTeam, (0,0,20) );
@@ -1107,7 +1108,7 @@ claymoreDetonationThread()
 
 	self playsound ("claymore_activated");
 
-	self notify( "activated", player );
+	self notify( "detonating", player );
 
 	wait level.claymoreDetectionGracePeriod;
 
@@ -1155,54 +1156,47 @@ isPlayerVisibleForClaymore( claymore )
 }
 
 
-explosiveKillcamThread()
+explosiveKillcamThread( entitiesSpawnOrigin ) 
 {
 	if ( !level.killcam )
 		return;
 	
-	self thread explosiveKillcamTriggerThread();
+	self thread explosiveKillcamTriggerThread( entitiesSpawnOrigin );
 
 	waittillframeend; //Fixed: resolve race condition in next frame (array and trigger)
 
 	self thread explosiveKillcamTrackingEntitiesThread();
 
-	self waittill( "activated", player );
+	self waittill( "detonating", player );
 
-	playerId = player getEntityNumber();
+	self.killCamTrackingForcedPlayer = player;
+
 	trackingEntities = self.killCamTrackingEntities;
-	trackingEntity = trackingEntities[playerId];
 	trackingTime = level.claymoreDetectionGracePeriod / 2;
 
-	if ( isDefined( trackingEntity ) )
+	self explosiveKillcamTrackingEntitiesUpdate( trackingTime, isDefined( player ) );
+
+	wait trackingTime;
+
+	wait 1.0;
+
+	if ( isDefined( trackingEntities ) )
 	{
-		//trackingAngles = vectorToAngles( player.origin - trackingEntity.origin );
-		trackingAngles = self.angles;
-		trackingEntity rotateTo ( (0, trackingAngles[1], 0) , trackingTime, 0.05, 0.1 );
-
-		self.killCamEnt = trackingEntity;
-		self.killCamEnt.isKillcamEnt = true;
-		
-		//player iPrintLn ( "[CKC] Last time updating killcam target angles to " + player.name );
-	
-		player waittill( "end_killcam" );
-
 		for ( i = 0; i < trackingEntities.size; i++ )
 		{
 			if ( isDefined( trackingEntities[i] ) )
 				trackingEntities[i] delete();
 		}
-
-		//player iPrintLn ( "[CKC] All tracked entities deleted" );
 	}
 }
 
 
-explosiveKillcamTriggerThread()
+explosiveKillcamTriggerThread( spawnOrigin )
 {
 	//self is explosive
 
 	self endon ( "death" );
-	self endon ( "activated" );
+	self endon ( "detonating" );
 	level endon ( "game_ended" );
 
 	killcamDetectionTrigger = spawn( "trigger_radius", self.origin-(0,0,128), 0, 512, 256 );
@@ -1217,14 +1211,15 @@ explosiveKillcamTriggerThread()
 	{
 		killcamDetectionTrigger waittill( "trigger", player );
 	
-		if ( player isPlayerEnemyForExplosive( self ) )
+		if ( player isPlayerEnemyForExplosive( self ) ) //<-- may be track all players? for any possible kills
 		{
 			playerId = player getEntityNumber();
 
 			if ( !isDefined( self.killcamTrackingEntities[playerId] ) )
 			{
 				//camPos = self.origin + vector_scale( anglesToForward( self.angles ), -10 ) ;//+ ( 0, 0, 10 );
-				killcamTrackingEntity = spawn( "script_model", self.origin );
+
+				killcamTrackingEntity = spawn( "script_model", spawnOrigin );
 				killcamTrackingEntity setModel( "tag_origin" );
 				killcamTrackingEntity.angles = (0, self.angles[1], 0);
 
@@ -1245,31 +1240,41 @@ explosiveKillcamTrackingEntitiesThread()
 	//self is explosive
 
 	self endon( "death" );
-	self endon( "activated" );
+	self endon( "detonating" );
 	level endon( "game_ended" );
 
 	trackingTime = 0.5;
 
 	while(1)
 	{
-		trackedPlayersIds = getArrayKeys( self.killCamTrackingEntities );
-
-		for ( i = 0; i < trackedPlayersIds.size; i++ )
-		{
-			playerId = trackedPlayersIds[i];
-			trackedPlayer = getEntByNum( playerId );
-			trackingEntity = self.killCamTrackingEntities[playerId];
-
-			if ( isDefined( trackedPlayer ) && isPlaying( trackedPlayer ) && trackedPlayer isTouching( self.killcamDetectionTrigger ) )
-			{
-				trackingAngles = vectorToAngles( trackedPlayer.origin - trackingEntity.origin );
-				trackingEntity rotateTo ( (0, trackingAngles[1], 0) , trackingTime, 0.1, 0.1 );
-
-				//trackedPlayer iPrintLn ( "[CKC] Updating killcam target angles to " + trackedPlayer.name );
-			}
-		}
+		self explosiveKillcamTrackingEntitiesUpdate( trackingTime );
 
 		wait trackingTime;
+	}
+}
+
+
+explosiveKillcamTrackingEntitiesUpdate( trackingTime, trackingToSelf )
+{
+	trackedPlayersIds = getArrayKeys( self.killCamTrackingEntities );
+
+	for ( i = 0; i < trackedPlayersIds.size; i++ )
+	{
+		playerId = trackedPlayersIds[i];
+		trackedPlayer = getEntByNum( playerId );
+		trackingEntity = self.killCamTrackingEntities[playerId];
+
+		if ( isDefined( trackedPlayer ) && isPlaying( trackedPlayer ) && trackedPlayer isTouching( self.killcamDetectionTrigger ) )
+		{
+			if ( isDefined( trackingToSelf ) )
+				trackingAngles = self.angles;
+			else
+				trackingAngles = vectorToAngles( trackedPlayer.origin - trackingEntity.origin );
+
+			trackingEntity rotateTo ( (0, trackingAngles[1], 0) , trackingTime, 0.1, 0.1 );
+
+			//trackedPlayer iPrintLn ( "[CKC] Updating killcam target angles to " + trackedPlayer.name );
+		}
 	}
 }
 
@@ -1451,13 +1456,20 @@ watchC4AltDetonation()
 }
 
 
-waitAndDetonate( delay )
+waitAndDetonate( delay, attacker )
 {
 	self endon("death");
+
+	self notify( "detonating" );
+	
 	wait delay;
 
 	self.owner thread rebuildExplosiveArray();
-	self detonate();
+
+	if ( isDefined( attacker ) )
+		self detonate( attacker );
+	else
+		self detonate();
 }
 
 deleteExplosivesOnDisconnect()
@@ -1539,8 +1551,7 @@ explosiveDemageThread()
 			attacker notify("destroyed_explosive");
 	}
 
-	self.owner thread rebuildExplosiveArray();
-	self detonate( attacker );
+	self waitAndDetonate( 0.1, attacker );
 	// won't get here; got death notify.
 }
 
@@ -1589,8 +1600,11 @@ saydamaged(orig, amount)
 	}
 }
 
-playC4Effects()
+c4PlayEffects()
 {
+	if ( level.scr_show_c4_blink_effect == 0 )
+		return;
+
 	self endon("death");
 	self waittill("activated");
 
@@ -1786,31 +1800,46 @@ claymorePlayEffects()
 	if ( level.scr_claymore_show_laser_beams == 0 )
 		return;
 
-	org = self getTagOrigin( "tag_fx" );
-	ang = self getTagAngles( "tag_fx" );
-
 	fxName = level.claymoreFXidRed;
-	dbname = "red";
 
 	if ( ( level.teamBased && level.gametype != "bel" ) && level.scr_claymore_show_laser_beams == 2 )
 	{
 		switch ( ToLower( game[self.owner.pers["team"]] ) )
 		{
-			case "sas":		fxName = level.claymoreFXidGreen; dbname = "^2green"; break;
-			case "marines":	fxName = level.claymoreFXidBlue; dbname = "^4blue"; break;
-
-			case "russian":	fxName = level.claymoreFXidRed; dbname = "^1red"; break;
 			case "opfor":
-			case "arab":	fxName = level.claymoreFXidYellow; dbname = "^3yellow"; break;
+			case "arab":	fxName = level.claymoreFXidYellow; break;
+			case "sas":		fxName = level.claymoreFXidGreen; break;
+			case "marines":	fxName = level.claymoreFXidBlue; break;
+			case "russian":	fxName = level.claymoreFXidRed; break;
 		}
 
 		// iPrintLn ("color: " + dbname + "^7 of team " + game[self.owner.pers["team"]] + " - " + game["allies"] + " vs " + game["axis"]);
 	}
 
-	fx = spawnFx( fxName, org, anglesToForward( ang ), anglesToUp( ang ) );
-	triggerfx( fx );
+	self endon("death");
 
-	self thread clearFXOnDeath( fx );
+	while(1)
+	{
+		org = self getTagOrigin( "tag_fx" );
+		ang = self getTagAngles( "tag_fx" );
+
+		fx = spawnFx( fxName, org, anglesToForward( ang ), anglesToUp( ang ) );
+		triggerfx( fx );
+
+		self thread clearFXOnDeath( fx );
+
+		originalOrigin = self.origin;
+
+		while(1)
+		{
+			wait .25;
+			if ( self.origin != originalOrigin )
+				break;
+		}
+
+		fx delete();
+		self waittillNotMoving();
+	}
 }
 
 

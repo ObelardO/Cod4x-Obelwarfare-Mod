@@ -75,7 +75,7 @@ init()
 	
 	// Set mod name and version
 	setDvar( "_Mod", "ObelWarfare Mod", true );
-	setDvar( "_ModVer", "v6.524 (RU)", true );
+	setDvar( "_ModVer", "v6.616 (RU)", true );
 
 	// Make a health check of the server
 	//level thread openwarfare\_servercheck::init();
@@ -1636,7 +1636,7 @@ endGame( winner, endReasonText )
 
 	wait 3.5;
 
-	if( level.players.size > 0 && winner != "tie" )
+	if( level.players.size > 0 && ( !isPlayer(winner) && winner != "tie" ) )
     {
         thread maps\mp\gametypes\_finalkillcam::StartFinalKillcam( winner, "match" );
     }
@@ -5821,6 +5821,22 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 
 		if(isDefined(eInflictor.killCamEnt))
 			killcamentity = eInflictor.killCamEnt getEntityNumber();
+
+		if ( isDefined( eInflictor.killcamTrackingEntities ) )
+		{
+			if ( isDefined( eInflictor.killCamTrackingForcedPlayer ) )
+				playerId = eInflictor.killCamTrackingForcedPlayer getEntityNumber();
+			else
+				playerId = self getEntityNumber();
+
+			trackingEntity = eInflictor.killcamTrackingEntities[playerId];
+
+			if ( isDefined( trackingEntity ) )
+			{
+				trackingEntity.isKillcamEnt = true;
+				killcamentity = trackingEntity getEntityNumber();
+			}
+		}
 
 		//if(isDefined(eInflictor.killcamstart))
 		//	killcamstart = eInflictor.killcamstart;
