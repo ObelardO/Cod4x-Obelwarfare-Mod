@@ -1382,7 +1382,7 @@ endGame( winner, endReasonText )
 		}
 	}
 
-    // end round
+	//BEGIN_REGION: ROUND ENDING  
     game["roundsplayed"]++;
     
     // See if we need to perform a check for the game
@@ -1532,16 +1532,15 @@ endGame( winner, endReasonText )
 			roundEndWait( level.halftimeRoundEndDelay, !(hitRoundLimit() || hitScoreLimit()) );
 		}
 
-		if(level.players.size > 0 && ( level.gametype == "sd" || level.gametype == "sab" ) && !hitScoreLimit() && !hitRoundLimit())
+		if ( ! hitRoundLimit() && ! hitScoreLimit() )
 		{
-		    thread maps\mp\gametypes\_finalkillcam::StartFinalKillcam( winner, "round" );
-		}
+			if( isDefined( winner ) && ( isPlayer( winner ) || winner != "tie" ) )
+			{
+		    	thread maps\mp\gametypes\_finalkillcam::StartFinalKillcam( winner, "round" );
 
-		if(level.fk)
-			level waittill("end_killcam");
-
-		if ( !hitRoundLimit() && !hitScoreLimit() )
-		{
+				if(level.fk) level waittill("end_killcam");
+			}
+			
 			game["state"] = "playing";
 				if ( level.teamBalance )
 				{
@@ -1563,7 +1562,9 @@ endGame( winner, endReasonText )
 	}
 
 	thread maps\mp\gametypes\_missions::roundEnd( winner );
+	//END_REGION: ROUND ENDING  
 
+	//BEGIN_REGION: MATCH ENDING
 	if ( ( level.teamBased && level.gametype != "bel" ) && hitRoundLimit() ) {
 		if ( game["teamScores"]["allies"] == game["teamScores"]["axis"] )
 			winner = "tie";
@@ -1634,9 +1635,9 @@ endGame( winner, endReasonText )
 		}
 	}
 
-	wait 3.5;
+	wait 4.0;
 
-	if( level.players.size > 0 && ( !isPlayer(winner) && winner != "tie" ) )
+	if( isDefined( winner ) && ( isPlayer( winner ) || winner != "tie" ) )
     {
         thread maps\mp\gametypes\_finalkillcam::StartFinalKillcam( winner, "match" );
     }
@@ -1691,10 +1692,12 @@ endGame( winner, endReasonText )
 			}
 		}
 	}
+	//END_REGION: MATCH ENDING 
 
 	thread timeLimitClock_Intermission( level.scr_intermission_time, ( level.scr_amvs_enable == 0 || game["skip_final_map_voting"] ) );
 	wait (level.scr_intermission_time);
 
+	//Keep playing on this map while fast restarts limit not reached
 	if ( level.scr_eog_fastrestart != 0 ) {	
 		fastRestarts = getDvarInt( "ow_fastrestarts" );
 		
@@ -1706,13 +1709,16 @@ endGame( winner, endReasonText )
 		}
 	}
 	
+	//Final map voting
 	if ( isDefined( level.onEndGameMapVote ) )
 	{
 		[[level.onEndGameMapVote]] ();
 	}
 
+	//Disabled: final map voting replaced to external package
 	//openwarfare\_advancedmvs::mapVoting_Intermission();
 	
+	//Close all and start new game
 	players = level.players;
 	for ( index = 0; index < players.size; index++ )
 	{
@@ -5231,8 +5237,10 @@ Callback_PlayerDamage( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, s
 	prof_begin( "Callback_PlayerDamage log" );
 
 	// Do debug print if it's enabled
+	/#
 	if(getDvarInt("g_debugDamage"))
 		println("client:" + self getEntityNumber() + " health:" + self.health + " attacker:" + eAttacker.clientid + " inflictor is player:" + isPlayer(eInflictor) + " damage:" + iDamage + " hitLoc:" + sHitLoc);
+	#/
 
 	if(self.sessionstate != "dead")
 	{
@@ -5263,6 +5271,7 @@ Callback_PlayerDamage( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, s
 		self.sMeansOfDeath = sMeansOfDeath;
 	}
 
+	/#
 	if ( getdvarint("scr_hitloc_debug") )
 	{
 		if ( !isdefined( eAttacker.hitlocInited ) )
@@ -5338,6 +5347,7 @@ Callback_PlayerDamage( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, s
 	}
 
 	prof_end( "Callback_PlayerDamage log" );
+	#/
 }
 
 finishPlayerDamageWrapper( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime )
@@ -5791,10 +5801,10 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 	self.leaving_team = undefined;
 
 
-	if ( sWeapon == "artillery_mp" || sWeapon == "claymore_mp" || sWeapon == "frag_grenade_short_mp" || sWeapon == "none" || isSubStr( sWeapon, "cobra" ) )
+	if ( sWeapon == "artillery_mp" || sWeapon == "claymore_mp" || sWeapon == "c4_mp" || sWeapon == "frag_grenade_short_mp" || sWeapon == "none" || isSubStr( sWeapon, "cobra" ) )
 		doKillcam = false;
 
-	if ( ( isSubStr( sWeapon, "cobra" ) ) && isdefined( eInflictor ) )
+	if ( ! doKillcam && isSubStr( sWeapon, "cobra" ) && isdefined( eInflictor ) )
 	{
 		killcamentity = eInflictor getEntityNumber();
 		doKillcam = true;
@@ -5804,7 +5814,7 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 		killcamentity = -1;
 	}
 
-	//Killcam for c4, claymore, grenade
+	//Advanced killcam for c4, claymore, grenade
 	if(sMeansOfDeath != "MOD_MELEE" && isDefined(eInflictor) && (sWeapon == "c4_mp" || sWeapon == "claymore_mp" || sWeapon == "rpg_mp" || sWeapon == "frag_grenade_mp" || sWeapon == "artillery_mp" || sWeapon == "airstrike_mp"))
 	{
 		dokillcam = true;

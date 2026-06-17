@@ -1288,7 +1288,10 @@ LANG_RUSSIAN "^3Esc.^7 нРЛЕМЮ"
 // maps\mp\gametypes\_finalkillcam.gsc
 //******************************************************************************
 REFERENCE FINALCAM_PLAYER_VS_PLAYER
-LANG_RUSSIAN "&&1 ^1VS. ^7&&2"
+LANG_RUSSIAN "&&1 ^1VS ^7&&2"
+
+REFERENCE FINALCAM_PLAYER_SUICIDE
+LANG_RUSSIAN "яюлнкхйбхдюжхъ: ^7&&1"
 
 REFERENCE FINALCAM_MATCH_WIN
 LANG_RUSSIAN "онаедю б люрве"

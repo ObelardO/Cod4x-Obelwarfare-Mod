@@ -204,7 +204,15 @@ CreateFKHUD( victim, attacker, mode )
     self.fk_title_low.archived = false;
     self.fk_title_low.foreground = true;
     self.fk_title_low.alpha = 1;
-    self.fk_title_low setText( &"OW_FINALCAM_PLAYER_VS_PLAYER", attacker.name, victim.name );
+
+    if ( victim != attacker )
+    {
+        self.fk_title_low setText( &"OW_FINALCAM_PLAYER_VS_PLAYER", attacker.name, victim.name );
+    }
+    else
+    {
+        self.fk_title_low setText( &"OW_FINALCAM_PLAYER_SUICIDE", victim.name );
+    }
     
     switch ( mode )
     {
@@ -217,20 +225,26 @@ CreateFKHUD( victim, attacker, mode )
     }
 }
 
-onPlayerKilled( eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, killcamentity )
+onPlayerKilled( eInflictor, eAttacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, killcamentity )
 {
-    if( attacker != self && isDefined( attacker ) && isDefined( attacker.team ) )
+    //if( attacker != self && isDefined( attacker ) && isDefined( attacker.team ) )
+    if( isDefined( eAttacker ) && isDefined( eAttacker.team ) && isDefined ( level.otherTeam[eAttacker.team] ) )
     {    
         level.showFinalKillcam = true;
-        
-        team = attacker.team;
-        
-        level.doFK[team] = true;
-        
+
         if( level.teamBased && level.gametype != "bel" )
         {
-            level.KillInfo[team]["attacker"] = attacker;
-            level.KillInfo[team]["attackerNumber"] = attacker getEntityNumber();
+            team = eAttacker.team;
+
+            if ( eAttacker == self ) team = level.otherTeam[team];
+        
+            level.doFK[team] = true;
+
+            if ( ! isDefined( level.KillInfo ) )
+                level.KillInfo = [];
+
+            level.KillInfo[team]["attacker"] = eAttacker;
+            level.KillInfo[team]["attackerNumber"] = eAttacker getEntityNumber();
             level.KillInfo[team]["victim"] = self;
             level.KillInfo[team]["deathTime"] = GetTime()/1000;
             level.KillInfo[team]["weapon"] = sWeapon;
@@ -238,12 +252,15 @@ onPlayerKilled( eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHi
         }
         else
         {
-            attacker.KillInfo["attacker"] = attacker;
-            attacker.KillInfo["attackerNumber"] = attacker getEntityNumber();
-            attacker.KillInfo["victim"] = self;
-            attacker.KillInfo["deathTime"] = GetTime()/1000;
-            attacker.KillInfo["weapon"] = sWeapon;
-            attacker.KillInfo["killcamentity"] = killcamentity;
+            if ( ! isDefined( eAttacker.KillInfo ) )
+                eAttacker.KillInfo = [];
+
+            eAttacker.KillInfo["attacker"] = eAttacker;
+            eAttacker.KillInfo["attackerNumber"] = eAttacker getEntityNumber();
+            eAttacker.KillInfo["victim"] = self;
+            eAttacker.KillInfo["deathTime"] = GetTime()/1000;
+            eAttacker.KillInfo["weapon"] = sWeapon;
+            eAttacker.KillInfo["killcamentity"] = killcamentity;
         }
     }
 }
@@ -252,16 +269,19 @@ onPlayerKilled( eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHi
 StartFinalKillcam( winner, mode )
 {
     level endon("end_killcam");
-    
-    if( !level.showFinalKillcam)
+
+    if( ! level.showFinalKillcam )
         return;
     
-    if( ( !isDefined(winner) || !isPlayer(winner) ) && ( !isDefined( level.doFK[winner] || !level.doFK[winner] ) ) )
-        return;
+    if( level.teamBased && level.gametype != "bel" )
+    {
+        if( ! ( isDefined( level.doFK[winner] ) && level.doFK[winner] ) ) return;
+    }
+    else if( ! ( isPlayer( winner ) && isDefined( winner.KillInfo ) ) ) return;
     
     level.fk = true;
     
-    for( i = 0; i < level.players.size; i ++)
+    for( i = 0; i < level.players.size; i++ )
     {
         player = level.players[i];
         
