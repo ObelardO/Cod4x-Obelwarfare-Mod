@@ -2,103 +2,176 @@
 #include maps\mp\gametypes\_hud_util;
 #include common_scripts\utility;
 
+
 init()
 {
-    level.fk = false;
-    level.showFinalKillcam = false;
-
-    level.doFK["axis"] = false;
-    level.doFK["allies"] = false;
-    
-    level.slowmotstart = undefined;
-
-    for(;;)
-    {
-        level waittill("connected", player);
-
-        player thread beginFK();
-    }
-
-    //self SetClientDvar( "ui_ShowMenuOnly", "" );    
+    level.finalKillcamInProgress = false;
+    level.finalKillcamInfo = [];
 }
 
-        
-beginFK()
+
+onPlayerKilled( eInflictor, eAttacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, killcamentity, iAttackerNum )
 {
-    self endon( "disconnect" );
-    
-    for( ;; )
+    switch( sMeansOfDeath )
     {
-        self waittill( "beginFK", winner, mode );
-        
-        self notify( "reset_outcome" );
-        
-        if( level.TeamBased && level.gametype != "bel" )
+        //Don't record explosions witn none weapons
+        case "MOD_EXPLOSIVE":
+            if( sWeapon == "none" )
+                return;
+
+            break;
+
+        //Override killcam entity (like a burrel)
+        /*case "MOD_CRUSH":
+            if( isDefined( eInflictor ) )
+                killcamentity = eInflictor getEntityNumber();
+
+            break;*/
+
+        //Override attacker for suicides
+        case "MOD_SUICIDE":
+        case "MOD_FALLING":
+        case "MOD_TRIGGER_HURT":
+            eAttacker = self;
+
+            break;
+    }
+
+    if( ! isDefined( eAttacker ) )
+    {
+        return;
+    }
+
+    attackerNum = eAttacker getEntityNumber();
+
+    if( ! isPlayer( eAttacker ) && iAttackerNum > 0 )
+    {
+        attackerNum = iAttackerNum;
+    }
+
+    if( isDefined( eAttacker.team ) && isDefined ( level.otherTeam[eAttacker.team] ) )
+    {    
+        if( level.teamBased && level.gametype != "bel" )
         {
-            self finalkillcam(
-                level.KillInfo[winner]["attacker"], 
-                level.KillInfo[winner]["attackerNumber"], 
-                level.KillInfo[winner]["deathTime"], 
-                level.KillInfo[winner]["victim"], 
-                level.KillInfo[winner]["weapon"],
-                level.KillInfo[winner]["killcamentity"],
-                mode);
+            killerId = eAttacker.team;
+
+            //Hack to show player suicide. switch team for displaying self kill 
+            if ( eAttacker == self ) killerId = level.otherTeam[eAttacker.team];
         }
         else
         {
-            self finalkillcam(
-                winner.KillInfo["attacker"], 
-                winner.KillInfo["attackerNumber"], 
-                winner.KillInfo["deathTime"], 
-                winner.KillInfo["victim"], 
-                winner.KillInfo["weapon"], 
-                winner.KillInfo["killcamentity"],
-                mode);
+            killerId = "player";
         }
+
+        level.finalKillcamInfo[killerId]["attacker"] = eAttacker;
+        level.finalKillcamInfo[killerId]["attackerNumber"] = attackerNum;
+        level.finalKillcamInfo[killerId]["victim"] = self;
+        level.finalKillcamInfo[killerId]["deathTime"] = GetTime()/1000;
+        level.finalKillcamInfo[killerId]["weapon"] = sWeapon;
+        level.finalKillcamInfo[killerId]["killcamentity"] = killcamentity;
     }
 }
 
-finalkillcam( attacker, attackerNum, deathtime, victim, weapon, killcamentity, mode )
+
+startFinalKillcam( winner, mode )
 {
-    self endon("disconnect");
     level endon("end_killcam");
     
-    //self SetClientDvar("ui_ShowMenuOnly", "none");
+    finalKillcamInfo = undefined;
 
-    camdist = 40;
-    camtime = 5;
-
-    if (weapon == "artillery_mp")
+    if( level.teamBased && level.gametype != "bel" )
     {
-        camtime = 3;
-        camdist = 60;
+        finalKillcamInfo = level.finalKillcamInfo[winner];
+    }
+    else if( isPlayer( winner ) )
+    {
+        finalKillcamInfo = level.finalKillcamInfo["player"];
     }
 
-    else if (weapon == "airstrike_mp")
+    if( ! isDefined( finalKillcamInfo ) )
     {
-        camtime = 3;
-        camdist = 60;
+        return;
     }
-
-    else if (weapon == "claymore_mp")
-    {
-        camtime = 3.0;
-        camdist = 20;
-    }
-
-    else if (weapon == "frag_grenade_mp")
-    {
-        camtime = 4.0; // show long enough to see grenade thrown
-        camdist = 60;
-    }
-
-    predelay = getTime()/1000 - deathTime;
-    postdelay = 1;
-    killcamlength = camtime + postdelay;
-    killcamoffset = camtime + predelay;
     
+    switch( finalKillcamInfo["weapon"] )
+    {
+        case "artillery_mp":
+            viewDuratation = 3;
+            viewEntityDist = 60;
+            break;
+
+        case "airstrike_mp":
+            viewDuratation = 3;
+            viewEntityDist = 60;
+            break;
+
+        case "claymore_mp":
+            viewDuratation = 3.0;
+            viewEntityDist = 20;
+            break;
+
+        case "frag_grenade_mp":
+            viewDuratation = 4.0; // show long enough to see grenade thrown
+            viewEntityDist = 60;
+            break;
+
+        default:
+            viewDuratation = 5;
+            viewEntityDist = 40;
+    }
+
+    startDelay = getTime()/1000 - finalKillcamInfo["deathTime"];
+    finalDelay = 1;
+    timeLength = viewDuratation + finalDelay;
+    timeOffset = viewDuratation + startDelay;
+
+    //if we're not looking back in time far enough to even see the death, cancel
+    if( timeOffset <= startDelay )
+    {
+        return;
+    }
+    
+    level.finalKillcamInProgress = true;
+    level notify("begin_killcam");
+
     visionSetNaked( maps\mp\gametypes\_globallogic::GetNakedVision(), 0.5 );
-    
+
+    for( i = 0; i < level.players.size; i++ )
+    {
+        player = level.players[i];
+
+        player setClientDvar ("cg_airstrikeKillCamDist", viewEntityDist );
+        
+        player thread playerFinalKillcamThread(
+            finalKillcamInfo["attacker"], 
+            finalKillcamInfo["attackerNumber"], 
+            finalKillcamInfo["deathTime"], 
+            finalKillcamInfo["victim"], 
+            finalKillcamInfo["weapon"],
+            finalKillcamInfo["killcamentity"],
+            timeOffset,
+            timeLength,
+            mode);
+    }
+
+    wait timeLength;
+
+    visionSetNaked( "mpOutro", 0.2 );
+    wait 0.2;
+
+    level.finalKillcamInProgress = false;
+    level notify("end_killcam");
+}
+
+
+playerFinalKillcamThread( attacker, attackerNum, deathtime, victim, weapon, viewEntity, timeOffset, timeLength, mode )
+{
+    level endon("end_killcam");
+    self endon("disconnect");
+
+    self notify( "reset_outcome" );
+
+    wait 0.05;
     self notify ( "begin_killcam", getTime() );
     
     self allowSpectateTeam("allies", true);
@@ -108,111 +181,49 @@ finalkillcam( attacker, attackerNum, deathtime, victim, weapon, killcamentity, m
     
     self.sessionstate = "spectator";
 	self.spectatorclient = attackerNum;
-	self.killcamentity = killcamentity;
-	self.archivetime = killcamoffset;
-	self.killcamlength = killcamlength;
+	self.killcamEntity = viewEntity;
+	self.archivetime = timeOffset;
+	self.killcamlength = timeLength;
 	self.psoffsettime = 0;
+
+    self showFinalKillcamHUD( victim, attacker, mode );
+
+    self.killcam = true;    
     
-    if(!isDefined(level.slowmostart))
-        level.slowmostart = killcamlength - 4;
+    wait timeLength;
 
-    wait 0.05;
-
-    if ( self.archivetime <= predelay ) // if we're not looking back in time far enough to even see the death, cancel
-	{
-		self.sessionstate = "dead";
-		self.spectatorclient = -1;
-		self.killcamentity = -1;
-		self.archivetime = 0;
-		self.psoffsettime = 0;
-
-    	self thread EndFK();
-
-		return;
-	}
+    if ( ! isDefined( self ) )
+        return;
     
-    self.killcam = true;
-
-    self setClientDvar ("cg_airstrikeKillCamDist", camdist );
-    
-    if( isDefined( self.fk_title_low ) )
-    {
-        self.fk_title_low.alpha = 1;
-    }
-    else
-    {
-        self CreateFKHUD( victim, attacker, mode );
-    }
-    
-    self thread WaitEnd( killcamlength );
-    
-    wait 0.05;
-    
-    self waittill( "end_killcam" );
-
-    self thread CleanFK();
-    self thread EndFK();
-}
-
-EndFK()
-{
     self.killcamentity = -1;
 	self.archivetime = 0;
 	self.psoffsettime = 0;
-    
-    wait 0.05;
-    
-    self.sessionstate = "spectator";
-	spawnpointname = "mp_global_intermission";
-	spawnpoints = getentarray(spawnpointname, "classname");
-	assert( spawnpoints.size );
-	spawnpoint = maps\mp\gametypes\_spawnlogic::getSpawnpoint_Random(spawnpoints);
 
-	self spawn(spawnpoint.origin, spawnpoint.angles);
+    self hideFinalKillcamHUD();
 
-    wait 0.05;
-    
     self.killcam = undefined;
-    self thread maps\mp\gametypes\_spectating::setSpectatePermissions();
 
-    level notify("end_killcam");
-
-    level.fk = false;  
-}
-
-CleanFK()
-{
-    self.fk_title_low.alpha = 0;
-
-    visionSetNaked( "mpOutro", 1.0 );
-}
-
-WaitEnd( killcamlength )
-{
-    self endon("disconnect");
-	self endon("end_killcam");
-    
-    wait killcamlength;
-    
+    wait 0.05;
     self notify("end_killcam");
 }
 
-CreateFKHUD( victim, attacker, mode )
+
+showFinalKillcamHUD( victim, attacker, mode )
 {
-    self.fk_title_low = createFontString( "default", 1.4 );
-    self.fk_title_low setPoint( "CENTER", "BOTTOM", 0, -30 );
-    self.fk_title_low.archived = false;
-    self.fk_title_low.foreground = true;
+    if( ! isDefined( self.fk_title_low ) )
+    {
+        self.fk_title_low = createFontString( "default", 1.4 );
+        self.fk_title_low setPoint( "CENTER", "BOTTOM", 0, -30 );
+        self.fk_title_low.archived = false;
+        self.fk_title_low.foreground = true;
+    }
+
     self.fk_title_low.alpha = 1;
 
     if ( victim != attacker )
-    {
         self.fk_title_low setText( &"OW_FINALCAM_PLAYER_VS_PLAYER", attacker.name, victim.name );
-    }
     else
-    {
         self.fk_title_low setText( &"OW_FINALCAM_PLAYER_SUICIDE", victim.name );
-    }
     
     switch ( mode )
     {
@@ -225,87 +236,8 @@ CreateFKHUD( victim, attacker, mode )
     }
 }
 
-onPlayerKilled( eInflictor, eAttacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, killcamentity )
+
+hideFinalKillcamHUD()
 {
-    //if( attacker != self && isDefined( attacker ) && isDefined( attacker.team ) )
-    if( isDefined( eAttacker ) && isDefined( eAttacker.team ) && isDefined ( level.otherTeam[eAttacker.team] ) )
-    {    
-        level.showFinalKillcam = true;
-
-        if( level.teamBased && level.gametype != "bel" )
-        {
-            team = eAttacker.team;
-
-            if ( eAttacker == self ) team = level.otherTeam[team];
-        
-            level.doFK[team] = true;
-
-            if ( ! isDefined( level.KillInfo ) )
-                level.KillInfo = [];
-
-            level.KillInfo[team]["attacker"] = eAttacker;
-            level.KillInfo[team]["attackerNumber"] = eAttacker getEntityNumber();
-            level.KillInfo[team]["victim"] = self;
-            level.KillInfo[team]["deathTime"] = GetTime()/1000;
-            level.KillInfo[team]["weapon"] = sWeapon;
-            level.KillInfo[team]["killcamentity"] = killcamentity;
-        }
-        else
-        {
-            if ( ! isDefined( eAttacker.KillInfo ) )
-                eAttacker.KillInfo = [];
-
-            eAttacker.KillInfo["attacker"] = eAttacker;
-            eAttacker.KillInfo["attackerNumber"] = eAttacker getEntityNumber();
-            eAttacker.KillInfo["victim"] = self;
-            eAttacker.KillInfo["deathTime"] = GetTime()/1000;
-            eAttacker.KillInfo["weapon"] = sWeapon;
-            eAttacker.KillInfo["killcamentity"] = killcamentity;
-        }
-    }
-}
-
-
-StartFinalKillcam( winner, mode )
-{
-    level endon("end_killcam");
-
-    if( ! level.showFinalKillcam )
-        return;
-    
-    if( level.teamBased && level.gametype != "bel" )
-    {
-        if( ! ( isDefined( level.doFK[winner] ) && level.doFK[winner] ) ) return;
-    }
-    else if( ! ( isPlayer( winner ) && isDefined( winner.KillInfo ) ) ) return;
-    
-    level.fk = true;
-    
-    for( i = 0; i < level.players.size; i++ )
-    {
-        player = level.players[i];
-        
-        player notify("beginFK", winner, mode );
-    }
-    
-    //Disabled cas slow motion calls MAX PACKETS network issues
-    //slowMotion();
-}
-
-slowMotion()
-{
-    while(!isDefined(level.slowmostart))
-        wait 0.05;
-    
-    wait level.slowmostart;
-    
-    SetDvar("timescale", ".25");
-    for(i=0;i<level.players.size;i++)
-        level.players[i] setclientdvar("timescale", ".25");
-    
-    wait 2;
-    
-    SetDvar("timescale", "1");
-    for(i=0;i<level.players.size;i++)
-        level.players[i] setclientdvar("timescale", "1");
+    self.fk_title_low.alpha = 0;
 }

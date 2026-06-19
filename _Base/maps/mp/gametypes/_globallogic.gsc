@@ -1536,9 +1536,9 @@ endGame( winner, endReasonText )
 		{
 			if( isDefined( winner ) && ( isPlayer( winner ) || winner != "tie" ) )
 			{
-		    	thread maps\mp\gametypes\_finalkillcam::StartFinalKillcam( winner, "round" );
+		    	thread maps\mp\gametypes\_finalkillcam::startFinalKillcam( winner, "round" );
 
-				if(level.fk) level waittill("end_killcam");
+				if(level.finalKillcamInProgress) level waittill("end_killcam");
 			}
 			
 			game["state"] = "playing";
@@ -1639,10 +1639,10 @@ endGame( winner, endReasonText )
 
 	if( isDefined( winner ) && ( isPlayer( winner ) || winner != "tie" ) )
     {
-        thread maps\mp\gametypes\_finalkillcam::StartFinalKillcam( winner, "match" );
+        thread maps\mp\gametypes\_finalkillcam::startFinalKillcam( winner, "match" );
     }
 
-    if(level.fk)
+    if(level.finalKillcamInProgress)
         level waittill("end_killcam");
 	else
         roundEndWait( level.postRoundTime, true );
@@ -5796,15 +5796,16 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 			thread maps\mp\gametypes\_deathicons::addDeathicon( body, self, self.pers["team"], 3.0, level.scr_hud_show_death_icons == 2 );
 	}
 	
+	wasTeamSwitched = isDefined( self.switching_teams ) && isDefined( attacker ) && attacker == self;
+
 	self.switching_teams = undefined;
 	self.joining_team = undefined;
 	self.leaving_team = undefined;
 
-
-	if ( sWeapon == "artillery_mp" || sWeapon == "claymore_mp" || sWeapon == "c4_mp" || sWeapon == "frag_grenade_short_mp" || sWeapon == "none" || isSubStr( sWeapon, "cobra" ) )
+	if( sWeapon == "artillery_mp" || sWeapon == "claymore_mp" || sWeapon == "c4_mp" || sWeapon == "frag_grenade_short_mp" || sWeapon == "none" || isSubStr( sWeapon, "cobra" ) )
 		doKillcam = false;
 
-	if ( ! doKillcam && isSubStr( sWeapon, "cobra" ) && isdefined( eInflictor ) )
+	if( isSubStr( sWeapon, "cobra" ) && isdefined( eInflictor ) )
 	{
 		killcamentity = eInflictor getEntityNumber();
 		doKillcam = true;
@@ -5815,13 +5816,13 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 	}
 
 	//Advanced killcam for c4, claymore, grenade
-	if(sMeansOfDeath != "MOD_MELEE" && isDefined(eInflictor) && (sWeapon == "c4_mp" || sWeapon == "claymore_mp" || sWeapon == "rpg_mp" || sWeapon == "frag_grenade_mp" || sWeapon == "artillery_mp" || sWeapon == "airstrike_mp"))
+	if( sMeansOfDeath != "MOD_MELEE" && isDefined(eInflictor) && (sWeapon == "c4_mp" || sWeapon == "claymore_mp" || sWeapon == "rpg_mp" || sWeapon == "frag_grenade_mp" || sWeapon == "artillery_mp" || sWeapon == "airstrike_mp"))
 	{
 		dokillcam = true;
 		
-		if(lpattacknum < 0)
+		if( lpattacknum < 0 )
 		{
-			if(!isDefined(attacker) || (isDefined(attacker) && !isPlayer(attacker) && attacker.classname != "script_vehicle"))
+			if( ! isDefined( attacker ) || ( isDefined( attacker ) && ! isPlayer( attacker ) && attacker.classname != "script_vehicle" ) )
 				lpattacknum = self getEntityNumber();
 			else 
 				lpattacknum = attacker getEntityNumber();
@@ -5829,7 +5830,7 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 
 		killcamentity = eInflictor getEntityNumber();
 
-		if(isDefined(eInflictor.killCamEnt))
+		if( isDefined( eInflictor.killCamEnt ) )
 			killcamentity = eInflictor.killCamEnt getEntityNumber();
 
 		if ( isDefined( eInflictor.killcamTrackingEntities ) )
@@ -5853,13 +5854,17 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 	}
 
 	//Setup final killcam
-	maps\mp\gametypes\_finalkillcam::onPlayerKilled( eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, killcamentity );
+	if( ! wasTeamSwitched )
+	{
+		maps\mp\gametypes\_finalkillcam::onPlayerKilled( eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, killcamentity, lpattacknum );
+	}
+
 	self thread [[level.onPlayerKilled]]( eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration );
 
 	self.deathTime = getTime();
 
 	// let the player watch themselves die
-	wait ( 0.25 );
+	wait ( 0.5 );
 	self.cancelKillcam = false;
 	self thread cancelKillCamOnUse();
 	postDeathDelay = waitForTimeOrNotifies( 1.75 );
@@ -6415,7 +6420,7 @@ delayStartRagdoll( ent, sHitLoc, vDir, sWeapon, eInflictor, sMeansOfDeath )
 		explosionForce = .75;
 		if ( sMeansOfDeath == "MOD_IMPACT" || sMeansOfDeath == "MOD_EXPLOSIVE" || isSubStr(sMeansOfDeath, "MOD_GRENADE") || isSubStr(sMeansOfDeath, "MOD_PROJECTILE") || sHitLoc == "head" || sHitLoc == "helmet" )
 		{
-			explosionForce = 2.5;
+			explosionForce = 3.0;
 		}
 
 		ent startragdoll( 1 );
