@@ -452,7 +452,7 @@ splashNotify( splash )
 		splashNotify[0].vertAlign = "middle";
 		splashNotify[0] setText( getSplashTitle( splash.name ) );
 		splashNotify[0].glowcolor = ( 0.15, 1.0, 0.15 );
-		splashNotify[0].glowalpha = 0.5;//getSplashColorRGBA(splash.name,8);
+		splashNotify[0].glowalpha = 0.333;//getSplashColorRGBA(splash.name,8);
 		splashNotify[0].sort = 1001;
 		//splashNotify[0] maps\mp\gametypes\_hud::fontPulseInit();
 		splashNotify[0].hideWhenInMenu = true;
