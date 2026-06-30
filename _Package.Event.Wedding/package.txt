@@ -1,0 +1,3 @@
+name=Wedding
+iwd=zevent_wed
+gsc=_wedding
