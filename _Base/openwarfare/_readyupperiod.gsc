@@ -100,6 +100,7 @@ start()
 	// Make sure we have enough players
 	waitForPlayers();
 
+
 	// Let's check if there's a time limit to force the ready-up to be over
 	if ( level.scr_match_readyup_time_match != 0 && !game["roundsplayed"] ) {
 		level thread showTimeLimitCountdown( level.scr_match_readyup_time_match );
@@ -128,8 +129,9 @@ start()
 			//isBot = player getGuid() == "" || ( isDefined( player.isBot ) && player.isBot ) || ( isDefined( player.pers[ "isBot" ] ) && player.pers[ "isBot" ] ) ;
 			
 			// Start the monitoring thread if this player doesn't have it running
-			if ( !isDefined( player.readyUpPeriod ) && player.pers["team"] != "spectator" ) {				
+			if ( (!isDefined( player.readyUpPeriod ) || !player.readyUpPeriod ) && player.pers["team"] != "spectator" ) {				
 				player.matchReady = false;
+				player.matchReadyHintShown = false;
 				player thread readyUpPeriod();
 				player thread addNewEvent( "onJoinedTeam", ::onJoinedTeam );
 			}
@@ -187,6 +189,9 @@ start()
 onJoinedTeam()
 {
 	self.matchReady = false;
+	self.matchReadyHintShown = false;
+
+	//lf iPrintLn( "Joined team: " + self.name + " to " + self.pers["team"]);
 }
 
 readyUpPeriod()
@@ -210,15 +215,22 @@ readyUpPeriod()
 	self.readyUpText.foreground = false;
 	self.readyUpText.hidewheninmenu = true;
 
-	// Create the press USE key to toggle the readiness status
-	self maps\mp\gametypes\_hud_hints::showHint( &"OW_READYUP_PRESS_TO_TOGGLE", "readyup_bypass", undefined, true );
-
 	// We are going to monitor this player until the readyup period ends
 	keyDown = false;
 
 	while ( level.inReadyUpPeriod && self.pers["team"] != "spectator" )
 	{
 		wait (0.05);
+
+		if ( !self.matchReadyHintShown )
+		{
+			wait 0.05;
+
+			self maps\mp\gametypes\_hud_hints::showHint( &"OW_READYUP_PRESS_TO_TOGGLE", "readyup_bypass", undefined, true );
+			self.matchReadyHintShown = true;
+
+			//self iPrintLn( "Showed hint for " + self.name );
+		}
 
 		// Check if the player hit the use key
 		if ( self useButtonPressed() ) {
@@ -262,6 +274,7 @@ readyUpPeriod()
 		self notify("readyupperiod_ended");
 		
 	self.readyUpPeriod = undefined;
+	self.matchReadyHintShown = false;
 }
 
 
@@ -387,7 +400,7 @@ createHudElements()
 	game["readyUpIconAllies"].x = -90;
 	game["readyUpIconAllies"].y = -30;
 
-	game["readyUpTextAlliesNotReady"] = createServerFontString( "objective", 3.5 );
+	game["readyUpTextAlliesNotReady"] = createServerFontString( "objective", 2.5 );
 	game["readyUpTextAlliesNotReady"].archived = false;
 	game["readyUpTextAlliesNotReady"].hideWhenInMenu = true;
 	game["readyUpTextAlliesNotReady"].alignX = "left";
@@ -412,7 +425,7 @@ createHudElements()
 	game["readyUpIconAxis"].x = 90;
 	game["readyUpIconAxis"].y = -30;
 
-	game["readyUpTextAxisNotReady"] = createServerFontString( "objective", 3.5 );
+	game["readyUpTextAxisNotReady"] = createServerFontString( "objective", 2.5 );
 	game["readyUpTextAxisNotReady"].archived = false;
 	game["readyUpTextAxisNotReady"].hideWhenInMenu = true;
 	game["readyUpTextAxisNotReady"].alignX = "right";
