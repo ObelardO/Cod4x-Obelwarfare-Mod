@@ -1538,7 +1538,9 @@ endGame( winner, endReasonText )
 			{
 		    	thread maps\mp\gametypes\_finalkillcam::startFinalKillcam( winner, "round" );
 
-				if(level.finalKillcamInProgress) level waittill("end_killcam");
+				wait 0.05;
+
+				if( level.finalKillcamInProgress ) level waittill("end_killcam");
 			}
 			
 			game["state"] = "playing";
@@ -1640,6 +1642,8 @@ endGame( winner, endReasonText )
 	if( isDefined( winner ) && ( isPlayer( winner ) || winner != "tie" ) )
     {
         thread maps\mp\gametypes\_finalkillcam::startFinalKillcam( winner, "match" );
+
+		wait 0.05;
     }
 
     if(level.finalKillcamInProgress)
@@ -5856,7 +5860,7 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 	//Setup final killcam
 	if( ! wasTeamSwitched )
 	{
-		maps\mp\gametypes\_finalkillcam::onPlayerKilled( eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, killcamentity, lpattacknum );
+		self maps\mp\gametypes\_finalkillcam::onPlayerKilled( eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, killcamentity, lpattacknum );
 	}
 
 	self thread [[level.onPlayerKilled]]( eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration );
@@ -6734,7 +6738,7 @@ default_getNakedVision()
 	return getDvar( "mapname" );
 }
 
-GetNakedVision()
+getNakedVision()
 {
 	return [[level.getNakedVision]]();
 }

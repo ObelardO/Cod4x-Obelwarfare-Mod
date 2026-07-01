@@ -1170,6 +1170,22 @@ LANG_SPANISH "Presiona ^1[[{+activate}]] ^7para navegar entre comandos.\nPresion
 
 
 //******************************************************************************
+// maps\mp\gametypes\_finalkillcam.gsc
+//******************************************************************************
+REFERENCE FINALCAM_PLAYER_VS_PLAYER
+LANG_SPANISH "&&1 ^1VS ^7&&2"
+
+REFERENCE FINALCAM_PLAYER_SUICIDE
+LANG_SPANISH "SUICIDIO: ^7&&1"
+
+REFERENCE FINALCAM_MATCH_WIN
+LANG_SPANISH "KILL DE VICTORIA DE PARTIDA"
+
+REFERENCE FINALCAM_ROUND_WIN
+LANG_SPANISH "KILL DE VICTORIA DE RONDA"
+
+
+//******************************************************************************
 // ui_mp/connect.menu
 //******************************************************************************
 REFERENCE BROUGHT2UBY
