@@ -5,7 +5,8 @@
 menuDef
 {
     name			"MantleHint"
-    rect			0 100 20 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+    rect			0 -50 20 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_BOTTOM
+    exp             rect Y( dvarint( "cg_hudMantleY" ) - 5 )
     fullScreen		0
     visible			when( HUD_IS_VISIBLE )
 
@@ -13,9 +14,13 @@ menuDef
     {
         name			"chRect"
         rect			0 0 20 20
-        textscale		(TEXTSIZE_SMALL * 0.6)
+        textscale		( TEXTSIZE_SMALL * 0.6 )
         textstyle		ITEM_TEXTSTYLE_SHADOWED
+        textalign		ITEM_ALIGN_MIDDLE_CENTER
+        textfont		UI_FONT_OBJECTIVE
         ownerdraw		CG_MANTLE_HINT
+        exp				forecolor A( HUD_FOREGROUND_ALPHA * HudFade( "dpad" ) )
+        forecolor		1 1 1 1
         visible			when( CLIENT_NOT_SPECTATING && HINT_MANTLE_IS_VISIBLE && dvarString ( "ui_hud_hint_text" ) == "" )
         decoration
     }

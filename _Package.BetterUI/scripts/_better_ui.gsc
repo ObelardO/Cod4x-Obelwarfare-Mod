@@ -73,7 +73,8 @@ init()
     forceClientDvar( "cg_drawhealth", 1 );
     forceClientDvar( "cg_hudDamageIconHeight", 64 );
     forceClientDvar( "cg_hudDamageIconWidth", 128 );
-    forceClientDvar( "cg_hudProneY", -52 ); // or +10 for hide this hint
+    forceClientDvar( "cg_hudProneY", -56 ); // or +10 for hide this hint
+    forceClientDvar( "cg_hudMantleY", -56 ); // or +10 for hide this hint
     forceClientDvar( "cg_drawSpectatorMessages", 0 );
     forceClientDvar( "cg_crossHair", ( 1 - level.hardcoreMode ) );
 
@@ -125,8 +126,8 @@ init()
     // Move progress bars
     level.primaryProgressBarY = 90; // from center
     level.primaryProgressBarTextY = 76;
-    level.secondaryProgressBarY = 184; // from center
-    level.secondaryProgressBarTextY = 170;
+    level.secondaryProgressBarY = 180; // from center
+    level.secondaryProgressBarTextY = 166;
 
     level.scr_hud_show_spectator_messages = 0;
 
