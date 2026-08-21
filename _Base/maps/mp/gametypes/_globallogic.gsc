@@ -738,6 +738,9 @@ spawnPlayer()
 
 	hadSpawned = self.hasSpawned;
 
+	if ( !hadSpawned && isDefined( level.teamImbalance ) && level.teamImbalance.ready && level.numLives )
+		self.pers["lives"] = getAverageNumlives();
+
 	self.sessionstate = "playing";
 	self.spectatorclient = -1;
 	self.killcamentity = -1;
@@ -3097,6 +3100,12 @@ updateTeamStatus()
 
 	prof_end( "updateTeamStatus" );
 
+	if ( isDefined( level.teamImbalance ) && level.teamImbalance.active )
+	{
+		if ( !isDefined( level.teamImbalance.rosterCount ) || level.playerCount["allies"] != level.teamImbalance.rosterCount["allies"] || level.playerCount["axis"] != level.teamImbalance.rosterCount["axis"] )
+			openwarfare\_teamimbalance::onRosterChanged();
+	}
+
 	level updateGameEvents();
 }
 
@@ -3278,6 +3287,7 @@ startGame()
 	}
 
 	prematchPeriod();
+	openwarfare\_teamimbalance::onRoundStart();
 	level notify("prematch_over");
 
 	thread timeLimitClock();
@@ -3655,7 +3665,11 @@ TimeUntilSpawn( includeTeamkillDelay )
 		else if ( isDefined( game["_overtime"] ) )
 			respawnDelay = self openwarfare\_overtime::respawnDelay();
 		else
-			respawnDelay = getdvarx( "scr_" + level.gameType + "_playerrespawndelay", "float", 10, -1, 300 );
+		{
+			respawnDelay = openwarfare\_teamimbalance::getRespawnDelay( self.pers["team"] );
+			if ( !isDefined( respawnDelay ) )
+				respawnDelay = getdvarx( "scr_" + level.gameType + "_playerrespawndelay", "float", 10, -1, 300 );
+		}
 
 		if ( level.hardcoreMode && !isDefined( result ) && !respawnDelay )
 			respawnDelay = 10.0;

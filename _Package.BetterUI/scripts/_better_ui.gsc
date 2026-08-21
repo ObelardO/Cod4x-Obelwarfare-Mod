@@ -259,15 +259,20 @@ playerSessionWatcher()
 onPlayerDeath() {  }
 
 
-prematchOverWatcher() { }
-/*{
-    self waittill( "prematch_over" );
+prematchOverWatcher()
+{
+    level waittill( "prematch_over" );
 
-    if( isDefined( level.teamsStatus ) )
-    {   
-        setdvar( "ui_hud_show_teams_status", level.teamsStatus.showHUD );
+    for ( i = 0; i < level.players.size; i++ )
+    {
+        player = level.players[i];
+
+        if ( !isDefined( player ) || !isDefined( player.pers["lives"] ) )
+            continue;
+
+        player setClientDvar( "ui_hud_lives_count", getPlayerLivesCount( player ) );
     }
-}*/
+}
 
 
 gameOverWatcher() { }
