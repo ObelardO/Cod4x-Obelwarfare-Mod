@@ -1524,4 +1524,17 @@ REFERENCE SERVER_INFO
 LANG_RUSSIAN "»Ќ‘ќ–ћј÷»я"
 
 
+//******************************************************************************
+// openwarfare/_teamassign.gsc
+//******************************************************************************
+REFERENCE AUTOBALANCE_SKILL_NOW
+LANG_RUSSIAN "јвтобаланс команд по навыку"
+
+REFERENCE AUTOBALANCE_SKILL_SECONDS
+LANG_RUSSIAN "јвтобаланс команд по навыку через &&1 сек."
+
+REFERENCE AUTOBALANCE_SKILL_NEXT_ROUND
+LANG_RUSSIAN " оманды будут сбалансированы по навыку в следующем раунде"
+
+
 ENDMARKER

@@ -136,6 +136,9 @@ init()
 	// setDvar( "scr_teambalance_check_interval", "59" );
 	// setDvar( "scr_teambalance_delay", "15" );
 	// setDvar( "scr_teambalance_protected_clan_tags", "" );
+	// setDvar( "scr_teamassign_enable", "0" );
+	// setDvar( "scr_teamassign_priority", "0" );
+	// setDvar( "scr_teamassign_ignore_bots", "0" );
 	// setDvar( "scr_custom_teams_enable", "0" );
 	// setDvar( "scr_custom_teams_maintain_on_switch", "1" );
 	// setDvar( "scr_custom_teams_strings", "have won the match!;have won the round!;mission accomplished;eliminated;forfeited;have been all frozen!" );

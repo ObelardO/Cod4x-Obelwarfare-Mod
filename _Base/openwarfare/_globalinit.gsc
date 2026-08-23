@@ -43,6 +43,7 @@ init()
 	//thread openwarfare\_firingmode::init();	
 	thread openwarfare\_fitnesscs::init();	
 	thread openwarfare\_gamebalance::init();
+	thread openwarfare\_teamassign::init();
 	thread openwarfare\_globalchat::init();
 	thread openwarfare\_guidcs::init();
 	thread openwarfare\_healthsystem::init();

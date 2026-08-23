@@ -255,6 +255,9 @@ SetupCallbacks()
 	level.onEndGameMapVote = ::blank;
 
 	level.autoassign = ::menuAutoAssign;
+	level.pickAutoAssignTeam = ::pickAutoAssignTeam;
+	level.getTeamBalance = maps\mp\gametypes\_teams::getTeamBalance;
+	level.balanceTeams = maps\mp\gametypes\_teams::balanceMostRecent;
 	level.spectator = ::menuSpectator;
 	level.class = ::menuClass;
 	level.allies = ::menuAllies;
@@ -2266,6 +2269,31 @@ updateGameTypeDvars()
 }
 
 
+pickAutoAssignTeam()
+{
+	teams[0] = "allies";
+	teams[1] = "axis";
+	assignment = teams[randomInt(2)];
+	playerCounts = self maps\mp\gametypes\_teams::CountPlayers();
+
+	if ( playerCounts["allies"] == playerCounts["axis"] )
+	{
+		if ( getTeamScore( "allies" ) == getTeamScore( "axis" ) )
+			assignment = teams[randomInt(2)];
+		else if ( getTeamScore( "allies" ) < getTeamScore( "axis" ) )
+			assignment = "allies";
+		else
+			assignment = "axis";
+	}
+	else if ( playerCounts["allies"] < playerCounts["axis"] )
+		assignment = "allies";
+	else
+		assignment = "axis";
+
+	return assignment;
+}
+
+
 menuAutoAssign()
 {
 	teams[0] = "allies";
@@ -2300,28 +2328,7 @@ menuAutoAssign()
 		}
 
 		if ( assignment == "" || getDvarInt( "party_autoteams" ) == 0 )
-		{
-			playerCounts = self maps\mp\gametypes\_teams::CountPlayers();
-
-			// if teams are equal return the team with the lowest score
-			if ( playerCounts["allies"] == playerCounts["axis"] )
-			{
-				if( getTeamScore( "allies" ) == getTeamScore( "axis" ) )
-					assignment = teams[randomInt(2)];
-				else if ( getTeamScore( "allies" ) < getTeamScore( "axis" ) )
-					assignment = "allies";
-				else
-					assignment = "axis";
-			}
-			else if( playerCounts["allies"] < playerCounts["axis"] )
-			{
-				assignment = "allies";
-			}
-			else
-			{
-				assignment = "axis";
-			}
-		}
+			assignment = self [[level.pickAutoAssignTeam]]();
 
 		if ( assignment == self.pers["team"] && (self.sessionstate == "playing" || self.sessionstate == "dead") )
 		{

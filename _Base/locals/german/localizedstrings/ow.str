@@ -1404,4 +1404,17 @@ REFERENCE SERVER_INFO
 LANG_GERMAN "INFORMATIONEN"
 
 
+//******************************************************************************
+// openwarfare/_teamassign.gsc
+//******************************************************************************
+REFERENCE AUTOBALANCE_SKILL_NOW
+LANG_GERMAN "Ausgleich der Teams nach Spielstärke"
+
+REFERENCE AUTOBALANCE_SKILL_SECONDS
+LANG_GERMAN "Ausgleich der Teams nach Spielstärke in &&1 Sekunden"
+
+REFERENCE AUTOBALANCE_SKILL_NEXT_ROUND
+LANG_GERMAN "Die Teams werden nächste Runde nach Spielstärke ausgeglichen"
+
+
 ENDMARKER
