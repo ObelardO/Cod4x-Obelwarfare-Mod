@@ -85,6 +85,15 @@ init()
 	// setDvar( "scr_server_load_medium", "12" );
 
 	//******************************************************************************
+	// configs/server/gamebalance.cfg
+	//******************************************************************************
+	// setDvar( "scr_gamebalance_enable", "0" );
+	// setDvar( "scr_gamebalance_lives_enable", "1" );
+	// setDvar( "scr_gamebalance_lives_max", "0" );
+	// setDvar( "scr_gamebalance_respawn_enable", "1" );
+	// setDvar( "scr_gamebalance_respawn_min", "1" );
+
+	//******************************************************************************
 	// configs/server/overtime.cfg
 	//******************************************************************************
 	// setDvar( "scr_overtime_enable", "0" );

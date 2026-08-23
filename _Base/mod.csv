@@ -294,6 +294,7 @@ rawfile,openwarfare/_eventmanager.gsc
 rawfile,openwarfare/_extendedobituaries.gsc
 rawfile,openwarfare/_firingmode.gsc
 rawfile,openwarfare/_fitnesscs.gsc
+rawfile,openwarfare/_gamebalance.gsc
 rawfile,openwarfare/_globalchat.gsc
 rawfile,openwarfare/_globalinit.gsc
 rawfile,openwarfare/_guidcs.gsc
@@ -336,7 +337,6 @@ rawfile,openwarfare/_speedcontrol.gsc
 rawfile,openwarfare/_sponsors.gsc
 rawfile,openwarfare/_stationaryturrets.gsc
 rawfile,openwarfare/_strategyperiod.gsc
-rawfile,openwarfare/_teamimbalance.gsc
 rawfile,openwarfare/_teamstatus.gsc
 rawfile,openwarfare/_testbots.gsc
 rawfile,openwarfare/_thirdperson.gsc

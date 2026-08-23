@@ -42,6 +42,7 @@ init()
 	thread openwarfare\_extendedobituaries::init();
 	//thread openwarfare\_firingmode::init();	
 	thread openwarfare\_fitnesscs::init();	
+	thread openwarfare\_gamebalance::init();
 	thread openwarfare\_globalchat::init();
 	thread openwarfare\_guidcs::init();
 	thread openwarfare\_healthsystem::init();
@@ -76,7 +77,6 @@ init()
 	thread openwarfare\_speedcontrol::init();
 	thread openwarfare\_sponsors::init();
 	thread openwarfare\_stationaryturrets::init();
-	thread openwarfare\_teamimbalance::init();
 	thread openwarfare\_teamstatus::init();
 	thread openwarfare\_testbots::init();
 	thread openwarfare\_thirdperson::init();

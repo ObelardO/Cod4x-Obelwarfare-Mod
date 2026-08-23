@@ -15,53 +15,53 @@
 
 init()
 {
-	level.teamImbalance = spawnStruct();
-	level.teamImbalance.active = false;
-	level.teamImbalance.ready = false;
-	level.teamImbalance.imbalanced = false;
-	level.teamImbalance.timingsValid = false;
-	level.teamImbalance.largerTeam = "";
-	level.teamImbalance.smallerTeam = "";
+	level.gameBalance = spawnStruct();
+	level.gameBalance.active = false;
+	level.gameBalance.ready = false;
+	level.gameBalance.imbalanced = false;
+	level.gameBalance.timingsValid = false;
+	level.gameBalance.largerTeam = "";
+	level.gameBalance.smallerTeam = "";
 
-	level.teamImbalance.count = [];
-	level.teamImbalance.count["allies"] = 0;
-	level.teamImbalance.count["axis"] = 0;
-	level.teamImbalance.lives = [];
-	level.teamImbalance.lives["allies"] = 0;
-	level.teamImbalance.lives["axis"] = 0;
-	level.teamImbalance.respawnDelay = [];
-	level.teamImbalance.respawnDelay["allies"] = 0;
-	level.teamImbalance.respawnDelay["axis"] = 0;
-	level.teamImbalance.timeScale = [];
-	level.teamImbalance.timeScale["allies"] = 1.0;
-	level.teamImbalance.timeScale["axis"] = 1.0;
-	level.teamImbalance.rosterCount = [];
-	level.teamImbalance.rosterCount["allies"] = 0;
-	level.teamImbalance.rosterCount["axis"] = 0;
+	level.gameBalance.count = [];
+	level.gameBalance.count["allies"] = 0;
+	level.gameBalance.count["axis"] = 0;
+	level.gameBalance.lives = [];
+	level.gameBalance.lives["allies"] = 0;
+	level.gameBalance.lives["axis"] = 0;
+	level.gameBalance.respawnDelay = [];
+	level.gameBalance.respawnDelay["allies"] = 0;
+	level.gameBalance.respawnDelay["axis"] = 0;
+	level.gameBalance.timeScale = [];
+	level.gameBalance.timeScale["allies"] = 1.0;
+	level.gameBalance.timeScale["axis"] = 1.0;
+	level.gameBalance.rosterCount = [];
+	level.gameBalance.rosterCount["allies"] = 0;
+	level.gameBalance.rosterCount["axis"] = 0;
 
-	level.scr_teamimbalance_enable = getdvarx( "scr_teamimbalance_enable", "int", 0, 0, 1 );
+	level.scr_gamebalance_enable = getdvarx( "scr_gamebalance_enable", "int", 0, 0, 1 );
 
-	if ( !level.scr_teamimbalance_enable || !level.teamBased )
+	if ( !level.scr_gamebalance_enable || !level.teamBased )
 		return;
 
-	level.scr_teamimbalance_lives_enable = getdvarx( "scr_teamimbalance_lives_enable", "int", 1, 0, 1 );
-	level.scr_teamimbalance_lives_max = getdvarx( "scr_teamimbalance_lives_max", "int", 0, 0, 100 );
-	level.scr_teamimbalance_respawn_enable = getdvarx( "scr_teamimbalance_respawn_enable", "int", 1, 0, 1 );
-	level.scr_teamimbalance_respawn_min = getdvarx( "scr_teamimbalance_respawn_min", "float", 1, 0, 30 );
+	level.scr_gamebalance_lives_enable = getdvarx( "scr_gamebalance_lives_enable", "int", 1, 0, 1 );
+	level.scr_gamebalance_lives_max = getdvarx( "scr_gamebalance_lives_max", "int", 0, 0, 100 );
+	level.scr_gamebalance_respawn_enable = getdvarx( "scr_gamebalance_respawn_enable", "int", 1, 0, 1 );
+	level.scr_gamebalance_respawn_min = getdvarx( "scr_gamebalance_respawn_min", "float", 1, 0, 30 );
 
-	level.teamImbalance.active = true;
+	level.gameBalance.active = true;
 }
 
 
 isActive()
 {
-	return ( isDefined( level.teamImbalance ) && level.teamImbalance.active );
+	return ( isDefined( level.gameBalance ) && level.gameBalance.active );
 }
 
 
 isImbalanced()
 {
-	return ( isActive() && level.teamImbalance.imbalanced );
+	return ( isActive() && level.gameBalance.imbalanced );
 }
 
 
@@ -72,7 +72,7 @@ onRoundStart()
 
 	snapshotLives();
 	refreshTimings();
-	level.teamImbalance.ready = true;
+	level.gameBalance.ready = true;
 }
 
 
@@ -87,10 +87,10 @@ onRosterChanged()
 
 getTeamCount( team )
 {
-	if ( !isActive() || !isDefined( level.teamImbalance.count[team] ) )
+	if ( !isActive() || !isDefined( level.gameBalance.count[team] ) )
 		return 0;
 
-	return level.teamImbalance.count[team];
+	return level.gameBalance.count[team];
 }
 
 
@@ -99,7 +99,7 @@ getLargerTeam()
 	if ( !isActive() )
 		return "";
 
-	return level.teamImbalance.largerTeam;
+	return level.gameBalance.largerTeam;
 }
 
 
@@ -108,40 +108,40 @@ getSmallerTeam()
 	if ( !isActive() )
 		return "";
 
-	return level.teamImbalance.smallerTeam;
+	return level.gameBalance.smallerTeam;
 }
 
 
 getLives( team )
 {
-	if ( !isActive() || !isDefined( level.teamImbalance.lives[team] ) )
+	if ( !isActive() || !isDefined( level.gameBalance.lives[team] ) )
 		return level.numLives;
 
-	return level.teamImbalance.lives[team];
+	return level.gameBalance.lives[team];
 }
 
 
 getRespawnDelay( team )
 {
-	if ( !isActive() || !level.scr_teamimbalance_respawn_enable )
+	if ( !isActive() || !level.scr_gamebalance_respawn_enable )
 		return undefined;
 
 	if ( !isDefined( team ) || ( team != "allies" && team != "axis" ) )
 		return undefined;
 
-	if ( !level.teamImbalance.timingsValid )
+	if ( !level.gameBalance.timingsValid )
 		return undefined;
 
-	return level.teamImbalance.respawnDelay[team];
+	return level.gameBalance.respawnDelay[team];
 }
 
 
 getTimeScale( team )
 {
-	if ( !isActive() || !isDefined( team ) || !isDefined( level.teamImbalance.timeScale[team] ) )
+	if ( !isActive() || !isDefined( team ) || !isDefined( level.gameBalance.timeScale[team] ) )
 		return 1.0;
 
-	return level.teamImbalance.timeScale[team];
+	return level.gameBalance.timeScale[team];
 }
 
 
@@ -165,15 +165,15 @@ snapshotLives()
 	countAllies = countAlivePlayers( "allies" );
 	countAxis = countAlivePlayers( "axis" );
 
-	level.teamImbalance.count["allies"] = countAllies;
-	level.teamImbalance.count["axis"] = countAxis;
-	level.teamImbalance.lives["allies"] = level.numLives;
-	level.teamImbalance.lives["axis"] = level.numLives;
-	level.teamImbalance.imbalanced = false;
-	level.teamImbalance.largerTeam = "";
-	level.teamImbalance.smallerTeam = "";
+	level.gameBalance.count["allies"] = countAllies;
+	level.gameBalance.count["axis"] = countAxis;
+	level.gameBalance.lives["allies"] = level.numLives;
+	level.gameBalance.lives["axis"] = level.numLives;
+	level.gameBalance.imbalanced = false;
+	level.gameBalance.largerTeam = "";
+	level.gameBalance.smallerTeam = "";
 
-	if ( !level.scr_teamimbalance_lives_enable || level.numLives <= 1 )
+	if ( !level.scr_gamebalance_lives_enable || level.numLives <= 1 )
 		return;
 
 	if ( countAllies == 0 || countAxis == 0 || countAllies == countAxis )
@@ -194,9 +194,9 @@ snapshotLives()
 		smallerCount = countAllies;
 	}
 
-	level.teamImbalance.imbalanced = true;
-	level.teamImbalance.largerTeam = largerTeam;
-	level.teamImbalance.smallerTeam = smallerTeam;
+	level.gameBalance.imbalanced = true;
+	level.gameBalance.largerTeam = largerTeam;
+	level.gameBalance.smallerTeam = smallerTeam;
 
 	totalPool = largerCount * level.numLives;
 	baseLives = int( totalPool / smallerCount );
@@ -209,8 +209,8 @@ snapshotLives()
 	if ( smallerLives > maxLives )
 		smallerLives = maxLives;
 
-	level.teamImbalance.lives[largerTeam] = level.numLives;
-	level.teamImbalance.lives[smallerTeam] = smallerLives;
+	level.gameBalance.lives[largerTeam] = level.numLives;
+	level.gameBalance.lives[smallerTeam] = smallerLives;
 
 	applyTeamLives( largerTeam, level.numLives, 0 );
 	applyTeamLives( smallerTeam, baseLives, remainder );
@@ -227,11 +227,11 @@ refreshTimings()
 	if ( isDefined( level.playerCount ) && isDefined( level.playerCount["axis"] ) )
 		countAxis = level.playerCount["axis"];
 
-	level.teamImbalance.rosterCount["allies"] = countAllies;
-	level.teamImbalance.rosterCount["axis"] = countAxis;
-	level.teamImbalance.timeScale["allies"] = 1.0;
-	level.teamImbalance.timeScale["axis"] = 1.0;
-	level.teamImbalance.timingsValid = false;
+	level.gameBalance.rosterCount["allies"] = countAllies;
+	level.gameBalance.rosterCount["axis"] = countAxis;
+	level.gameBalance.timeScale["allies"] = 1.0;
+	level.gameBalance.timeScale["axis"] = 1.0;
+	level.gameBalance.timingsValid = false;
 
 	if ( countAllies == 0 || countAxis == 0 )
 		return;
@@ -241,16 +241,16 @@ refreshTimings()
 	else
 		largerCount = countAxis;
 
-	level.teamImbalance.timeScale["allies"] = ( countAllies * 1.0 ) / largerCount;
-	level.teamImbalance.timeScale["axis"] = ( countAxis * 1.0 ) / largerCount;
-	level.teamImbalance.timingsValid = true;
+	level.gameBalance.timeScale["allies"] = ( countAllies * 1.0 ) / largerCount;
+	level.gameBalance.timeScale["axis"] = ( countAxis * 1.0 ) / largerCount;
+	level.gameBalance.timingsValid = true;
 
-	if ( !level.scr_teamimbalance_respawn_enable )
+	if ( !level.scr_gamebalance_respawn_enable )
 		return;
 
 	baseDelay = getBaseRespawnDelay();
-	level.teamImbalance.respawnDelay["allies"] = scaleRespawnDelay( baseDelay, level.teamImbalance.timeScale["allies"] );
-	level.teamImbalance.respawnDelay["axis"] = scaleRespawnDelay( baseDelay, level.teamImbalance.timeScale["axis"] );
+	level.gameBalance.respawnDelay["allies"] = scaleRespawnDelay( baseDelay, level.gameBalance.timeScale["allies"] );
+	level.gameBalance.respawnDelay["axis"] = scaleRespawnDelay( baseDelay, level.gameBalance.timeScale["axis"] );
 }
 
 
@@ -318,8 +318,8 @@ applyTeamLives( team, baseLives, remainder )
 
 getMaxLives()
 {
-	if ( level.scr_teamimbalance_lives_max > 0 )
-		return level.scr_teamimbalance_lives_max;
+	if ( level.scr_gamebalance_lives_max > 0 )
+		return level.scr_gamebalance_lives_max;
 
 	return level.numLives * 2;
 }
@@ -343,8 +343,8 @@ scaleRespawnDelay( baseDelay, timeScale )
 
 	respawnDelay = baseDelay * timeScale;
 
-	if ( respawnDelay < level.scr_teamimbalance_respawn_min )
-		respawnDelay = level.scr_teamimbalance_respawn_min;
+	if ( respawnDelay < level.scr_gamebalance_respawn_min )
+		respawnDelay = level.scr_gamebalance_respawn_min;
 
 	return respawnDelay;
 }
