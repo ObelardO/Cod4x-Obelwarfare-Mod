@@ -47,6 +47,8 @@ start()
 	precacheString( &"OW_STRATEGY_GET_READY" );
 	precacheString( &"OW_STRATEGY_BYPASSED" );
 	precacheString( &"OW_PRESS_TO_BYPASS" );
+	precacheString( &"OW_STRATEGY_ROUND" );
+	precacheString( &"OW_STRATEGY_ROUND_LIMIT" );
 
 	precacheStatusIcon( "hud_status_ready" );
 
@@ -69,6 +71,19 @@ start()
 	level.strategyPeriodTimer.sort = 1001;
 	level.strategyPeriodTimer.foreground = false;
 	level.strategyPeriodTimer.hideWhenInMenu = true;
+
+	if ( isDefined( level.roundLimit ) && level.roundLimit != 1 ) {
+		currentRound = game["roundsplayed"] + 1;
+		level.strategyRoundText = createServerFontString( "default", 1.4 );
+		level.strategyRoundText setPoint( "CENTER", "CENTER", 0, -40 );
+		level.strategyRoundText.sort = 1001;
+		level.strategyRoundText.foreground = false;
+		level.strategyRoundText.hidewheninmenu = true;
+		if ( level.roundLimit > 1 )
+			level.strategyRoundText setText( &"OW_STRATEGY_ROUND_LIMIT", currentRound, level.roundLimit );
+		else
+			level.strategyRoundText setText( &"OW_STRATEGY_ROUND", currentRound );
+	}
 
 	// Loop until the strategy period is over
 	while ( level.inStrategyPeriod )
@@ -119,9 +134,21 @@ start()
 	}
 
 	visionSetNaked( maps\mp\gametypes\_globallogic::getNakedVision(), level.scr_match_strategy_getready_time );
-	wait ( level.scr_match_strategy_getready_time );
-	level.strategyPeriodText destroy();
-	level.strategyPeriodTimer destroy();
+	
+	fadeHudElem( level.strategyPeriodText, 0.5 );
+	fadeHudElem( level.strategyPeriodTimer, 0.5 );
+	fadeHudElem( level.strategyRoundText, 0.5 );
+	
+	wait ( 0.5 );
+
+	destroyHudElem( level.strategyPeriodText );
+	destroyHudElem( level.strategyPeriodTimer );
+	destroyHudElem( level.strategyRoundText );
+
+	if ( level.scr_match_strategy_getready_time > 0.5 )
+	{
+		wait ( level.scr_match_strategy_getready_time - 0.5 );
+	}
 
 	for ( index = 0; index < level.players.size; index++ )
 	{
@@ -221,12 +248,18 @@ strategyPeriod()
 
 	self.bypassedPeriodText setText( &"OW_STRATEGY_GET_READY" );
 
-	wait ( level.scr_match_strategy_getready_time );
+	wait ( level.scr_match_strategy_getready_time - 0.5 );
 
-	// Remove the HUD elements
-	if ( isDefined( self.bypassedPeriodText ) )
-		self.bypassedPeriodText destroy();
+	fadeHudElem( self.bypassedPeriodText, 0.5 );
+	wait ( 0.5 );
+	destroyHudElem( self.bypassedPeriodText );
 
 	// Enable player movement
 	self notify("strategyperiod_ended");
+}
+
+destroyHudElem( hudElem )
+{
+	if ( isDefined( hudElem ) )
+		hudElem destroy();
 }

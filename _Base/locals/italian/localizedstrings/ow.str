@@ -1005,6 +1005,12 @@ LANG_ITALIAN "Periodo per la strategia terminato"
 REFERENCE STRATEGY_PERIOD_STARTED
 LANG_ITALIAN "Tempo per la strategia:"
 
+REFERENCE STRATEGY_ROUND
+LANG_ITALIAN "Round &&1"
+
+REFERENCE STRATEGY_ROUND_LIMIT
+LANG_ITALIAN "Round &&1 di &&2"
+
 REFERENCE PRESS_TO_BYPASS
 LANG_ITALIAN "Premere^3 [{+activate}] ^7per saltare"
 

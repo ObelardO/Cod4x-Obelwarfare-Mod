@@ -1468,3 +1468,11 @@ getLastAlivePlayer()
 
 	return winner;
 }
+
+fadeHudElem( hudElem, fadeTime )
+{
+	if ( !isDefined( hudElem ) )
+		return;
+	hudElem fadeOverTime( fadeTime );
+	hudElem.alpha = 0;
+}

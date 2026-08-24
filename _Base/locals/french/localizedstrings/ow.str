@@ -1005,6 +1005,12 @@ LANG_FRENCH "Période de stratégie écoulée"
 REFERENCE STRATEGY_PERIOD_STARTED
 LANG_FRENCH "Période de stratégie :"
 
+REFERENCE STRATEGY_ROUND
+LANG_FRENCH "Manche &&1"
+
+REFERENCE STRATEGY_ROUND_LIMIT
+LANG_FRENCH "Manche &&1 sur &&2"
+
 REFERENCE PRESS_TO_BYPASS
 LANG_FRENCH "Appuyez sur^3 [{+activate}] ^7pour interrompre"
 

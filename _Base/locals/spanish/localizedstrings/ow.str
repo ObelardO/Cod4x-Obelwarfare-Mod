@@ -1005,6 +1005,12 @@ LANG_SPANISH "El tiempo estrategico se ha acabado"
 REFERENCE STRATEGY_PERIOD_STARTED
 LANG_SPANISH "Tiempo estrategico de ronda:"
 
+REFERENCE STRATEGY_ROUND
+LANG_SPANISH "Ronda &&1"
+
+REFERENCE STRATEGY_ROUND_LIMIT
+LANG_SPANISH "Ronda &&1 de &&2"
+
 REFERENCE PRESS_TO_BYPASS
 LANG_SPANISH "Pulsa^3 [{+activate}] ^7para evitar"
 

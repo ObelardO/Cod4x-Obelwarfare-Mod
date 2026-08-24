@@ -709,6 +709,11 @@ matchStartTimer()
 
 	visionSetNaked( GetNakedVision(), 2.0 );
 
+	fadeHudElem( matchStartText, 0.5 );
+	fadeHudElem( matchStartTimer, 0.5 );
+	fadeHudElem( game["matchReadyUpText"], 0.5 );
+	wait ( 0.5 );
+
 	matchStartTimer destroyElem();
 	matchStartText destroyElem();
 

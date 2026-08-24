@@ -1070,6 +1070,12 @@ LANG_RUSSIAN "Стратегическая пауза окончена."
 REFERENCE STRATEGY_PERIOD_STARTED
 LANG_RUSSIAN "Стратегическая пауза."
 
+REFERENCE STRATEGY_ROUND
+LANG_RUSSIAN "Раунд &&1"
+
+REFERENCE STRATEGY_ROUND_LIMIT
+LANG_RUSSIAN "Раунд &&1 из &&2"
+
 REFERENCE PRESS_TO_BYPASS
 LANG_RUSSIAN "Нажмите^3 [{+activate}] ^7для готовности"
 
