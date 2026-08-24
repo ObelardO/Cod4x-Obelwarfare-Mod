@@ -51,7 +51,7 @@ isIgnoredBot( player )
 	if ( !isDefined( player ) || !isPlayer( player ) )
 		return false;
 
-	return IsBot( player );
+	return isBot( player );
 }
 
 

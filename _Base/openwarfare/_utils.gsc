@@ -1165,6 +1165,12 @@ isSpectating()
 }
 
 
+isBot( player )
+{
+	return isDefined( player ) && isPlayer( player ) && player getGUID() == "0";
+}
+
+
 rulesetDvar( varName, varValue )
 {
 	// Store the variable for in-game monitoring

@@ -50,6 +50,7 @@ init()
 	level.scr_gamebalance_respawn_min = getdvarx( "scr_gamebalance_respawn_min", "float", 1, 0, 30 );
 
 	level.gameBalance.active = true;
+	level.getLateJoinerLives = ::getLateJoinerLives;
 }
 
 
@@ -70,7 +71,7 @@ onRoundStart()
 	if ( !isActive() )
 		return;
 
-	snapshotLives();
+	setupRoundLives();
 	refreshTimings();
 	level.gameBalance.ready = true;
 }
@@ -160,7 +161,78 @@ scaleTimeForPlayer( player, baseTime )
 }
 
 
-snapshotLives()
+getLateJoinerLives()
+{
+	if ( !isActive() || !level.gameBalance.ready || !level.numLives )
+		return self maps\mp\gametypes\_globallogic::getLateJoinerLives();
+
+	if ( !isDefined( self.pers["team"] ) )
+		return self maps\mp\gametypes\_globallogic::getLateJoinerLives();
+
+	team = self.pers["team"];
+	if ( team != "allies" && team != "axis" )
+		return self maps\mp\gametypes\_globallogic::getLateJoinerLives();
+
+	totalPercent = 0.0;
+	numPlayers = 0;
+	players = level.players;
+
+	for ( i = 0; i < players.size; i++ )
+	{
+		teammate = players[i];
+		if ( !isDefined( teammate ) || teammate == self )
+			continue;
+
+		if ( !isDefined( teammate.pers["team"] ) || teammate.pers["team"] != team )
+			continue;
+
+		if ( !isDefined( teammate.hasSpawned ) || !teammate.hasSpawned )
+			continue;
+
+		if ( !isDefined( teammate.pers["lives"] ) )
+			continue;
+
+		startLives = getStartLives( teammate, team );
+		if ( startLives < 1 )
+			continue;
+
+		if ( !isAlive( teammate ) && teammate.pers["lives"] <= 0 )
+			remaining = 0;
+		else
+			remaining = teammate.pers["lives"] + 1;
+		if ( remaining > startLives )
+			remaining = startLives;
+
+		totalPercent += ( remaining * 1.0 ) / startLives;
+		numPlayers++;
+	}
+
+	if ( numPlayers == 0 )
+		return 1;
+
+	lives = int( ( totalPercent / numPlayers ) * level.numLives + 0.5 );
+	if ( lives < 1 )
+		lives = 1;
+	if ( lives > level.numLives )
+		lives = level.numLives;
+
+	return lives;
+}
+
+
+getStartLives( player, team )
+{
+	if ( isDefined( player.gameBalanceStartLives ) && player.gameBalanceStartLives > 0 )
+		return player.gameBalanceStartLives;
+
+	if ( isDefined( level.gameBalance.lives[team] ) && level.gameBalance.lives[team] > 0 )
+		return level.gameBalance.lives[team];
+
+	return level.numLives;
+}
+
+
+setupRoundLives()
 {
 	countAllies = countAlivePlayers( "allies" );
 	countAxis = countAlivePlayers( "axis" );
@@ -312,6 +384,8 @@ applyTeamLives( team, baseLives, remainder )
 			player.pers["lives"] = targetLives - 1;
 		else
 			player.pers["lives"] = targetLives;
+
+		player.gameBalanceStartLives = targetLives;
 	}
 }
 

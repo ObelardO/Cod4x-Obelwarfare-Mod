@@ -258,6 +258,7 @@ SetupCallbacks()
 	level.pickAutoAssignTeam = ::pickAutoAssignTeam;
 	level.getTeamBalance = maps\mp\gametypes\_teams::getTeamBalance;
 	level.balanceTeams = maps\mp\gametypes\_teams::balanceMostRecent;
+	level.getLateJoinerLives = ::getLateJoinerLives;
 	level.spectator = ::menuSpectator;
 	level.class = ::menuClass;
 	level.allies = ::menuAllies;
@@ -741,8 +742,8 @@ spawnPlayer()
 
 	hadSpawned = self.hasSpawned;
 
-	if ( !hadSpawned && isDefined( level.gameBalance ) && level.gameBalance.ready && level.numLives )
-		self.pers["lives"] = getAverageNumlives();
+	if ( !hadSpawned && !level.inPrematchPeriod && level.numLives )
+		self.pers["lives"] = self [[level.getLateJoinerLives]]();
 
 	self.sessionstate = "playing";
 	self.spectatorclient = -1;
@@ -2181,7 +2182,7 @@ registerNumLivesDvar( dvarString, defaultValue, minValue, maxValue )
 }
 
 
-getAverageNumlives()
+getLateJoinerLives()
 {
 	totalLives = 0;
 	numPlayers = 0;
@@ -2208,6 +2209,12 @@ getAverageNumlives()
 		return 1;
 
 	return getValueInRange( int( totalLives / numPlayers ) + 1, 1, level.numLives );
+}
+
+
+getAverageNumlives()
+{
+	return getLateJoinerLives();
 }
 
 
@@ -4757,9 +4764,7 @@ forceSpawnPlayer()
 	}
 
 	if ( level.numLives )
-	{
-		self.pers["lives"] = getAverageNumlives();
-	}
+		self.pers["lives"] = self [[level.getLateJoinerLives]]();
 
 	self.waitingToSpawn = false;
 	self.waveSpawnIndex = undefined;
