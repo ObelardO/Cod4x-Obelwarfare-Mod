@@ -1404,4 +1404,17 @@ REFERENCE SERVER_INFO
 LANG_SPANISH "INFORMACION"
 
 
+//******************************************************************************
+// openwarfare/_teamassign.gsc
+//******************************************************************************
+REFERENCE AUTOBALANCE_SKILL_NOW
+LANG_SPANISH "Equilibrando equipos por habilidad"
+
+REFERENCE AUTOBALANCE_SKILL_SECONDS
+LANG_SPANISH "Equilibrando equipos por habilidad en &&1 segundos"
+
+REFERENCE AUTOBALANCE_SKILL_NEXT_ROUND
+LANG_SPANISH "Los equipos se equilibrarán por habilidad en la siguiente ronda"
+
+
 ENDMARKER

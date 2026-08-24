@@ -1404,4 +1404,17 @@ REFERENCE SERVER_INFO
 LANG_FRENCH "INFORMATION"
 
 
+//******************************************************************************
+// openwarfare/_teamassign.gsc
+//******************************************************************************
+REFERENCE AUTOBALANCE_SKILL_NOW
+LANG_FRENCH "Équilibrage des équipes par niveau"
+
+REFERENCE AUTOBALANCE_SKILL_SECONDS
+LANG_FRENCH "Équilibrage des équipes par niveau dans &&1 secondes"
+
+REFERENCE AUTOBALANCE_SKILL_NEXT_ROUND
+LANG_FRENCH "Les équipes seront équilibrées par niveau à la prochaine manche"
+
+
 ENDMARKER

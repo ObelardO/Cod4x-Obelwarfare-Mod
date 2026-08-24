@@ -255,6 +255,10 @@ SetupCallbacks()
 	level.onEndGameMapVote = ::blank;
 
 	level.autoassign = ::menuAutoAssign;
+	level.pickAutoAssignTeam = ::pickAutoAssignTeam;
+	level.getTeamBalance = maps\mp\gametypes\_teams::getTeamBalance;
+	level.balanceTeams = maps\mp\gametypes\_teams::balanceMostRecent;
+	level.getLateJoinerLives = ::getLateJoinerLives;
 	level.spectator = ::menuSpectator;
 	level.class = ::menuClass;
 	level.allies = ::menuAllies;
@@ -737,6 +741,9 @@ spawnPlayer()
 		self.sessionteam = "none";
 
 	hadSpawned = self.hasSpawned;
+
+	if ( !hadSpawned && !level.inPrematchPeriod && level.numLives )
+		self.pers["lives"] = self [[level.getLateJoinerLives]]();
 
 	self.sessionstate = "playing";
 	self.spectatorclient = -1;
@@ -2175,7 +2182,7 @@ registerNumLivesDvar( dvarString, defaultValue, minValue, maxValue )
 }
 
 
-getAverageNumlives()
+getLateJoinerLives()
 {
 	totalLives = 0;
 	numPlayers = 0;
@@ -2202,6 +2209,12 @@ getAverageNumlives()
 		return 1;
 
 	return getValueInRange( int( totalLives / numPlayers ) + 1, 1, level.numLives );
+}
+
+
+getAverageNumlives()
+{
+	return getLateJoinerLives();
 }
 
 
@@ -2263,6 +2276,31 @@ updateGameTypeDvars()
 }
 
 
+pickAutoAssignTeam()
+{
+	teams[0] = "allies";
+	teams[1] = "axis";
+	assignment = teams[randomInt(2)];
+	playerCounts = self maps\mp\gametypes\_teams::CountPlayers();
+
+	if ( playerCounts["allies"] == playerCounts["axis"] )
+	{
+		if ( getTeamScore( "allies" ) == getTeamScore( "axis" ) )
+			assignment = teams[randomInt(2)];
+		else if ( getTeamScore( "allies" ) < getTeamScore( "axis" ) )
+			assignment = "allies";
+		else
+			assignment = "axis";
+	}
+	else if ( playerCounts["allies"] < playerCounts["axis"] )
+		assignment = "allies";
+	else
+		assignment = "axis";
+
+	return assignment;
+}
+
+
 menuAutoAssign()
 {
 	teams[0] = "allies";
@@ -2297,28 +2335,7 @@ menuAutoAssign()
 		}
 
 		if ( assignment == "" || getDvarInt( "party_autoteams" ) == 0 )
-		{
-			playerCounts = self maps\mp\gametypes\_teams::CountPlayers();
-
-			// if teams are equal return the team with the lowest score
-			if ( playerCounts["allies"] == playerCounts["axis"] )
-			{
-				if( getTeamScore( "allies" ) == getTeamScore( "axis" ) )
-					assignment = teams[randomInt(2)];
-				else if ( getTeamScore( "allies" ) < getTeamScore( "axis" ) )
-					assignment = "allies";
-				else
-					assignment = "axis";
-			}
-			else if( playerCounts["allies"] < playerCounts["axis"] )
-			{
-				assignment = "allies";
-			}
-			else
-			{
-				assignment = "axis";
-			}
-		}
+			assignment = self [[level.pickAutoAssignTeam]]();
 
 		if ( assignment == self.pers["team"] && (self.sessionstate == "playing" || self.sessionstate == "dead") )
 		{
@@ -3097,6 +3114,12 @@ updateTeamStatus()
 
 	prof_end( "updateTeamStatus" );
 
+	if ( isDefined( level.gameBalance ) && level.gameBalance.active )
+	{
+		if ( !isDefined( level.gameBalance.rosterCount ) || level.playerCount["allies"] != level.gameBalance.rosterCount["allies"] || level.playerCount["axis"] != level.gameBalance.rosterCount["axis"] )
+			openwarfare\_gamebalance::onRosterChanged();
+	}
+
 	level updateGameEvents();
 }
 
@@ -3278,6 +3301,7 @@ startGame()
 	}
 
 	prematchPeriod();
+	openwarfare\_gamebalance::onRoundStart();
 	level notify("prematch_over");
 
 	thread timeLimitClock();
@@ -3655,7 +3679,11 @@ TimeUntilSpawn( includeTeamkillDelay )
 		else if ( isDefined( game["_overtime"] ) )
 			respawnDelay = self openwarfare\_overtime::respawnDelay();
 		else
-			respawnDelay = getdvarx( "scr_" + level.gameType + "_playerrespawndelay", "float", 10, -1, 300 );
+		{
+			respawnDelay = openwarfare\_gamebalance::getRespawnDelay( self.pers["team"] );
+			if ( !isDefined( respawnDelay ) )
+				respawnDelay = getdvarx( "scr_" + level.gameType + "_playerrespawndelay", "float", 10, -1, 300 );
+		}
 
 		if ( level.hardcoreMode && !isDefined( result ) && !respawnDelay )
 			respawnDelay = 10.0;
@@ -4736,9 +4764,7 @@ forceSpawnPlayer()
 	}
 
 	if ( level.numLives )
-	{
-		self.pers["lives"] = getAverageNumlives();
-	}
+		self.pers["lives"] = self [[level.getLateJoinerLives]]();
 
 	self.waitingToSpawn = false;
 	self.waveSpawnIndex = undefined;

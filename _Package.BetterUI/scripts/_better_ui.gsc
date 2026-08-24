@@ -116,6 +116,7 @@ init()
 
 
     level thread prematchOverWatcher();
+    level thread overtimeLivesWatcher();
     level thread gameOverWatcher();
 
     level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
@@ -221,36 +222,43 @@ playerSessionWatcher()
     self endon( "disconnect" );
 
     lastSpectatorClient = -1;
+    lastLivesCount = -1;
 
     for( ;; )
     {
         wait ( 0.05 );
 
-        if ( self.sessionstate != "spectator") continue;
+        if ( self.sessionstate != "spectator" )
+        {
+            lastSpectatorClient = -1;
+            lastLivesCount = -1;
+            continue;
+        }
+
+        if ( self.spectatorclient == -1 )
+            continue;
+
+        player = getPlayerByEntityNumber( self.spectatorclient );
+
+        if ( !isDefined( player ) )
+            continue;
+
+        livesCount = getPlayerLivesCount( player );
 
         if ( lastSpectatorClient != self.spectatorclient )
         {
             lastSpectatorClient = self.spectatorclient;
 
-            //Debug info
-            //self iPrintLn( self.name + "spectating changed to: ^2 " + self.spectatorclient );
+            self setClientDvar( "ui_hud_spectating_name", player.name );
 
-            if ( lastSpectatorClient == -1 ) continue;
+            if ( isDefined( player.totalBandages ) )
+                self setClientDvar( "ui_bandages_qty", player.totalBandages );
+        }
 
-            player = getPlayerByEntityNumber( lastSpectatorClient );
-
-            if ( isDefined( player ) )
-            {
-                self setClientDvars(
-                    "ui_hud_lives_count",       getPlayerLivesCount ( player ),
-                    "ui_hud_spectating_name",   player.name
-                );
-
-                if ( isDefined( player.totalBandages ) )
-                {
-                    self setClientDvar( "ui_bandages_qty", player.totalBandages );
-                }
-            }
+        if ( lastLivesCount != livesCount )
+        {
+            lastLivesCount = livesCount;
+            self setClientDvar( "ui_hud_lives_count", livesCount );
         }
     }
 }
@@ -259,15 +267,39 @@ playerSessionWatcher()
 onPlayerDeath() {  }
 
 
-prematchOverWatcher() { }
-/*{
-    self waittill( "prematch_over" );
+prematchOverWatcher()
+{
+    level waittill( "prematch_over" );
+    refreshPlayersLivesCount();
+}
 
-    if( isDefined( level.teamsStatus ) )
-    {   
-        setdvar( "ui_hud_show_teams_status", level.teamsStatus.showHUD );
+
+overtimeLivesWatcher()
+{
+    level endon( "game_ended" );
+
+    while ( !isDefined( level.inOvertime ) || !level.inOvertime )
+        wait( 0.05 );
+
+    refreshPlayersLivesCount();
+}
+
+
+refreshPlayersLivesCount()
+{
+    for ( i = 0; i < level.players.size; i++ )
+    {
+        player = level.players[i];
+
+        if ( !isDefined( player ) || player.sessionstate == "spectator" )
+            continue;
+
+        if ( !isDefined( player.pers["lives"] ) )
+            continue;
+
+        player setClientDvar( "ui_hud_lives_count", getPlayerLivesCount( player ) );
     }
-}*/
+}
 
 
 gameOverWatcher() { }
@@ -387,6 +419,9 @@ getPlayerByEntityNumber( entityNumber )
 
 getPlayerLivesCount( player )
 {
+    if ( isDefined( level.inOvertime ) && level.inOvertime )
+        return 1;
+
     return ( player.pers["lives"] + ( level.numLives != 0 ) );
 }
 

@@ -158,6 +158,9 @@ resetServerVariables()
 	// configs/server/others.cfg
 	variableNames[ variableNames.size ] = "scr_server_overall_admin_guids scr_antilag scr_allow_leader_dialog scr_allow_testclients scr_b3_poweradmin_enable scr_enable_music scr_enable_nightvision scr_forfeit_enable scr_g_gravity scr_game_matchstarttime scr_game_playerwaittime scr_intermission_time scr_server_load_low scr_server_load_medium scr_server_load_on_startup scr_testclients scr_tk_explosive_countasone scr_tk_limit scr_tk_punishment scr_tk_punishment_time";
 	
+	// configs/server/gamebalance.cfg
+	variableNames[ variableNames.size ] = "scr_gamebalance_enable scr_gamebalance_lives_enable scr_gamebalance_lives_max scr_gamebalance_respawn_enable scr_gamebalance_respawn_min";
+
 	// configs/server/overtime.cfg
 	variableNames[ variableNames.size ] = "scr_overtime_enable scr_overtime_incrementalspawndelay scr_overtime_numlives scr_overtime_playerrespawndelay scr_overtime_suddendeath scr_overtime_timelimit";
 	
@@ -174,7 +177,7 @@ resetServerVariables()
 	variableNames[ variableNames.size ] = "scr_sponsor_enable scr_sponsor_time scr_sponsor_interval";
 	
 	// configs/server/teams.cfg
-	variableNames[ variableNames.size ] = "scr_clan_vs_all_tags scr_clan_vs_all_team scr_custom_allies_headicon scr_custom_allies_logo scr_custom_allies_name scr_custom_axis_headicon scr_custom_axis_logo scr_custom_axis_name scr_custom_teams_enable scr_custom_teams_maintain_on_switch scr_custom_teams_strings scr_force_autoassign scr_force_autoassign_clan_tags scr_switch_teams_at_halftime scr_teambalance scr_teambalance_check_interval scr_teambalance_delay scr_teambalance_protected_clan_tags scr_teambalance_show_message";
+	variableNames[ variableNames.size ] = "scr_clan_vs_all_tags scr_clan_vs_all_team scr_custom_allies_headicon scr_custom_allies_logo scr_custom_allies_name scr_custom_axis_headicon scr_custom_axis_logo scr_custom_axis_name scr_custom_teams_enable scr_custom_teams_maintain_on_switch scr_custom_teams_strings scr_force_autoassign scr_force_autoassign_clan_tags scr_switch_teams_at_halftime scr_teambalance scr_teambalance_check_interval scr_teambalance_delay scr_teambalance_protected_clan_tags scr_teambalance_show_message scr_teamassign_enable scr_teamassign_priority scr_teamassign_ignore_bots";
 	
 	// configs/server/voting.cfg
 	variableNames[ variableNames.size ] = "scr_allowvote scr_allowvote_changegametype scr_allowvote_changemap scr_allowvote_clan_tags scr_allowvote_kickplayer scr_allowvote_nextmap scr_allowvote_restartmap";

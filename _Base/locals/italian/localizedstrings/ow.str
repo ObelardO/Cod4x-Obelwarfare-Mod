@@ -1404,4 +1404,17 @@ REFERENCE SERVER_INFO
 LANG_ITALIAN "INFORMAZIONE"
 
 
+//******************************************************************************
+// openwarfare/_teamassign.gsc
+//******************************************************************************
+REFERENCE AUTOBALANCE_SKILL_NOW
+LANG_ITALIAN "Bilanciamento squadre per abilita'"
+
+REFERENCE AUTOBALANCE_SKILL_SECONDS
+LANG_ITALIAN "Bilanciamento squadre per abilita' tra &&1 secondi"
+
+REFERENCE AUTOBALANCE_SKILL_NEXT_ROUND
+LANG_ITALIAN "Le squadre saranno bilanciate per abilita' nel prossimo turno"
+
+
 ENDMARKER

@@ -1504,4 +1504,17 @@ REFERENCE SERVER_INFO
 LANG_ENGLISH "INFORMATION"
 
 
+//******************************************************************************
+// openwarfare/_teamassign.gsc
+//******************************************************************************
+REFERENCE AUTOBALANCE_SKILL_NOW
+LANG_ENGLISH "Balancing teams by skill"
+
+REFERENCE AUTOBALANCE_SKILL_SECONDS
+LANG_ENGLISH "Balancing teams by skill in &&1 seconds"
+
+REFERENCE AUTOBALANCE_SKILL_NEXT_ROUND
+LANG_ENGLISH "Teams will be balanced by skill next round"
+
+
 ENDMARKER

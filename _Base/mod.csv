@@ -294,6 +294,8 @@ rawfile,openwarfare/_eventmanager.gsc
 rawfile,openwarfare/_extendedobituaries.gsc
 rawfile,openwarfare/_firingmode.gsc
 rawfile,openwarfare/_fitnesscs.gsc
+rawfile,openwarfare/_gamebalance.gsc
+rawfile,openwarfare/_teamassign.gsc
 rawfile,openwarfare/_globalchat.gsc
 rawfile,openwarfare/_globalinit.gsc
 rawfile,openwarfare/_guidcs.gsc

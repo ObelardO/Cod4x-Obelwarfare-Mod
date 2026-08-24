@@ -1397,4 +1397,17 @@ REFERENCE SERVER_INFO
 LANG_PORTUGUESE "INFORMAÇÕES"
 
 
+//******************************************************************************
+// openwarfare/_teamassign.gsc
+//******************************************************************************
+REFERENCE AUTOBALANCE_SKILL_NOW
+LANG_PORTUGUESE "Equilibrando times por habilidade"
+
+REFERENCE AUTOBALANCE_SKILL_SECONDS
+LANG_PORTUGUESE "Equilibrando times por habilidade em &&1 segundos"
+
+REFERENCE AUTOBALANCE_SKILL_NEXT_ROUND
+LANG_PORTUGUESE "Os times serão equilibrados por habilidade na próxima partida"
+
+
 ENDMARKER
