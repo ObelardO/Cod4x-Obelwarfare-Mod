@@ -72,14 +72,16 @@ start()
 	level.strategyPeriodTimer.foreground = false;
 	level.strategyPeriodTimer.hideWhenInMenu = true;
 
-	if ( isDefined( level.roundLimit ) && level.roundLimit != 1 ) {
+	if ( isDefined( game["_overtime"] ) || ( isDefined( level.roundLimit ) && level.roundLimit != 1 ) ) {
 		currentRound = game["roundsplayed"] + 1;
 		level.strategyRoundText = createServerFontString( "default", 1.4 );
 		level.strategyRoundText setPoint( "CENTER", "CENTER", 0, -40 );
 		level.strategyRoundText.sort = 1001;
 		level.strategyRoundText.foreground = false;
 		level.strategyRoundText.hidewheninmenu = true;
-		if ( level.roundLimit > 1 )
+		if ( isDefined( game["_overtime"] ) )
+			level.strategyRoundText setText( &"MP_OVERTIME" );
+		else if ( level.roundLimit > 1 )
 			level.strategyRoundText setText( &"OW_STRATEGY_ROUND_LIMIT", currentRound, level.roundLimit );
 		else
 			level.strategyRoundText setText( &"OW_STRATEGY_ROUND", currentRound );
