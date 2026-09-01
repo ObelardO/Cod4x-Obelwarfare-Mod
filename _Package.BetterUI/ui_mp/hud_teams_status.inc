@@ -98,7 +98,7 @@
     { \
         rect		0 TS_HUD_OFFSET_Y 1 1 TS_HUD_ALIGN \
         exp         rect Y( TS_HUD_SCORE_POS_Y ) \
-        exp         rect X( xOffsetOp * TS_HUD_SCORE_POS_X * HUD_MINUS_ONE - 0.5 ) \
+        exp         rect X( xOffsetOp * TS_HUD_SCORE_POS_X * HUD_MINUS_ONE - 0.66 ) \
         exp         text( score ) \
         textfont	UI_FONT_OBJECTIVE \
         textscale	0.3 \
