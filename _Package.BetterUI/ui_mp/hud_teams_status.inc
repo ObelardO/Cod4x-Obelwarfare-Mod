@@ -45,7 +45,7 @@
 #define TS_PLAYER_SCORE_RANK      ( dvarint( "ui_hud_teams_status_player_rank" ) )
  
 #define TS_HUD_PLAYER_SCORE_1     ( scoreatrank( 1 ) )
-#define TS_HUD_PLAYER_SCORE_2     ( TS_IS_PLAYER_LOSING * player ( score ) ) + ( TS_IS_PLAYER_WINNING * scoreatrank( 2 ) )
+#define TS_HUD_PLAYER_SCORE_2     ( ( TS_IS_PLAYER_LOSING * scoreatrank( TS_PLAYER_SCORE_RANK ) ) + ( TS_IS_PLAYER_WINNING * scoreatrank( 2 ) ) )
 
 #define TS_HUD_PLAYER_INDEX       ( TS_IS_PLAYER_LOSING * TS_PLAYER_SCORE_RANK ) + ( TS_IS_PLAYER_WINNING * 2 )
 
@@ -118,7 +118,7 @@
 
 #define TS_HUD_SCOREBAR( xOffsetOp, widthMod, isVisibleExp, score ) \
     TS_HUD_SCOREBAR_RECT( xOffsetOp, widthMod, TS_HUD_SCOREBAR_WIDTH, isVisibleExp, 0 0 0 0.3 ) \
-    TS_HUD_SCOREBAR_RECT( xOffsetOp, widthMod, ( TS_HUD_SCOREBAR_WIDTH * ( score / dvarInt( "ui_scorelimit" ) ) ), isVisibleExp, 1 1 1 HUD_FOREGROUND_ALPHA ) \
+    TS_HUD_SCOREBAR_RECT( xOffsetOp, widthMod, TS_HUD_SCOREBAR_WIDTH_FILLED( score ), isVisibleExp, TS_HUD_SCORECOLOR_BASE ) \
     TS_HUD_SCOREBAR_BORDER( xOffsetOp, isVisibleExp )
 
 #define TS_HUD_SCOREBAR_RECT( xOffsetOp, widthMod, barWidth, isVisibleExp, color ) \
@@ -134,6 +134,8 @@
         visible         when ( isVisibleExp && TS_HUD_SCOREBAR_IS_VISIBLE ) \
         decoration \
     }
+
+#define TS_HUD_SCOREBAR_WIDTH_FILLED( scoreExp ) ( TS_HUD_SCOREBAR_WIDTH * ( scoreExp / dvarInt( "ui_scorelimit" ) ) )
 
 #define TS_HUD_SCOREBAR_BORDER( xOffsetOp, isVisibleExp ) \
     itemDef \
