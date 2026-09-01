@@ -1,0 +1,61 @@
+//**************************************************************//
+//            Website: http://cod4.obelardo.ru                  //
+//**************************************************************//
+
+#include "ui/menudef.h"
+#include "ui_mp/common_macro.inc"
+
+menuDef
+{
+	name			"finalduel_vote"
+	fullScreen		0
+	rect			0 0 640 480
+	focusColor		1 1 1 1
+	style			WINDOW_STYLE_EMPTY
+	onEsc			{ close self; }
+
+	execKey "1" { play "mouse_click"; scriptmenuresponse "yes"; close self; }
+	execKey "2" { play "mouse_click"; scriptmenuresponse "no"; close self; }
+
+	itemDef
+	{
+		name		"title"
+		type		ITEM_TYPE_TEXT
+		rect		-200 40 400 24 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_TOP
+		textAlign	ITEM_ALIGN_CENTER
+		textScale	0.4
+		textFont	UI_FONT_NORMAL
+		foreColor	1 1 1 1
+		text		"@OW_FINALDUEL_VOTE_TITLE"
+		visible		1
+		decoration
+	}
+
+	itemDef
+	{
+		name		"btn_yes"
+		type		ITEM_TYPE_BUTTON
+		rect		-140 70 120 22 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_TOP
+		textAlign	ITEM_ALIGN_CENTER
+		textScale	0.32
+		textFont	UI_FONT_NORMAL
+		foreColor	0.6 1 0.6 1
+		text		"@OW_FINALDUEL_YES"
+		visible		1
+		action		{ play "mouse_click"; scriptmenuresponse "yes"; close self; }
+	}
+
+	itemDef
+	{
+		name		"btn_no"
+		type		ITEM_TYPE_BUTTON
+		rect		20 70 120 22 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_TOP
+		textAlign	ITEM_ALIGN_CENTER
+		textScale	0.32
+		textFont	UI_FONT_NORMAL
+		foreColor	1 0.5 0.5 1
+		text		"@OW_FINALDUEL_NO"
+		visible		1
+		action		{ play "mouse_click"; scriptmenuresponse "no"; close self; }
+	}
+}

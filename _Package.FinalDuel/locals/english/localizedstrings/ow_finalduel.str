@@ -1,0 +1,54 @@
+//**************************************************************//
+//            Website: http://cod4.obelardo.ru                  //
+//**************************************************************//
+
+VERSION          "1"
+CONFIG           "C:\trees\cod3\cod3\bin\StringEd.cfg"
+FILENOTES        ""
+
+REFERENCE CALLVOTE
+LANG_ENGLISH "Final Duel"
+
+REFERENCE VOTE_TITLE
+LANG_ENGLISH "End round with Final Duel?"
+
+REFERENCE HUD
+LANG_ENGLISH "Final Duel vote"
+
+REFERENCE HUD_YES
+LANG_ENGLISH "Yes: &&1"
+
+REFERENCE HUD_NO
+LANG_ENGLISH "No: &&1"
+
+REFERENCE HUD_NEED
+LANG_ENGLISH "Need: &&1"
+
+REFERENCE HUD_TIME
+LANG_ENGLISH "&&1s"
+
+REFERENCE YES
+LANG_ENGLISH "Yes (1)"
+
+REFERENCE NO
+LANG_ENGLISH "No (2)"
+
+REFERENCE STARTED
+LANG_ENGLISH "Final Duel vote called by &&1"
+
+REFERENCE PASSED
+LANG_ENGLISH "Final Duel started"
+
+REFERENCE FAILED
+LANG_ENGLISH "Final Duel vote failed"
+
+REFERENCE ALREADY
+LANG_ENGLISH "A Final Duel vote was already called this round"
+
+REFERENCE NOT_ALIVE
+LANG_ENGLISH "Only alive players can call a Final Duel"
+
+REFERENCE NEED_PLAYERS
+LANG_ENGLISH "Not enough alive players for a Final Duel"
+
+ENDMARKER

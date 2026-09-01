@@ -1,0 +1,54 @@
+//**************************************************************//
+//            Website: http://cod4.obelardo.ru                  //
+//**************************************************************//
+
+VERSION          "1"
+CONFIG           "C:\trees\cod3\cod3\bin\StringEd.cfg"
+FILENOTES        ""
+
+REFERENCE CALLVOTE
+LANG_RUSSIAN "Финальная дуэль"
+
+REFERENCE VOTE_TITLE
+LANG_RUSSIAN "Закончить раунд финальной дуэлью?"
+
+REFERENCE HUD
+LANG_RUSSIAN "Голосование: финальная дуэль"
+
+REFERENCE HUD_YES
+LANG_RUSSIAN "За: &&1"
+
+REFERENCE HUD_NO
+LANG_RUSSIAN "Против: &&1"
+
+REFERENCE HUD_NEED
+LANG_RUSSIAN "Нужно: &&1"
+
+REFERENCE HUD_TIME
+LANG_RUSSIAN "&&1с"
+
+REFERENCE YES
+LANG_RUSSIAN "Да (1)"
+
+REFERENCE NO
+LANG_RUSSIAN "Нет (2)"
+
+REFERENCE STARTED
+LANG_RUSSIAN "Финальную дуэль предложил &&1"
+
+REFERENCE PASSED
+LANG_RUSSIAN "Финальная дуэль началась"
+
+REFERENCE FAILED
+LANG_RUSSIAN "Голосование за финальную дуэль провалено"
+
+REFERENCE ALREADY
+LANG_RUSSIAN "Голосование за финальную дуэль уже было в этом раунде"
+
+REFERENCE NOT_ALIVE
+LANG_RUSSIAN "Только живые игроки могут начать финальную дуэль"
+
+REFERENCE NEED_PLAYERS
+LANG_RUSSIAN "Недостаточно живых игроков для финальной дуэли"
+
+ENDMARKER

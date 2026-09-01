@@ -1,0 +1,8 @@
+#Final Duel: Scripts
+rawfile,scripts/_finalduel.gsc
+
+#Final Duel: Menus
+menufile,ui_mp/scriptmenus/finalduel_vote.menu
+
+#Final Duel: Locals
+localize,ow_finalduel
