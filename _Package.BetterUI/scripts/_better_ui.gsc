@@ -83,6 +83,10 @@ init()
 
     // Team status
     scr_hud_show_teams_status = getdvarx( "scr_hud_show_teams_status", "int", 1, 0, 2 );
+    scr_hud_show_teams_status_scorebars = getdvarx( "scr_hud_show_teams_status_scorebars", "int", 1, 0, 1 );
+
+    setDvar( "ui_hud_show_teams_status_scorebars", scr_hud_show_teams_status_scorebars );
+    makeDvarServerInfo( "ui_hud_show_teams_status_scorebars" );
 
     if( scr_hud_show_teams_status > 0 )
     {

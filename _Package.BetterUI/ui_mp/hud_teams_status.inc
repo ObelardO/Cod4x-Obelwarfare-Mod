@@ -56,6 +56,17 @@
 #define TS_HUD_SCORECOLOR_TIE     1.00 1.00 1.00 1.00
 
 
+#define TS_HUD_SCOREBAR_IS_VISIBLE  ( ( dvarint( "ui_hud_show_teams_status_scorebars" ) > 0 ) && ( dvarInt( "ui_scorelimit" ) > 0 ) )
+#define TS_HUD_SCOREBAR_WIDTH       60
+#define TS_HUD_SCOREBAR_HEIGHT      3
+#define TS_HUD_SCOREBAR_OFFSET_Y    5
+#define TS_HUD_SCOREBAR_POS_Y       ( TS_HUD_OFFSET_Y + TS_HUD_SCOREBAR_OFFSET_Y )
+
+#define TS_HUD_SCORE_OFFSET_Y       4
+#define TS_HUD_SCORE_POS_X          ( TS_HUD_SPACING_X_HALF + INV_BACK_SIZE + 5 )
+#define TS_HUD_SCORE_POS_Y          ( TS_HUD_OFFSET_Y - ( TS_HUD_SCOREBAR_IS_VISIBLE * TS_HUD_SCORE_OFFSET_Y ) )
+
+
 #define TS_HUD_TIMER_VISIBLE      1
 #define TS_HUD_BOMB_SIZE          36
 #define TS_HUD_BOMB_SIZE_HALF     18
@@ -65,13 +76,15 @@
     INV_SLOT_ICON_LEFT( TS_HUD_ALIGN, TS_HUD_POS_X, isVisibleExp, INV_BACK_MAT_DOUBLE, INV_BACK_SIZE_DOUBLE, INV_BACK_ALPHA, style WINDOW_STYLE_SHADER, iconMaterial, "", 1 ) \
     INV_SLOT_AMMO_LEFT( TS_HUD_ALIGN, TS_HUD_POS_X, isVisibleExp, exp text( count ), INV_CLR_WHITE, 1, INV_AMMO_POS_FIX_NONE ) \
     INV_SLOT_AMMO_LEFT( TS_HUD_ALIGN, TS_HUD_POS_X, isVisibleExp && isCountBlinkingExp == 1, exp text( count ), INV_CLR_RED, INV_LAST_ALPHA_EXP, INV_AMMO_POS_FIX_NONE ) \
-    TS_HUD_TEAM_SCORE( INV_ALIGN_X_OP_LEFT, ITEM_ALIGN_MIDDLE_RIGHT, isVisibleExp, score, isWinExp, isLoseExp, isTieExp )
+    TS_HUD_TEAM_SCORE( INV_ALIGN_X_OP_LEFT, ITEM_ALIGN_MIDDLE_RIGHT, isVisibleExp, score, isWinExp, isLoseExp, isTieExp ) \
+    TS_HUD_SCOREBAR_LEFT( isVisibleExp, score )
 
 #define TS_HUD_TEAM_RIGHT( isVisibleExp, iconMaterial, count, isCountBlinkingExp, score, isWinExp, isLoseExp, isTieExp ) \
     INV_SLOT_ICON_RIGHT( TS_HUD_ALIGN, TS_HUD_POS_X, isVisibleExp, INV_BACK_MAT_DOUBLE, INV_BACK_SIZE_DOUBLE, INV_BACK_ALPHA, style WINDOW_STYLE_SHADER, iconMaterial, "", 1 ) \
     INV_SLOT_AMMO_RIGHT( TS_HUD_ALIGN, TS_HUD_POS_X, isVisibleExp, exp text( count ), INV_CLR_WHITE, 1, INV_AMMO_POS_FIX_NONE ) \
     INV_SLOT_AMMO_RIGHT( TS_HUD_ALIGN, TS_HUD_POS_X, isVisibleExp && isCountBlinkingExp == 1, exp text( count ), INV_CLR_RED, INV_LAST_ALPHA_EXP, INV_AMMO_POS_FIX_NONE ) \
-    TS_HUD_TEAM_SCORE( INV_ALIGN_X_OP_RIGHT, ITEM_ALIGN_MIDDLE_LEFT, isVisibleExp, score, isWinExp, isLoseExp, isTieExp )
+    TS_HUD_TEAM_SCORE( INV_ALIGN_X_OP_RIGHT, ITEM_ALIGN_MIDDLE_LEFT, isVisibleExp, score, isWinExp, isLoseExp, isTieExp ) \
+    TS_HUD_SCOREBAR_RIGHT( isVisibleExp, score )
 
 #define TS_HUD_TEAM_SCORE( xOffsetOp, textAlign, isVisibleExp, score, isWinExp, isLoseExp, isTieExp ) \
     TS_HUD_ITEM_SCORE( xOffsetOp, textAlign, TS_HUD_SCORECOLOR_BASE, score, isVisibleExp ) \
@@ -84,8 +97,8 @@
     itemDef \
     { \
         rect		0 TS_HUD_OFFSET_Y 1 1 TS_HUD_ALIGN \
-        exp         rect Y( TS_HUD_OFFSET_Y ) \
-        exp         rect X( xOffsetOp * ( TS_HUD_SPACING_X_HALF + INV_BACK_SIZE + 5 ) * HUD_MINUS_ONE ) \
+        exp         rect Y( TS_HUD_SCORE_POS_Y ) \
+        exp         rect X( xOffsetOp * TS_HUD_SCORE_POS_X * HUD_MINUS_ONE ) \
         exp         text( score ) \
         textfont	UI_FONT_OBJECTIVE \
         textscale	0.3 \
@@ -93,6 +106,31 @@
         textstyle	ITEM_TEXTSTYLE_SHADOWEDMORE \
         forecolor   color \
         visible 	when( isVisibleExp ); \
+        decoration \
+    }
+
+
+#define TS_HUD_SCOREBAR_LEFT( isVisibleExp, score ) \
+    TS_HUD_SCOREBAR( INV_ALIGN_X_OP_LEFT, INV_ALIGN_W_MOD_RIGHT, isVisibleExp, score )
+
+#define TS_HUD_SCOREBAR_RIGHT( isVisibleExp, score ) \
+    TS_HUD_SCOREBAR( INV_ALIGN_X_OP_RIGHT, INV_ALIGN_W_MOD_LEFT, isVisibleExp, score )
+
+#define TS_HUD_SCOREBAR( xOffsetOp, widthMod, isVisibleExp, score ) \
+    TS_HUD_SCOREBAR_RECT( xOffsetOp, widthMod, TS_HUD_SCOREBAR_WIDTH, isVisibleExp, 0 0 0 0.3 ) \
+    TS_HUD_SCOREBAR_RECT( xOffsetOp, widthMod, ( TS_HUD_SCOREBAR_WIDTH * ( score / dvarInt( "ui_scorelimit" ) ) ), isVisibleExp, 1 1 1 HUD_FOREGROUND_ALPHA )
+
+#define TS_HUD_SCOREBAR_RECT( xOffsetOp, widthMod, barWidth, isVisibleExp, color ) \
+    itemDef \
+    { \
+        style           WINDOW_STYLE_SHADER \
+        rect            0 0 0 TS_HUD_SCOREBAR_HEIGHT TS_HUD_ALIGN \
+        exp             rect Y( TS_HUD_SCOREBAR_POS_Y ) \
+        exp             rect X( xOffsetOp * TS_HUD_SCORE_POS_X * HUD_MINUS_ONE - widthMod * barWidth ) \
+        exp             rect W( barWidth ) \
+        background      "white" \
+        forecolor       color \
+        visible         when ( isVisibleExp && TS_HUD_SCOREBAR_IS_VISIBLE ) \
         decoration \
     }
 
