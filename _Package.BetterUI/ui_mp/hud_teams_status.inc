@@ -59,6 +59,7 @@
 #define TS_HUD_SCOREBAR_IS_VISIBLE  ( ( dvarint( "ui_hud_show_teams_status_scorebars" ) > 0 ) && ( dvarInt( "ui_scorelimit" ) > 0 ) )
 #define TS_HUD_SCOREBAR_WIDTH       60
 #define TS_HUD_SCOREBAR_HEIGHT      3
+#define TS_HUD_SCOREBAR_BORDER_W    0.5
 #define TS_HUD_SCOREBAR_OFFSET_Y    5
 #define TS_HUD_SCOREBAR_POS_Y       ( TS_HUD_OFFSET_Y + TS_HUD_SCOREBAR_OFFSET_Y )
 
@@ -92,13 +93,12 @@
     TS_HUD_ITEM_SCORE( xOffsetOp, textAlign, TS_HUD_SCORECOLOR_LOSE, score, isVisibleExp && isLoseExp ) \
     TS_HUD_ITEM_SCORE( xOffsetOp, textAlign, TS_HUD_SCORECOLOR_TIE,  score, isVisibleExp && isTieExp )
 
-
 #define TS_HUD_ITEM_SCORE( xOffsetOp, textAlign, color, score, isVisibleExp ) \
     itemDef \
     { \
         rect		0 TS_HUD_OFFSET_Y 1 1 TS_HUD_ALIGN \
         exp         rect Y( TS_HUD_SCORE_POS_Y ) \
-        exp         rect X( xOffsetOp * TS_HUD_SCORE_POS_X * HUD_MINUS_ONE ) \
+        exp         rect X( xOffsetOp * TS_HUD_SCORE_POS_X * HUD_MINUS_ONE - 0.5 ) \
         exp         text( score ) \
         textfont	UI_FONT_OBJECTIVE \
         textscale	0.3 \
@@ -118,7 +118,8 @@
 
 #define TS_HUD_SCOREBAR( xOffsetOp, widthMod, isVisibleExp, score ) \
     TS_HUD_SCOREBAR_RECT( xOffsetOp, widthMod, TS_HUD_SCOREBAR_WIDTH, isVisibleExp, 0 0 0 0.3 ) \
-    TS_HUD_SCOREBAR_RECT( xOffsetOp, widthMod, ( TS_HUD_SCOREBAR_WIDTH * ( score / dvarInt( "ui_scorelimit" ) ) ), isVisibleExp, 1 1 1 HUD_FOREGROUND_ALPHA )
+    TS_HUD_SCOREBAR_RECT( xOffsetOp, widthMod, ( TS_HUD_SCOREBAR_WIDTH * ( score / dvarInt( "ui_scorelimit" ) ) ), isVisibleExp, 1 1 1 HUD_FOREGROUND_ALPHA ) \
+    TS_HUD_SCOREBAR_BORDER( xOffsetOp, isVisibleExp )
 
 #define TS_HUD_SCOREBAR_RECT( xOffsetOp, widthMod, barWidth, isVisibleExp, color ) \
     itemDef \
@@ -130,6 +131,19 @@
         exp             rect W( barWidth ) \
         background      "white" \
         forecolor       color \
+        visible         when ( isVisibleExp && TS_HUD_SCOREBAR_IS_VISIBLE ) \
+        decoration \
+    }
+
+#define TS_HUD_SCOREBAR_BORDER( xOffsetOp, isVisibleExp ) \
+    itemDef \
+    { \
+        style           WINDOW_STYLE_SHADER \
+        rect            0 0 TS_HUD_SCOREBAR_BORDER_W TS_HUD_SCOREBAR_HEIGHT TS_HUD_ALIGN \
+        exp             rect Y( TS_HUD_SCOREBAR_POS_Y ) \
+        exp             rect X( xOffsetOp * ( TS_HUD_SCORE_POS_X * HUD_MINUS_ONE - TS_HUD_SCOREBAR_WIDTH ) ) \
+        background      "white" \
+        forecolor       1 1 1 0.95 \
         visible         when ( isVisibleExp && TS_HUD_SCOREBAR_IS_VISIBLE ) \
         decoration \
     }
