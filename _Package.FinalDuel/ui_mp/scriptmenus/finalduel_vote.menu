@@ -1,0 +1,130 @@
+//**************************************************************//
+//            Website: http://cod4.obelardo.ru                  //
+//**************************************************************//
+
+#include "ui/menudef.h"
+#include "ui_mp/common_macro.inc"
+
+#define CHOICE_GROUP			"finalduel_vote"
+
+#include "ui_mp/menustyle.inc"
+#include "ui/choices_setup_common.menu"
+
+#include "ui_mp/popupstyle.inc"
+#include "ui/choices_setup_popmenu.menu"
+
+#undef CHOICE_SIZE_X
+#define CHOICE_SIZE_X			210
+
+#undef CHOICE_POPUP_BACKCOLOR
+#define CHOICE_POPUP_BACKCOLOR	0.2 0.2 0.22 0.65
+
+#undef CHOICE_HORIZONTAL_ALIGN
+#define CHOICE_HORIZONTAL_ALIGN	HORIZONTAL_ALIGN_LEFT
+#undef CHOICE_VERTICAL_ALIGN
+#define CHOICE_VERTICAL_ALIGN	VERTICAL_ALIGN_BOTTOM
+
+#define ORIGIN_QUICKMESSAGEWINDOW		0 16
+
+{
+	menuDef
+	{
+		name			"finalduel_vote"
+		visible			0
+		fullscreen		0
+		rect			4 ( 0 - CHOICE_POPUP_HEIGHT( 4 ) - 8 ) CHOICE_POPUP_WIDTH CHOICE_POPUP_HEIGHT( 4 ) CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN
+		border			1
+		bordersize		CHOICE_POPUP_BORDER_WIDTH
+		bordercolor		0 0 0 0
+		focusColor		COLOR_FOCUSED
+		style			WINDOW_STYLE_FILLED
+		popup
+
+		onOpen
+		{
+			setDvar cl_bypassMouseInput "1";
+		}
+		onClose
+		{
+			setDvar cl_bypassMouseInput "0";
+		}
+		onESC
+		{
+			;
+		}
+
+		PREPROC_SHADER_DRAW( -4 -4 CHOICE_POPUP_WIDTH CHOICE_POPUP_HEIGHT( 4 ), 0 0, "white", CHOICE_POPUP_BACKCOLOR, 1, CHOICE_POPUP_BORDER_WIDTH, CHOICE_POPUP_BORDER_COLOR )
+
+		CHOICE_POPMENU_TITLE( "@OW_FINALDUEL_VOTE_TITLE" )
+
+		itemDef
+		{
+			name			"vote_time"
+			rect			( CHOICE_POPUP_WIDTH - 8 ) 2 0 0
+			forecolor		1 1 1 1
+			textfont		UI_FONT_NORMAL
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textscale		TEXTSIZE_SMALL
+			textalign		ITEM_ALIGN_TOP_RIGHT
+			exp				text( dvarInt( "ui_finalduel_time" ) );
+			visible			1
+			decoration
+		}
+
+		itemDef
+		{
+			name			"vote_yes"
+			rect			16 20 0 0
+			origin			ORIGIN_QUICKMESSAGEWINDOW
+			forecolor		1 1 1 1
+			textfont		UI_FONT_NORMAL
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textscale		TEXTSIZE_SMALL
+			textaligny		8
+			exp				text( locString( "@OW_FINALDUEL_VOTE_YES", dvarInt( "ui_finalduel_yes" ) ) );
+			visible			when( dvarString( "ui_finalduel_vote" ) != "no" );
+			decoration
+		}
+		itemDef
+		{
+			rect			16 20 0 0
+			origin			ORIGIN_QUICKMESSAGEWINDOW
+			forecolor		COLOR_DISABLED
+			textfont		UI_FONT_NORMAL
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textscale		TEXTSIZE_SMALL
+			textaligny		8
+			exp				text( locString( "@OW_FINALDUEL_VOTE_YES", dvarInt( "ui_finalduel_yes" ) ) );
+			visible			when( dvarString( "ui_finalduel_vote" ) == "no" );
+		}
+		execKey "1" { play "mouse_click"; scriptmenuresponse "yes"; }
+
+		itemDef
+		{
+			name			"vote_no"
+			rect			16 36 0 0
+			origin			ORIGIN_QUICKMESSAGEWINDOW
+			forecolor		1 1 1 1
+			textfont		UI_FONT_NORMAL
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textscale		TEXTSIZE_SMALL
+			textaligny		8
+			exp				text( locString( "@OW_FINALDUEL_VOTE_NO", dvarInt( "ui_finalduel_no" ) ) );
+			visible			when( dvarString( "ui_finalduel_vote" ) != "yes" );
+			decoration
+		}
+		itemDef
+		{
+			rect			16 36 0 0
+			origin			ORIGIN_QUICKMESSAGEWINDOW
+			forecolor		COLOR_DISABLED
+			textfont		UI_FONT_NORMAL
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textscale		TEXTSIZE_SMALL
+			textaligny		8
+			exp				text( locString( "@OW_FINALDUEL_VOTE_NO", dvarInt( "ui_finalduel_no" ) ) );
+			visible			when( dvarString( "ui_finalduel_vote" ) == "yes" );
+		}
+		execKey "2" { play "mouse_click"; scriptmenuresponse "no"; }
+	}
+}

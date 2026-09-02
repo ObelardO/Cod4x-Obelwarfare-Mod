@@ -1,0 +1,51 @@
+//**************************************************************//
+//            Website: http://cod4.obelardo.ru                  //
+//**************************************************************//
+
+VERSION          "1"
+CONFIG           "C:\trees\cod3\cod3\bin\StringEd.cfg"
+FILENOTES        ""
+
+REFERENCE CALLVOTE
+LANG_ENGLISH "Final Duel"
+
+REFERENCE VOTE_TITLE
+LANG_ENGLISH "Final Duel?"
+
+REFERENCE VOTE_YES
+LANG_ENGLISH "^31.^7 Yes (&&1)"
+
+REFERENCE VOTE_NO
+LANG_ENGLISH "^32.^7 No (&&1)"
+
+REFERENCE YES
+LANG_ENGLISH "Yes"
+
+REFERENCE NO
+LANG_ENGLISH "No"
+
+REFERENCE STARTED
+LANG_ENGLISH "Final Duel vote called by &&1"
+
+REFERENCE PASSED
+LANG_ENGLISH "Final Duel started"
+
+REFERENCE FAILED
+LANG_ENGLISH "Final Duel vote failed"
+
+REFERENCE ALREADY
+LANG_ENGLISH "A Final Duel vote was already called this round"
+
+REFERENCE NOT_ALIVE
+LANG_ENGLISH "Only alive players can call a Final Duel"
+
+REFERENCE NEED_PLAYERS
+LANG_ENGLISH "Not enough alive players for a Final Duel"
+
+REFERENCE UAV
+LANG_ENGLISH "UAV activated permanently"
+
+REFERENCE COMPASS
+LANG_ENGLISH "Enemies shown on compass"
+
+ENDMARKER

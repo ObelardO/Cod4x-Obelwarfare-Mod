@@ -1,0 +1,51 @@
+//**************************************************************//
+//            Website: http://cod4.obelardo.ru                  //
+//**************************************************************//
+
+VERSION          "1"
+CONFIG           "C:\trees\cod3\cod3\bin\StringEd.cfg"
+FILENOTES        ""
+
+REFERENCE CALLVOTE
+LANG_RUSSIAN "Финальная дуэль"
+
+REFERENCE VOTE_TITLE
+LANG_RUSSIAN "Начать дуэль?"
+
+REFERENCE VOTE_YES
+LANG_RUSSIAN "^31.^7 За (&&1)"
+
+REFERENCE VOTE_NO
+LANG_RUSSIAN "^32.^7 Против (&&1)"
+
+REFERENCE YES
+LANG_RUSSIAN "Да"
+
+REFERENCE NO
+LANG_RUSSIAN "Нет"
+
+REFERENCE STARTED
+LANG_RUSSIAN "Финальную дуэль предложил &&1"
+
+REFERENCE PASSED
+LANG_RUSSIAN "Финальная дуэль началась"
+
+REFERENCE FAILED
+LANG_RUSSIAN "Голосование за финальную дуэль провалено"
+
+REFERENCE ALREADY
+LANG_RUSSIAN "Голосование за финальную дуэль уже было в этом раунде"
+
+REFERENCE NOT_ALIVE
+LANG_RUSSIAN "Только живые игроки могут начать финальную дуэль"
+
+REFERENCE NEED_PLAYERS
+LANG_RUSSIAN "Недостаточно живых игроков для финальной дуэли"
+
+REFERENCE UAV
+LANG_RUSSIAN "UAV активирован постоянно"
+
+REFERENCE COMPASS
+LANG_RUSSIAN "Враги отображаются на компасе"
+
+ENDMARKER

@@ -44,6 +44,9 @@ CHOICE_DBUTTON_VIS( 5, "@MPUI_CHANGE_GAME_TYPEMAP", when ( dvarint( ui_allowvote
 CHOICE_BUTTON_VIS( 6, "@MPUI_KICK_PLAYER", open kickplayer; close changemap; close changegametype; close callvote;, when ( dvarint( ui_allowvote_kickplayer ) == 1 ); )
 CHOICE_DBUTTON_VIS( 6, "@MPUI_KICK_PLAYER", when ( dvarint( ui_allowvote_kickplayer ) != 1 ); )
 
+CHOICE_BUTTON_VIS( 7, "@OW_FINALDUEL_CALLVOTE", scriptmenuresponse "finalduel"; close self;, when ( dvarint( ui_allowvote_finalduel ) == 1 ); )
+CHOICE_DBUTTON_VIS( 7, "@OW_FINALDUEL_CALLVOTE", when ( dvarint( ui_allowvote_finalduel ) != 1 ); )
+
 
 // restoring position/size
 #undef	CHOICE_SIZE_X
