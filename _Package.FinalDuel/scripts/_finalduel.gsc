@@ -30,7 +30,7 @@ init()
 
     level.scr_finalduel_vote_time = getdvarx( "scr_finalduel_vote_time", "int", 15, 5, 60 );
     level.scr_finalduel_min_alive = getdvarx( "scr_finalduel_min_alive", "int", 2, 2, 64 );
-    level.scr_finalduel_weapon = toLower( getdvarx( "scr_finalduel_weapon", "string", "beretta_mp" ) );
+    level.scr_finalduel_weapon = toLower( getdvarx( "scr_finalduel_weapon", "string", "knife_mp" ) );
     level.scr_finalduel_weapon_ammo = getdvarx( "scr_finalduel_weapon_ammo", "int", 0, 0, 999 );
     level.scr_finalduel_radar = getdvarx( "scr_finalduel_radar", "int", 1, 0, 2 );
     level.scr_finalduel_time = getdvarx( "scr_finalduel_time", "int", 60, 10, 300 );
