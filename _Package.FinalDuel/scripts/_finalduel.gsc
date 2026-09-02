@@ -23,20 +23,17 @@ init()
 {
     level.scr_finalduel_enable = getdvarx( "scr_finalduel_enable", "int", 1, 0, 1 );
 
-    if( !level.scr_finalduel_enable )
-    {
-        setDvar( "ui_allowvote_finalduel", 0 );
-        makeDvarServerInfo( "ui_allowvote_finalduel" );
-        return;
-    }
+    level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
 
-    setDvar( "ui_allowvote_finalduel", 1 );
-    makeDvarServerInfo( "ui_allowvote_finalduel" );
+    if( !level.scr_finalduel_enable )
+        return;
 
     level.scr_finalduel_vote_time = getdvarx( "scr_finalduel_vote_time", "int", 15, 5, 60 );
     level.scr_finalduel_min_alive = getdvarx( "scr_finalduel_min_alive", "int", 2, 2, 64 );
     level.scr_finalduel_weapon = toLower( getdvarx( "scr_finalduel_weapon", "string", "beretta_mp" ) );
     level.scr_finalduel_weapon_ammo = getdvarx( "scr_finalduel_weapon_ammo", "int", 0, 0, 999 );
+    level.scr_finalduel_radar = getdvarx( "scr_finalduel_radar", "int", 1, 0, 2 );
+    level.scr_finalduel_time = getdvarx( "scr_finalduel_time", "int", 60, 10, 300 );
 
     //Initialize final duel data once
     if( !isDefined( level.finalDuel ) )
@@ -62,13 +59,8 @@ init()
         precacheItem( level.scr_finalduel_weapon );
         precacheString( &"OW_FINALDUEL_CALLVOTE" );
         precacheString( &"OW_FINALDUEL_VOTE_TITLE" );
-        precacheString( &"OW_FINALDUEL_HUD" );
-        precacheString( &"OW_FINALDUEL_YES" );
-        precacheString( &"OW_FINALDUEL_NO" );
-        precacheString( &"OW_FINALDUEL_HUD_YES" );
-        precacheString( &"OW_FINALDUEL_HUD_NO" );
-        precacheString( &"OW_FINALDUEL_HUD_NEED" );
-        precacheString( &"OW_FINALDUEL_HUD_TIME" );
+        precacheString( &"OW_FINALDUEL_VOTE_YES" );
+        precacheString( &"OW_FINALDUEL_VOTE_NO" );
         precacheString( &"OW_FINALDUEL_STARTED" );
         precacheString( &"OW_FINALDUEL_PASSED" );
         precacheString( &"OW_FINALDUEL_FAILED" );
@@ -77,17 +69,31 @@ init()
         precacheString( &"OW_FINALDUEL_NEED_PLAYERS" );
     }
 
-    level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
     level thread watchRoundReset();
 }
 
 //Initialize player specific data and register events
 onPlayerConnected()
 {
+    self setClientDvar( "ui_allowvote_finalduel", level.scr_finalduel_enable );
+
+    if( !level.scr_finalduel_enable )
+        return;
+
     //Base module struct for player specific data
     self.finalDuel = spawnStruct();
     self.finalDuel.vote = "";
     self.finalDuel.canVote = false;
+
+    yesCount = 0;
+    noCount = 0;
+    if( isDefined( level.finalDuel ) )
+    {
+        yesCount = level.finalDuel.yes;
+        noCount = level.finalDuel.no;
+    }
+
+    self setClientDvars( "ui_finalduel_yes", yesCount, "ui_finalduel_no", noCount, "ui_finalduel_vote", "none" );
 
     self thread addNewEvent( "onMenuResponse", ::onMenuResponse );
     self thread addNewEvent( "onPlayerSpawned", ::onPlayerSpawned );
@@ -139,6 +145,7 @@ watchRoundReset()
         level.finalDuel.active = false;
         level.finalDuel.voting = false;
         level.finalDuel.voteUsed = false;
+        closeVoteMenus();
         destroyVoteHud();
     }
 }
@@ -206,10 +213,12 @@ runVote( caller, voters )
 
         voters[i].finalDuel.vote = "";
         voters[i].finalDuel.canVote = true;
+        voters[i] setClientDvar( "ui_finalduel_vote", "none" );
     }
 
-    iprintln( &"OW_FINALDUEL_STARTED", caller.name );
+    iprintlnbold( &"OW_FINALDUEL_STARTED", caller.name );
     createVoteHud();
+    updateVoteHud();
 
     for( i = 0; i < voters.size; i++ )
     {
@@ -222,7 +231,6 @@ runVote( caller, voters )
     for( t = level.scr_finalduel_vote_time; t > 0; t-- )
     {
         level.finalDuel.timeLeft = t;
-        updateVoteHud();
 
         if( level.finalDuel.yes >= level.finalDuel.needed )
             break;
@@ -261,6 +269,7 @@ registerVote( vote )
 
     self.finalDuel.vote = vote;
     self.finalDuel.canVote = false;
+    self setClientDvar( "ui_finalduel_vote", vote );
 
     if( vote == "yes" )
         level.finalDuel.yes++;
@@ -311,6 +320,60 @@ getAlivePlayers()
     return alive;
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                   HUD                                                   //
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+createVoteHud()
+{
+    destroyVoteHud();
+
+    hud = level.finalDuel.hud;
+    hud.time = newHudElem();
+    hud.time.horzAlign = "left";
+    hud.time.vertAlign = "bottom";
+    hud.time.alignX = "center";
+    hud.time.alignY = "top";
+    hud.time.x = 109;
+    hud.time.y = -90;
+    hud.time.fontScale = 1.4;
+    hud.time.color = ( 1, 1, 1 );
+    hud.time.archived = false;
+    hud.time.sort = 1001;
+    hud.time.hideWhenInMenu = false;
+    hud.time setTimer( level.scr_finalduel_vote_time );
+}
+
+updateVoteHud()
+{
+    players = level.players;
+    for( i = 0; i < players.size; i++ )
+    {
+        if( !isDefined( players[i] ) )
+            continue;
+
+        players[i] setClientDvars(
+            "ui_finalduel_yes", level.finalDuel.yes,
+            "ui_finalduel_no", level.finalDuel.no
+        );
+    }
+}
+
+destroyVoteHud()
+{
+    hud = level.finalDuel.hud;
+
+    if( isDefined( hud.time ) )
+        hud.time destroy();
+
+    resetVoteHudRefs();
+}
+
+resetVoteHudRefs()
+{
+    level.finalDuel.hud.time = undefined;
+}
+
 closeVoteMenus()
 {
     players = level.players;
@@ -325,96 +388,6 @@ closeVoteMenus()
         players[i] closeMenu();
         players[i] closeInGameMenu();
     }
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                                                   HUD                                                   //
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-createVoteHud()
-{
-    destroyVoteHud();
-
-    hud = level.finalDuel.hud;
-
-    hud.title = createVoteHudElem( 0, 8, 1.4 );
-    hud.title setText( &"OW_FINALDUEL_HUD" );
-
-    hud.yes = createVoteHudElem( -120, 26, 1.4 );
-    hud.yes.label = &"OW_FINALDUEL_HUD_YES";
-
-    hud.no = createVoteHudElem( -40, 26, 1.4 );
-    hud.no.label = &"OW_FINALDUEL_HUD_NO";
-
-    hud.need = createVoteHudElem( 40, 26, 1.4 );
-    hud.need.label = &"OW_FINALDUEL_HUD_NEED";
-
-    hud.time = createVoteHudElem( 120, 26, 1.4 );
-    hud.time.label = &"OW_FINALDUEL_HUD_TIME";
-
-    updateVoteHud();
-}
-
-createVoteHudElem( x, y, fontScale )
-{
-    hud = newHudElem();
-    hud.horzAlign = "center";
-    hud.vertAlign = "top";
-    hud.alignX = "center";
-    hud.alignY = "top";
-    hud.x = x;
-    hud.y = y;
-    hud.fontScale = fontScale;
-    hud.archived = false;
-    hud.sort = 1001;
-    hud.hideWhenInMenu = true;
-    return hud;
-}
-
-updateVoteHud()
-{
-    hud = level.finalDuel.hud;
-
-    if( isDefined( hud.yes ) )
-        hud.yes setValue( level.finalDuel.yes );
-
-    if( isDefined( hud.no ) )
-        hud.no setValue( level.finalDuel.no );
-
-    if( isDefined( hud.need ) )
-        hud.need setValue( level.finalDuel.needed );
-
-    if( isDefined( hud.time ) )
-        hud.time setValue( level.finalDuel.timeLeft );
-}
-
-destroyVoteHud()
-{
-    hud = level.finalDuel.hud;
-    hudElems = [];
-    hudElems[hudElems.size] = hud.title;
-    hudElems[hudElems.size] = hud.yes;
-    hudElems[hudElems.size] = hud.no;
-    hudElems[hudElems.size] = hud.need;
-    hudElems[hudElems.size] = hud.time;
-
-    for( i = 0; i < hudElems.size; i++ )
-    {
-        if( isDefined( hudElems[i] ) )
-            hudElems[i] destroy();
-    }
-
-    resetVoteHudRefs();
-}
-
-resetVoteHudRefs()
-{
-    hud = level.finalDuel.hud;
-    hud.title = undefined;
-    hud.yes = undefined;
-    hud.no = undefined;
-    hud.need = undefined;
-    hud.time = undefined;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -433,11 +406,9 @@ startDuel()
     }
 
     level.numLives = 1;
-    maps\mp\gametypes\_globallogic::pauseTimer();
-    setDvar( "ui_bomb_timer", 0 );
-    setGameEndTime( 0 );
 
     abortPlantedBomb();
+    setDuelRoundTimer();
     disableObjectives();
     deleteMapWeapons();
     enablePermanentUav();
@@ -530,7 +501,10 @@ restorePlayerHealth()
 
 enablePermanentUav()
 {
-    if( level.teamBased )
+    if( level.scr_finalduel_radar == 0 )
+        return;
+
+    if( level.scr_finalduel_radar == 1 && level.teamBased )
     {
         setTeamRadar( "allies", true );
         setTeamRadar( "axis", true );
@@ -548,18 +522,26 @@ enablePermanentUav()
 
 enablePlayerUav()
 {
+    if( level.scr_finalduel_radar == 0 )
+        return;
+
+    if( level.scr_finalduel_radar == 1 )
+    {
+        self.hasRadar = true;
+        self setClientDvar( "ui_uav_client", 1 );
+        return;
+    }
+
     self setClientDvar( "g_compassShowEnemies", 1 );
-    self.hasRadar = true;
-    self setClientDvar( "ui_uav_client", 1 );
 }
 
 abortPlantedBomb()
 {
-    if( isDefined( level.bombPlanted ) && level.bombPlanted )
-    {
-        level.bombPlanted = false;
-        level notify( "bomb_defused" );
-    }
+    if( !isDefined( level.bombPlanted ) || !level.bombPlanted )
+        return;
+
+    level.bombPlanted = false;
+    level notify( "bomb_defused" );
 
     if( isDefined( level.tickingObject ) )
         level.tickingObject maps\mp\gametypes\_globallogic::stopTickingSound();
@@ -568,7 +550,34 @@ abortPlantedBomb()
         level.sdBombModel hide();
 
     setDvar( "ui_bomb_timer", 0 );
-    setGameEndTime( 0 );
+    maps\mp\gametypes\_globallogic::resumeTimer();
+}
+
+setDuelRoundTimer()
+{
+    desiredMs = level.scr_finalduel_time * 1000;
+
+    if( isDefined( level.timerStopped ) && level.timerStopped )
+        maps\mp\gametypes\_globallogic::resumeTimer();
+
+    level.timeLimitOverride = false;
+
+    if( !isDefined( level.timeLimit ) || level.timeLimit <= 0 )
+    {
+        minutes = int( ( level.scr_finalduel_time + 59 ) / 60 );
+        if( minutes < 1 )
+            minutes = 1;
+
+        level.timeLimit = minutes;
+    }
+
+    if( !isDefined( level.startTime ) )
+        return;
+
+    limitMs = level.timeLimit * 60 * 1000;
+    level.discardTime = ( getTime() - level.startTime ) - ( limitMs - desiredMs );
+
+    setGameEndTime( getTime() + desiredMs );
 }
 
 disableObjectives()
