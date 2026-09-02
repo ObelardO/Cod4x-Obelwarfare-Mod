@@ -42,4 +42,10 @@ LANG_ENGLISH "Only alive players can call a Final Duel"
 REFERENCE NEED_PLAYERS
 LANG_ENGLISH "Not enough alive players for a Final Duel"
 
+REFERENCE UAV
+LANG_ENGLISH "UAV activated permanently"
+
+REFERENCE COMPASS
+LANG_ENGLISH "Enemies shown on compass"
+
 ENDMARKER

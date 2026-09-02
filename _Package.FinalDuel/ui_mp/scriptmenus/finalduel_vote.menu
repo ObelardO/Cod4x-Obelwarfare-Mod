@@ -59,6 +59,20 @@
 
 		itemDef
 		{
+			name			"vote_time"
+			rect			( CHOICE_POPUP_WIDTH - 8 ) 2 0 0
+			forecolor		1 1 1 1
+			textfont		UI_FONT_NORMAL
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textscale		TEXTSIZE_SMALL
+			textalign		ITEM_ALIGN_TOP_RIGHT
+			exp				text( dvarInt( "ui_finalduel_time" ) );
+			visible			1
+			decoration
+		}
+
+		itemDef
+		{
 			name			"vote_yes"
 			rect			16 20 0 0
 			origin			ORIGIN_QUICKMESSAGEWINDOW

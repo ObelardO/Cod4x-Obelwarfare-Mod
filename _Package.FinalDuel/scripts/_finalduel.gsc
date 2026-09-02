@@ -51,10 +51,6 @@ init()
         level.finalDuel.loadoutHooked = false;
         level.finalDuel.prevOnLoadoutGiven = undefined;
 
-        //HUD elems live under the module hud struct
-        level.finalDuel.hud = spawnStruct();
-        resetVoteHudRefs();
-
         precacheMenu( level.finalDuel.menu );
         precacheItem( level.scr_finalduel_weapon );
         precacheString( &"OW_FINALDUEL_CALLVOTE" );
@@ -67,6 +63,8 @@ init()
         precacheString( &"OW_FINALDUEL_ALREADY" );
         precacheString( &"OW_FINALDUEL_NOT_ALIVE" );
         precacheString( &"OW_FINALDUEL_NEED_PLAYERS" );
+        precacheString( &"OW_FINALDUEL_UAV" );
+        precacheString( &"OW_FINALDUEL_COMPASS" );
     }
 
     level thread watchRoundReset();
@@ -93,7 +91,7 @@ onPlayerConnected()
         noCount = level.finalDuel.no;
     }
 
-    self setClientDvars( "ui_finalduel_yes", yesCount, "ui_finalduel_no", noCount, "ui_finalduel_vote", "none" );
+    self setClientDvars( "ui_finalduel_yes", yesCount, "ui_finalduel_no", noCount, "ui_finalduel_vote", "none", "ui_finalduel_time", 0 );
 
     self thread addNewEvent( "onMenuResponse", ::onMenuResponse );
     self thread addNewEvent( "onPlayerSpawned", ::onPlayerSpawned );
@@ -146,7 +144,6 @@ watchRoundReset()
         level.finalDuel.voting = false;
         level.finalDuel.voteUsed = false;
         closeVoteMenus();
-        destroyVoteHud();
     }
 }
 
@@ -216,14 +213,16 @@ runVote( caller, voters )
         voters[i] setClientDvar( "ui_finalduel_vote", "none" );
     }
 
-    iprintlnbold( &"OW_FINALDUEL_STARTED", caller.name );
-    createVoteHud();
+    iprintln( &"OW_FINALDUEL_STARTED", caller.name );
     updateVoteHud();
 
     for( i = 0; i < voters.size; i++ )
     {
         if( isDefined( voters[i] ) && isPlayer( voters[i] ) )
+        {
             voters[i] openMenu( level.finalDuel.menu );
+            voters[i] thread keepVoteMenuOpen();
+        }
     }
 
     caller registerVote( "yes" );
@@ -231,6 +230,7 @@ runVote( caller, voters )
     for( t = level.scr_finalduel_vote_time; t > 0; t-- )
     {
         level.finalDuel.timeLeft = t;
+        updateVoteHud();
 
         if( level.finalDuel.yes >= level.finalDuel.needed )
             break;
@@ -243,16 +243,15 @@ runVote( caller, voters )
 
     level.finalDuel.voting = false;
     closeVoteMenus();
-    destroyVoteHud();
 
     if( level.finalDuel.yes >= level.finalDuel.needed )
     {
-        iprintlnbold( &"OW_FINALDUEL_PASSED" );
+        showDuelStartNotify();
         level thread startDuel();
     }
     else
     {
-        iprintlnbold( &"OW_FINALDUEL_FAILED" );
+        iprintln( &"OW_FINALDUEL_FAILED" );
     }
 }
 
@@ -324,26 +323,6 @@ getAlivePlayers()
 //                                                   HUD                                                   //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-createVoteHud()
-{
-    destroyVoteHud();
-
-    hud = level.finalDuel.hud;
-    hud.time = newHudElem();
-    hud.time.horzAlign = "left";
-    hud.time.vertAlign = "bottom";
-    hud.time.alignX = "center";
-    hud.time.alignY = "top";
-    hud.time.x = 109;
-    hud.time.y = -90;
-    hud.time.fontScale = 1.4;
-    hud.time.color = ( 1, 1, 1 );
-    hud.time.archived = false;
-    hud.time.sort = 1001;
-    hud.time.hideWhenInMenu = false;
-    hud.time setTimer( level.scr_finalduel_vote_time );
-}
-
 updateVoteHud()
 {
     players = level.players;
@@ -354,24 +333,43 @@ updateVoteHud()
 
         players[i] setClientDvars(
             "ui_finalduel_yes", level.finalDuel.yes,
-            "ui_finalduel_no", level.finalDuel.no
+            "ui_finalduel_no", level.finalDuel.no,
+            "ui_finalduel_time", level.finalDuel.timeLeft
         );
     }
 }
 
-destroyVoteHud()
+keepVoteMenuOpen()
 {
-    hud = level.finalDuel.hud;
+    self endon( "disconnect" );
+    level endon( "game_ended" );
 
-    if( isDefined( hud.time ) )
-        hud.time destroy();
+    while( isDefined( level.finalDuel ) && level.finalDuel.voting )
+    {
+        if( !isDefined( self.finalDuel ) || !self.finalDuel.canVote || self.finalDuel.vote != "" )
+            return;
 
-    resetVoteHudRefs();
+        self openMenu( level.finalDuel.menu );
+        wait 0.5;
+    }
 }
 
-resetVoteHudRefs()
+showDuelStartNotify()
 {
-    level.finalDuel.hud.time = undefined;
+    notifyText = undefined;
+    if( level.scr_finalduel_radar == 1 )
+        notifyText = &"OW_FINALDUEL_UAV";
+    else if( level.scr_finalduel_radar == 2 )
+        notifyText = &"OW_FINALDUEL_COMPASS";
+
+    players = level.players;
+    for( i = 0; i < players.size; i++ )
+    {
+        if( !isDefined( players[i] ) || !isPlayer( players[i] ) )
+            continue;
+
+        players[i] thread maps\mp\gametypes\_hud_message::oldNotifyMessage( &"OW_FINALDUEL_PASSED", notifyText, undefined, ( 1, 0, 0 ), "mp_last_stand" );
+    }
 }
 
 closeVoteMenus()
@@ -453,10 +451,15 @@ applyDuelPlayer()
 
 giveDuelLoadout()
 {
+    self endon( "disconnect" );
+    self endon( "death" );
+
     weapon = level.scr_finalduel_weapon;
     ammo = level.scr_finalduel_weapon_ammo;
 
     self thread maps\mp\gametypes\_gameobjects::_disableWeapon();
+    wait 0.25;
+
     self takeAllWeapons();
     self deleteExplosives();
 
@@ -471,9 +474,9 @@ giveDuelLoadout()
     self giveWeapon( weapon );
     self setWeaponAmmoClip( weapon, ammo );
     self setWeaponAmmoStock( weapon, 0 );
-    self setSpawnWeapon( weapon );
     self switchToWeapon( weapon );
 
+    wait 0.35;
     self thread maps\mp\gametypes\_gameobjects::_enableWeapon();
 }
 

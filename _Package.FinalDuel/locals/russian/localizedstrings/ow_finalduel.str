@@ -42,4 +42,10 @@ LANG_RUSSIAN "Только живые игроки могут начать финальную дуэль"
 REFERENCE NEED_PLAYERS
 LANG_RUSSIAN "Недостаточно живых игроков для финальной дуэли"
 
+REFERENCE UAV
+LANG_RUSSIAN "UAV активирован постоянно"
+
+REFERENCE COMPASS
+LANG_RUSSIAN "Враги отображаются на компасе"
+
 ENDMARKER
