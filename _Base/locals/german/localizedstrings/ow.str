@@ -355,6 +355,9 @@ LANG_GERMAN "Elimiere alle anderen Spieler."
 REFERENCE UAV_ON
 LANG_GERMAN "Radar dauerhaft aktiviert"
 
+REFERENCE COMPASS_ON
+LANG_GERMAN "Feinde auf dem Kompass angezeigt"
+
 
 //******************************************************************************
 // maps/mp/gametypes/re.gsc

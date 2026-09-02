@@ -74,7 +74,7 @@ main()
 	level.scr_oitc_handgun = toLower( getdvarx( "scr_oitc_handgun", "string", "beretta_mp;colt45_mp;usp_mp;deserteagle_mp" ) );
 	level.scr_oitc_handgun = strtok( level.scr_oitc_handgun, ";" );
 	
-	level.scr_oitc_suddendeath_show_enemies = getdvarx( "scr_oitc_suddendeath_show_enemies", "int", 1, 0, 1 );
+	level.scr_oitc_suddendeath_show_enemies = getdvarx( "scr_oitc_suddendeath_show_enemies", "int", 1, 0, 2 );
 	level.scr_oitc_suddendeath_timelimit = getdvarx( "scr_oitc_suddendeath_timelimit", "int", 0, 0, 600 );	
 
 	level.scr_oitc_specialty_slot1 = getdvarx( "scr_oitc_specialty_slot1", "string", "specialty_fastreload" );
@@ -125,6 +125,9 @@ onStartGameType()
 	maps\mp\gametypes\_globallogic::setObjectiveHintText( "allies", &"OW_OBJECTIVES_ONEINTHECHAMBER_HINT" );
 	maps\mp\gametypes\_globallogic::setObjectiveHintText( "axis", &"OW_OBJECTIVES_ONEINTHECHAMBER_HINT" );
 
+	precacheString( &"OW_UAV_ON" );
+	precacheString( &"OW_COMPASS_ON" );
+
 	level.spawnMins = ( 0, 0, 0 );
 	level.spawnMaxs = ( 0, 0, 0 );
 	maps\mp\gametypes\_spawnlogic::addSpawnPoints( "allies", "mp_dm_spawn" );
@@ -152,10 +155,15 @@ onTimeLimit()
 		level.timeLimitOverride = true;
 		level.OITCExtraTime = true;
 	
-		if ( level.scr_oitc_suddendeath_show_enemies == 1 ) {
+		if ( level.scr_oitc_suddendeath_show_enemies != 0 ) {
+			notifyText = &"OW_UAV_ON";
+			if ( level.scr_oitc_suddendeath_show_enemies == 2 )
+				notifyText = &"OW_COMPASS_ON";
+
+			enableEnemyRadarDisplay( level.scr_oitc_suddendeath_show_enemies );
+
 			for ( index = 0; index < level.players.size; index++ ) {
-				level.players[index] thread maps\mp\gametypes\_hud_message::oldNotifyMessage( &"OW_ONEINTHECHAMBER", &"OW_UAV_ON", undefined, (1, 0, 0), "mp_last_stand" );
-				level.players[index] setClientDvar( "g_compassShowEnemies", 1 );
+				level.players[index] thread maps\mp\gametypes\_hud_message::oldNotifyMessage( &"OW_ONEINTHECHAMBER", notifyText, undefined, (1, 0, 0), "mp_last_stand" );
 			}
 		}
 	

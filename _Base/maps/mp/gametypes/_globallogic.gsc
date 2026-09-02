@@ -1394,6 +1394,8 @@ endGame( winner, endReasonText )
 		}
 	}
 
+	disableEnemyRadarDisplay();
+
 	//BEGIN_REGION: ROUND ENDING  
     game["roundsplayed"]++;
     

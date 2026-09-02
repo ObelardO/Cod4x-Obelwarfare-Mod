@@ -355,6 +355,9 @@ LANG_ENGLISH "Eliminate all the other players."
 REFERENCE UAV_ON
 LANG_ENGLISH "UAV Activated Permanently"
 
+REFERENCE COMPASS_ON
+LANG_ENGLISH "Enemies shown on compass"
+
 
 //******************************************************************************
 // maps/mp/gametypes/re.gsc

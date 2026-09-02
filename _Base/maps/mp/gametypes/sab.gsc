@@ -47,7 +47,7 @@ main()
 	// Syntax is getdvarx( dvarname, dvartype, dvardefault, minValue, maxValue )
 	level.scr_sab_show_bomb_carrier = getdvarx( "scr_sab_show_bomb_carrier", "int", 0, 0, 2  );
 	level.scr_sab_scoreboard_bomb_carrier = getdvarx( "scr_sab_scoreboard_bomb_carrier", "int", 1, 0, 1 );
-	level.scr_sab_suddendeath_show_enemies = getdvarx( "scr_sab_suddendeath_show_enemies", "int", 1, 0, 1 );
+	level.scr_sab_suddendeath_show_enemies = getdvarx( "scr_sab_suddendeath_show_enemies", "int", 1, 0, 2 );
 	level.scr_sab_suddendeath_timelimit = getdvarx( "scr_sab_suddendeath_timelimit", "int", 90, 0, 600 );
 	level.scr_sab_show_briefcase = getdvarx( "scr_sab_show_briefcase", "int", 1, 0, 1 );
 	level.scr_sab_planting_sound = getdvarx( "scr_sab_planting_sound", "int", 1, 0, 1 );
@@ -269,15 +269,16 @@ onOvertime()
 		level.players[index] notify("force_spawn");
 		level.players[index] thread maps\mp\gametypes\_hud_message::oldNotifyMessage( &"MP_SUDDEN_DEATH", &"MP_NO_RESPAWN", undefined, (1, 0, 0), "mp_last_stand" );
 
-		if ( level.scr_sab_suddendeath_show_enemies == 1 ) {
+		if ( level.scr_sab_suddendeath_show_enemies != 0 ) {
 			level.players[index] setClientDvars("cg_deadChatWithDead", 1,
 								"cg_deadChatWithTeam", 0,
 								"cg_deadHearTeamLiving", 0,
 								"cg_deadHearAllLiving", 0,
-								"cg_everyoneHearsEveryone", 0,
-								"g_compassShowEnemies", 1 );
+								"cg_everyoneHearsEveryone", 0 );
 		}
 	}
+
+	enableEnemyRadarDisplay( level.scr_sab_suddendeath_show_enemies );
 
 	if ( level.scr_sab_suddendeath_timelimit > 0 ) {
 		waitTime = 0;
@@ -378,13 +379,13 @@ onSpawnPlayer()
 		if ( isDefined( hintMessage ) )
 			self thread maps\mp\gametypes\_hud_message::hintMessage( hintMessage );
 
-		if ( level.scr_sab_suddendeath_show_enemies == 1 ) {
+		if ( level.scr_sab_suddendeath_show_enemies != 0 ) {
 			self setClientDvars("cg_deadChatWithDead", 1,
 								"cg_deadChatWithTeam", 0,
 								"cg_deadHearTeamLiving", 0,
 								"cg_deadHearAllLiving", 0,
-								"cg_everyoneHearsEveryone", 0,
-								"g_compassShowEnemies", 1 );
+								"cg_everyoneHearsEveryone", 0 );
+			self enablePlayerEnemyRadarDisplay( level.scr_sab_suddendeath_show_enemies );
 		}
 	}
 
