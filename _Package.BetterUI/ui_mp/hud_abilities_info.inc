@@ -9,6 +9,9 @@
 #undef INV_SLOT_L3_IS_VISIBLE
 #define INV_SLOT_L3_IS_VISIBLE   ( DPAD_IS_VISIBLE && ActionSlotUsable( 4 ) )
 
+#undef INV_SLOT_L4_IS_VISIBLE
+#define INV_SLOT_L4_IS_VISIBLE   ( DPAD_IS_VISIBLE && dvarint( "ui_hud_hp_next" ) > 0 )
+
 menuDef
 {
 	name			"DPad"
@@ -27,7 +30,11 @@ menuDef
 	INV_SLOT_AMMO_LEFT ( INV_ALIGN_L, INV_SLOT_L2_POS_X, INV_SLOT_L2_IS_VISIBLE && dvarint( "ui_bandages_qty" ) > 0, exp text( dvarint( "ui_bandages_qty" ) ), INV_CLR_WHITE, INV_DPAD_ALPHA, INV_AMMO_POS_FIX_NONE )	
 	INV_SLOT_AMMO_LEFT ( INV_ALIGN_L, INV_SLOT_L2_POS_X, INV_SLOT_L2_IS_VISIBLE && dvarint( "ui_bandages_qty" ) < 1, exp text( dvarint( "ui_bandages_qty" ) ), INV_CLR_RED,   INV_DPAD_ALPHA, INV_AMMO_POS_FIX_NONE )	
 	
-	//KILL STREAK
+	//HARDPOINT (OWNED)
 	INV_SLOT_ICON_L3 ( ownerdraw CG_PLAYER_ACTIONSLOT_4, INV_ICON_NONE, "+actionslot 4", INV_DPAD_ALPHA )
-	INV_SLOT_AMMO_L3 ( ownerdraw CG_PLAYER_ACTIONSLOT_4, INV_CLR_WHITE, INV_DPAD_ALPHA, INV_AMMO_POS_FIX_DPAD )	
+	INV_SLOT_AMMO_L3 ( exp text( 1 ), INV_CLR_WHITE, INV_DPAD_ALPHA, INV_AMMO_POS_FIX_NONE )
+
+	//HARDPOINT TRACKER (NEXT, DISABLED)
+	INV_SLOT_ICON_L4 ( style WINDOW_STYLE_SHADER, dvarString( "ui_hud_hp_next_icon" ), "", INV_DPAD_ALPHA * 0.45 )
+	INV_SLOT_AMMO_L4 ( exp text( dvarint( "ui_hud_hp_next_kills" ) ), INV_CLR_WHITE, INV_DPAD_ALPHA, INV_AMMO_POS_FIX_NONE )
 }

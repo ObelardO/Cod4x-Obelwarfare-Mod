@@ -37,3 +37,6 @@ material,faction_128_usmc_big
 material,faction_128_usmc_small
 material,faction_128_ussr_big
 material,faction_128_ussr_small
+material,compass_objpoint_satallite
+material,compass_objpoint_airstrike
+material,compass_objpoint_helicopter
