@@ -168,6 +168,7 @@ onPlayerConnected()
     self thread playerSessionWatcher();
     self thread playerSpectatingWatcher();
     self thread hardpointTrackerWatcher();
+    self thread hardpointLockWatcher();
 
     self updateHardpointTracker();
 }
@@ -452,14 +453,31 @@ hardpointTrackerWatcher()
 }
 
 
+hardpointLockWatcher()
+{
+    self endon( "disconnect" );
+
+    for ( ;; )
+    {
+        wait 0.5;
+
+        if ( self.sessionstate == "spectator" )
+            continue;
+
+        self updateHardpointTracker();
+    }
+}
+
+
 updateHardpointTracker( sourcePlayer )
 {
     if ( !isDefined( sourcePlayer ) )
         sourcePlayer = self;
 
     info = sourcePlayer maps\mp\gametypes\_hardpoints_utils::getNextHardpointInfo();
+    lockTime = sourcePlayer maps\mp\gametypes\_hardpoints_utils::getHardpointCallLockTime();
 
-    if ( isDefined( self.hudHpNext ) && self.hudHpNext == info.visible && self.hudHpNextKills == info.kills && self.hudHpNextKillsDone == info.killsDone && self.hudHpNextKillsNeed == info.killsNeed && isDefined( self.hudHpNextIcon ) && self.hudHpNextIcon == info.icon )
+    if ( isDefined( self.hudHpNext ) && self.hudHpNext == info.visible && self.hudHpNextKills == info.kills && self.hudHpNextKillsDone == info.killsDone && self.hudHpNextKillsNeed == info.killsNeed && isDefined( self.hudHpNextIcon ) && self.hudHpNextIcon == info.icon && isDefined( self.hudHpLockTime ) && self.hudHpLockTime == lockTime )
         return;
 
     self.hudHpNext = info.visible;
@@ -467,8 +485,9 @@ updateHardpointTracker( sourcePlayer )
     self.hudHpNextKillsDone = info.killsDone;
     self.hudHpNextKillsNeed = info.killsNeed;
     self.hudHpNextIcon = info.icon;
+    self.hudHpLockTime = lockTime;
 
-    self setClientDvars( "ui_hud_hp_next", info.visible, "ui_hud_hp_next_kills", info.kills, "ui_hud_hp_next_done", info.killsDone, "ui_hud_hp_next_need", info.killsNeed, "ui_hud_hp_next_icon", info.icon );
+    self setClientDvars( "ui_hud_hp_next", info.visible, "ui_hud_hp_next_kills", info.kills, "ui_hud_hp_next_done", info.killsDone, "ui_hud_hp_next_need", info.killsNeed, "ui_hud_hp_next_icon", info.icon, "ui_hud_hp_lock_time", lockTime );
 }
 
 

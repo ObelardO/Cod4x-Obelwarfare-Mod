@@ -8,6 +8,8 @@
 
 #undef INV_SLOT_L3_IS_VISIBLE
 #define INV_SLOT_L3_IS_VISIBLE   ( DPAD_IS_VISIBLE && ActionSlotUsable( 4 ) )
+#define INV_SLOT_L3_LOCKED       ( INV_SLOT_L3_IS_VISIBLE && dvarint( "ui_hud_hp_lock_time" ) != 0 )
+#define INV_SLOT_L3_ALPHA        ( INV_DPAD_ALPHA * ( 1 - ( dvarint( "ui_hud_hp_lock_time" ) != 0 ) * 0.5 ) )
 
 #undef INV_SLOT_L4_IS_VISIBLE
 #define INV_SLOT_L4_IS_VISIBLE   ( DPAD_IS_VISIBLE && dvarint( "ui_hud_hp_next" ) > 0 )
@@ -61,8 +63,9 @@ menuDef
 	INV_SLOT_AMMO_LEFT ( INV_ALIGN_L, INV_SLOT_L2_POS_X, INV_SLOT_L2_IS_VISIBLE && dvarint( "ui_bandages_qty" ) < 1, exp text( dvarint( "ui_bandages_qty" ) ), INV_CLR_RED,   INV_DPAD_ALPHA, INV_AMMO_POS_FIX_NONE )	
 	
 	//HARDPOINT (OWNED)
-	INV_SLOT_ICON_L3 ( ownerdraw CG_PLAYER_ACTIONSLOT_4, INV_ICON_NONE, "+actionslot 4", INV_DPAD_ALPHA )
-	INV_SLOT_AMMO_L3 ( exp text( 1 ), INV_CLR_WHITE, INV_DPAD_ALPHA, INV_AMMO_POS_FIX_NONE )
+	INV_SLOT_ICON_L3 ( ownerdraw CG_PLAYER_ACTIONSLOT_4, INV_ICON_NONE, "+actionslot 4", INV_SLOT_L3_ALPHA )
+	INV_SLOT_AMMO_L3 ( exp text( 1 ), INV_CLR_WHITE, INV_SLOT_L3_ALPHA, INV_AMMO_POS_FIX_NONE )
+	INV_SLOT_ICON_LEFT ( INV_ALIGN_L, INV_SLOT_L3_POS_X, INV_SLOT_L3_LOCKED, INV_BACK_MAT, INV_BACK_SIZE, 0.0, style WINDOW_STYLE_SHADER, "hud_slot_locked", "", INV_DPAD_ALPHA * 0.9 )
 
 	//HARDPOINT TRACKER (NEXT, DISABLED)
 	INV_SLOT_ICON_L4 ( style WINDOW_STYLE_SHADER, dvarString( "ui_hud_hp_next_icon" ), "", INV_DPAD_ALPHA * 0.45 )

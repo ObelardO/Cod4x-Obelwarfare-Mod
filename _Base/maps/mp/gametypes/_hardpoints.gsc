@@ -1133,41 +1133,13 @@ triggerHardpoint( hardpointType )
 			return false;
 		}
 
-		// [0.0.1] Check if we need to wait for certain interval to use the airstrike again
-		if ( level.scr_airstrike_hardpoint_interval > 0 ) {
-			if ( level.teambased ) {
-				// Get the time of the last airstrike for the team calling this airstrike
-				team = self.pers["team"];
-				if ( team == "allies" ) {
-					if ( isDefined( level.allies_last_airstrike ) ) {
-						last_airstrike = level.allies_last_airstrike;
-					} else {
-						last_airstrike = 0;
-					}
-				} else {
-					if ( isDefined( level.axis_last_airstrike ) ) {
-						last_airstrike = level.axis_last_airstrike;
-					} else {
-						last_airstrike = 0;
-					}
-				}
-			} else {
-				// Get the time of the last airstrike by this player
-				if ( isDefined( self.pers["last_airstrike"] ) ) {
-					last_airstrike = self.pers["last_airstrike"];
-				} else {
-					last_airstrike = 0;
-				}
-			}
-			// If we still need to wait because the interval time is not over yet then send a message to the player
-			currentTime = openwarfare\_timer::getTimePassed() / 1000;
-			if ( last_airstrike > 0 && ( currentTime - last_airstrike ) < level.scr_airstrike_hardpoint_interval ) {
-				availableIn = int(level.scr_airstrike_hardpoint_interval - ( currentTime - last_airstrike ));
-				self iPrintLnBold( &"OW_AIRSTRIKE_AVAILABLEIN", availableIn );
-				return false;
-			}
+		availableIn = self getAirstrikeCooldownTime();
+
+		if ( availableIn > 0 )
+		{
+			self iPrintLnBold( &"OW_AIRSTRIKE_AVAILABLEIN", availableIn );
+			return false;
 		}
-		// [0.0.1]
 
 		result = self selectAirstrikeLocation();
 
@@ -1191,43 +1163,14 @@ triggerHardpoint( hardpointType )
 			self iPrintLnBold( level.hardpointHints[hardpointType+"_not_available"] );
 			return false;
 		}
-	
-		// [0.0.1] Check if we need to wait an interval to use helicopter again
-		if ( level.scr_heli_hardpoint_interval > 0 ) {
-			if ( level.teambased ) {
-				// Get the last time the Helicopter was used by this team
-				team = self.pers["team"];
-				if ( team == "allies" ) {
-					if ( isDefined( level.allies_last_heli ) ) {
-						last_heli = level.allies_last_heli;
-					} else {
-						last_heli = 0;
-					}
-				} else {
-					if ( isDefined( level.axis_last_heli ) ) {
-						last_heli = level.axis_last_heli;
-					} else {
-						last_heli = 0;
-					}
-				}
-			} else {
-				// Get the last time the helicopter was used by this player
-				if ( isDefined( self.pers["last_heli"] ) ) {
-					last_heli = self.pers["last_heli"];
-				} else {
-					last_heli = 0;
-				}
-			}
 
-			// If we still need to wait to allow the Heliocopter send a message to the player
-			currentTime = openwarfare\_timer::getTimePassed() / 1000;
-			if ( last_heli > 0 && ( currentTime - last_heli ) < level.scr_heli_hardpoint_interval ) {
-				availableIn = int(level.scr_heli_hardpoint_interval - ( currentTime - last_heli ));
-				self iPrintLnBold( &"OW_HELICOPTER_AVAILABLEIN", availableIn );
-				return false;
-			}
+		availableIn = self getHelicopterCooldownTime();
+
+		if ( availableIn > 0 )
+		{
+			self iPrintLnBold( &"OW_HELICOPTER_AVAILABLEIN", availableIn );
+			return false;
 		}
-		// [0.0.1]
 
 		destination = 0;
 		random_path = randomint( level.heli_paths[destination].size );

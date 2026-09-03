@@ -178,3 +178,107 @@ getEnabledHardpoints()
 
 	return enabledHardpoints;
 }
+
+
+getHardpointCallLockTime()
+{
+	if ( !isDefined( self.pers["hardPointItem"] ) )
+		return 0;
+
+	hardpointType = self.pers["hardPointItem"];
+
+	if ( hardpointType == "airstrike_mp" )
+	{
+		if ( isDefined( level.airstrikeInProgress ) )
+			return -1;
+
+		return self getAirstrikeCooldownTime();
+	}
+
+	if ( hardpointType == "helicopter_mp" )
+	{
+		if ( isDefined( level.chopper ) )
+			return -1;
+
+		return self getHelicopterCooldownTime();
+	}
+
+	return 0;
+}
+
+
+getAirstrikeCooldownTime()
+{
+	if ( !isDefined( level.scr_airstrike_hardpoint_interval ) )
+		return 0;
+
+	return getHardpointCooldownTime( self getLastAirstrikeTime(), level.scr_airstrike_hardpoint_interval );
+}
+
+
+getHelicopterCooldownTime()
+{
+	if ( !isDefined( level.scr_heli_hardpoint_interval ) )
+		return 0;
+
+	return getHardpointCooldownTime( self getLastHelicopterTime(), level.scr_heli_hardpoint_interval );
+}
+
+
+getHardpointCooldownTime( lastTime, interval )
+{
+	if ( interval <= 0 || lastTime <= 0 )
+		return 0;
+
+	remaining = interval - ( openwarfare\_timer::getTimePassed() / 1000 - lastTime );
+
+	if ( remaining <= 0 )
+		return 0;
+
+	lockTime = int( remaining );
+
+	if ( lockTime < 1 )
+		lockTime = 1;
+
+	return lockTime;
+}
+
+
+getLastAirstrikeTime()
+{
+	if ( isDefined( level.teambased ) && level.teambased )
+	{
+		if ( self.pers["team"] == "allies" && isDefined( level.allies_last_airstrike ) )
+			return level.allies_last_airstrike;
+
+		if ( self.pers["team"] == "axis" && isDefined( level.axis_last_airstrike ) )
+			return level.axis_last_airstrike;
+
+		return 0;
+	}
+
+	if ( isDefined( self.pers["last_airstrike"] ) )
+		return self.pers["last_airstrike"];
+
+	return 0;
+}
+
+
+getLastHelicopterTime()
+{
+	if ( isDefined( level.teambased ) && level.teambased )
+	{
+		if ( self.pers["team"] == "allies" && isDefined( level.allies_last_heli ) )
+			return level.allies_last_heli;
+
+		if ( self.pers["team"] == "axis" && isDefined( level.axis_last_heli ) )
+			return level.axis_last_heli;
+
+		return 0;
+	}
+
+	if ( isDefined( self.pers["last_heli"] ) )
+		return self.pers["last_heli"];
+
+	return 0;
+}
