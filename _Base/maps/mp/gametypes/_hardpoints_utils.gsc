@@ -40,6 +40,8 @@ getNextHardpointInfo()
 	info = spawnStruct();
 	info.visible = 0;
 	info.kills = 0;
+	info.killsDone = 0;
+	info.killsNeed = 1;
 	info.icon = "white";
 
 	if ( !isDefined( level.scr_game_hardpoints ) || level.scr_game_hardpoints != 1 )
@@ -53,10 +55,15 @@ getNextHardpointInfo()
 
 	info.visible = 1;
 	info.kills = hardpoint.streak - streak;
+	info.killsNeed = hardpoint.streak;
+	info.killsDone = streak;
 	info.icon = hardpoint.hudIcon;
 
 	if ( info.kills < 1 )
 		info.kills = 1;
+
+	if ( info.killsNeed < 1 )
+		info.killsNeed = 1;
 
 	if ( !isDefined( info.icon ) || info.icon == "" )
 		info.icon = "white";

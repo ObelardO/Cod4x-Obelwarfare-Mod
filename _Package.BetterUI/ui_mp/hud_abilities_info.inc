@@ -12,6 +12,36 @@
 #undef INV_SLOT_L4_IS_VISIBLE
 #define INV_SLOT_L4_IS_VISIBLE   ( DPAD_IS_VISIBLE && dvarint( "ui_hud_hp_next" ) > 0 )
 
+#define INV_HP_NEXT_BAR_X        ( INV_SLOT_L4_POS_X - INV_BACK_PAD )
+#define INV_HP_NEXT_BAR_Y        ( INV_OFFSET_Y + INV_ICON_SIZE + INV_BACK_PAD + 5 - ( INV_HP_NEXT_BAR_H / 2 ) )
+#define INV_HP_NEXT_BAR_W        INV_BACK_SIZE
+#define INV_HP_NEXT_BAR_H        2
+
+#define INV_HP_NEXT_BAR \
+	itemDef \
+	{ \
+		rect			0 INV_HP_NEXT_BAR_Y INV_HP_NEXT_BAR_W INV_HP_NEXT_BAR_H INV_ALIGN_L \
+		exp				rect X( INV_HP_NEXT_BAR_X ) \
+		style			WINDOW_STYLE_SHADER \
+		background		"white" \
+		forecolor		0 0 0 1 \
+		exp				forecolor A( INV_DPAD_ALPHA * INV_BACK_ALPHA ) \
+		visible			when ( INV_SLOT_L4_IS_VISIBLE ) \
+		decoration \
+	} \
+	itemDef \
+	{ \
+		rect			0 INV_HP_NEXT_BAR_Y 0 INV_HP_NEXT_BAR_H INV_ALIGN_L \
+		exp				rect X( INV_HP_NEXT_BAR_X ) \
+		exp				rect W( INV_HP_NEXT_BAR_W * dvarint( "ui_hud_hp_next_done" ) / dvarint( "ui_hud_hp_next_need" ) ) \
+		style			WINDOW_STYLE_SHADER \
+		background		"white" \
+		forecolor		INV_CLR_WHITE 1 \
+		exp				forecolor A( INV_DPAD_ALPHA * HUD_FOREGROUND_ALPHA ) \
+		visible			when ( INV_SLOT_L4_IS_VISIBLE && dvarint( "ui_hud_hp_next_done" ) > 0 ) \
+		decoration \
+	}
+
 menuDef
 {
 	name			"DPad"
@@ -37,4 +67,5 @@ menuDef
 	//HARDPOINT TRACKER (NEXT, DISABLED)
 	INV_SLOT_ICON_L4 ( style WINDOW_STYLE_SHADER, dvarString( "ui_hud_hp_next_icon" ), "", INV_DPAD_ALPHA * 0.45 )
 	INV_SLOT_AMMO_L4 ( exp text( dvarint( "ui_hud_hp_next_kills" ) ), INV_CLR_WHITE, INV_DPAD_ALPHA, INV_AMMO_POS_FIX_NONE )
+	INV_HP_NEXT_BAR
 }
