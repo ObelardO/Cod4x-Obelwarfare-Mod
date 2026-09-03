@@ -53,6 +53,14 @@ getNextHardpointInfo()
 	if ( !isDefined( hardpoint ) )
 		return info;
 
+	owned = undefined;
+
+	if ( isDefined( self.pers["hardPointItem"] ) )
+		owned = getHardpointByType( self.pers["hardPointItem"] );
+
+	if ( isDefined( owned ) && hardpoint.streak <= owned.streak )
+		return info;
+
 	info.visible = 1;
 	info.kills = hardpoint.streak - streak;
 	info.killsNeed = hardpoint.streak;
@@ -130,6 +138,23 @@ getHardpointAtStreak( streak )
 	{
 		if ( hardpoints[i].streak == streak )
 			return hardpoints[i];
+	}
+
+	return undefined;
+}
+
+
+getHardpointByType( hardpointType )
+{
+	if ( !isDefined( hardpointType ) || !isDefined( level.hardpoints ) )
+		return undefined;
+
+	for ( i = 0; i < level.hardpoints.size; i++ )
+	{
+		hardpoint = level.hardpoints[i];
+
+		if ( isDefined( hardpoint ) && isDefined( hardpoint.type ) && hardpoint.type == hardpointType )
+			return hardpoint;
 	}
 
 	return undefined;

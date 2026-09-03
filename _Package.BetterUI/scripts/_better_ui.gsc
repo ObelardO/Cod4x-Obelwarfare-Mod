@@ -10,6 +10,7 @@
 //**************************************************************//
 
 #include maps\mp\_utility;
+#include common_scripts\utility;
 
 #include openwarfare\_eventmanager;
 #include openwarfare\_utils;
@@ -445,7 +446,7 @@ hardpointTrackerWatcher()
 
     for ( ;; )
     {
-        self waittill( "kill_streak" );
+        self waittill_any( "kill_streak", "hardpoint_called" );
         self updateHardpointTracker();
     }
 }
