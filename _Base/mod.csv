@@ -138,6 +138,7 @@ rawfile,maps/mp/gametypes/_gameobjects.gsc
 rawfile,maps/mp/gametypes/_gametypes.txt
 rawfile,maps/mp/gametypes/_globallogic.gsc
 rawfile,maps/mp/gametypes/_hardpoints.gsc
+rawfile,maps/mp/gametypes/_hardpoints_utils.gsc
 rawfile,maps/mp/gametypes/_healthoverlay.gsc
 rawfile,maps/mp/gametypes/_hud.gsc
 rawfile,maps/mp/gametypes/_hud_message.gsc
