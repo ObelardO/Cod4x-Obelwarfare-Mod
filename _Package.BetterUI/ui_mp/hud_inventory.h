@@ -125,18 +125,28 @@
         textscale       0 \
         decoration \
     } \
-    itemDef \ 
+    INV_SLOT_HINT( xOffsetOp, align, xPos, CLIENT_NOT_SPECTATING && isVisibleExp && keyBinding != "", KeyBinding( keyBinding ), INV_CLR_YELLOW, alphaExp )
+
+
+#define INV_SLOT_HINT_LEFT( xPos, isVisibleExp, textExp, color, alphaExp ) \
+    INV_SLOT_HINT( INV_ALIGN_X_OP_LEFT, INV_ALIGN_L, xPos, isVisibleExp, textExp, color, alphaExp )
+
+#define INV_SLOT_HINT_RIGHT( xPos, isVisibleExp, textExp, color, alphaExp ) \
+    INV_SLOT_HINT( INV_ALIGN_X_OP_RIGHT, INV_ALIGN_R, xPos, isVisibleExp, textExp, color, alphaExp )
+
+#define INV_SLOT_HINT( xOffsetOp, align, xPos, isVisibleExp, textExp, color, alphaExp ) \
+    itemDef \
     { \
         rect		0 ( INV_OFFSET_Y + INV_ICON_SIZE + INV_BACK_PAD + 5 ) 0 0 align \
         exp         rect X( xOffsetOp * ( xPos + INV_BACK_SIZE_HALF - 2 ) ) \
-        exp         text( KeyBinding( keyBinding ) ) \
+        exp         text( textExp ) \
         exp         forecolor A( alphaExp * HUD_FOREGROUND_ALPHA ) \
-        forecolor	INV_CLR_YELLOW 1 \
+        forecolor	color 1 \
         textfont	UI_FONT_OBJECTIVE \
         textscale	0.18 \
         textalign	ITEM_ALIGN_MIDDLE_CENTER \
         textstyle	ITEM_TEXTSTYLE_SHADOWEDMORE \
-        visible 	when ( CLIENT_NOT_SPECTATING && isVisibleExp && keyBinding != "" ) \
+        visible 	when ( isVisibleExp ) \
         decoration \
     }
 
