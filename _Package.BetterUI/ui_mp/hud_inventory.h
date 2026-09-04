@@ -6,6 +6,8 @@
                                 
 #define INV_ICON_SIZE           18
 #define INV_ICON_NONE           "white"
+#define INV_SLOT_LOCK_SIZE      7
+#define INV_SLOT_LOCK_MAT       "hud_slot_locked"
 
 
 #define INV_SPACING             4
@@ -19,6 +21,11 @@
 #define INV_SLOT_L3_IS_VISIBLE  0
 #define INV_SLOT_L4_IS_VISIBLE  0
 
+#define INV_SLOT_L1_AMMO_IS_VISIBLE  INV_SLOT_L1_IS_VISIBLE
+#define INV_SLOT_L2_AMMO_IS_VISIBLE  INV_SLOT_L2_IS_VISIBLE
+#define INV_SLOT_L3_AMMO_IS_VISIBLE  INV_SLOT_L3_IS_VISIBLE
+#define INV_SLOT_L4_AMMO_IS_VISIBLE  INV_SLOT_L4_IS_VISIBLE
+
 #define INV_SLOT_ANY_VISIABLE_L ( INV_SLOT_L1_IS_VISIBLE || INV_SLOT_L2_IS_VISIBLE || INV_SLOT_L3_IS_VISIBLE || INV_SLOT_L4_IS_VISIBLE )
 
 #define INV_SLOT_L1_POS_X       ( INV_OFFSET_X )
@@ -30,6 +37,10 @@
 #define INV_SLOT_R1_IS_VISIBLE  0
 #define INV_SLOT_R2_IS_VISIBLE  0
 #define INV_SLOT_R3_IS_VISIBLE  0
+
+#define INV_SLOT_R1_AMMO_IS_VISIBLE  INV_SLOT_R1_IS_VISIBLE
+#define INV_SLOT_R2_AMMO_IS_VISIBLE  INV_SLOT_R2_IS_VISIBLE
+#define INV_SLOT_R3_AMMO_IS_VISIBLE  INV_SLOT_R3_IS_VISIBLE
 
 #define INV_SLOT_ANY_VISIABLE_R ( INV_SLOT_R1_IS_VISIBLE || INV_SLOT_R2_IS_VISIBLE || INV_SLOT_R3_IS_VISIBLE )
 
@@ -152,29 +163,29 @@
 
 
 #define INV_SLOT_AMMO_L1( ammoDrawerDef, color, alphaExp, posFixExp ) \
-    INV_SLOT_AMMO_LEFT( INV_ALIGN_L, INV_SLOT_L1_POS_X, INV_SLOT_L1_IS_VISIBLE, ammoDrawerDef, color, alphaExp, posFixExp )
+    INV_SLOT_AMMO_LEFT( INV_ALIGN_L, INV_SLOT_L1_POS_X, INV_SLOT_L1_AMMO_IS_VISIBLE, ammoDrawerDef, color, alphaExp, posFixExp )
 
 #define INV_SLOT_AMMO_L2( ammoDrawerDef, color, alphaExp, posFixExp ) \
-    INV_SLOT_AMMO_LEFT( INV_ALIGN_L, INV_SLOT_L2_POS_X, INV_SLOT_L2_IS_VISIBLE, ammoDrawerDef, color, alphaExp, posFixExp )
+    INV_SLOT_AMMO_LEFT( INV_ALIGN_L, INV_SLOT_L2_POS_X, INV_SLOT_L2_AMMO_IS_VISIBLE, ammoDrawerDef, color, alphaExp, posFixExp )
 
 #define INV_SLOT_AMMO_L3( ammoDrawerDef, color, alphaExp, posFixExp ) \
-    INV_SLOT_AMMO_LEFT( INV_ALIGN_L, INV_SLOT_L3_POS_X, INV_SLOT_L3_IS_VISIBLE, ammoDrawerDef, color, alphaExp, posFixExp )
+    INV_SLOT_AMMO_LEFT( INV_ALIGN_L, INV_SLOT_L3_POS_X, INV_SLOT_L3_AMMO_IS_VISIBLE, ammoDrawerDef, color, alphaExp, posFixExp )
 
 #define INV_SLOT_AMMO_L4( ammoDrawerDef, color, alphaExp, posFixExp ) \
-    INV_SLOT_AMMO_LEFT( INV_ALIGN_L, INV_SLOT_L4_POS_X, INV_SLOT_L4_IS_VISIBLE, ammoDrawerDef, color, alphaExp, posFixExp )
+    INV_SLOT_AMMO_LEFT( INV_ALIGN_L, INV_SLOT_L4_POS_X, INV_SLOT_L4_AMMO_IS_VISIBLE, ammoDrawerDef, color, alphaExp, posFixExp )
 
 #define INV_SLOT_AMMO_LEFT( align, xPos, isVisibleExp, ammoDrawerDef, color, alphaExp, posFixExp ) \
     INV_SLOT_AMMO( align, INV_ALIGN_X_OP_LEFT, INV_ALIGN_W_MOD_LEFT, xPos, isVisibleExp, ammoDrawerDef, color, alphaExp, posFixExp ) 
 
 
 #define INV_SLOT_AMMO_R1( ammoDrawerDef, color, alphaExp, posFixExp ) \
-    INV_SLOT_AMMO_RIGHT( INV_ALIGN_R, INV_SLOT_R1_POS_X, INV_SLOT_R1_IS_VISIBLE, ammoDrawerDef, color, alphaExp, posFixExp )
+    INV_SLOT_AMMO_RIGHT( INV_ALIGN_R, INV_SLOT_R1_POS_X, INV_SLOT_R1_AMMO_IS_VISIBLE, ammoDrawerDef, color, alphaExp, posFixExp )
 
 #define INV_SLOT_AMMO_R2( ammoDrawerDef, color, alphaExp, posFixExp ) \
-    INV_SLOT_AMMO_RIGHT( INV_ALIGN_R, INV_SLOT_R2_POS_X, INV_SLOT_R2_IS_VISIBLE, ammoDrawerDef, color, alphaExp, posFixExp )
+    INV_SLOT_AMMO_RIGHT( INV_ALIGN_R, INV_SLOT_R2_POS_X, INV_SLOT_R2_AMMO_IS_VISIBLE, ammoDrawerDef, color, alphaExp, posFixExp )
 
 #define INV_SLOT_AMMO_R3( ammoDrawerDef, color, alphaExp, posFixExp ) \
-    INV_SLOT_AMMO_RIGHT( INV_ALIGN_R, INV_SLOT_R3_POS_X, INV_SLOT_R3_IS_VISIBLE, ammoDrawerDef, color, alphaExp, posFixExp )
+    INV_SLOT_AMMO_RIGHT( INV_ALIGN_R, INV_SLOT_R3_POS_X, INV_SLOT_R3_AMMO_IS_VISIBLE, ammoDrawerDef, color, alphaExp, posFixExp )
 
 #define INV_SLOT_AMMO_RIGHT( align, xPos, isVisibleExp, ammoDrawerDef, color, alphaExp, posFixExp ) \
     INV_SLOT_AMMO( align, INV_ALIGN_X_OP_RIGHT, INV_ALIGN_W_MOD_RIGHT, xPos, isVisibleExp, ammoDrawerDef, color, alphaExp, posFixExp ) 
@@ -193,6 +204,26 @@
         exp             forecolor A ( alphaExp ) \
         background      INV_ICON_NONE \
         ammoDrawerDef \
+        visible			when ( isVisibleExp ) \
+        decoration \
+    }
+
+
+#define INV_SLOT_LOCK_LEFT( align, xPos, isVisibleExp, alphaExp ) \
+    INV_SLOT_LOCK( INV_ALIGN_X_OP_LEFT, INV_ALIGN_W_MOD_LEFT, align, xPos, isVisibleExp, alphaExp )
+
+#define INV_SLOT_LOCK_RIGHT( align, xPos, isVisibleExp, alphaExp ) \
+    INV_SLOT_LOCK( INV_ALIGN_X_OP_RIGHT, INV_ALIGN_W_MOD_RIGHT, align, xPos, isVisibleExp, alphaExp )
+
+#define INV_SLOT_LOCK( xOffsetOp, widthMod, align, xPos, isVisibleExp, alphaExp ) \
+    itemDef \
+    { \
+        rect			0 ( INV_OFFSET_Y + INV_ICON_SIZE - INV_SLOT_LOCK_SIZE ) INV_SLOT_LOCK_SIZE INV_SLOT_LOCK_SIZE align \
+        exp				rect X( xOffsetOp * ( xPos + INV_BACK_SIZE - INV_BACK_PAD * 2 - INV_SLOT_LOCK_SIZE + 1 ) - widthMod * INV_SLOT_LOCK_SIZE ) \
+        style			WINDOW_STYLE_SHADER \
+        background		INV_SLOT_LOCK_MAT \
+        forecolor		INV_CLR_WHITE 1 \
+        exp				forecolor A( alphaExp ) \
         visible			when ( isVisibleExp ) \
         decoration \
     }
