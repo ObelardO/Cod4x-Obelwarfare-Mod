@@ -218,8 +218,8 @@
 #define INV_SLOT_LOCK( xOffsetOp, widthMod, align, xPos, isVisibleExp, alphaExp ) \
     itemDef \
     { \
-        rect			0 ( INV_OFFSET_Y + INV_ICON_SIZE - INV_SLOT_LOCK_SIZE ) INV_SLOT_LOCK_SIZE INV_SLOT_LOCK_SIZE align \
-        exp				rect X( xOffsetOp * ( xPos + INV_BACK_SIZE - INV_BACK_PAD * 2 - INV_SLOT_LOCK_SIZE + 1 ) - widthMod * INV_SLOT_LOCK_SIZE ) \
+        rect			0 ( INV_OFFSET_Y + INV_ICON_SIZE - INV_SLOT_LOCK_SIZE + 0.5 ) INV_SLOT_LOCK_SIZE INV_SLOT_LOCK_SIZE align \
+        exp				rect X( xOffsetOp * ( xPos + INV_BACK_SIZE - INV_BACK_PAD * 2 - INV_SLOT_LOCK_SIZE ) - widthMod * ( INV_SLOT_LOCK_SIZE - 0.5 ) ) \
         style			WINDOW_STYLE_SHADER \
         background		INV_SLOT_LOCK_MAT \
         forecolor		INV_CLR_WHITE 1 \
