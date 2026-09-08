@@ -1482,6 +1482,8 @@ enableEnemyRadarDisplay( mode )
 	if ( mode == 0 )
 		return;
 
+	level.enemyRadarDisplayMode = mode;
+
 	if ( mode == 1 && level.teamBased )
 	{
 		setTeamRadar( "allies", true );
@@ -1505,6 +1507,9 @@ enablePlayerEnemyRadarDisplay( mode )
 
 	if ( mode == 1 )
 	{
+		if ( self hasPerk( "specialty_gpsjammer" ) )
+			self unsetPerk( "specialty_gpsjammer" );
+
 		self.hasRadar = true;
 		self setClientDvar( "ui_uav_client", 1 );
 		return;
@@ -1515,6 +1520,8 @@ enablePlayerEnemyRadarDisplay( mode )
 
 disableEnemyRadarDisplay()
 {
+	level.enemyRadarDisplayMode = 0;
+
 	if ( level.teamBased )
 	{
 		setTeamRadar( "allies", false );

@@ -816,6 +816,9 @@ spawnPlayer()
 			}
 		}
 	}
+
+	if ( isDefined( level.enemyRadarDisplayMode ) )
+		self enablePlayerEnemyRadarDisplay( level.enemyRadarDisplayMode );
 	
 	if ( level.inReadyUpPeriod ) {
 		// Check if we need to disable the weapons
