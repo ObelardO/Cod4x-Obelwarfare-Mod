@@ -624,6 +624,7 @@ clearDuelWorldItems()
 {
     deleteDroppedWeapons();
     deletePlacedExplosives();
+    deleteStationaryTurrets();
 }
 
 deleteDroppedWeapons()
@@ -663,6 +664,32 @@ deletePlacedExplosives()
     deleteEntsBy( "c4_mp_axis", "targetname" );
     deleteEntsBy( "claymore_mp_allies", "targetname" );
     deleteEntsBy( "claymore_mp_axis", "targetname" );
+}
+
+deleteStationaryTurrets()
+{
+    turretClasses = [];
+    turretClasses[0] = "misc_turret";
+    turretClasses[1] = "misc_mg42";
+
+    for( i = 0; i < turretClasses.size; i++ )
+    {
+        turrets = getEntArray( turretClasses[i], "classname" );
+        if( !isDefined( turrets ) )
+            continue;
+
+        for( t = 0; t < turrets.size; t++ )
+        {
+            if( !isDefined( turrets[t] ) )
+                continue;
+
+            owner = turrets[t] getTurretOwner();
+            if( isDefined( owner ) && isPlayer( owner ) )
+                owner unlink();
+
+            turrets[t] delete();
+        }
+    }
 }
 
 deleteEntsBy( value, key )
