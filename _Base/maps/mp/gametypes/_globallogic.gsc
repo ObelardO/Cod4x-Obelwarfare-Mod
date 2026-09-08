@@ -233,6 +233,7 @@ SetupCallbacks()
 	level.onScoreLimit = ::default_onScoreLimit;
 	level.onDeadEvent = ::default_onDeadEvent;
 	level.onOneLeftEvent = ::default_onOneLeftEvent;
+	level.onRemoveBomb = ::default_onRemoveBomb;
 	level.giveTeamScore = ::giveTeamScore;
 	level.givePlayerScore = ::givePlayerScore;
 	level.getTeamKillScore = ::default_getTeamKillScore;
@@ -3284,6 +3285,33 @@ resumeTimer()
 
 	level.timerStopped = false;
 	level.discardTime += gettime() - level.timerPauseTime;
+}
+
+
+removeBomb()
+{
+	[[level.onRemoveBomb]]();
+}
+
+
+default_onRemoveBomb()
+{
+	if ( !isDefined( level.bombPlanted ) )
+		return;
+
+	if ( level.bombPlanted == 0 )
+		return;
+
+	// Do not notify bomb_defused: in CoD4 that can complete the fuse wait
+	// as if the timer expired instead of killing bombPlanted().
+	level.bombFuseAborted = 1;
+	level.bombPlanted = 0;
+
+	if ( isDefined( level.tickingObject ) )
+		level.tickingObject maps\mp\gametypes\_globallogic::stopTickingSound();
+
+	setDvar( "ui_bomb_timer", 0 );
+	resumeTimer();
 }
 
 
