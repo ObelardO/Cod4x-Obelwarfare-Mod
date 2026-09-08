@@ -408,7 +408,7 @@ startDuel()
     abortPlantedBomb();
     setDuelRoundTimer();
     disableObjectives();
-    deleteMapWeapons();
+    clearDuelWorldItems();
     enablePermanentUav();
 
     players = level.players;
@@ -424,7 +424,7 @@ startDuel()
             player.pers["lives"] = 0;
     }
 
-    level thread keepMapClear();
+    level thread delayedClearDuelWorldItems();
 }
 
 onLoadoutGiven()
@@ -620,36 +620,67 @@ disableGameObject( object )
     object maps\mp\gametypes\_gameobjects::disableObject();
 }
 
-deleteMapWeapons()
+clearDuelWorldItems()
 {
-    if( !isDefined( level.weaponList ) )
-        return;
+    deleteDroppedWeapons();
+    deletePlacedExplosives();
+}
 
-    for( i = 0; i < level.weaponList.size; i++ )
+deleteDroppedWeapons()
+{
+    if( isDefined( level.weaponList ) )
     {
-        ents = getEntArray( "weapon_" + level.weaponList[i], "classname" );
-        for( e = 0; e < ents.size; e++ )
-        {
-            if( isDefined( ents[e] ) )
-                ents[e] delete();
-        }
+        for( i = 0; i < level.weaponList.size; i++ )
+            deleteEntsBy( "weapon_" + level.weaponList[i], "classname" );
     }
 
+    extras = [];
+    extras[extras.size] = "frag_grenade_mp";
+    extras[extras.size] = "frag_grenade_short_mp";
+    extras[extras.size] = "flash_grenade_mp";
+    extras[extras.size] = "concussion_grenade_mp";
+    extras[extras.size] = "smoke_grenade_mp";
+    extras[extras.size] = "c4_mp";
+    extras[extras.size] = "claymore_mp";
+    extras[extras.size] = "rpg_mp";
+    extras[extras.size] = "knife_mp";
+
+    for( i = 0; i < extras.size; i++ )
+        deleteEntsBy( "weapon_" + extras[i], "classname" );
+}
+
+deletePlacedExplosives()
+{
     players = level.players;
     for( i = 0; i < players.size; i++ )
     {
         if( isDefined( players[i] ) )
             players[i] deleteExplosives();
     }
+
+    deleteEntsBy( "grenade", "classname" );
+    deleteEntsBy( "c4_mp_allies", "targetname" );
+    deleteEntsBy( "c4_mp_axis", "targetname" );
+    deleteEntsBy( "claymore_mp_allies", "targetname" );
+    deleteEntsBy( "claymore_mp_axis", "targetname" );
 }
 
-keepMapClear()
+deleteEntsBy( value, key )
+{
+    ents = getEntArray( value, key );
+    for( i = 0; i < ents.size; i++ )
+    {
+        if( isDefined( ents[i] ) )
+            ents[i] delete();
+    }
+}
+
+delayedClearDuelWorldItems()
 {
     level endon( "game_ended" );
 
-    while( isDefined( level.finalDuel ) && level.finalDuel.active )
-    {
-        wait 1;
-        deleteMapWeapons();
-    }
+    wait 0.5;
+
+    if( isDefined( level.finalDuel ) && level.finalDuel.active )
+        clearDuelWorldItems();
 }
