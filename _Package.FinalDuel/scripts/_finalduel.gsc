@@ -409,7 +409,7 @@ startDuel()
     setDuelRoundTimer();
     disableObjectives();
     clearDuelWorldItems();
-    enablePermanentUav();
+    enableEnemyRadarDisplay( level.scr_finalduel_radar );
 
     players = level.players;
     for( i = 0; i < players.size; i++ )
@@ -446,7 +446,7 @@ applyDuelPlayer()
     self clearPlayerDebuffs();
     self restorePlayerHealth();
     self giveDuelLoadout();
-    self enablePlayerUav();
+    self enablePlayerEnemyRadarDisplay( level.scr_finalduel_radar );
 }
 
 giveDuelLoadout()
@@ -500,42 +500,6 @@ restorePlayerHealth()
         self.health = self.maxhealth;
     else if( isDefined( level.maxhealth ) )
         self.health = level.maxhealth;
-}
-
-enablePermanentUav()
-{
-    if( level.scr_finalduel_radar == 0 )
-        return;
-
-    if( level.scr_finalduel_radar == 1 && level.teamBased )
-    {
-        setTeamRadar( "allies", true );
-        setTeamRadar( "axis", true );
-        setDvar( "ui_uav_allies", 1 );
-        setDvar( "ui_uav_axis", 1 );
-    }
-
-    players = level.players;
-    for( i = 0; i < players.size; i++ )
-    {
-        if( isDefined( players[i] ) )
-            players[i] enablePlayerUav();
-    }
-}
-
-enablePlayerUav()
-{
-    if( level.scr_finalduel_radar == 0 )
-        return;
-
-    if( level.scr_finalduel_radar == 1 )
-    {
-        self.hasRadar = true;
-        self setClientDvar( "ui_uav_client", 1 );
-        return;
-    }
-
-    self setClientDvar( "g_compassShowEnemies", 1 );
 }
 
 abortPlantedBomb()
