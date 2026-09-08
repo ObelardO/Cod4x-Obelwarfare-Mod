@@ -75,7 +75,7 @@ init()
 	
 	// Set mod name and version
 	setDvar( "_Mod", "ObelWarfare Mod", true );
-	setDvar( "_ModVer", "v6.616 (RU)", true );
+	setDvar( "_ModVer", "v6.903 (RU)", true );
 
 	// Make a health check of the server
 	//level thread openwarfare\_servercheck::init();
@@ -816,6 +816,9 @@ spawnPlayer()
 			}
 		}
 	}
+
+	if ( isDefined( level.enemyRadarDisplayMode ) )
+		self enablePlayerEnemyRadarDisplay( level.enemyRadarDisplayMode );
 	
 	if ( level.inReadyUpPeriod ) {
 		// Check if we need to disable the weapons
@@ -1393,6 +1396,8 @@ endGame( winner, endReasonText )
 				player setClientDvar( "ui_lobbypopup", "summary" );
 		}
 	}
+
+	disableEnemyRadarDisplay();
 
 	//BEGIN_REGION: ROUND ENDING  
     game["roundsplayed"]++;

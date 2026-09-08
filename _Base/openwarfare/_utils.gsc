@@ -1476,3 +1476,71 @@ fadeHudElem( hudElem, fadeTime )
 	hudElem fadeOverTime( fadeTime );
 	hudElem.alpha = 0;
 }
+
+enableEnemyRadarDisplay( mode )
+{
+	if ( mode == 0 )
+		return;
+
+	level.enemyRadarDisplayMode = mode;
+
+	if ( mode == 1 && level.teamBased )
+	{
+		setTeamRadar( "allies", true );
+		setTeamRadar( "axis", true );
+		setDvar( "ui_uav_allies", 1 );
+		setDvar( "ui_uav_axis", 1 );
+	}
+
+	players = level.players;
+	for ( i = 0; i < players.size; i++ )
+	{
+		if ( isDefined( players[i] ) )
+			players[i] enablePlayerEnemyRadarDisplay( mode );
+	}
+}
+
+enablePlayerEnemyRadarDisplay( mode )
+{
+	if ( mode == 0 )
+		return;
+
+	if ( mode == 1 )
+	{
+		if ( self hasPerk( "specialty_gpsjammer" ) )
+			self unsetPerk( "specialty_gpsjammer" );
+
+		self.hasRadar = true;
+		self setClientDvar( "ui_uav_client", 1 );
+		return;
+	}
+
+	self setClientDvar( "g_compassShowEnemies", 1 );
+}
+
+disableEnemyRadarDisplay()
+{
+	level.enemyRadarDisplayMode = 0;
+
+	if ( level.teamBased )
+	{
+		setTeamRadar( "allies", false );
+		setTeamRadar( "axis", false );
+		setDvar( "ui_uav_allies", 0 );
+		setDvar( "ui_uav_axis", 0 );
+	}
+
+	players = level.players;
+	for ( i = 0; i < players.size; i++ )
+	{
+		if ( isDefined( players[i] ) )
+			players[i] disablePlayerEnemyRadarDisplay();
+	}
+}
+
+disablePlayerEnemyRadarDisplay()
+{
+	self.hasRadar = false;
+	self setClientDvar( "ui_uav_client", 0 );
+	self setClientDvar( "g_compassShowEnemies", 0 );
+}

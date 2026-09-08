@@ -76,7 +76,7 @@ main()
 	
 	level.scr_ch_ownerspawndelay = getdvarx( "scr_ch_ownerspawndelay", "int", 0, 0, 60 );	
 
-	level.scr_ch_suddendeath_show_enemies = getdvarx( "scr_ch_suddendeath_show_enemies", "int", 1, 0, 1 );
+	level.scr_ch_suddendeath_show_enemies = getdvarx( "scr_ch_suddendeath_show_enemies", "int", 1, 0, 2 );
 	level.scr_ch_suddendeath_timelimit = getdvarx( "scr_ch_suddendeath_timelimit", "int", 90, 0, 600 );
 	
 	maps\mp\gametypes\_globallogic::init();
@@ -322,15 +322,16 @@ onOvertime()
 		level.players[index] notify("force_spawn");
 		level.players[index] thread maps\mp\gametypes\_hud_message::oldNotifyMessage( &"MP_SUDDEN_DEATH", &"MP_NO_RESPAWN", undefined, (1, 0, 0), "mp_last_stand" );
 
-		if ( level.scr_ch_suddendeath_show_enemies == 1 ) {
+		if ( level.scr_ch_suddendeath_show_enemies != 0 ) {
 			level.players[index] setClientDvars("cg_deadChatWithDead", 1,
 								"cg_deadChatWithTeam", 0,
 								"cg_deadHearTeamLiving", 0,
 								"cg_deadHearAllLiving", 0,
-								"cg_everyoneHearsEveryone", 0,
-								"g_compassShowEnemies", 1 );
+								"cg_everyoneHearsEveryone", 0 );
 		}
 	}
+
+	enableEnemyRadarDisplay( level.scr_ch_suddendeath_show_enemies );
 
 	if ( level.scr_ch_suddendeath_timelimit > 0 ) {
 		waitTime = 0;

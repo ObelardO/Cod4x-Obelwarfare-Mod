@@ -31,7 +31,7 @@ REFERENCE PASSED
 LANG_RUSSIAN "Финальная дуэль началась"
 
 REFERENCE FAILED
-LANG_RUSSIAN "Голосование за финальную дуэль провалено"
+LANG_RUSSIAN "Голосование за финальную дуэль не удалось"
 
 REFERENCE ALREADY
 LANG_RUSSIAN "Голосование за финальную дуэль уже было в этом раунде"
@@ -43,9 +43,9 @@ REFERENCE NEED_PLAYERS
 LANG_RUSSIAN "Недостаточно живых игроков для финальной дуэли"
 
 REFERENCE UAV
-LANG_RUSSIAN "UAV активирован постоянно"
+LANG_RUSSIAN "UAV активирован для всех"
 
 REFERENCE COMPASS
-LANG_RUSSIAN "Враги отображаются на компасе"
+LANG_RUSSIAN "Враги отображаются на радаре"
 
 ENDMARKER

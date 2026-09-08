@@ -377,6 +377,9 @@ LANG_RUSSIAN "Уничтожайте всех других игроков"
 REFERENCE UAV_ON
 LANG_ENGLISH "UAV Активирован для всех"
 
+REFERENCE COMPASS_ON
+LANG_RUSSIAN "Враги отображаются на компасе"
+
 
 //******************************************************************************
 // maps/mp/gametypes/re.gsc

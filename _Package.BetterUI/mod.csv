@@ -27,7 +27,7 @@ material,hud_background_line
 material,hud_background_line_half
 material,hud_background_line_half_inv
 material,hud_background_quad
-material,hud_explosive_locked
+material,hud_slot_locked
 material,waypoint_dead
 material,faction_128_arab_big
 material,faction_128_arab_small
@@ -37,3 +37,6 @@ material,faction_128_usmc_big
 material,faction_128_usmc_small
 material,faction_128_ussr_big
 material,faction_128_ussr_small
+material,compass_objpoint_satallite
+material,compass_objpoint_airstrike
+material,compass_objpoint_helicopter

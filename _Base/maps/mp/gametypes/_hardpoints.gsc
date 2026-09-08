@@ -13,6 +13,7 @@
 
 #include maps\mp\_utility;
 #include maps\mp\gametypes\_hud_util;
+#include maps\mp\gametypes\_hardpoints_utils;
 #include common_scripts\utility;
 #include openwarfare\_utils;
 
@@ -66,14 +67,16 @@ init()
 	setDvar( "ui_uav_axis", 0 );
 	setDvar( "ui_uav_client", 0 );
 
+	level.hardpoints = [];
 	level.hardpointItems = [];
-	priority = 0;
-	level.hardpointItems["radar_mp"] = priority;
-	priority++;
-	level.hardpointItems["airstrike_mp"] = priority;
-	priority++;
-	level.hardpointItems["helicopter_mp"] = priority;
-	priority++;
+
+	uavEnabled = 0;
+	if ( level.scr_hardpoint_allow_uav == 1 && level.scr_game_forceuav == 0 )
+		uavEnabled = 1;
+
+	registerHardpoint( "radar_mp", level.scr_hardpoint_uav_streak, uavEnabled, "compass_objpoint_satallite" );
+	registerHardpoint( "airstrike_mp", level.scr_hardpoint_airstrike_streak, level.scr_hardpoint_allow_airstrike, "compass_objpoint_airstrike" );
+	registerHardpoint( "helicopter_mp", level.scr_hardpoint_helicopter_streak, level.scr_hardpoint_allow_helicopter, "compass_objpoint_helicopter" );
 
 	level.hardpointHints["radar_mp"] = &"MP_EARNED_RADAR";
 	level.hardpointHints["airstrike_mp"] = &"MP_EARNED_AIRSTRIKE";
@@ -148,6 +151,22 @@ init()
 distance2d(a,b)
 {
 	return distance((a[0],a[1],0), (b[0],b[1],0));
+}
+
+
+registerHardpoint( hardpointType, streak, enabled, hudIcon )
+{
+	hardpoint = spawnStruct();
+	hardpoint.type = hardpointType;
+	hardpoint.streak = streak;
+	hardpoint.enabled = enabled;
+	hardpoint.hudIcon = hudIcon;
+
+	level.hardpointItems[hardpointType] = level.hardpoints.size;
+	level.hardpoints[level.hardpoints.size] = hardpoint;
+
+	if ( isDefined( hudIcon ) && hudIcon != "" )
+		preCacheShader( hudIcon );
 }
 
 
@@ -891,62 +910,22 @@ playSoundinSpace (alias, origin, master)
 // [0.0.1] Entire function has been re-written to support new parameters
 giveHardpointItemForStreak()
 {
-	// Check if we need to use the kill streak or the amount of kills
-	if ( level.scr_game_hardpoints_mode == 0 ) {
-		streak = self.cur_kill_streak;
-		actualstreak = self.cur_kill_streak;
-	} else {
-		streak = self.kills;
-		actualstreak = self.kills;
-	}
+	actualstreak = self getHardpointStreakCount();
 
 	// If hardpoints are disabled then just show the kill streak messages
 	if ( level.scr_game_hardpoints != 1 ) {
-		if ( streak && (streak % 5) == 0 )
-			self streakNotify( streak );
+		if ( actualstreak && (actualstreak % 5) == 0 )
+			self streakNotify( actualstreak );
 		return;
 	}
 
-	// If the kill streak is more than 0 (this function can be called and kill streak be 0 sometimes) and hardpoints cycling is active
-	if ( actualstreak && level.scr_game_hardpoints_cycle == 1 ) {
-		// Check what's the turning point to start the cycle again
-		cyclestreak = 0;
+	streak = getCycledHardpointStreak( actualstreak );
+	hardpoint = getHardpointAtStreak( streak );
 
-		if ( level.scr_hardpoint_allow_uav == 1 && level.scr_hardpoint_uav_streak > cyclestreak && level.scr_game_forceuav == 0 )
-			cyclestreak = level.scr_hardpoint_uav_streak;
-
-		if ( level.scr_hardpoint_allow_airstrike == 1 && level.scr_hardpoint_airstrike_streak > cyclestreak )
-			cyclestreak = level.scr_hardpoint_airstrike_streak;
-
-		if ( level.scr_hardpoint_allow_helicopter == 1 && level.scr_hardpoint_helicopter_streak > cyclestreak )
-			cyclestreak = level.scr_hardpoint_helicopter_streak;
-
-		// If the kill streak is bigger than the the turning point to start all over again calculate the number of streaks past the turning point
-		if ( cyclestreak && actualstreak > cyclestreak ) {
-			streak = ( actualstreak % cyclestreak );
-			// If the remaining is 0 then it means we are at a point where the kill streak equals the turning point for the cycle
-			if ( streak == 0 ) {
-				streak = cyclestreak;
-			}
-		}
-	}
-
-	// Check if UAV is active and if we have reached the kill streak for it
-	if ( level.scr_hardpoint_allow_uav == 1 && streak == level.scr_hardpoint_uav_streak && level.scr_game_forceuav == 0 )
-		self giveHardpoint( "radar_mp", actualstreak );
-
-	// Check if Airstrike is active and if we have reached the kill streak for it
-	else if ( level.scr_hardpoint_allow_airstrike == 1 && streak == level.scr_hardpoint_airstrike_streak )
-		self giveHardpoint( "airstrike_mp", actualstreak );
-
-	// Check if Helicopter is active and if we have reached the kill streak for it
-	else if ( level.scr_hardpoint_allow_helicopter == 1 && streak == level.scr_hardpoint_helicopter_streak )
-		self giveHardpoint( "helicopter_mp", actualstreak );
-
-	// Just notify about the kill streak every 5 kills
+	if ( isDefined( hardpoint ) )
+		self giveHardpoint( hardpoint.type, actualstreak );
 	else if ( actualstreak && (actualstreak % 5) == 0 )
 		self streakNotify( actualstreak );
-
 }
 
 
@@ -1154,41 +1133,13 @@ triggerHardpoint( hardpointType )
 			return false;
 		}
 
-		// [0.0.1] Check if we need to wait for certain interval to use the airstrike again
-		if ( level.scr_airstrike_hardpoint_interval > 0 ) {
-			if ( level.teambased ) {
-				// Get the time of the last airstrike for the team calling this airstrike
-				team = self.pers["team"];
-				if ( team == "allies" ) {
-					if ( isDefined( level.allies_last_airstrike ) ) {
-						last_airstrike = level.allies_last_airstrike;
-					} else {
-						last_airstrike = 0;
-					}
-				} else {
-					if ( isDefined( level.axis_last_airstrike ) ) {
-						last_airstrike = level.axis_last_airstrike;
-					} else {
-						last_airstrike = 0;
-					}
-				}
-			} else {
-				// Get the time of the last airstrike by this player
-				if ( isDefined( self.pers["last_airstrike"] ) ) {
-					last_airstrike = self.pers["last_airstrike"];
-				} else {
-					last_airstrike = 0;
-				}
-			}
-			// If we still need to wait because the interval time is not over yet then send a message to the player
-			currentTime = openwarfare\_timer::getTimePassed() / 1000;
-			if ( last_airstrike > 0 && ( currentTime - last_airstrike ) < level.scr_airstrike_hardpoint_interval ) {
-				availableIn = int(level.scr_airstrike_hardpoint_interval - ( currentTime - last_airstrike ));
-				self iPrintLnBold( &"OW_AIRSTRIKE_AVAILABLEIN", availableIn );
-				return false;
-			}
+		availableIn = self getAirstrikeCooldownTime();
+
+		if ( availableIn > 0 )
+		{
+			self iPrintLnBold( &"OW_AIRSTRIKE_AVAILABLEIN", availableIn );
+			return false;
 		}
-		// [0.0.1]
 
 		result = self selectAirstrikeLocation();
 
@@ -1212,43 +1163,14 @@ triggerHardpoint( hardpointType )
 			self iPrintLnBold( level.hardpointHints[hardpointType+"_not_available"] );
 			return false;
 		}
-	
-		// [0.0.1] Check if we need to wait an interval to use helicopter again
-		if ( level.scr_heli_hardpoint_interval > 0 ) {
-			if ( level.teambased ) {
-				// Get the last time the Helicopter was used by this team
-				team = self.pers["team"];
-				if ( team == "allies" ) {
-					if ( isDefined( level.allies_last_heli ) ) {
-						last_heli = level.allies_last_heli;
-					} else {
-						last_heli = 0;
-					}
-				} else {
-					if ( isDefined( level.axis_last_heli ) ) {
-						last_heli = level.axis_last_heli;
-					} else {
-						last_heli = 0;
-					}
-				}
-			} else {
-				// Get the last time the helicopter was used by this player
-				if ( isDefined( self.pers["last_heli"] ) ) {
-					last_heli = self.pers["last_heli"];
-				} else {
-					last_heli = 0;
-				}
-			}
 
-			// If we still need to wait to allow the Heliocopter send a message to the player
-			currentTime = openwarfare\_timer::getTimePassed() / 1000;
-			if ( last_heli > 0 && ( currentTime - last_heli ) < level.scr_heli_hardpoint_interval ) {
-				availableIn = int(level.scr_heli_hardpoint_interval - ( currentTime - last_heli ));
-				self iPrintLnBold( &"OW_HELICOPTER_AVAILABLEIN", availableIn );
-				return false;
-			}
+		availableIn = self getHelicopterCooldownTime();
+
+		if ( availableIn > 0 )
+		{
+			self iPrintLnBold( &"OW_HELICOPTER_AVAILABLEIN", availableIn );
+			return false;
 		}
-		// [0.0.1]
 
 		destination = 0;
 		random_path = randomint( level.heli_paths[destination].size );
