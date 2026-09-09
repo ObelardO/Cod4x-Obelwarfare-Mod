@@ -99,6 +99,7 @@ main()
 	level.onOneLeftEvent = ::onOneLeftEvent;
 	level.onTimeLimit = ::onTimeLimit;
 	level.onRoundSwitch = ::onRoundSwitch;
+	level.onRemoveObjectives = ::onRemoveObjectives;
 
 	if ( level.scr_re_defenders_spawndelay > 0 ) {
 		level.onRespawnDelay = ::getRespawnDelay;
@@ -780,4 +781,12 @@ disableObject()
 	} else {
 		self maps\mp\gametypes\_gameobjects::disableObject();
 	}	
+}
+
+
+onRemoveObjectives()
+{
+	level.goalZone maps\mp\gametypes\_gameobjects::disableObject();
+	level.objectiveA maps\mp\gametypes\_gameobjects::disableObject();
+	level.objectiveB maps\mp\gametypes\_gameobjects::disableObject();
 }

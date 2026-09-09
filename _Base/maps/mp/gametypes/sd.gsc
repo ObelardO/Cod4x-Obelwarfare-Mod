@@ -134,7 +134,7 @@ main()
 	level.onOneLeftEvent = ::onOneLeftEvent;
 	level.onTimeLimit = ::onTimeLimit;
 	level.onRoundSwitch = ::onRoundSwitch;
-	level.onRemoveBomb = ::onRemoveBomb;
+	level.onRemoveObjectives = ::onRemoveObjectives;
 	level.getTeamKillPenalty = ::sd_getTeamKillPenalty;
 	level.getTeamKillScore = ::sd_getTeamKillScore;				
 
@@ -1119,9 +1119,37 @@ bombDefused()
 }
 
 
-onRemoveBomb()
+onRemoveObjectives()
 {
-	maps\mp\gametypes\_globallogic::default_onRemoveBomb();
+	abortPlantedBomb();
+
+	level.sdBomb maps\mp\gametypes\_gameobjects::disableObject();
+	level.defuseObject maps\mp\gametypes\_gameobjects::disableObject();
+	maps\mp\gametypes\_gameobjects::disableObjectsArray( level.bombZones );
+
+	if ( isDefined( level.sdBombModel ) )
+		level.sdBombModel hide();
+}
+
+
+abortPlantedBomb()
+{
+	if ( !isDefined( level.bombPlanted ) )
+		return;
+
+	if ( level.bombPlanted == 0 )
+		return;
+
+	// Do not notify bomb_defused: in CoD4 that can complete the fuse wait
+	// as if the timer expired instead of killing bombPlanted().
+	level.bombFuseAborted = 1;
+	level.bombPlanted = 0;
+
+	if ( isDefined( level.tickingObject ) )
+		level.tickingObject maps\mp\gametypes\_globallogic::stopTickingSound();
+
+	setDvar( "ui_bomb_timer", 0 );
+	maps\mp\gametypes\_globallogic::resumeTimer();
 }
 
 

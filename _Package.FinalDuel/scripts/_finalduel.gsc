@@ -416,9 +416,8 @@ startDuel()
 
     level.numLives = 1;
 
-    maps\mp\gametypes\_globallogic::removeBomb();
+    maps\mp\gametypes\_globallogic::removeObjectives();
     setDuelRoundTimer();
-    disableObjectives();
     clearDuelWorldItems();
     enableEnemyRadarDisplay( level.scr_finalduel_radar );
 
@@ -541,57 +540,6 @@ setDuelRoundTimer()
     level.discardTime = ( getTime() - level.startTime ) - ( limitMs - desiredMs );
 
     setGameEndTime( getTime() + desiredMs );
-}
-
-disableObjectives()
-{
-    disableGameObject( level.radioObject );
-
-    disableGameObjectArray( level.domFlags );
-
-    if( isDefined( level.flags ) )
-    {
-        if( isDefined( level.flags["allies"] ) )
-            disableGameObject( level.flags["allies"] );
-
-        if( isDefined( level.flags["axis"] ) )
-            disableGameObject( level.flags["axis"] );
-    }
-
-    disableGameObject( level.sdBomb );
-    disableGameObject( level.defuseObject );
-    disableGameObjectArray( level.bombZones );
-
-    if( isDefined( level.bombZones ) )
-    {
-        if( isDefined( level.bombZones["allies"] ) )
-            disableGameObject( level.bombZones["allies"] );
-
-        if( isDefined( level.bombZones["axis"] ) )
-            disableGameObject( level.bombZones["axis"] );
-    }
-
-    disableGameObject( level.sabBomb );
-
-    if( isDefined( level.sdBombModel ) )
-        level.sdBombModel hide();
-}
-
-disableGameObjectArray( objects )
-{
-    if( !isDefined( objects ) )
-        return;
-
-    for( i = 0; i < objects.size; i++ )
-        disableGameObject( objects[i] );
-}
-
-disableGameObject( object )
-{
-    if( !isDefined( object ) )
-        return;
-
-    object maps\mp\gametypes\_gameobjects::disableObject();
 }
 
 clearDuelWorldItems()
