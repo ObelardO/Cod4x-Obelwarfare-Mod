@@ -1986,6 +1986,9 @@ setCarryIcon( shader )
 
 disableObject()
 {
+	if ( !isDefined( self ) )
+		return;
+
 	self notify("disabled");
 
 	if ( self.type == "carryObject" )
@@ -2001,6 +2004,21 @@ disableObject()
 
 	self.trigger triggerOff();
 	self setVisibleTeam( "none" );
+}
+
+
+disableObjectsArray( objects )
+{
+	if ( !isDefined( objects ) )
+		return;
+
+	for ( i = 0; i < objects.size; i++ )
+	{
+		if ( !isDefined( objects[i] ) )
+			continue;
+
+		objects[i] disableObject();
+	}
 }
 
 

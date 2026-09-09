@@ -111,6 +111,7 @@ main()
 	level.onRoundSwitch = ::onRoundSwitch;
 	level.onSpawnPlayer = ::onSpawnPlayer;
 	level.onStartGameType = ::onStartGameType;
+	level.onRemoveObjectives = ::onRemoveObjectives;
 		
 	if ( level.scr_ctf_endround_on_capture == 1 ) {
 		level.onTimeLimit = ::onTimeLimit;
@@ -1129,4 +1130,14 @@ delayedLeaderDialog( sound, team )
 	wait .1;
 	maps\mp\gametypes\_globallogic::WaitTillSlowProcessAllowed();
 	maps\mp\gametypes\_globallogic::leaderDialog( sound, team );
+}
+
+
+onRemoveObjectives()
+{
+	if ( !isDefined( level.flags ) )
+		return;
+
+	level.flags["allies"] maps\mp\gametypes\_gameobjects::disableObject();
+	level.flags["axis"] maps\mp\gametypes\_gameobjects::disableObject();
 }

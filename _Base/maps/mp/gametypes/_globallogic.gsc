@@ -233,6 +233,7 @@ SetupCallbacks()
 	level.onScoreLimit = ::default_onScoreLimit;
 	level.onDeadEvent = ::default_onDeadEvent;
 	level.onOneLeftEvent = ::default_onOneLeftEvent;
+	level.onRemoveObjectives = ::blank;
 	level.giveTeamScore = ::giveTeamScore;
 	level.givePlayerScore = ::givePlayerScore;
 	level.getTeamKillScore = ::default_getTeamKillScore;
@@ -3284,6 +3285,12 @@ resumeTimer()
 
 	level.timerStopped = false;
 	level.discardTime += gettime() - level.timerPauseTime;
+}
+
+
+removeObjectives()
+{
+	[[level.onRemoveObjectives]]();
 }
 
 

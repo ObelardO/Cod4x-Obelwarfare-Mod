@@ -100,6 +100,7 @@ main()
 	level.onRoundSwitch = ::onRoundSwitch;
 	level.onSpawnPlayer = ::onSpawnPlayer;
 	level.onStartGameType = ::onStartGameType;
+	level.onRemoveObjectives = ::onRemoveObjectives;
 	
 	if ( level.scr_ch_chmode == 0 ) {
 		level.onTimeLimit = ::onTimeLimit;
@@ -959,4 +960,10 @@ forceSpawnTeam( team )
 			wait .1;
 		}
 	}
+}
+
+
+onRemoveObjectives()
+{
+	level.flag maps\mp\gametypes\_gameobjects::disableObject();
 }

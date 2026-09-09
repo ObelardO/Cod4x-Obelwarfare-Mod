@@ -153,7 +153,7 @@ watchRoundReset()
 
 tryStartVote()
 {
-    if( !isAlive( self ) || self.sessionstate != "playing" )
+    if( !self isDuelAlivePlayer() )
     {
         self iprintln( &"OW_FINALDUEL_NOT_ALIVE" );
         return;
@@ -304,19 +304,30 @@ getAlivePlayers()
     for( i = 0; i < players.size; i++ )
     {
         player = players[i];
-        if( !isDefined( player ) || !isPlayer( player ) )
+        if( !isDefined( player ) )
             continue;
 
-        if( !isAlive( player ) || player.sessionstate != "playing" )
-            continue;
-
-        if( !isDefined( player.pers["team"] ) || player.pers["team"] == "spectator" )
+        if( !player isDuelAlivePlayer() )
             continue;
 
         alive[alive.size] = player;
     }
 
     return alive;
+}
+
+isDuelAlivePlayer()
+{
+    if( !isDefined( self ) || !isPlayer( self ) )
+        return false;
+
+    if( !isAlive( self ) || self.sessionstate != "playing" )
+        return false;
+
+    if( !isDefined( self.pers["team"] ) || self.pers["team"] == "spectator" )
+        return false;
+
+    return true;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -403,13 +414,14 @@ startDuel()
         level.finalDuel.loadoutHooked = true;
     }
 
+    level.onTimeLimit = maps\mp\gametypes\_globallogic::default_onTimeLimit;
+
     level.numLives = 1;
 
-    abortPlantedBomb();
+    maps\mp\gametypes\_globallogic::removeObjectives();
     setDuelRoundTimer();
-    disableObjectives();
     clearDuelWorldItems();
-    enablePermanentUav();
+    enableEnemyRadarDisplay( level.scr_finalduel_radar );
 
     players = level.players;
     for( i = 0; i < players.size; i++ )
@@ -418,12 +430,14 @@ startDuel()
         if( !isDefined( player ) || !isPlayer( player ) )
             continue;
 
-        if( isAlive( player ) && player.sessionstate == "playing" )
+        if( player isDuelAlivePlayer() )
             player thread applyDuelPlayer();
         else
             player.pers["lives"] = 0;
     }
 
+    waittillframeend;
+    deleteStationaryTurrets();
     level thread delayedClearDuelWorldItems();
 }
 
@@ -443,10 +457,11 @@ applyDuelPlayer()
 
     self.pers["lives"] = 0;
 
+    self unlink();
     self clearPlayerDebuffs();
     self restorePlayerHealth();
     self giveDuelLoadout();
-    self enablePlayerUav();
+    self enablePlayerEnemyRadarDisplay( level.scr_finalduel_radar );
 }
 
 giveDuelLoadout()
@@ -502,60 +517,6 @@ restorePlayerHealth()
         self.health = level.maxhealth;
 }
 
-enablePermanentUav()
-{
-    if( level.scr_finalduel_radar == 0 )
-        return;
-
-    if( level.scr_finalduel_radar == 1 && level.teamBased )
-    {
-        setTeamRadar( "allies", true );
-        setTeamRadar( "axis", true );
-        setDvar( "ui_uav_allies", 1 );
-        setDvar( "ui_uav_axis", 1 );
-    }
-
-    players = level.players;
-    for( i = 0; i < players.size; i++ )
-    {
-        if( isDefined( players[i] ) )
-            players[i] enablePlayerUav();
-    }
-}
-
-enablePlayerUav()
-{
-    if( level.scr_finalduel_radar == 0 )
-        return;
-
-    if( level.scr_finalduel_radar == 1 )
-    {
-        self.hasRadar = true;
-        self setClientDvar( "ui_uav_client", 1 );
-        return;
-    }
-
-    self setClientDvar( "g_compassShowEnemies", 1 );
-}
-
-abortPlantedBomb()
-{
-    if( !isDefined( level.bombPlanted ) || !level.bombPlanted )
-        return;
-
-    level.bombPlanted = false;
-    level notify( "bomb_defused" );
-
-    if( isDefined( level.tickingObject ) )
-        level.tickingObject maps\mp\gametypes\_globallogic::stopTickingSound();
-
-    if( isDefined( level.sdBombModel ) )
-        level.sdBombModel hide();
-
-    setDvar( "ui_bomb_timer", 0 );
-    maps\mp\gametypes\_globallogic::resumeTimer();
-}
-
 setDuelRoundTimer()
 {
     desiredMs = level.scr_finalduel_time * 1000;
@@ -583,48 +544,10 @@ setDuelRoundTimer()
     setGameEndTime( getTime() + desiredMs );
 }
 
-disableObjectives()
-{
-    disableGameObject( level.sdBomb );
-    disableGameObject( level.defuseObject );
-    disableGameObject( level.sabBomb );
-    disableGameObject( level.radioObject );
-
-    disableGameObjectArray( level.bombZones );
-    disableGameObjectArray( level.domFlags );
-
-    if( isDefined( level.flags ) )
-    {
-        if( isDefined( level.flags["allies"] ) )
-            disableGameObject( level.flags["allies"] );
-
-        if( isDefined( level.flags["axis"] ) )
-            disableGameObject( level.flags["axis"] );
-    }
-}
-
-disableGameObjectArray( objects )
-{
-    if( !isDefined( objects ) )
-        return;
-
-    for( i = 0; i < objects.size; i++ )
-        disableGameObject( objects[i] );
-}
-
-disableGameObject( object )
-{
-    if( !isDefined( object ) )
-        return;
-
-    object maps\mp\gametypes\_gameobjects::disableObject();
-}
-
 clearDuelWorldItems()
 {
     deleteDroppedWeapons();
     deletePlacedExplosives();
-    deleteStationaryTurrets();
 }
 
 deleteDroppedWeapons()
@@ -644,7 +567,6 @@ deleteDroppedWeapons()
     extras[extras.size] = "c4_mp";
     extras[extras.size] = "claymore_mp";
     extras[extras.size] = "rpg_mp";
-    extras[extras.size] = "knife_mp";
 
     for( i = 0; i < extras.size; i++ )
         deleteEntsBy( "weapon_" + extras[i], "classname" );
@@ -668,28 +590,7 @@ deletePlacedExplosives()
 
 deleteStationaryTurrets()
 {
-    turretClasses = [];
-    turretClasses[0] = "misc_turret";
-    turretClasses[1] = "misc_mg42";
-
-    for( i = 0; i < turretClasses.size; i++ )
-    {
-        turrets = getEntArray( turretClasses[i], "classname" );
-        if( !isDefined( turrets ) )
-            continue;
-
-        for( t = 0; t < turrets.size; t++ )
-        {
-            if( !isDefined( turrets[t] ) )
-                continue;
-
-            owner = turrets[t] getTurretOwner();
-            if( isDefined( owner ) && isPlayer( owner ) )
-                owner unlink();
-
-            turrets[t] delete();
-        }
-    }
+    openwarfare\_stationaryturrets::removeStationaryTurrets();
 }
 
 deleteEntsBy( value, key )

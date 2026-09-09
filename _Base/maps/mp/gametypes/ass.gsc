@@ -100,6 +100,7 @@ main()
 	level.onSpawnPlayer = ::onSpawnPlayer;
 	level.onStartGameType = ::onStartGameType;
 	level.onTimeLimit = ::onTimeLimit;
+	level.onRemoveObjectives = ::onRemoveObjectives;
 
 	game["dialog"]["gametype"] = gameTypeDialog( "ass" );
 	
@@ -720,4 +721,10 @@ detachHead()
 	}
 	
 	return;
+}
+
+
+onRemoveObjectives()
+{
+	level.extractionZone maps\mp\gametypes\_gameobjects::disableObject();
 }

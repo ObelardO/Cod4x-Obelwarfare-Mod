@@ -134,6 +134,7 @@ main()
 	level.onOneLeftEvent = ::onOneLeftEvent;
 	level.onTimeLimit = ::onTimeLimit;
 	level.onRoundSwitch = ::onRoundSwitch;
+	level.onRemoveObjectives = ::onRemoveObjectives;
 	level.getTeamKillPenalty = ::sd_getTeamKillPenalty;
 	level.getTeamKillScore = ::sd_getTeamKillScore;				
 
@@ -540,6 +541,8 @@ bombs()
 	level.bombPlanted = false;
 	level.bombDefused = false;
 	level.bombExploded = false;
+	level.bombFuseAborted = 0;
+	level.bombWrongWire = 0;
 
 	trigger = getEnt( "sd_bomb_pickup_trig", "targetname" );
 	if ( !isDefined( trigger ) )
@@ -899,8 +902,12 @@ onReset()
 
 bombPlanted( destroyedObj, player )
 {
+	level endon( "bomb_defused" );
+
 	maps\mp\gametypes\_globallogic::pauseTimer();
 	level.bombPlanted = true;
+	level.bombWrongWire = 0;
+	level thread watchBombWrongWire();
 	if ( level.scr_sd_bomb_notification_enable == 1 )
 		destroyedObj.visuals[0] thread maps\mp\gametypes\_globallogic::playTickingSound();
 	level.tickingObject = destroyedObj.visuals[0];
@@ -987,12 +994,41 @@ bombPlanted( destroyedObj, player )
 
 	level.defuseObject = defuseObject;
 
-	BombTimerWait();
+	endTime = gettime() + ( level.bombTimer * 1000 );
+	while ( 1 )
+	{
+		if ( level.bombFuseAborted == 1 )
+			break;
+
+		if ( level.bombPlanted == 0 )
+			break;
+
+		if ( level.gameEnded == 1 )
+			break;
+
+		if ( level.bombWrongWire == 1 )
+			break;
+
+		if ( gettime() >= endTime )
+			break;
+
+		wait 0.05;
+	}
+
 	setDvar( "ui_bomb_timer", 0 );
-  if ( level.scr_sd_bomb_notification_enable == 1 )
+	if ( level.scr_sd_bomb_notification_enable == 1 )
 		destroyedObj.visuals[0] maps\mp\gametypes\_globallogic::stopTickingSound();
 
-	if ( level.gameEnded || level.bombDefused )
+	if ( level.gameEnded == 1 )
+		return;
+
+	if ( level.bombDefused == 1 )
+		return;
+
+	if ( level.bombPlanted == 0 )
+		return;
+
+	if ( level.bombFuseAborted == 1 )
 		return;
 
 	level.bombExploded = true;
@@ -1025,14 +1061,6 @@ bombPlanted( destroyedObj, player )
 	sd_endGame( game["attackers"], game["strings"]["target_destroyed"] );
 }
 
-BombTimerWait()
-{
-	level endon("game_ended");
-	level endon("bomb_defused");
-	level endon("wrong_wire");
-	wait level.bombTimer;
-}
-
 playSoundinSpace( alias, origin )
 {
 	org = spawn( "script_origin", origin );
@@ -1040,6 +1068,39 @@ playSoundinSpace( alias, origin )
 	org playSound( alias  );
 	wait 10; // MP doesn't have "sounddone" notifies =(
 	org delete();
+}
+
+BombTimerWait()
+{
+	level endon( "bomb_defused" );
+
+	endTime = gettime() + ( level.bombTimer * 1000 );
+	while ( 1 )
+	{
+		if ( level.bombFuseAborted == 1 )
+		{
+			level waittill( "bomb_fuse_abort_hang" );
+			return;
+		}
+
+		if ( level.gameEnded == 1 )
+			return;
+
+		if ( level.bombWrongWire == 1 )
+			return;
+
+		if ( gettime() >= endTime )
+			return;
+
+		wait 0.05;
+	}
+}
+
+watchBombWrongWire()
+{
+	level endon( "bomb_defused" );
+	level waittill( "wrong_wire" );
+	level.bombWrongWire = 1;
 }
 
 bombDefused()
@@ -1055,6 +1116,40 @@ bombDefused()
 	setGameEndTime( 0 );
 
 	sd_endGame( game["defenders"], game["strings"]["bomb_defused"] );
+}
+
+
+onRemoveObjectives()
+{
+	abortPlantedBomb();
+
+	level.sdBomb maps\mp\gametypes\_gameobjects::disableObject();
+	level.defuseObject maps\mp\gametypes\_gameobjects::disableObject();
+	maps\mp\gametypes\_gameobjects::disableObjectsArray( level.bombZones );
+
+	if ( isDefined( level.sdBombModel ) )
+		level.sdBombModel hide();
+}
+
+
+abortPlantedBomb()
+{
+	if ( !isDefined( level.bombPlanted ) )
+		return;
+
+	if ( level.bombPlanted == 0 )
+		return;
+
+	// Do not notify bomb_defused: in CoD4 that can complete the fuse wait
+	// as if the timer expired instead of killing bombPlanted().
+	level.bombFuseAborted = 1;
+	level.bombPlanted = 0;
+
+	if ( isDefined( level.tickingObject ) )
+		level.tickingObject maps\mp\gametypes\_globallogic::stopTickingSound();
+
+	setDvar( "ui_bomb_timer", 0 );
+	maps\mp\gametypes\_globallogic::resumeTimer();
 }
 
 
