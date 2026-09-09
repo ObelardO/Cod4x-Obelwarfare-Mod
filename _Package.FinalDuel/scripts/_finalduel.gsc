@@ -414,6 +414,8 @@ startDuel()
         level.finalDuel.loadoutHooked = true;
     }
 
+    level.onTimeLimit = maps\mp\gametypes\_globallogic::default_onTimeLimit;
+
     level.numLives = 1;
 
     maps\mp\gametypes\_globallogic::removeObjectives();
