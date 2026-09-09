@@ -736,8 +736,6 @@ onCantUse( player )
 
 bombPlanted( destroyedObj, team )
 {
-	level endon( "bomb_defused" );
-
 	maps\mp\gametypes\_globallogic::pauseTimer();
 	level.bombPlanted = true;
 	level.bombPlantedBy = team;
@@ -867,6 +865,9 @@ bombDefused( object )
 	level.bombPlanted = false;
 	if ( !level.inOvertime )
 		level.timeLimitOverride = false;
+
+	if ( isDefined( level.tickingObject ) )
+		level.tickingObject maps\mp\gametypes\_globallogic::stopTickingSound();
 
 	level notify("bomb_defused");
 }
