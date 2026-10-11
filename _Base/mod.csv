@@ -195,7 +195,6 @@ rawfile,maps/mp/gametypes/vg.gsc
 rawfile,maps/mp/gametypes/vg.txt
 rawfile,maps/mp/gametypes/war.gsc
 
-
 fx,freezetag/defrostbeam
 fx,freezetag/defrostbeamred
 fx,greed/ui_pickup_green
