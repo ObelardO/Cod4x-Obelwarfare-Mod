@@ -1123,6 +1123,12 @@ triggerHardpoint( hardpointType )
 {
 	if ( hardpointType == "radar_mp" )
 	{
+		if ( isDefined( level.blockHardpointUav ) && level.blockHardpointUav )
+		{
+			self iPrintLnBold( level.hardpointHints["radar_mp_not_available"] );
+			return false;
+		}
+
 		self thread useRadarItem();
 	}
 	else if ( hardpointType == "airstrike_mp" )

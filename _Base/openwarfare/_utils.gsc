@@ -1482,6 +1482,20 @@ enableEnemyRadarDisplay( mode )
 	if ( mode == 0 )
 		return;
 
+	level.enemyRadarDisplayMode = mode;
+	if ( mode == 1 )
+		level.blockHardpointUav = true;
+
+	level notify( "radar_timer_kill_allies" );
+	level notify( "radar_timer_kill_axis" );
+
+	players = level.players;
+	for ( i = 0; i < players.size; i++ )
+	{
+		if ( isDefined( players[i] ) )
+			players[i] notify( "radar_timer_kill" );
+	}
+
 	if ( mode == 1 && level.teamBased )
 	{
 		setTeamRadar( "allies", true );
@@ -1505,6 +1519,9 @@ enablePlayerEnemyRadarDisplay( mode )
 
 	if ( mode == 1 )
 	{
+		if ( self hasPerk( "specialty_gpsjammer" ) )
+			self unsetPerk( "specialty_gpsjammer" );
+
 		self.hasRadar = true;
 		self setClientDvar( "ui_uav_client", 1 );
 		return;
@@ -1515,6 +1532,9 @@ enablePlayerEnemyRadarDisplay( mode )
 
 disableEnemyRadarDisplay()
 {
+	level.enemyRadarDisplayMode = 0;
+	level.blockHardpointUav = false;
+
 	if ( level.teamBased )
 	{
 		setTeamRadar( "allies", false );

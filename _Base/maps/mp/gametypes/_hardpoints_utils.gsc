@@ -203,6 +203,14 @@ getHardpointCallLockTime()
 		return self getHelicopterCooldownTime();
 	}
 
+	if ( hardpointType == "radar_mp" )
+	{
+		if ( isDefined( level.blockHardpointUav ) && level.blockHardpointUav )
+			return -1;
+
+		return 0;
+	}
+
 	return 0;
 }
 

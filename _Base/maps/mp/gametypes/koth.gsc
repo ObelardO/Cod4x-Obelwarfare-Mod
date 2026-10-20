@@ -45,6 +45,7 @@ main()
 	level.onSpawnPlayer = ::onSpawnPlayer;
 	level.onPlayerKilled = ::onPlayerKilled;
 	level.onRoundSwitch = ::onRoundSwitch;
+	level.onRemoveObjectives = ::onRemoveObjectives;
 
 	precacheShader( "compass_waypoint_captureneutral" );
 	precacheShader( "compass_waypoint_capture" );
@@ -934,4 +935,10 @@ onRoundSwitch()
 	// Just change the value for the variable controlling which map assets will be assigned to each team
 	level.halftimeType = "halftime";
 	game["switchedsides"] = !game["switchedsides"];
+}
+
+
+onRemoveObjectives()
+{
+	level.radioObject maps\mp\gametypes\_gameobjects::disableObject();
 }

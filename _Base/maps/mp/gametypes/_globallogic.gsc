@@ -75,7 +75,7 @@ init()
 	
 	// Set mod name and version
 	setDvar( "_Mod", "ObelWarfare Mod", true );
-	setDvar( "_ModVer", "v6.616 (RU)", true );
+	setDvar( "_ModVer", "v6.903 (RU)", true );
 
 	// Make a health check of the server
 	//level thread openwarfare\_servercheck::init();
@@ -233,6 +233,7 @@ SetupCallbacks()
 	level.onScoreLimit = ::default_onScoreLimit;
 	level.onDeadEvent = ::default_onDeadEvent;
 	level.onOneLeftEvent = ::default_onOneLeftEvent;
+	level.onRemoveObjectives = ::blank;
 	level.giveTeamScore = ::giveTeamScore;
 	level.givePlayerScore = ::givePlayerScore;
 	level.getTeamKillScore = ::default_getTeamKillScore;
@@ -816,6 +817,9 @@ spawnPlayer()
 			}
 		}
 	}
+
+	if ( isDefined( level.enemyRadarDisplayMode ) )
+		self enablePlayerEnemyRadarDisplay( level.enemyRadarDisplayMode );
 	
 	if ( level.inReadyUpPeriod ) {
 		// Check if we need to disable the weapons
@@ -3281,6 +3285,12 @@ resumeTimer()
 
 	level.timerStopped = false;
 	level.discardTime += gettime() - level.timerPauseTime;
+}
+
+
+removeObjectives()
+{
+	[[level.onRemoveObjectives]]();
 }
 
 

@@ -10,4 +10,5 @@ init()
 	thread scripts\_better_ui::init();
 	thread scripts\_finalmapvoting::init();
 	thread scripts\_finalduel::init();
+	thread scripts\_autumnevent::init();
 }
