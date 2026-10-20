@@ -27,7 +27,7 @@ menuDef
 	exp				rect Y( 0 - ONLINEGAME_OFFSET_EXP )
 	exp				rect X( 0 - ONLINEGAME_OFFSET_EXP )
     fullScreen		1
-    visible			when( HUD_IS_VISIBLE && CLIENT_NOT_DEAD && CLIENT_NOT_FREE_SPECTATING && INV_IS_VISIBLE && dvarInt( ui_hud_has_weapon ) == 1 )
+    visible			when( HUD_IS_VISIBLE && HUD_IS_NOT_SCOPED && CLIENT_NOT_DEAD && CLIENT_NOT_FREE_SPECTATING && INV_IS_VISIBLE && dvarInt( ui_hud_has_weapon ) == 1 )
 
     //WEAPON BACK
     itemDef
