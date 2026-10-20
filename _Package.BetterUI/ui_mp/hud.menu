@@ -30,7 +30,10 @@
 
 #define HUD_MINUS_ONE				( 0 - 1 )
 
-#define HUD_IS_VISIBLE           	( !inkillcam() && !flashbanged() && !isIntermission() && !ui_active() && !scoped() && dvarInt( ui_show_timeout ) == 0 )
+#define HUD_IS_VISIBLE           	( !inkillcam() && !flashbanged() && !isIntermission() && !ui_active() && dvarInt( ui_show_timeout ) == 0 )
+#define HUD_IS_SCOPED				( scoped() )
+#define HUD_IS_NOT_SCOPED			( !scoped() )
+
 
 #define HUD_ORIGIN_BOTTOM_LEFT_Y	0
 
