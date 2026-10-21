@@ -30,6 +30,7 @@ init()
 
     level.scr_finalduel_vote_time = getdvarx( "scr_finalduel_vote_time", "int", 15, 5, 60 );
     level.scr_finalduel_min_alive = getdvarx( "scr_finalduel_min_alive", "int", 2, 2, 64 );
+    level.scr_finalduel_overtime_only = getdvarx( "scr_finalduel_overtime_only", "int", 0, 0, 1 );
     level.scr_finalduel_weapon = toLower( getdvarx( "scr_finalduel_weapon", "string", "knife_mp" ) );
     level.scr_finalduel_weapon_ammo = getdvarx( "scr_finalduel_weapon_ammo", "int", 0, 0, 999 );
     level.scr_finalduel_radar = getdvarx( "scr_finalduel_radar", "int", 1, 0, 2 );
@@ -62,6 +63,7 @@ init()
         precacheString( &"OW_FINALDUEL_FAILED" );
         precacheString( &"OW_FINALDUEL_ALREADY" );
         precacheString( &"OW_FINALDUEL_NOT_ALIVE" );
+        precacheString( &"OW_FINALDUEL_NOT_OVERTIME" );
         precacheString( &"OW_FINALDUEL_NEED_PLAYERS" );
         precacheString( &"OW_FINALDUEL_UAV" );
         precacheString( &"OW_FINALDUEL_COMPASS" );
@@ -151,11 +153,28 @@ watchRoundReset()
 //                                                   VOTE                                                  //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+isDuelOvertime()
+{
+    if( isDefined( game["_overtime"] ) && game["_overtime"] )
+        return true;
+
+    if( isDefined( level.inOvertime ) && level.inOvertime )
+        return true;
+
+    return false;
+}
+
 tryStartVote()
 {
     if( !self isDuelAlivePlayer() )
     {
         self iprintln( &"OW_FINALDUEL_NOT_ALIVE" );
+        return;
+    }
+
+    if( level.scr_finalduel_overtime_only && !isDuelOvertime() )
+    {
+        self iprintln( &"OW_FINALDUEL_NOT_OVERTIME" );
         return;
     }
 

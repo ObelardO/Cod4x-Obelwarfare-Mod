@@ -39,6 +39,9 @@ LANG_ENGLISH "A Final Duel vote was already called this round"
 REFERENCE NOT_ALIVE
 LANG_ENGLISH "Only alive players can call a Final Duel"
 
+REFERENCE NOT_OVERTIME
+LANG_ENGLISH "Final Duel can only be called during overtime"
+
 REFERENCE NEED_PLAYERS
 LANG_ENGLISH "Not enough alive players for a Final Duel"
 

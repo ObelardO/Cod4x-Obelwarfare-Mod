@@ -39,6 +39,9 @@ LANG_RUSSIAN "Голосование за финальную дуэль уже было в этом раунде"
 REFERENCE NOT_ALIVE
 LANG_RUSSIAN "Только живые игроки могут начать финальную дуэль"
 
+REFERENCE NOT_OVERTIME
+LANG_RUSSIAN "Финальную дуэль можно начать только в овертайме"
+
 REFERENCE NEED_PLAYERS
 LANG_RUSSIAN "Недостаточно живых игроков для финальной дуэли"
 
