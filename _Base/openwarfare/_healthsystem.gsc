@@ -93,6 +93,7 @@ init()
   level.scr_healthsystem_show_healthbar = getdvarx( "scr_healthsystem_show_healthbar", "int", 0, 0, 1 );
 
   level.scr_healthsystem_headshot_blood_fx = getdvarx( "scr_healthsystem_headshot_blood_fx", "int", 1, 0, 1 );
+  level.scr_healthsystem_knife_blood_fx = getdvarx( "scr_healthsystem_knife_blood_fx", "int", 1, 0, 1 );
   level.scr_healthsystem_bleeding_blood_fx = getdvarx( "scr_healthsystem_bleeding_blood_fx", "int", 0, 0, 1 );
   
   //=======
@@ -111,7 +112,7 @@ init()
   preCacheString( &"OW_MEDIC_HINT_HEAL" );
   preCacheString( &"OW_MEDIC_HINT_BANDAGE" );
 
-  if ( level.scr_healthsystem_headshot_blood_fx || level.scr_healthsystem_bleeding_blood_fx )
+  if ( level.scr_healthsystem_headshot_blood_fx || level.scr_healthsystem_knife_blood_fx || level.scr_healthsystem_bleeding_blood_fx )
     level._effect["flesh_hit_head_fatal_exit"] = loadfx( "impacts/flesh_hit_head_fatal_exit" );
 
   level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
@@ -138,7 +139,7 @@ onPlayerConnected()
 	self thread addNewEvent( "onPlayerDeath", ::onPlayerDeath );
 	self thread addNewEvent( "onJoinedSpectators", ::onJoinedSpectators );
 
-	if ( level.scr_healthsystem_headshot_blood_fx )
+	if ( level.scr_healthsystem_headshot_blood_fx || level.scr_healthsystem_knife_blood_fx )
 		self thread onPlayerKilledBloodFx();
 }
 
@@ -150,9 +151,26 @@ onPlayerKilledBloodFx()
 	{
 		self waittill( "player_killed", eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, fDistance );
 
-		if ( sMeansOfDeath == "MOD_HEAD_SHOT" )
+		if ( sMeansOfDeath == "MOD_HEAD_SHOT" && level.scr_healthsystem_headshot_blood_fx )
 			self playBloodImpactFx( undefined, vDir );
+		else if ( sMeansOfDeath == "MOD_MELEE" && level.scr_healthsystem_knife_blood_fx )
+			self playKnifeBloodFx( attacker );
 	}
+}
+
+playKnifeBloodFx( attacker )
+{
+	if ( !isDefined( level._effect["flesh_hit_head_fatal_exit"] ) )
+		return;
+
+	if ( !isDefined( attacker ) || !isPlayer( attacker ) )
+		return;
+
+	viewAngles = attacker getPlayerAngles();
+	fxOrigin = attacker getEye() + ( anglesToForward( viewAngles ) * 36 );
+	sprayDir = anglesToRight( viewAngles );
+
+	playFx( level._effect["flesh_hit_head_fatal_exit"], fxOrigin, sprayDir, ( 0, 0, 1 ) );
 }
 
 playBloodImpactFx( vPoint, vDir )
