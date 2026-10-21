@@ -542,7 +542,6 @@ bombs()
 	level.bombDefused = false;
 	level.bombExploded = false;
 	level.bombFuseAborted = 0;
-	level.bombWrongWire = 0;
 
 	trigger = getEnt( "sd_bomb_pickup_trig", "targetname" );
 	if ( !isDefined( trigger ) )
@@ -902,12 +901,8 @@ onReset()
 
 bombPlanted( destroyedObj, player )
 {
-	level endon( "bomb_defused" );
-
 	maps\mp\gametypes\_globallogic::pauseTimer();
 	level.bombPlanted = true;
-	level.bombWrongWire = 0;
-	level thread watchBombWrongWire();
 	if ( level.scr_sd_bomb_notification_enable == 1 )
 		destroyedObj.visuals[0] thread maps\mp\gametypes\_globallogic::playTickingSound();
 	level.tickingObject = destroyedObj.visuals[0];
@@ -994,41 +989,12 @@ bombPlanted( destroyedObj, player )
 
 	level.defuseObject = defuseObject;
 
-	endTime = gettime() + ( level.bombTimer * 1000 );
-	while ( 1 )
-	{
-		if ( level.bombFuseAborted == 1 )
-			break;
-
-		if ( level.bombPlanted == 0 )
-			break;
-
-		if ( level.gameEnded == 1 )
-			break;
-
-		if ( level.bombWrongWire == 1 )
-			break;
-
-		if ( gettime() >= endTime )
-			break;
-
-		wait 0.05;
-	}
-
+	BombTimerWait();
 	setDvar( "ui_bomb_timer", 0 );
 	if ( level.scr_sd_bomb_notification_enable == 1 )
 		destroyedObj.visuals[0] maps\mp\gametypes\_globallogic::stopTickingSound();
 
-	if ( level.gameEnded == 1 )
-		return;
-
-	if ( level.bombDefused == 1 )
-		return;
-
-	if ( level.bombPlanted == 0 )
-		return;
-
-	if ( level.bombFuseAborted == 1 )
+	if ( level.gameEnded || level.bombDefused || level.bombFuseAborted == 1 || level.bombPlanted == 0 )
 		return;
 
 	level.bombExploded = true;
@@ -1072,7 +1038,9 @@ playSoundinSpace( alias, origin )
 
 BombTimerWait()
 {
-	level endon( "bomb_defused" );
+	level endon("game_ended");
+	level endon("bomb_defused");
+	level endon("wrong_wire");
 
 	endTime = gettime() + ( level.bombTimer * 1000 );
 	while ( 1 )
@@ -1083,24 +1051,11 @@ BombTimerWait()
 			return;
 		}
 
-		if ( level.gameEnded == 1 )
-			return;
-
-		if ( level.bombWrongWire == 1 )
-			return;
-
 		if ( gettime() >= endTime )
 			return;
 
 		wait 0.05;
 	}
-}
-
-watchBombWrongWire()
-{
-	level endon( "bomb_defused" );
-	level waittill( "wrong_wire" );
-	level.bombWrongWire = 1;
 }
 
 bombDefused()

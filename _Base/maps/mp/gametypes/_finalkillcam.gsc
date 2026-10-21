@@ -134,8 +134,10 @@ startFinalKillcam( winner, mode )
 
     showFinalKillcamHUD( killInfo["victimName"], killInfo["attackerName"], killInfo["isSuicide"] );
     visionSetNaked( maps\mp\gametypes\_globallogic::getNakedVision(), 0.5 );
-    //Use it only with FinalKillcamEntityCamera plugin: https://github.com/ObelardO/Cod4x-Server/tree/final-killcam-plugin/plugins/FinalKillcamEntityCamera
+    //Use it only with CoD4x and FinalKillcamEntityCamera plugin: https://github.com/ObelardO/Cod4x-Server/tree/final-killcam-plugin/plugins/FinalKillcamEntityCamera
+#if isSyscallDefined setFinalKillcamTargetEntity
     setFinalKillcamTargetEntity( killInfo["victimNum"] );
+#endif
     
     for( i = 0; i < level.players.size; i++ )
     {
@@ -151,8 +153,10 @@ startFinalKillcam( winner, mode )
 
     hideFinalKillcamHUD();
     visionSetNaked( "mpOutro", 0.2 );
-    //Use it only with FinalKillcamEntityCamera
+    //Use it only with CoD4x and FinalKillcamEntityCamera
+#if isSyscallDefined setFinalKillcamTargetEntity
     setFinalKillcamTargetEntity( -1 );
+#endif
     wait 0.2;
 
     level.finalKillcamInProgress = false;

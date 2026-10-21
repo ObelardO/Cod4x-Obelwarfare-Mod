@@ -91,6 +91,9 @@ init()
   //=======  
   //Health bar
   level.scr_healthsystem_show_healthbar = getdvarx( "scr_healthsystem_show_healthbar", "int", 0, 0, 1 );
+
+  level.scr_healthsystem_headshot_blood_fx = getdvarx( "scr_healthsystem_headshot_blood_fx", "int", 1, 0, 1 );
+  level.scr_healthsystem_bleeding_blood_fx = getdvarx( "scr_healthsystem_bleeding_blood_fx", "int", 0, 0, 1 );
   
   //=======
   // PreCache Items
@@ -107,6 +110,9 @@ init()
   preCacheString( &"OW_STATUS_BANDAGE" );
   preCacheString( &"OW_MEDIC_HINT_HEAL" );
   preCacheString( &"OW_MEDIC_HINT_BANDAGE" );
+
+  if ( level.scr_healthsystem_headshot_blood_fx || level.scr_healthsystem_bleeding_blood_fx )
+    level._effect["flesh_hit_head_fatal_exit"] = loadfx( "impacts/flesh_hit_head_fatal_exit" );
 
   level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
 }
@@ -130,7 +136,42 @@ onPlayerConnected()
 {
 	self thread addNewEvent( "onPlayerSpawned", ::onPlayerSpawned );
 	self thread addNewEvent( "onPlayerDeath", ::onPlayerDeath );
-	self thread addNewEvent( "onJoinedSpectators", ::onJoinedSpectators );   
+	self thread addNewEvent( "onJoinedSpectators", ::onJoinedSpectators );
+
+	if ( level.scr_healthsystem_headshot_blood_fx )
+		self thread onPlayerKilledBloodFx();
+}
+
+onPlayerKilledBloodFx()
+{
+	self endon("disconnect");
+
+	for (;;)
+	{
+		self waittill( "player_killed", eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, fDistance );
+
+		if ( sMeansOfDeath == "MOD_HEAD_SHOT" )
+			self playBloodImpactFx( undefined, vDir );
+	}
+}
+
+playBloodImpactFx( vPoint, vDir )
+{
+	if ( !isDefined( level._effect["flesh_hit_head_fatal_exit"] ) )
+		return;
+
+	fxOrigin = vPoint;
+	if ( !isDefined( fxOrigin ) )
+	{
+		fxOrigin = self getTagOrigin( "j_head" );
+		if ( !isDefined( fxOrigin ) )
+			fxOrigin = self.origin + ( 0, 0, 60 );
+	}
+
+	if ( isDefined( vDir ) )
+		playFx( level._effect["flesh_hit_head_fatal_exit"], fxOrigin, vDir );
+	else
+		playFx( level._effect["flesh_hit_head_fatal_exit"], fxOrigin );
 }
 
 onPlayerSpawned()
@@ -551,6 +592,9 @@ bleedPlayer( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vP
 
 	// Show the bleeding shader to the player
 	self.isBleeding = true;
+
+	if ( level.scr_healthsystem_bleeding_blood_fx )
+		self playBloodImpactFx( vPoint, vDir );
 	
 	if ( level.scr_healthsystem_bleeding_icon ) 
 	{

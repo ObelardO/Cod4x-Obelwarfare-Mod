@@ -8,7 +8,7 @@ menuDef
     rect			0 -50 20 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_BOTTOM
     exp             rect Y( dvarint( "cg_hudMantleY" ) - 5 )
     fullScreen		0
-    visible			when( HUD_IS_VISIBLE )
+    visible			when( HUD_IS_VISIBLE && HUD_IS_NOT_SCOPED )
 
     itemDef
     {
@@ -47,7 +47,8 @@ menuDef
 }
 
 // Invalid cmd hint
-/*menuDef
+/*
+menuDef
 {
     name			"InvalidCmdHint"
     rect			0 -150 0 0 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
@@ -58,31 +59,37 @@ menuDef
     {
         name			"chRect"
         rect			0 0 0 0
-        textscale		TEXTSIZE_SMALL
+        textscale		TEXTSIZE_SMALL * 5
         textstyle		ITEM_TEXTSTYLE_SHADOWED
         ownerdraw		CG_INVALID_CMD_HINT
         textfont		UI_FONT_NORMAL
         visible			when( CLIENT_NOT_SPECTATING )
         decoration
     }
-}*/
+}
+*/
 
 // Hold breath hint
 //Pel - Removed to allow CAC Class in
 menuDef
 {
     name			"HoldBreathHint"
-    rect			0 110 20 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+    rect			0 -50 20 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_BOTTOM
+    exp             rect Y( dvarint( "cg_hudMantleY" ) )
     fullScreen		0
-    visible         when( HUD_IS_VISIBLE )
+    visible			when( HUD_IS_VISIBLE )
 
     itemDef
     {
         name			"chRect"
-        rect			0 0 0 0
-        textscale		TEXTSIZE_SMALL
+        rect			0 0 20 20
+        textscale		( TEXTSIZE_SMALL * 0.6 )
         textstyle		ITEM_TEXTSTYLE_SHADOWED
+        textalign		ITEM_ALIGN_MIDDLE_CENTER
+        textfont		UI_FONT_OBJECTIVE
         ownerdraw		CG_HOLD_BREATH_HINT
+        exp				forecolor A( HUD_FOREGROUND_ALPHA )
+        forecolor		1 1 1 1
         visible			when( HINT_BREATH_IS_VISIBLE )
         decoration
     }

@@ -677,6 +677,7 @@ init()
 	// setDvar( "scr_weaponjams_probability", "250" );
 	// setDvar( "scr_weaponjams_gap_time", "0" );
 	// setDvar( "scr_sniperzoom_enable", "0" );
+	// setDvar( "scr_sniperzoom_focus_enable", "1" );
 	// setDvar( "scr_sniperzoom_lower_levels", "8" );
 	// setDvar( "scr_sniperzoom_upper_levels", "9" );
 	// setDvar( "scr_rangefinder_enable", "0" );
