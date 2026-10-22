@@ -8,11 +8,12 @@ IW4MAdmin
 BetterUI
 FinalMapVoting
 FinalDuel
+TrashRemover
+MeleeWeapons
 //Event.Wedding
-//TrashRemover // Not worked (1000 xmodels limit)
 //Event.Spring
 //Event.Victory
 //Event.Winter
 //Event.Xmas
-//Event.Autumn
+Event.Autumn
 //Event.HappyBirthday
