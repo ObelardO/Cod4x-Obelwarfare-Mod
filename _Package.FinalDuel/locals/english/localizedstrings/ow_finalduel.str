@@ -34,7 +34,13 @@ REFERENCE FAILED
 LANG_ENGLISH "Final Duel vote failed"
 
 REFERENCE ALREADY
-LANG_ENGLISH "A Final Duel vote was already called this round"
+LANG_ENGLISH "A Final Duel vote is already in progress"
+
+REFERENCE PLAYER_LIMIT
+LANG_ENGLISH "You have no Final Duel votes left this round"
+
+REFERENCE TEAM_LIMIT
+LANG_ENGLISH "Your team has no Final Duel votes left this round"
 
 REFERENCE NOT_ALIVE
 LANG_ENGLISH "Only alive players can call a Final Duel"
