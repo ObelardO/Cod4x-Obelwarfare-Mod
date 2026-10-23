@@ -69,14 +69,14 @@ init()
   level.scr_healthsystem_medic_bandaging = getdvarx( "scr_healthsystem_medic_bandaging", "int", 1, 0, 1 );
   level.scr_healthsystem_medic_healing_self = getdvarx( "scr_healthsystem_medic_healing_self", "int", 1, 0, 1 );
   level.scr_healthsystem_medic_healing_time = getdvarx( "scr_healthsystem_medic_healing_time", "int", 3, 2, 10 );
-  level.scr_healthsystem_medic_healing_health = getdvarx( "scr_healthsystem_medic_healing_health", "int", 25, 1, getDvarInt( "scr_player_maxhealth" ) );
+  level.scr_healthsystem_medic_healing_health = getdvarx( "scr_healthsystem_medic_healing_health", "int", 25, 1, level.maxhealth );
   level.scr_healthsystem_medic_clear_damage_effects = getdvarx( "scr_healthsystem_medic_clear_damage_effects", "int", 0, 0, 1 );
   level.scr_healthsystem_medic_take_bandage = getdvarx( "scr_healthsystem_medic_take_bandage", "int", 0, 0, 1 );
     
   //=======
   // Health Pack Specific Dvars
   //=======
-  level.scr_healthsystem_healthpacks_health = getdvarx( "scr_healthsystem_healthpacks_health", "int", 25, 1, getDvarInt( "scr_player_maxhealth" ) );
+  level.scr_healthsystem_healthpacks_health = getdvarx( "scr_healthsystem_healthpacks_health", "int", 25, 1, level.maxhealth );
   level.scr_healthsystem_healthpacks_random_health = getdvarx( "scr_healthsystem_healthpacks_random_health", "int", 0, 0, 1 );
   level.scr_healthsystem_healthpacks_timeout = getdvarx( "scr_healthsystem_healthpacks_timeout", "float", 60, 30, 300 );
     
@@ -668,8 +668,6 @@ medicHintThread()
 	self endon("death");
 	level endon( "game_ended" );
 
-	maxHealth = getMaxHealth();
-
 	lastTeammate = undefined;
 	isHintShown = false;
 	teamMateNeedHelp = false;
@@ -696,7 +694,7 @@ medicHintThread()
 		wait (1);
 
 		teamMate = self findClosestTeammate();
-		teamMateNeedHelp = isDefined( teamMate ) && teamMate.health < maxHealth && ( level.gametype != "ftag" || !teamMate.freezeTag["frozen"] );
+		teamMateNeedHelp = isDefined( teamMate ) && teamMate.health < teamMate getMaxHealth() && ( level.gametype != "ftag" || !teamMate.freezeTag["frozen"] );
 
 		if ( teamMateNeedHelp && ( !isDefined( lastTeammate ) || lastTeammate != teamMate ) )
 		{
@@ -748,7 +746,7 @@ medic()
 		return;
 	}
   
-	if ( teammate.health >= getMaxHealth() )
+	if ( teammate.health >= teammate getMaxHealth() )
 		return;
 
 	// Check if the player is frozen
@@ -1074,6 +1072,7 @@ healTeammate( teammate )
     
 		addingHealth = 0.0;
 		remainingHealthPoints = 0.0;
+		maxHealth = teammate getMaxHealth();
 		healEnds = openwarfare\_timer::getTimePassed() + level.scr_healthsystem_medic_healing_time * 1000;
 		while ( isAlive( teammate ) && self.isHealingTeammate && healEnds > openwarfare\_timer::getTimePassed() )
 		{
@@ -1091,17 +1090,17 @@ healTeammate( teammate )
 				teammate.health += 1;
 				addingHealth = 0.0;
 				
-				if (teammate.health >= getMaxHealth() )
+				if (teammate.health >= maxHealth )
 				{
-					teammate.health = getMaxHealth();
+					teammate.health = maxHealth;
 					break;
 				}
 			}
 			wait (0.05);
 		}
     
-		if ( (teammate.health + int( remainingHealthPoints ) ) >= getMaxHealth() )
-			teammate.health = getMaxHealth();
+		if ( (teammate.health + int( remainingHealthPoints ) ) >= maxHealth )
+			teammate.health = maxHealth;
 		else
 			teammate.health += int( remainingHealthPoints ); 
     
@@ -1206,8 +1205,10 @@ findClosestTeammate()
 
 getMaxHealth()
 {
-	max = getDvarInt( "scr_player_maxhealth" );
-	return max;
+	if ( isDefined( self.maxhealth ) && self.maxhealth > 0 )
+		return self.maxhealth;
+
+	return level.maxhealth;
 }
 
 showHealingStatus( condition )
