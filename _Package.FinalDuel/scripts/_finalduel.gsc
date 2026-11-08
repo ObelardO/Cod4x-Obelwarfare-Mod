@@ -30,6 +30,9 @@ init()
 
     level.scr_finalduel_vote_time = getdvarx( "scr_finalduel_vote_time", "int", 15, 5, 60 );
     level.scr_finalduel_min_alive = getdvarx( "scr_finalduel_min_alive", "int", 2, 2, 64 );
+    level.scr_finalduel_overtime_only = getdvarx( "scr_finalduel_overtime_only", "int", 0, 0, 1 );
+    level.scr_finalduel_calls_player = getdvarx( "scr_finalduel_calls_player", "int", 1, 0, 16 );
+    level.scr_finalduel_calls_team = getdvarx( "scr_finalduel_calls_team", "int", 1, 0, 16 );
     level.scr_finalduel_weapon = toLower( getdvarx( "scr_finalduel_weapon", "string", "knife_mp" ) );
     level.scr_finalduel_weapon_ammo = getdvarx( "scr_finalduel_weapon_ammo", "int", 0, 0, 999 );
     level.scr_finalduel_radar = getdvarx( "scr_finalduel_radar", "int", 1, 0, 2 );
@@ -43,7 +46,9 @@ init()
         level.finalDuel.menu = "finalduel_vote";
         level.finalDuel.active = false;
         level.finalDuel.voting = false;
-        level.finalDuel.voteUsed = false;
+        level.finalDuel.teamCalls = [];
+        level.finalDuel.teamCalls["allies"] = 0;
+        level.finalDuel.teamCalls["axis"] = 0;
         level.finalDuel.yes = 0;
         level.finalDuel.no = 0;
         level.finalDuel.needed = 0;
@@ -61,7 +66,10 @@ init()
         precacheString( &"OW_FINALDUEL_PASSED" );
         precacheString( &"OW_FINALDUEL_FAILED" );
         precacheString( &"OW_FINALDUEL_ALREADY" );
+        precacheString( &"OW_FINALDUEL_PLAYER_LIMIT" );
+        precacheString( &"OW_FINALDUEL_TEAM_LIMIT" );
         precacheString( &"OW_FINALDUEL_NOT_ALIVE" );
+        precacheString( &"OW_FINALDUEL_NOT_OVERTIME" );
         precacheString( &"OW_FINALDUEL_NEED_PLAYERS" );
         precacheString( &"OW_FINALDUEL_UAV" );
         precacheString( &"OW_FINALDUEL_COMPASS" );
@@ -82,6 +90,7 @@ onPlayerConnected()
     self.finalDuel = spawnStruct();
     self.finalDuel.vote = "";
     self.finalDuel.canVote = false;
+    self.finalDuel.calls = 0;
 
     yesCount = 0;
     noCount = 0;
@@ -142,7 +151,6 @@ watchRoundReset()
 
         level.finalDuel.active = false;
         level.finalDuel.voting = false;
-        level.finalDuel.voteUsed = false;
         closeVoteMenus();
     }
 }
@@ -150,6 +158,17 @@ watchRoundReset()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                   VOTE                                                  //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+isDuelOvertime()
+{
+    if( isDefined( game["_overtime"] ) && game["_overtime"] )
+        return true;
+
+    if( isDefined( level.inOvertime ) && level.inOvertime )
+        return true;
+
+    return false;
+}
 
 tryStartVote()
 {
@@ -159,11 +178,20 @@ tryStartVote()
         return;
     }
 
-    if( level.finalDuel.active || level.finalDuel.voting || level.finalDuel.voteUsed )
+    if( level.scr_finalduel_overtime_only && !isDuelOvertime() )
+    {
+        self iprintln( &"OW_FINALDUEL_NOT_OVERTIME" );
+        return;
+    }
+
+    if( level.finalDuel.active || level.finalDuel.voting )
     {
         self iprintln( &"OW_FINALDUEL_ALREADY" );
         return;
     }
+
+    if( isDefined( level.gameEnded ) && level.gameEnded )
+        return;
 
     if( game["state"] != "playing" )
         return;
@@ -187,6 +215,24 @@ tryStartVote()
         return;
     }
 
+    if( level.scr_finalduel_calls_player > 0 && self.finalDuel.calls >= level.scr_finalduel_calls_player )
+    {
+        self iprintln( &"OW_FINALDUEL_PLAYER_LIMIT" );
+        return;
+    }
+
+    if( level.teamBased && level.scr_finalduel_calls_team > 0 && level.finalDuel.teamCalls[self.pers["team"]] >= level.scr_finalduel_calls_team )
+    {
+        self iprintln( &"OW_FINALDUEL_TEAM_LIMIT" );
+        return;
+    }
+
+    self.finalDuel.calls++;
+
+    if( level.teamBased )
+        level.finalDuel.teamCalls[self.pers["team"]]++;
+
+    level.finalDuel.voting = true;
     level thread runVote( self, voters );
 }
 
@@ -195,7 +241,6 @@ runVote( caller, voters )
     level endon( "game_ended" );
 
     level.finalDuel.voting = true;
-    level.finalDuel.voteUsed = true;
     level.finalDuel.yes = 0;
     level.finalDuel.no = 0;
     level.finalDuel.needed = int( voters.size / 2 ) + 1;
@@ -206,6 +251,7 @@ runVote( caller, voters )
         if( !isDefined( voters[i].finalDuel ) )
         {
             voters[i].finalDuel = spawnStruct();
+            voters[i].finalDuel.calls = 0;
         }
 
         voters[i].finalDuel.vote = "";

@@ -13,10 +13,10 @@ REFERENCE VOTE_TITLE
 LANG_RUSSIAN "Начать дуэль?"
 
 REFERENCE VOTE_YES
-LANG_RUSSIAN "^31.^7 За (&&1)"
+LANG_RUSSIAN "^31.^7 Да (&&1)"
 
 REFERENCE VOTE_NO
-LANG_RUSSIAN "^32.^7 Против (&&1)"
+LANG_RUSSIAN "^32.^7 Нет (&&1)"
 
 REFERENCE YES
 LANG_RUSSIAN "Да"
@@ -25,19 +25,28 @@ REFERENCE NO
 LANG_RUSSIAN "Нет"
 
 REFERENCE STARTED
-LANG_RUSSIAN "Финальную дуэль предложил &&1"
+LANG_RUSSIAN "Игрок ^3&&1^7 предложил дуэль"
 
 REFERENCE PASSED
-LANG_RUSSIAN "Финальная дуэль началась"
+LANG_RUSSIAN "Дуэль началась"
 
 REFERENCE FAILED
-LANG_RUSSIAN "Голосование за финальную дуэль не удалось"
+LANG_RUSSIAN "Голосование за дуэль не удалось"
 
 REFERENCE ALREADY
-LANG_RUSSIAN "Голосование за финальную дуэль уже было в этом раунде"
+LANG_RUSSIAN "Голосование за дуэль уже идёт"
+
+REFERENCE PLAYER_LIMIT
+LANG_RUSSIAN "Вы больше не можете предложить дуэль в этом раунде"
+
+REFERENCE TEAM_LIMIT
+LANG_RUSSIAN "Ваша каманда больше не может предложить дуаль в этом раунде"
 
 REFERENCE NOT_ALIVE
 LANG_RUSSIAN "Только живые игроки могут начать финальную дуэль"
+
+REFERENCE NOT_OVERTIME
+LANG_RUSSIAN "Финальную дуэль можно начать только в дополнительное время"
 
 REFERENCE NEED_PLAYERS
 LANG_RUSSIAN "Недостаточно живых игроков для финальной дуэли"
