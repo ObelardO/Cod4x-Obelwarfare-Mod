@@ -58,4 +58,19 @@ menuDef
 
     // Player direction indicator
     MM_HUD_LAYER( "compassplayer", "compassping_player", CG_PLAYER_COMPASS_PLAYER, 1, 1 )
+
+    // Callout under the minimap
+    itemDef
+    {
+        name			"minimap_callout"
+        rect			( MM_HUD_SIZE_W * 0.5 ) ( MM_HUD_SIZE_H + 9 ) 0 0 MM_HUD_ALIGN
+        textfont		UI_FONT_OBJECTIVE
+        textscale		( TEXTSIZE_SMALL * 0.5 )
+        textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+        textalign		ITEM_ALIGN_MIDDLE_CENTER
+        forecolor		1 1 1 HUD_FOREGROUND_ALPHA
+        exp				text( dvarString( "ui_callout" ) )
+        visible			when ( dvarString( "ui_callout" ) != "" )
+        decoration
+    }
 }
