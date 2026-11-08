@@ -167,6 +167,7 @@ onPlayerConnected()
     self thread playerAngleWatcher();
     self thread playerSessionWatcher();
     self thread playerSpectatingWatcher();
+    self thread playerCalloutWatcher();
     self thread hardpointTrackerWatcher();
     self thread hardpointLockWatcher();
 
@@ -272,6 +273,37 @@ playerSessionWatcher()
             lastLivesCount = livesCount;
             self setClientDvar( "ui_hud_lives_count", livesCount );
         }
+    }
+}
+
+
+playerCalloutWatcher()
+{
+    self endon("disconnect");
+
+    curCalloutText = "";
+    newCalloutText = "";
+
+    for (;;)
+    {
+        info = self getCallout();
+        
+        if ( isDefined(info) )
+        {
+            newCalloutText = info["localized"];
+        }
+        else
+        {
+            newCalloutText = "";
+        }
+
+        if ( newCalloutText != curCalloutText )
+        {
+            curCalloutText = newCalloutText;
+            self setClientDvar( "ui_callout", curCalloutText );
+        }
+
+        wait 0.05;
     }
 }
 
