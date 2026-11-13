@@ -5,6 +5,9 @@ localize,marker
 material,compass_ping
 material,waypoint_ping
 
+#Ping Marker: sounds
+sound,pingmarker,,all_mp
+
 #Ping Marker: scripts
 rawfile,scripts/_splashicons.gsc
 
