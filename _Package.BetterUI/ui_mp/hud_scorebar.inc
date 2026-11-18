@@ -6,8 +6,8 @@
 #define SCORE_OFFSET_X	        4
 #define SCORE_OFFSET_Y	        2
 
-#define TEAM_IS_MARINES			( localVarString( ui_team ) == "marines" )
-#define TEAM_IS_OPFOR			( localVarString( ui_team ) == "opfor" )
+#define TEAM_IS_MARINES			( dvarString( ui_team ) == "marines" )
+#define TEAM_IS_OPFOR			( dvarString( ui_team ) == "opfor" )
 
 #define TEAM_IS_TIED	        ( team( score ) == otherteam( score  ))
 #define TEAM_IS_WINNING         ( team( score ) > otherteam( score ) )
