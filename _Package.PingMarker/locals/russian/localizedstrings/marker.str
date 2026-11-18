@@ -5,4 +5,32 @@
 REFERENCE SETTINGS_TEXT
 LANG_RUSSIAN "Уст. указатель"
 
+//******************************************************************************
+// scripts/_pingmarker.gsc
+//******************************************************************************
+
+REFERENCE DIR_NORTH
+LANG_RUSSIAN "Север"
+
+REFERENCE DIR_NORTHEAST
+LANG_RUSSIAN "Северо-восток"
+
+REFERENCE DIR_EAST
+LANG_RUSSIAN "Восток"
+
+REFERENCE DIR_SOUTHEAST
+LANG_RUSSIAN "Юго-восток"
+
+REFERENCE DIR_SOUTH
+LANG_RUSSIAN "Юг"
+
+REFERENCE DIR_SOUTHWEST
+LANG_RUSSIAN "Юго-запад"
+
+REFERENCE DIR_WEST
+LANG_RUSSIAN "Запад"
+
+REFERENCE DIR_NORTHWEST
+LANG_RUSSIAN "Северо-запад"
+
 ENDMARKER

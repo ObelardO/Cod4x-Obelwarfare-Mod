@@ -5,4 +5,32 @@
 REFERENCE SETTINGS_TEXT
 LANG_ENGLISH "Place marker"
 
+//******************************************************************************
+// scripts/_pingmarker.gsc
+//******************************************************************************
+
+REFERENCE DIR_NORTH
+LANG_ENGLISH "North"
+
+REFERENCE DIR_NORTHEAST
+LANG_ENGLISH "Northeast"
+
+REFERENCE DIR_EAST
+LANG_ENGLISH "East"
+
+REFERENCE DIR_SOUTHEAST
+LANG_ENGLISH "Southeast"
+
+REFERENCE DIR_SOUTH
+LANG_ENGLISH "South"
+
+REFERENCE DIR_SOUTHWEST
+LANG_ENGLISH "Southwest"
+
+REFERENCE DIR_WEST
+LANG_ENGLISH "West"
+
+REFERENCE DIR_NORTHWEST
+LANG_ENGLISH "Northwest"
+
 ENDMARKER
