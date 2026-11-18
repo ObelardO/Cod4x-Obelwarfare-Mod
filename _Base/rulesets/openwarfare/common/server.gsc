@@ -109,6 +109,8 @@ init()
 	// setDvar( "scr_server_rank_type", "0" );
 	// setDvar( "scr_power_rank_mode", "0" );
 	// setDvar( "scr_power_rank_delay", "0.5" );
+	// setDvar( "scr_power_rank_prestige", "1" );
+	// setDvar( "scr_power_rank_xp", "0" );
 	// setDvar( "scr_enable_virtual_ranks", "0" );
 	// setDvar( "scr_virtual_ranks", "Pfc.=3;LCpl.=6;Cpl.=9;Sgt.=12;SSgt.=15;GySgt.=18;MSgt.=21;MGySgt.=24;2ndLt.=27;1stLt.=30;Capt.=33;Maj.=36;LtCol.=39;Col.=42;BGen.=45;MajGen.=48;LtGen.=51;Gen.=54;CDR.=55" );
 	// setDvar( "scr_virtual_ranks_score", "50" );

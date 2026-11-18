@@ -23,10 +23,11 @@
 #define CHOICE_GROUP			"class"
 #define CHOICE_SEP_1			3
 #define CHOICE_SEP_2			5
-#define CHOICE_SEP_3			7
+#define CHOICE_SEP_3			8
 
 #include "ui_mp/menustyle.inc"
-#include "ui_mp/choices_setup_teams.menu"
+#include "ui/choices_setup_common.menu"
+#include "ui_mp/team_is.inc"
 
 #define ORIGIN_DESCRIPTION		(CHOICE_X_START + 15) 190
 
@@ -185,9 +186,11 @@
 		CHOICE_SEPARATOR( CHOICE_SEP_2 )
 
 
-		CHOICE_BUTTON( 6, "@MENU_CONTROLS", close self; open main_controls )
+		CHOICE_BUTTON( 6, "@MPUI_CHALLENGES", scriptMenuResponse "challenges"; )
 
-		CHOICE_BUTTON( 7, "@MENU_OPTIONS", close self; open main_options; execnow "set ui_allow_graphic_change 0"; )
+		CHOICE_BUTTON( 7, "@MENU_CONTROLS", close self; open main_controls )
+
+		CHOICE_BUTTON( 8, "@MENU_OPTIONS", close self; open main_options; execnow "set ui_allow_graphic_change 0"; )
 
 		
 
@@ -195,18 +198,18 @@
 
 
 		// Adding the current server to the favorites is now working as of version 0.0.2.
-		CHOICE_BUTTON_VIS( 9, "@OW_FAVORITE_ADD",  uiScript CreateFavorite; open popup_addfavorite;, when( dvarstring( ui_favoriteAddress ) != "" ) )
-		CHOICE_DBUTTON_VIS( 9, "@OW_FAVORITE_ADD", when( dvarstring( ui_favoriteAddress ) == "" ) )
+		CHOICE_BUTTON_VIS( 10, "@OW_FAVORITE_ADD",  uiScript CreateFavorite; open popup_addfavorite;, when( dvarstring( ui_favoriteAddress ) != "" ) )
+		CHOICE_DBUTTON_VIS( 10, "@OW_FAVORITE_ADD", when( dvarstring( ui_favoriteAddress ) == "" ) )
 
-		CHOICE_BUTTON_VIS( 8, "@OW_SERVER_INFORMATION",  close self; open serverinfo;, when( dvarbool( ui_server_info ) ) )
-		CHOICE_DBUTTON_VIS( 8, "@OW_SERVER_INFORMATION", when( !dvarbool( ui_server_info ) ) )
+		CHOICE_BUTTON_VIS( 9, "@OW_SERVER_INFORMATION",  close self; open serverinfo;, when( dvarbool( ui_server_info ) ) )
+		CHOICE_DBUTTON_VIS( 9, "@OW_SERVER_INFORMATION", when( !dvarbool( ui_server_info ) ) )
 		
 
 
-		CHOICE_BUTTON_BG( 10, 1 )
-		CHOICE_HIGHLIGHT( 10, 1 )
-		CHOICE_BUTTON_VIS_NOHI( 10, "@MENU_LEAVE_GAME", open popup_endgame, when( dvarbool( sv_running ) ) )
-		CHOICE_BUTTON_VIS_NOHI( 10, "@MENU_LEAVE_GAME", open popup_leavegame, when( !dvarbool( sv_running ) ) )
+		CHOICE_BUTTON_BG( 11, 1 )
+		CHOICE_HIGHLIGHT( 11, 1 )
+		CHOICE_BUTTON_VIS_NOHI( 11, "@MENU_LEAVE_GAME", open popup_endgame, when( dvarbool( sv_running ) ) )
+		CHOICE_BUTTON_VIS_NOHI( 11, "@MENU_LEAVE_GAME", open popup_leavegame, when( !dvarbool( sv_running ) ) )
 
 		#include "ui/safearea.menu"
 	}

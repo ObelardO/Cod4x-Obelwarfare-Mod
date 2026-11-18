@@ -22,6 +22,9 @@ init()
 {
 	// Get the main module's dvar
 	level.scr_power_rank_mode = getdvarx( "scr_power_rank_mode", "int", 0, 0, 2 );
+	level.scr_power_rank_prestige = getdvarx( "scr_power_rank_prestige", "int", 1, 0, 1 );
+	// 0 keeps the stop at the start of Commander. A higher value is the rank XP to reach.
+	level.scr_power_rank_xp = getdvarx( "scr_power_rank_xp", "int", 0, 0, 1000000 );
 
 	// Check if we need to run this process
 	if ( level.scr_power_rank_mode == 0 || !level.rankedMatch )
@@ -61,13 +64,27 @@ onPlayerSpawned()
 givePowerRankXP()
 {
 	self endon("disconnect");
+
+	if ( level.scr_power_rank_prestige && isDefined( self.pers["prestige"] ) && self.pers["prestige"] > 0 )
+		return;
 	
-	// Check if we need to give XP to the player	
-	if ( self.pers["rankxp"] < level.powerRankInfoMinXp[ level.maxPower ] ) {
+	// 0 stops at the start of Commander. Otherwise stop at this rank XP, and
+	// never past the Commander cap that prestige confirm checks.
+	targetXp = level.powerRankInfoMinXp[ level.maxPower ];
+	if ( level.scr_power_rank_xp > 0 )
+	{
+		targetXp = level.scr_power_rank_xp;
+		capXp = maps\mp\gametypes\_rank::getRankInfoMaxXp( level.maxRank );
+		if ( targetXp > capXp )
+			targetXp = capXp;
+	}
+
+	if ( self.pers["rankxp"] < targetXp ) {
 		
-		// Assign enough XP to advance 3 ranks at a time
 		for ( rankId = 1; rankId <= level.maxPower; rankId++ ) {
 			rankXp = level.powerRankInfoMinXp[ rankId ];
+			if ( rankXp > targetXp )
+				rankXp = targetXp;
 			
 			if ( rankXp > self.pers["rankxp"] ) {
 				rankXp -= self.pers["rankxp"];
@@ -75,9 +92,17 @@ givePowerRankXP()
 				self maps\mp\gametypes\_rank::updateRank();
 				wait ( level.scr_power_rank_delay );
 			}
+
+			if ( self.pers["rankxp"] >= targetXp )
+				break;
+		}
+
+		if ( self.pers["rankxp"] < targetXp )
+		{
+			self maps\mp\gametypes\_rank::giveRankXP( "powerrank", targetXp - self.pers["rankxp"], true );
+			self maps\mp\gametypes\_rank::updateRank();
 		}
 		
-		// Let the player know about the promotion to max level
 		self maps\mp\gametypes\_rank::updateRankAnnounceHUD( true );
 	}
 	

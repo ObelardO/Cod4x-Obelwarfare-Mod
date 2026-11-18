@@ -14,13 +14,12 @@
 init()
 {
 	game["menu_team"] = "team_marinesopfor";
-	game["menu_class_allies"] = "class_marines";
+	game["menu_class_allies"] = "class";
 	game["menu_changeclass_allies"] = "changeclass_marines_mw";
-	game["menu_class_axis"] = "class_opfor";
+	game["menu_class_axis"] = "class";
 	game["menu_changeclass_axis"] = "changeclass_opfor_mw";
 	game["menu_class"] = "class";
 	game["menu_changeclass"] = "changeclass_mw";
-	game["menu_changeclass_offline"] = "changeclass_offline";
 
 	game["menu_callvote"] = "callvote";
 	game["menu_muteplayer"] = "muteplayer";
@@ -40,13 +39,10 @@ init()
 
 	precacheMenu("scoreboard");
 	precacheMenu(game["menu_team"]);
-	precacheMenu(game["menu_class_allies"]);
 	precacheMenu(game["menu_changeclass_allies"]);
-	precacheMenu(game["menu_class_axis"]);
 	precacheMenu(game["menu_changeclass_axis"]);
 	precacheMenu(game["menu_class"]);
 	precacheMenu(game["menu_changeclass"]);
-	precacheMenu(game["menu_changeclass_offline"]);
 	precacheString( &"MP_HOST_ENDED_GAME" );
 	precacheString( &"MP_HOST_ENDGAME_RESPONSE" );
 

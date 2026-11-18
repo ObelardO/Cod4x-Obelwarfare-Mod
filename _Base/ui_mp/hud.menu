@@ -15,11 +15,11 @@
 
 #include "ui/menudef.h"
 
-#define TEAM_IS_MARINES		(localVarString( ui_team ) == "marines")
-#define TEAM_IS_OPFOR		(localVarString( ui_team ) == "opfor")
+#define TEAM_IS_MARINES		(dvarString( ui_team ) == "marines")
+#define TEAM_IS_OPFOR		(dvarString( ui_team ) == "opfor")
 
 #define RANK_ORIGIN 0 6
-#define ONLINEGAME (dvarInt( "onlinegame" ) && !dvarInt( "xblive_privatematch" ) )
+#define ONLINEGAME (dvarInt( "onlinegame" ))
 #define ONLINEGAME_OFFSET 10
 
 #define FLASH_OFS 	((sin(milliseconds()/90))*2)

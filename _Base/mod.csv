@@ -13,6 +13,7 @@ ignore,mod_ignore
 
 localize,ow
 localize,props
+localize,prestige
 
 rawfile,maps/createfx/mp_backlot_fx.gsc
 rawfile,maps/createfx/mp_bloc_fx.gsc
@@ -316,6 +317,7 @@ rawfile,openwarfare/_paindeathsounds.gsc
 rawfile,openwarfare/_playerdvars.gsc
 rawfile,openwarfare/_players.gsc
 rawfile,openwarfare/_powerrank.gsc
+rawfile,openwarfare/_prestige.gsc
 rawfile,openwarfare/_quickactions.gsc
 rawfile,openwarfare/_rangefinder.gsc
 rawfile,openwarfare/_readyupperiod.gsc
@@ -365,11 +367,14 @@ menufile,ui_mp/scriptmenus/advancedacp.menu
 menufile,ui_mp/scriptmenus/advancedmvs.menu
 menufile,ui_mp/scriptmenus/callvote.menu
 menufile,ui_mp/scriptmenus/callvote_buttons.inc
+menufile,ui_mp/scriptmenus/changeclass.menu
 menufile,ui_mp/scriptmenus/changeclass_marines_mw.menu
 menufile,ui_mp/scriptmenus/changeclass_mw.menu
 menufile,ui_mp/scriptmenus/changeclass_opfor_mw.menu
 menufile,ui_mp/scriptmenus/changeclass_props.menu
 menufile,ui_mp/scriptmenus/class.menu
+menufile,ui_mp/challenges_ingame.menu
+menufile,ui_mp/scriptmenus/popup_prestige.menu
 menufile,ui_mp/scriptmenus/clientcmd.menu
 menufile,ui_mp/scriptmenus/eog_statistics.menu
 menufile,ui_mp/scriptmenus/ow_cac_editor.menu
@@ -387,9 +392,7 @@ rawfile,ui_mp/tactical_map.inc
 rawfile,ui_mp/teamicon.inc
 
 rawfile,ui_mp/controls_multi_slot42.inc
-
-menufile,ui_mp/choices_setup_teams.menu
-menufile,ui_mp/choices_setup_common.menu
+rawfile,ui_mp/team_is.inc
 
 
 sound,daycycle,,all_mp
