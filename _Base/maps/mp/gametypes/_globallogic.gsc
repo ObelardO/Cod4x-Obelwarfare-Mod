@@ -2447,9 +2447,6 @@ beginClassChoice( forceNewChoice )
 		self.pers["class"] = undefined;
 		self.class = undefined;
 
-		// open a menu that just sets the ui_team localvar
-		self openMenu( game[ "menu_initteam_" + team ] );
-
 		if ( self.sessionstate != "playing" && game["state"] == "playing" )
 			self thread [[level.spawnClient]]();
 		level thread updateTeamStatus();

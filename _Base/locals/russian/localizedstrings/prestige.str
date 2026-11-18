@@ -1,0 +1,74 @@
+VERSION          "1"
+CONFIG           "C:\trees\cod3\cod3\bin\StringEd.cfg"
+FILENOTES        ""
+
+REFERENCE        MODE
+LANG_RUSSIAN     "Престиж"
+
+REFERENCE        DESC
+LANG_RUSSIAN     "Сброс звания, оружий, перков и испытаний."
+
+REFERENCE        TITLE1
+LANG_RUSSIAN     "Предупреждение"
+
+REFERENCE        WARNING1
+LANG_RUSSIAN     "Получение нового престижного звания сбросит ваше звание и все достижения. Продолжить?"
+
+REFERENCE        TITLE2
+LANG_RUSSIAN     "Вы уверены?"
+
+REFERENCE        WARNING2
+LANG_RUSSIAN     "Вы потеряете всё оружие, модули, камуфляжи, перки, достижения и свои классы."
+
+REFERENCE        TITLE3
+LANG_RUSSIAN     "Последнее предупреждение"
+
+REFERENCE        WARNING3
+LANG_RUSSIAN     "Это нельзя отменить. Получить новое престижное звание?"
+
+REFERENCE        ENTER
+LANG_RUSSIAN     "Да, получить престижное звание"
+
+REFERENCE        ENTERING
+LANG_RUSSIAN     "Сброс достижений..."
+
+REFERENCE        RESETTING
+LANG_RUSSIAN     "Сброс всех оружий, перков, испытаний и классов."
+
+REFERENCE        KILLFEED
+LANG_RUSSIAN     "^3&&1^7 получает престижное звание ^3&&2^7."
+
+REFERENCE        NAME1
+LANG_RUSSIAN     "Престиж: мастер-комендор-сержант"
+
+REFERENCE        NAME2
+LANG_RUSSIAN     "Престиж: комендант-сержант"
+
+REFERENCE        NAME3
+LANG_RUSSIAN     "Престиж: главный сержант армии"
+
+REFERENCE        NAME4
+LANG_RUSSIAN     "Престиж: старший прапорщик"
+
+REFERENCE        NAME5
+LANG_RUSSIAN     "Престиж: лейтенант"
+
+REFERENCE        NAME6
+LANG_RUSSIAN     "Престиж: майор"
+
+REFERENCE        NAME7
+LANG_RUSSIAN     "Престиж: полковник"
+
+REFERENCE        NAME8
+LANG_RUSSIAN     "Престиж: главный сержант"
+
+REFERENCE        NAME9
+LANG_RUSSIAN     "Престиж: генерал армии"
+
+REFERENCE        NAME10
+LANG_RUSSIAN     "Престиж: верховный главнокомандующий"
+
+REFERENCE        MAX
+LANG_RUSSIAN     "Вы достигли максимального престижа."
+
+ENDMARKER

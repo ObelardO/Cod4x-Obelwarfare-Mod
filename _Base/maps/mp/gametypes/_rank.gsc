@@ -173,6 +173,25 @@ onPlayerConnect()
 		player.pers["rankxp"] = player maps\mp\gametypes\_persistence::statGet( "rankxp" );
 		
 		prestigeId = 0;
+		if ( level.rankedMatch || level.scr_server_rank_type == 2 )
+		{
+			prestigeId = player getStat( 2326 );
+			if ( prestigeId < 0 )
+				prestigeId = 0;
+			if ( prestigeId > level.maxPrestige )
+				prestigeId = level.maxPrestige;
+
+			player openwarfare\_prestige::repairWipedClasses();
+
+			// Old ranks 55-64 stored XP past Commander. Sit those players on the level-55 cap
+			// so the prestige button, which compares XP to that exact value, can appear.
+			maxRankXp = getRankInfoMaxXp( level.maxRank );
+			if ( player.pers["rankxp"] > maxRankXp )
+			{
+				player.pers["rankxp"] = maxRankXp;
+				player maps\mp\gametypes\_persistence::statSet( "rankxp", maxRankXp );
+			}
+		}
 		player.pers["prestige"] = prestigeId;
 		
 		rankId = player getRankForXp( player getRankXP() );
@@ -195,7 +214,7 @@ onPlayerConnect()
 			assertex( isdefined(player.cur_rankNum), "rank: "+ rankId + " does not have an index, check mp/ranktable.csv" );
 			player setStat( 251, player.cur_rankNum );
 			player setStat( 252, player.cur_rankNum );
-			player setStat( 2326, 0 );
+			player setStat( 2326, prestigeId );
 				
 			// resetting unlockable vars
 			if ( !isDefined( player.pers["unlocks"] ) )
@@ -554,7 +573,7 @@ updateRank()
 	self logString( "promoted from " + oldRank + " to " + newRankId + " timeplayed: " + self maps\mp\gametypes\_persistence::statGet( "time_played_total" ) );		
 
 	if ( level.gametype != "gg" )
-		self setRank( newRankId );
+		self setRank( newRankId, self.pers["prestige"] );
 		
 	return true;
 }
@@ -1150,8 +1169,8 @@ incRankXP( amount )
 	xp = self getRankXP();
 	newXp = (xp + amount);
 
-	if ( self.pers["rank"] == level.maxRank && newXp >= getRankInfoMaxXP( level.maxRank ) )
-		newXp = getRankInfoMaxXP( level.maxRank ) - 1;
+	if ( self.pers["rank"] == level.maxRank && newXp >= getRankInfoMaxXp( level.maxRank ) )
+		newXp = getRankInfoMaxXp( level.maxRank );
 
 	self.pers["rankxp"] = newXp;
 	self maps\mp\gametypes\_persistence::statSet( "rankxp", newXp );

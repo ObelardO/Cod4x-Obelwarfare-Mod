@@ -469,68 +469,6 @@ REFERENCE REMINDER
 LANG_SPANISH "Recordatorio..."
 
 
-//******************************************************************************
-// mp/rankTable.csv
-//******************************************************************************
-REFERENCE RANK_PRESTIGE1
-LANG_SPANISH "Prestige MGS."
-
-REFERENCE RANK_PRESTIGE2
-LANG_SPANISH "Prestige CSM."
-
-REFERENCE RANK_PRESTIGE3
-LANG_SPANISH "Prestige SMOTA."
-
-REFERENCE RANK_PRESTIGE4
-LANG_SPANISH "Prestige CWO."
-
-REFERENCE RANK_PRESTIGE5
-LANG_SPANISH "Prestige Lt."
-
-REFERENCE RANK_PRESTIGE6
-LANG_SPANISH "Prestige Maj."
-
-REFERENCE RANK_PRESTIGE7
-LANG_SPANISH "Prestige Col."
-
-REFERENCE RANK_PRESTIGE8
-LANG_SPANISH "Prestige CrSM."
-
-REFERENCE RANK_PRESTIGE9
-LANG_SPANISH "Prestige GOTA."
-
-REFERENCE RANK_PRESTIGE10
-LANG_SPANISH "Prestige SC."
-
-REFERENCE RANK_PRESTIGE1_FULL
-LANG_SPANISH "Prestige Master Gny. Sergeant"
-
-REFERENCE RANK_PRESTIGE2_FULL
-LANG_SPANISH "Prestige Command Sergeant Major"
-
-REFERENCE RANK_PRESTIGE3_FULL
-LANG_SPANISH "Prestige S.M.O.T.A."
-
-REFERENCE RANK_PRESTIGE4_FULL
-LANG_SPANISH "Prestige C.W.O."
-
-REFERENCE RANK_PRESTIGE5_FULL
-LANG_SPANISH "Prestige Lieutenant"
-
-REFERENCE RANK_PRESTIGE6_FULL
-LANG_SPANISH "Prestige Major"
-
-REFERENCE RANK_PRESTIGE7_FULL
-LANG_SPANISH "Prestige Colonel"
-
-REFERENCE RANK_PRESTIGE8_FULL
-LANG_SPANISH "Prestige C.S.M."
-
-REFERENCE RANK_PRESTIGE9_FULL
-LANG_SPANISH "Prestige G.O.T.A."
-
-REFERENCE RANK_PRESTIGE10_FULL
-LANG_SPANISH "Prestige Supreme Commander"
 
 
 //******************************************************************************

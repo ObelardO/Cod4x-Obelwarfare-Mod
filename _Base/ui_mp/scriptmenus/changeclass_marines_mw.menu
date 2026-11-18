@@ -42,10 +42,6 @@
 		focuscolor		COLOR_FOCUSED
 		style			WINDOW_STYLE_EMPTY
 		blurWorld		7.0
-		onOpen
-		{
-			setLocalVarString ui_team "marines"
-		}
 		onEsc
 		{
 			scriptMenuResponse "back";

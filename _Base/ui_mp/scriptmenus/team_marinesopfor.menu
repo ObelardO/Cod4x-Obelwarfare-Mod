@@ -25,7 +25,8 @@
 #define CHOICE_SEP_1			3
 
 #include "ui_mp/menustyle.inc"
-#include "ui_mp/choices_setup_teams.menu"
+#include "ui/choices_setup_common.menu"
+#include "ui_mp/team_is.inc"
 
 {
 	menuDef
