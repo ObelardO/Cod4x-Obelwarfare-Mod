@@ -283,6 +283,8 @@ menuDef
 #define ICE_STAT_PISTOL			0
 #define ICE_STAT_SPECOPS		10
 #define ICE_STAT_ASSAULT		20
+/* mp44 is stats row 57. 57 - 50 = bit 7, the first free assault bit. */
+#define ICE_STAT_ASSAULT_EXTRA		50
 #define ICE_STAT_SNIPER			60
 #define ICE_STAT_DEMOLITIONS		70
 #define ICE_STAT_HEAVYGUNNER		80
@@ -292,11 +294,7 @@ menuDef
     ( int( tablelookup( "mp/statsTable.csv", 4, ref, 0 ) ) - statOffset )
 
 #define ICE_GET_MASK_VALUE( mask, bit ) \
-    ( dvarInt( mask ) & ( 1 << ( int( bit ) ) ) )
-
-/* A stats row outside its class block (mp44) must not shift by 15 or more. Bit 15 is never packed. */
-#define ICE_SAFE_BIT( bit ) \
-    ( ( int( bit ) ) * ( ( int( bit ) ) < 15 ) + 15 * ( ( int( bit ) ) >= 15 ) )
+    ( dvarInt( mask ) & ( 1<<int( bit ) ) )
 
 #include "ui_mp/ice/ice_primary_popup.inc"
 

@@ -421,6 +421,10 @@ initAllowedWeapons( statOffset, className, overrideClassName )
         addAllowedItem( storedClass, weaponName, dvarName, weaponItemType, "ui_ice_allow_" + storedClass, weapIndex - statOffset );
     }
 
+    //mp44 is stats row 57. Virtual base 50 matches ICE_STAT_ASSAULT_EXTRA, so the bit is 7.
+    if ( className == "assault" && overrideClassName == "" )
+        addAllowedItem( "assault", "mp44", "weap_allow_assault_mp44", weaponItemType, "ui_ice_allow_assault", int( tableLookup( "mp/statsTable.csv", 4, "mp44", 0 ) ) - 50 );
+
     //Initialize allowed attachments for each weapon in weapon class
     initAllowedAttachments( statOffset, className + overrideClassName );
 }
