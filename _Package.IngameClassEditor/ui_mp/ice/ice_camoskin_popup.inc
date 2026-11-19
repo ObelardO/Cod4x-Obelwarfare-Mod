@@ -25,7 +25,8 @@
 		ICE_CLOSE_ALL_POPUPS_ACTION
 
 #define LOCAL_CAMO_ITEM( itemNum, camoName, pnum, camoRef, highlight_dvar, bitMask, visArg )\
-	CHOICE_BUTTON_FOCUS( itemNum, camoName, LOCAL_CAMO_ACTION( camoRef );, execnow "set "highlight_dvar" "camoRef;, ; );
+	CHOICE_BUTTON_FOCUS( itemNum, camoName, LOCAL_CAMO_ACTION( camoRef );, execnow "set "highlight_dvar" "camoRef;, ; ); \
+	ICE_CURRENT_LABEL( itemNum, camoName, when( dvarString( "loadout_camo" ) == camoRef ); )
 
 #define LOCAL_CAMO_POPUP_ONOPEN\
     execnow "set "UI_FOCUSFIRST" "REF_CAMO_NONE"; set ui_inside_popup camo";

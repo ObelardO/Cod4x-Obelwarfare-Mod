@@ -51,7 +51,8 @@
     when( LOCAL_SIDEARM_ALLOWED( wRef ) && wRef != REF_DESERTEAGLE && wRef != REF_DESERTEAGLEGOLD );, \
             LOCAL_SIDEARM_ALLOWED( wRef ) && wRef != REF_DESERTEAGLE && wRef != REF_DESERTEAGLEGOLD ) \
     CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, LOCAL_SIDEARM_ONFOCUS( wRef ), ;, when( LOCAL_SIDEARM_ALLOWED( wRef ) == 0 ); ) \
-    CHOICE_DBUTTON_VIS( itemNum, wName, when( LOCAL_SIDEARM_ALLOWED( wRef ) == 0 ); )
+    CHOICE_DBUTTON_VIS( itemNum, wName, when( LOCAL_SIDEARM_ALLOWED( wRef ) == 0 ); ) \
+    ICE_CURRENT_LABEL( itemNum, wName, when( dvarString( "loadout_secondary" ) == wRef ); )
 
 #define LOCAL_SIDEARM_POPUP_ONOPEN( wclass )\
     execnow "set "UI_FOCUSFIRST" "REF_M9BERETTA"; set selected_weapon_class "wclass"; set ui_inside_popup "wclass;\

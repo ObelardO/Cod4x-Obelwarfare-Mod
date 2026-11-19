@@ -59,6 +59,7 @@
     /*Disabled*/\
     CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, LOCAL_ATTACHMENT_ONFOCUS(wClass,wRef), ;, when( LOCAL_ATTACHMENT_ALLOWED( wClass, p_numref ) == 0 ); ) \
     CHOICE_DBUTTON_VIS( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,wRef,3), when( LOCAL_ATTACHMENT_ALLOWED( wClass, p_numref ) == 0 ); ) \
+    ICE_CURRENT_LABEL( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,wRef,3), when( ( dvarString( "ui_primary_selected" ) == "primary" && dvarString( "loadout_primary_attachment" ) == wRef ) || ( dvarString( "ui_primary_selected" ) == "secondary" && dvarString( "loadout_secondary_attachment" ) == wRef ) ); ) \
     
 #define LOCAL_PISTOL_ATTACHMENT_ITEM( itemNum, wClass ,p_numref, wRef )\
     /*Pistol attachment*/\
@@ -67,6 +68,7 @@
     /*Disabled*/\
     CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, LOCAL_ATTACHMENT_ONFOCUS(wClass,wRef), ;, when( LOCAL_ATTACHMENT_ALLOWED( wClass, p_numref ) == 0 ); ) \
     CHOICE_DBUTTON_VIS( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,wRef,3), when( LOCAL_ATTACHMENT_ALLOWED( wClass, p_numref ) == 0 ); ) \
+    ICE_CURRENT_LABEL( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,wRef,3), when( dvarString( "loadout_secondary_attachment" ) == wRef ); ) \
     
 #define LOCAL_ATTACHMENT_POPUP_ONOPEN( wClass )\
     execnow "set "UI_FOCUSFIRST" "REF_ATTACHMENT_NONE"; set ui_inside_popup attachment";\

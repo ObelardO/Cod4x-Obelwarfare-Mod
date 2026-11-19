@@ -296,6 +296,22 @@ menuDef
 #define ICE_GET_MASK_VALUE( mask, bit ) \
     ( dvarInt( mask ) & ( 1<<int( bit ) ) )
 
+#define ICE_CURRENT_LABEL( itemIndex, textArg, visArg ) \
+    itemDef \
+    { \
+        type			ITEM_TYPE_TEXT \
+        rect			CHOICE_RECT( itemIndex ) \
+        exp				text( textArg ); \
+        textfont		CHOICE_TEXTFONT \
+        textscale		CHOICE_TEXTSIZE \
+        textstyle		CHOICE_TEXTSTYLE \
+        textAlign		CHOICE_TEXTALIGN \
+        textAlignX		CHOICE_TEXT_OFFSET_X \
+        forecolor		COLOR_TITLE \
+        visible			visArg \
+        decoration \
+    }
+
 #include "ui_mp/ice/ice_primary_popup.inc"
 
 #include "ui_mp/ice/ice_primary_attachment_popup.inc"

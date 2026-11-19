@@ -93,10 +93,10 @@
     ( dvarString( "ui_primary_selected" ) == "primary" && dvarString( "loadout_primary" ) == wRef ) || ( dvarString( "ui_primary_selected" ) == "secondary" && dvarString( "loadout_secondary" ) == wRef )
 
 #define LOCAL_PRIMARY_WEAPON_ALLOWED_OVERKILL( wRef ) \
-    dvarString( "ui_primary_selected" ) == "primary" && dvarString( "loadout_secondary" ) != wRef && dvarString( "loadout_primary" ) != wRef
+    dvarString( "ui_primary_selected" ) == "primary" && dvarString( "loadout_secondary" ) != wRef
 
 #define LOCAL_SECONDARY_WEAPON_ALLOWED_OVERKILL( wRef, overkillBit ) \
-    dvarString( "ui_primary_selected" ) == "secondary" && dvarString( "loadout_primary" ) != wRef && dvarString( "loadout_secondary" ) != wRef && LOCAL_OVERKILL_CLASS_ALLOWED( overkillBit )
+    dvarString( "ui_primary_selected" ) == "secondary" && dvarString( "loadout_primary" ) != wRef && LOCAL_OVERKILL_CLASS_ALLOWED( overkillBit )
 
 #define LOCAL_WEAPON_DISABLED_OVERKILL( wClass, wRef, statOffset ) \
     LOCAL_WEAPON_IS_ALLOWED ( wClass, wRef, statOffset ) && dvarString( "loadout_perk2" ) == "specialty_twoprimaries" && \
@@ -120,7 +120,6 @@
 // hacked to hide the second primary if same weapon is selected in first primary, change weapon description to "Already selected"
 #define LOCAL_WEAPON_ITEM_EX( itemNum, wName, wClass, wRef, statOffset, overkillBit, primaryAction, overkillAction )\
     CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, LOCAL_PRIMARY_ONFOCUS( wClass, wRef, statOffset ), ;, when( LOCAL_WEAPON_IS_ALLOWED( wClass, wRef, statOffset ) == 0 ); )\
-    CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, LOCAL_PRIMARY_ONFOCUS_OVERKILL( wClass, wRef, statOffset ), ;, when( LOCAL_WEAPON_IS_ALLOWED( wClass, wRef, statOffset ) && LOCAL_WEAPON_IS_CURRENT( wRef ) ); )\
     CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, LOCAL_PRIMARY_ONFOCUS_OVERKILL( wClass, wRef, statOffset ), ;, when( LOCAL_WEAPON_DISABLED_OVERKILL( wClass, wRef, statOffset ) ); )\
     CHOICE_DBUTTON_VIS( itemNum, wName, when( 1 ); ) \
     /*Primary*/\
@@ -132,7 +131,8 @@
     CHOICE_BUTTON_FOCUS_VIS_ADV_HK( itemNum, wName, overkillAction( wClass, wRef ), \
         LOCAL_PRIMARY_ONFOCUS( wClass, wRef, statOffset ), ;, when( \
         LOCAL_SECONDARY_WEAPON_VISIBLE( wClass, wRef, statOffset, overkillBit ) );, \
-        LOCAL_SECONDARY_WEAPON_VISIBLE( wClass, wRef, statOffset, overkillBit ) )
+        LOCAL_SECONDARY_WEAPON_VISIBLE( wClass, wRef, statOffset, overkillBit ) ) \
+    ICE_CURRENT_LABEL( itemNum, wName, when( LOCAL_WEAPON_IS_CURRENT( wRef ) ); )
 
 #define LOCAL_WEAPON_CLASS_ACTION( wClass, className ) \
     play "mouse_click";\
@@ -146,7 +146,8 @@
 #define LOCAL_WEAPON_CLASS_ITEM( itemNum, wClass, className, overkillBit )\
     CHOICE_BUTTON_FOCUS_VIS( itemNum, className, LOCAL_WEAPON_CLASS_ACTION( wClass, className );, ;, ;, when( dvarString( "ui_primary_selected" ) == "primary" ) );\
     CHOICE_BUTTON_FOCUS_VIS( itemNum, className, LOCAL_WEAPON_CLASS_ACTION_OVERKILL( wClass, className );, ;, ;, when( dvarString( "ui_primary_selected" ) == "secondary" && LOCAL_OVERKILL_CLASS_ALLOWED( overkillBit ) ) );\
-    CHOICE_DBUTTON_VIS( itemNum, className, when( dvarString( "ui_primary_selected" ) == "secondary" && LOCAL_OVERKILL_CLASS_ALLOWED( overkillBit ) == 0 ); )
+    CHOICE_DBUTTON_VIS( itemNum, className, when( dvarString( "ui_primary_selected" ) == "secondary" && LOCAL_OVERKILL_CLASS_ALLOWED( overkillBit ) == 0 ); ) \
+    ICE_CURRENT_LABEL( itemNum, className, when( ( dvarString( "ui_primary_selected" ) == "primary" && dvarString( "loadout_class" ) == wClass ) || ( dvarString( "ui_primary_selected" ) == "secondary" && dvarString( "loadout_class_secondary" ) == wClass ) ); )
     
 #define LOCAL_WEAPON_CLASS_POPUP_ONOPEN\
     execnow "set ui_inside_popup weapon_class; set ui_show_preview 1";\

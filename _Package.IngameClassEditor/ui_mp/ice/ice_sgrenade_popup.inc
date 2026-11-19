@@ -32,7 +32,8 @@
     when( ( wRef == REF_SMOKE_X1 && ( dvarString( "loadout_perk1" )=="specialty_specialgrenade") ) == 0 && LOCAL_SGRENADE_ALLOWED( wRef ) );, \
             ( wRef == REF_SMOKE_X1 && ( dvarString( "loadout_perk1" )=="specialty_specialgrenade") ) == 0 && LOCAL_SGRENADE_ALLOWED( wRef ) ) \
     CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, execnow "set "highlight_dvar" "wRef, ;, when( wRef == REF_SMOKE_X1 && (dvarString( "loadout_perk1" )=="specialty_specialgrenade") && LOCAL_SGRENADE_ALLOWED( wRef )); ) \
-    CHOICE_DBUTTON_VIS( itemNum, wName, when( ( wRef == REF_SMOKE_X1 && ( dvarString( "loadout_perk1" )=="specialty_specialgrenade" ) ) || LOCAL_SGRENADE_ALLOWED( wRef ) == 0 ); )
+    CHOICE_DBUTTON_VIS( itemNum, wName, when( ( wRef == REF_SMOKE_X1 && ( dvarString( "loadout_perk1" )=="specialty_specialgrenade" ) ) || LOCAL_SGRENADE_ALLOWED( wRef ) == 0 ); ) \
+    ICE_CURRENT_LABEL( itemNum, wName, when( dvarString( "loadout_grenade" ) == wRef ); )
 
 #define LOCAL_SGRENADE_POPUP_ONOPEN\
     execnow "set "UI_FOCUSFIRST" "REF_FLASH_X1"; set ui_inside_popup sgrenade";\

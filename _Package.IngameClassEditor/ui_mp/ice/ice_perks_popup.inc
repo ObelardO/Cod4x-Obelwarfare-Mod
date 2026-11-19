@@ -5,12 +5,6 @@
 #define LOCAL_PERK_INFO_ALLOWED\
     ( ICE_GET_MASK_VALUE( "ui_ice_allow_" + dvarString( "ui_inside_popup" ), dvarInt( "ui_ice_bit" ) ) != 0 )
 
-#define LOCAL_PERK_INFO_EQUIPPED( perkSlot )\
-    dvarString( "loadout_"perkSlot ) == dvarString( "ui_perk_hl_ref" )
-
-#define LOCAL_PERK_INFO_NOT_EQUIPPED( perkSlot )\
-    dvarString( "loadout_"perkSlot ) != dvarString( "ui_perk_hl_ref" )
-
 #define LOCAL_PERK_INFO_ALLOWED_GRENADE\
     ( dvarString( "ui_perk_hl_ref" ) != REF_SPECIALGRENADE_X3 || dvarString( "loadout_grenade" ) != REF_SMOKE_X1 )
 
@@ -21,8 +15,6 @@
     ( ICE_GET_MASK_VALUE( "ui_ice_class_" + dvarString( "ui_inside_popup" ), dvarInt( "ui_ice_bit" ) ) != 0 )
 
 #define LOCAL_PERK_INFO_VISIBLE( perkSlot )\
-    /* PERK NOT EQUIPPED */\
-    LOCAL_PERK_INFO_NOT_EQUIPPED( perkSlot ) &&\
     /* PERK ALLOWED */\
     LOCAL_PERK_INFO_ALLOWED &&\
     /* PERK ALLOWED FOR CLASS */\
@@ -48,9 +40,6 @@
     /* perk desc locked - class*/\
     PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0,  "@OW_ICE_LOCK_CLASS", TEXTSIZE_INFO_DESC, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE \
         visible when( LOCAL_PERK_INFO_ALLOWED && LOCAL_PERK_INFO_ALLOWED_CLASS == 0 ); )\
-    /* perk desc locked - equipped*/\
-    PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0,  "@OW_ICE_LOCK_EQUIPPED", TEXTSIZE_INFO_DESC, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE \
-        visible when( LOCAL_PERK_INFO_EQUIPPED( perkSlot ) ); )\
     /* perk desc locked - greanade*/\
     PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0,  "@OW_ICE_LOCK_FRAG", TEXTSIZE_INFO_DESC, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE \
         visible when( LOCAL_PERK_INFO_NOT_ALLOWED_GRENADE ); )\
@@ -89,25 +78,18 @@
 #define LOCAL_PERK_EQUIPPED( perkSlot, perkRef )\
     dvarString( "loadout_"perkSlot ) == perkRef
 
-#define LOCAL_PERK_NOT_EQUIPPED( perkSlot, perkRef )\
-    dvarString( "loadout_"perkSlot ) != perkRef
-
-#define LOCAL_PERK_CHOICE_NOT_LOCKED( perkSlot, perkRef, bit )\
-    LOCAL_PERK_NOT_EQUIPPED( perkSlot, perkRef ) &&\
-    LOCAL_PERK_ALLOWED( perkSlot, bit ) &&\
-    LOCAL_PERK_ALLOWED_CLASS( perkSlot, bit ) &&\
-    LOCAL_PERK_ALLOWED_GRENADE( perkRef )
-
-#define LOCAL_PERK_CHOICE_IS_LOCKED( perkSlot, perkRef, bit )\
-    LOCAL_PERK_EQUIPPED( perkSlot, perkRef ) ||\
-    LOCAL_PERK_ALLOWED( perkSlot, bit ) == 0 ||\
-    LOCAL_PERK_ALLOWED_CLASS( perkSlot, bit ) == 0 ||\
-    ( perkRef == REF_SPECIALGRENADE_X3 && dvarString( "loadout_grenade" ) == REF_SMOKE_X1 )
+#define LOCAL_PERK_CHOICE_IS_BLOCKED( perkSlot, perkRef, bit )\
+    ( \
+        LOCAL_PERK_ALLOWED( perkSlot, bit ) == 0 ||\
+        LOCAL_PERK_ALLOWED_CLASS( perkSlot, bit ) == 0 ||\
+        ( perkRef == REF_SPECIALGRENADE_X3 && dvarString( "loadout_grenade" ) == REF_SMOKE_X1 ) \
+    )
 
 #define LOCAL_PERK_ITEM_VIS( itemNum, camoName, perkSlot, perkRef, paction, bit, visArg )\
-    CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, camoName, LOCAL_PERK_ACTION( perkSlot, perkRef, paction );, LOCAL_PERK_ONFOCUS( bit, perkRef ), ;, when( LOCAL_PERK_CHOICE_NOT_LOCKED( perkSlot, perkRef, bit ) && visArg );, 0 )\
-    CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;,LOCAL_PERK_LOCKED_ONFOCUS( bit, perkRef ), ;, when( LOCAL_PERK_CHOICE_IS_LOCKED( perkSlot, perkRef, bit ) && visArg ); )\
-    CHOICE_DBUTTON_VIS( itemNum, camoName, when( LOCAL_PERK_CHOICE_IS_LOCKED( perkSlot, perkRef, bit ) && visArg ); )
+    CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, camoName, LOCAL_PERK_ACTION( perkSlot, perkRef, paction );, LOCAL_PERK_ONFOCUS( bit, perkRef ), ;, when( LOCAL_PERK_CHOICE_IS_BLOCKED( perkSlot, perkRef, bit ) == 0 && visArg );, 0 )\
+    CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, LOCAL_PERK_LOCKED_ONFOCUS( bit, perkRef ), ;, when( LOCAL_PERK_CHOICE_IS_BLOCKED( perkSlot, perkRef, bit ) && visArg ); )\
+    CHOICE_DBUTTON_VIS( itemNum, camoName, when( LOCAL_PERK_CHOICE_IS_BLOCKED( perkSlot, perkRef, bit ) && visArg ); ) \
+    ICE_CURRENT_LABEL( itemNum, camoName, when( LOCAL_PERK_EQUIPPED( perkSlot, perkRef ) && visArg ); )
 
 #define LOCAL_PERK_POPUP_ONOPEN( perkRef, perkSlot )\
     execnow "set "UI_FOCUSFIRST" "perkRef"; set ui_inside_popup "perkSlot;\
