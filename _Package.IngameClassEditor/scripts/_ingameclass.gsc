@@ -185,10 +185,10 @@ onMenuResponse( menu, response )
         return;
     }
 
-    //Update allowed weapon classes in UI for secondary weapon as a primary weapon (only for specialty_twoprimaries perk) 
+    //Update which weapon classes may be picked as the overkill second primary
     if ( response == "allow:secondary" )
     {
-        updateAllowedItem( "specialty_twoprimaries", "perk2" );
+        self pushOverkillMask();
 
         return;
     }
@@ -300,6 +300,8 @@ initLoadoutData( classInfoIndex )
          "loadout_class", getPlayerClassName( getLoadoutDataRef("primary") ),
          "loadout_class_secondary", getPlayerClassName( getLoadoutDataRef("secondary") )
     );
+
+    self pushOverkillMask();
 }
 
 //Get weapon class name (assault, specops, heavygunner, demolitions or sniper) based on weapon reference and allowed items list
@@ -414,8 +416,9 @@ initAllowedWeapons( statOffset, className, overrideClassName )
         else
             dvarName = "weap_allow_" + className + "_" + weaponName;
 
-        //Add allowed weapon to the global allowed items list
-        addAllowedItem( className + overrideClassName, weaponName, dvarName, weaponItemType );
+        //Bit is the stats row inside this class block. The menu shifts by the same index.
+        storedClass = className + overrideClassName;
+        addAllowedItem( storedClass, weaponName, dvarName, weaponItemType, "ui_ice_allow_" + storedClass, weapIndex - statOffset );
     }
 
     //Initialize allowed attachments for each weapon in weapon class
@@ -432,7 +435,7 @@ initAllowedAttachments( statOffset, weaponClass )
     if( weaponClass != "" )
     {            
         dvarName = "attach_allow_" + weaponClass + "_none";
-        addAllowedItem( weaponClass, "none", dvarName, attachItemType );
+        addAllowedItem( weaponClass, "none", dvarName, attachItemType, "ui_ice_allow_" + weaponClass + "_atch", attachmentMaskBit( "none" ) );
     }
 
     //Get attachment names from stock table for weapon class
@@ -449,7 +452,7 @@ initAllowedAttachments( statOffset, weaponClass )
     if( attachmentsNames.size == 0 )
     {
         dvarName = "attach_allow_" + weaponClass + "_" + attachments;
-        addAllowedItem( weaponClass, attachments, dvarName, attachItemType );
+        addAllowedItem( weaponClass, attachments, dvarName, attachItemType, "ui_ice_allow_" + weaponClass + "_atch", attachmentMaskBit( attachments ) );
     }
     //Weapon has multiple attachment options
     else
@@ -457,7 +460,7 @@ initAllowedAttachments( statOffset, weaponClass )
         for( attachIndex = 0; attachIndex < attachmentsNames.size; attachIndex++ )
         {
             dvarName = "attach_allow_" + weaponClass + "_" + attachmentsNames[attachIndex];
-            addAllowedItem( weaponClass, attachmentsNames[attachIndex], dvarName, attachItemType );
+            addAllowedItem( weaponClass, attachmentsNames[attachIndex], dvarName, attachItemType, "ui_ice_allow_" + weaponClass + "_atch", attachmentMaskBit( attachmentsNames[attachIndex] ) );
         }
     }
 }
@@ -465,6 +468,12 @@ initAllowedAttachments( statOffset, weaponClass )
 //Initialize allowed perks for weapon class and master option for all classes
 initAllowedPerks( className )
 {
+    //Bit 0 is the first perk of each group in statsTable order. A group holds at most 15.
+    perkBits = [];
+    perkBits["perk1"] = 0;
+    perkBits["perk2"] = 0;
+    perkBits["perk3"] = 0;
+
     //Read all perk names and groups from stock table
     for( perkIndex = 150; perkIndex < 190; perkIndex++ )
     {
@@ -478,26 +487,35 @@ initAllowedPerks( className )
         if( !isDefined( perkGroup ) || perkGroup == "" )
             continue;
 
+        maskBit = perkBits[perkGroup];
+        if ( maskBit < 15 )
+            perkBits[perkGroup] = maskBit + 1;
+        else
+            maskBit = -1;
+
         dvarName = undefined;
+        maskDvar = undefined;
 
         //Perk with no class dependency, use master option for all classes
         if( className == "")
         {
             dvarName = "perk_allow_" + perkName;
+            maskDvar = "ui_ice_allow_" + perkGroup;
         }
         //Perk with class dependency, use class specific dvar
         else 
         {
             dvarName = "perk_" + className + "_allow_" + perkName;
+            maskDvar = "ui_ice_class_" + perkGroup;
         }
 
         //Add allowed perk to the global allowed items list
-        addAllowedItem( className, perkName, dvarName, perkGroup );
+        addAllowedItem( className, perkName, dvarName, perkGroup, maskDvar, maskBit );
     }
 }
 
 //Add item to the global allowed items list
-addAllowedItem( className, itemName, dvarName, itemType )
+addAllowedItem( className, itemName, dvarName, itemType, maskDvar, maskBit )
 {
     //If not class name defined, use value for all classes (master option)
     if( !isDefined( className ) || className == "" ) className = "*all*";
@@ -510,6 +528,8 @@ addAllowedItem( className, itemName, dvarName, itemType )
     level.cacIngame.allowedItems[itemIndex].className = className;
     level.cacIngame.allowedItems[itemIndex].itemName = itemName;
     level.cacIngame.allowedItems[itemIndex].itemType = itemType;
+    level.cacIngame.allowedItems[itemIndex].maskDvar = maskDvar;
+    level.cacIngame.allowedItems[itemIndex].maskBit = maskBit;
 
     //Add index to helper lookup arrays for fast searching without loops
     if( !isDefined( level.cacIngame.allowedItemsIndexesLookup[className] ) )
@@ -547,100 +567,157 @@ updateAllowedItemsInMenu( className, itemType )
         isCurrentClass = isSubStr( className, "current" );
         isAllClasses = isSubStr( className, "all" );
 
-        //Update perks allowed state for current weapon class
+        //Class mask for the open perk group. Overkill folds the second weapon class into the same bits.
         if( isCurrentClass )
         {
-            primaryClassName = getPlayerClassName( getLoadoutDataRef( "primary" ) );
-
-            updateAllowedItems( primaryClassName, itemType );
-
-            if( getLoadoutDataRef("perk2") == "specialty_twoprimaries" )
-            {
-                secondaryClassName = getPlayerClassName( getLoadoutDataRef( "secondary" ) );
-
-                updateAllowedItems( secondaryClassName, itemType );
-            }
+            self pushPerkClassMask( getPlayerClassName( getLoadoutDataRef( "primary" ) ), itemType );
         }
 
-        //Updates perks allowed state for all classes (master option above individual weapon class options)
+        //Global server rule for this perk group
         if( isAllClasses )
         {
-            updateAllowedItems( "*all*", itemType );
+            self pushAllowMask( "*all*", itemType );
         }
 
         //Update perks allowed state for specific weapon class (not used because isCurrentClass is used instead)
         if( !isCurrentClass && !isAllClasses )
         {
-            updateAllowedItems( className, itemType );
+            self pushPerkClassMask( className, itemType );
         }
     }
-    //Update allowed weapons or attacmhments in UI based on weapon class
+    //Update allowed weapons or attachments in UI based on weapon class
     else 
     {
-        updateAllowedItems( className, itemType );
+        self pushAllowMask( className, itemType );
     }
 }
 
-//Update client allowed dvars for specific item
-//Iterates through all classes to find all items with matching itemName and itemType
-updateAllowedItem( itemName, itemType )
+//Value of one bit. Script has no shift operator, so bit 0 is 1 and each next bit doubles.
+maskBitValue( bit )
 {
-    //Use helper index array to iterate only relevant items - O(m) where m is items in class+itemType, not O(n)
-    classNames = GetArrayKeys( level.cacIngame.allowedItemsIndexesLookup );
+    value = 1;
 
-    for( classIndex = 0; classIndex < classNames.size; classIndex++ )
-    {
-        className = classNames[classIndex];
-        allowedItemsIndexes = getAllowedItemsIndexes( className, itemType );
+    for ( i = 0; i < bit; i++ )
+        value = value * 2;
 
-        if( !isDefined( allowedItemsIndexes ) ) continue;
-
-        for( i = 0; i < allowedItemsIndexes.size; i++ )
-        {
-            allowedItemIndex = allowedItemsIndexes[i];
-            allowedItem = level.cacIngame.allowedItems[allowedItemIndex];
-
-            if( allowedItem.itemName == itemName )
-            {
-                self setClientDvar( allowedItem.dvarName, allowedItem.dvarValue );
-            }
-        }
-    }
+    return value;
 }
 
-//Update client allowed dvars for items group in weapon class
-updateAllowedItems( className, itemType, updateOnlyNotAllowedItems )
+//attachmentTable column 9. none is 0, matching NUM_NONE in the menu.
+attachmentMaskBit( attachmentName )
 {
-    updateOnlyNotAllowedItems = isDefined( updateOnlyNotAllowedItems ) && updateOnlyNotAllowedItems;
+    return int( tableLookup( "mp/attachmentTable.csv", 4, attachmentName, 9 ) );
+}
 
-    //Use helper index array - O(m) where m is items in class+itemType, not O(n)
+//Find one allowed item by class, type and reference
+getAllowedItemByName( className, itemType, itemName )
+{
     allowedItemsIndexes = getAllowedItemsIndexes( className, itemType );
-    if( !isDefined( allowedItemsIndexes ) ) return;
+    if ( !isDefined( allowedItemsIndexes ) )
+        return undefined;
 
-    for( i = 0; i < allowedItemsIndexes.size; i++ )
+    for ( i = 0; i < allowedItemsIndexes.size; i++ )
     {
-        allowedItemIndex = allowedItemsIndexes[i];
-        allowedItem = level.cacIngame.allowedItems[allowedItemIndex];
+        allowedItem = level.cacIngame.allowedItems[ allowedItemsIndexes[i] ];
 
-        if ( updateOnlyNotAllowedItems && allowedItem.dvarValue > 0 ) continue;
-
-        self setClientDvar( allowedItem.dvarName, allowedItem.dvarValue );
-        
-        debugLog = "[CAC Ingame] Item ^3" + allowedItem.itemName + "^7 in group ^3" + itemType + "^7 for class ^3" + className + "^7 is";
-        
-        if( allowedItem.dvarValue == 1 )
-        {
-            debugLog += "^2 allowed";
-        }
-        else
-        {
-            debugLog += "^1 NOT allowed";
-        }
-
-        //self iprintLn( debugLog + " dvar ^3" + allowedItem.dvarName);
+        if ( allowedItem.itemName == itemName )
+            return allowedItem;
     }
 
-    //self iprintLn( "[CAC Ingame] Processed " + allowedItemsIndexes.size + " allowed items" );
+    return undefined;
+}
+
+//Pack every item in this class and type into its mask dvar. Bit 1 means the server allows it.
+pushAllowMask( className, itemType )
+{
+    allowedItemsIndexes = getAllowedItemsIndexes( className, itemType );
+    if ( !isDefined( allowedItemsIndexes ) )
+        return;
+
+    mask = 0;
+    maskDvar = undefined;
+
+    for ( i = 0; i < allowedItemsIndexes.size; i++ )
+    {
+        allowedItem = level.cacIngame.allowedItems[ allowedItemsIndexes[i] ];
+
+        if ( !isDefined( maskDvar ) )
+            maskDvar = allowedItem.maskDvar;
+
+        if ( !isDefined( allowedItem.maskBit ) || allowedItem.maskBit < 0 )
+            continue;
+
+        if ( allowedItem.dvarValue > 0 )
+            mask = mask + maskBitValue( allowedItem.maskBit );
+    }
+
+    if ( isDefined( maskDvar ) )
+        self setClientDvar( maskDvar, mask );
+}
+
+//Class perk mask for the primary weapon. With overkill, a perk bit stays set only when the second weapon class allows it too.
+pushPerkClassMask( primaryClass, perkGroup )
+{
+    allowedItemsIndexes = getAllowedItemsIndexes( primaryClass, perkGroup );
+    if ( !isDefined( allowedItemsIndexes ) )
+        return;
+
+    secondaryClass = undefined;
+    if ( getLoadoutDataRef( "perk2" ) == "specialty_twoprimaries" )
+        secondaryClass = getPlayerClassName( getLoadoutDataRef( "secondary" ) );
+
+    mask = 0;
+    maskDvar = undefined;
+
+    for ( i = 0; i < allowedItemsIndexes.size; i++ )
+    {
+        allowedItem = level.cacIngame.allowedItems[ allowedItemsIndexes[i] ];
+
+        if ( !isDefined( maskDvar ) )
+            maskDvar = allowedItem.maskDvar;
+
+        if ( !isDefined( allowedItem.maskBit ) || allowedItem.maskBit < 0 )
+            continue;
+
+        allowed = allowedItem.dvarValue > 0;
+
+        if ( allowed && isDefined( secondaryClass ) && secondaryClass != "" && secondaryClass != "none" )
+        {
+            secondaryItem = getAllowedItemByName( secondaryClass, perkGroup, allowedItem.itemName );
+
+            if ( isDefined( secondaryItem ) && secondaryItem.dvarValue <= 0 )
+                allowed = false;
+        }
+
+        if ( allowed )
+            mask = mask + maskBitValue( allowedItem.maskBit );
+    }
+
+    if ( isDefined( maskDvar ) )
+        self setClientDvar( maskDvar, mask );
+}
+
+//One bit per weapon class, in class-popup order: assault, specops, heavygunner, demolitions, sniper.
+pushOverkillMask()
+{
+    classNames = [];
+    classNames[0] = "assault";
+    classNames[1] = "specops";
+    classNames[2] = "heavygunner";
+    classNames[3] = "demolitions";
+    classNames[4] = "sniper";
+
+    mask = 0;
+
+    for ( i = 0; i < classNames.size; i++ )
+    {
+        allowedItem = getAllowedItemByName( classNames[i], "perk2", "specialty_twoprimaries" );
+
+        if ( isDefined( allowedItem ) && allowedItem.dvarValue > 0 )
+            mask = mask + maskBitValue( i );
+    }
+
+    self setClientDvar( "ui_ice_overkill", mask );
 }
 
 //Validate all loadout data (primary and secondary weapon, attachments, perks and grenade)

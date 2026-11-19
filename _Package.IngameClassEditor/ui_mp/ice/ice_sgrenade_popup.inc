@@ -24,12 +24,15 @@
     scriptMenuResponse "ice_set:grenade:"wRef;\
     close "ice_weapon_popup_extra"
     
+#define LOCAL_SGRENADE_ALLOWED( wRef ) \
+    ( ICE_GET_MASK_VALUE( "ui_ice_allow_grenade", ICE_GET_STATS_INDEX( wRef, ICE_STAT_GRENADE ) ) != 0 )
+
 #define LOCAL_SGRENADE_ITEM( itemNum, wName, wRef, highlight_dvar )\
     CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, wName, LOCAL_SGRENADE_ACTION( wRef ), execnow "set "highlight_dvar" "wRef, ;, \
-    when( ( wRef == REF_SMOKE_X1 && ( dvarString( "loadout_perk1" )=="specialty_specialgrenade") ) == 0 && dvarBool( "weap_allow_"wRef ) );, \
-            ( wRef == REF_SMOKE_X1 && ( dvarString( "loadout_perk1" )=="specialty_specialgrenade") ) == 0 && dvarBool( "weap_allow_"wRef ) ) \
-    CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, execnow "set "highlight_dvar" "wRef, ;, when( wRef == REF_SMOKE_X1 && (dvarString( "loadout_perk1" )=="specialty_specialgrenade") && dvarBool("weap_allow_"wRef)); ) \
-    CHOICE_DBUTTON_VIS( itemNum, wName, when( ( wRef == REF_SMOKE_X1 && ( dvarString( "loadout_perk1" )=="specialty_specialgrenade" ) ) || !dvarBool( "weap_allow_"wRef ) ); )
+    when( ( wRef == REF_SMOKE_X1 && ( dvarString( "loadout_perk1" )=="specialty_specialgrenade") ) == 0 && LOCAL_SGRENADE_ALLOWED( wRef ) );, \
+            ( wRef == REF_SMOKE_X1 && ( dvarString( "loadout_perk1" )=="specialty_specialgrenade") ) == 0 && LOCAL_SGRENADE_ALLOWED( wRef ) ) \
+    CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, execnow "set "highlight_dvar" "wRef, ;, when( wRef == REF_SMOKE_X1 && (dvarString( "loadout_perk1" )=="specialty_specialgrenade") && LOCAL_SGRENADE_ALLOWED( wRef )); ) \
+    CHOICE_DBUTTON_VIS( itemNum, wName, when( ( wRef == REF_SMOKE_X1 && ( dvarString( "loadout_perk1" )=="specialty_specialgrenade" ) ) || LOCAL_SGRENADE_ALLOWED( wRef ) == 0 ); )
 
 #define LOCAL_SGRENADE_POPUP_ONOPEN\
     execnow "set "UI_FOCUSFIRST" "REF_FLASH_X1"; set ui_inside_popup sgrenade";\
