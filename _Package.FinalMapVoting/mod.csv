@@ -58,13 +58,17 @@ material,mp_rd_xmas_preview
 material,mp_sconsegrad_preview
 material,mp_selo_preview
 material,mp_steamlab_preview
-material,mp_stream_preview
 material,mp_strike_2_preview
 material,mp_struggle_preview
 material,mp_summit_preview
 material,mp_firingrange_preview
 material,mp_sinai_preview
 material,mp_getaway_preview
+material,mp_angrydogs_pound_preview
+material,mp_decay_preview
+material,mp_mw2_boneyard_preview
+material,mp_mw2_underpass_preview
+material,mp_mw3_hardhat_preview
 
 #Final Map Voting: Materials (Custom Xmax Maps)
 material,mp_backlot_snow_preview
@@ -82,3 +86,22 @@ material,mp_summit_xmas_preview
 material,mp_vac_2_snow_preview
 material,mp_waw_castle_snow_preview
 material,mp_winter_rasalem_preview
+material,mp_killhouse_xmas_preview
+material,mp_nuked_xmas_preview
+
+#Final Map Voting: Materials (Custom ww2 Maps)
+material,mp_asylum_preview
+material,mp_breakout_preview
+material,mp_burgundy_preview
+material,mp_carantan_preview
+material,mp_courtyard_preview
+material,mp_dawnville_preview
+material,mp_downtown_preview
+material,mp_farmhouse_preview
+material,mp_firestation_preview
+material,mp_stream_preview
+material,mp_trainstation_preview
+material,mp_waw_castle_preview
+material,mp_waw_decoy_preview
+material,mp_waw_matmata_preview
+material,mp_waw_toujane_preview

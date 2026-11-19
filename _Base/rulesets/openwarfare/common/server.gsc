@@ -85,6 +85,15 @@ init()
 	// setDvar( "scr_server_load_medium", "12" );
 
 	//******************************************************************************
+	// configs/server/gamebalance.cfg
+	//******************************************************************************
+	// setDvar( "scr_gamebalance_enable", "0" );
+	// setDvar( "scr_gamebalance_lives_enable", "1" );
+	// setDvar( "scr_gamebalance_lives_max", "0" );
+	// setDvar( "scr_gamebalance_respawn_enable", "1" );
+	// setDvar( "scr_gamebalance_respawn_min", "1" );
+
+	//******************************************************************************
 	// configs/server/overtime.cfg
 	//******************************************************************************
 	// setDvar( "scr_overtime_enable", "0" );
@@ -100,6 +109,8 @@ init()
 	// setDvar( "scr_server_rank_type", "0" );
 	// setDvar( "scr_power_rank_mode", "0" );
 	// setDvar( "scr_power_rank_delay", "0.5" );
+	// setDvar( "scr_power_rank_prestige", "1" );
+	// setDvar( "scr_power_rank_xp", "0" );
 	// setDvar( "scr_enable_virtual_ranks", "0" );
 	// setDvar( "scr_virtual_ranks", "Pfc.=3;LCpl.=6;Cpl.=9;Sgt.=12;SSgt.=15;GySgt.=18;MSgt.=21;MGySgt.=24;2ndLt.=27;1stLt.=30;Capt.=33;Maj.=36;LtCol.=39;Col.=42;BGen.=45;MajGen.=48;LtGen.=51;Gen.=54;CDR.=55" );
 	// setDvar( "scr_virtual_ranks_score", "50" );
@@ -127,6 +138,9 @@ init()
 	// setDvar( "scr_teambalance_check_interval", "59" );
 	// setDvar( "scr_teambalance_delay", "15" );
 	// setDvar( "scr_teambalance_protected_clan_tags", "" );
+	// setDvar( "scr_teamassign_enable", "0" );
+	// setDvar( "scr_teamassign_priority", "0" );
+	// setDvar( "scr_teamassign_ignore_bots", "0" );
 	// setDvar( "scr_custom_teams_enable", "0" );
 	// setDvar( "scr_custom_teams_maintain_on_switch", "1" );
 	// setDvar( "scr_custom_teams_strings", "have won the match!;have won the round!;mission accomplished;eliminated;forfeited;have been all frozen!" );

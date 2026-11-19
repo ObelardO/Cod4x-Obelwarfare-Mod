@@ -114,6 +114,7 @@ main()
 	level.onPlayerKilled = ::onPlayerKilled;
 	level.onPrecacheGameType = ::onPrecacheGameType;
 	level.onRoundSwitch = ::onRoundSwitch;
+	level.onRemoveObjectives = ::onRemoveObjectives;
 
 	game["dialog"]["gametype"] = gameTypeDialog( "domination" );
 	game["dialog"]["offense_obj"] = "capture_objs";
@@ -987,4 +988,10 @@ onRoundSwitch()
 	// Just change the value for the variable controlling which map assets will be assigned to each team
 	level.halftimeType = "halftime";
 	game["switchedsides"] = !game["switchedsides"];
+}
+
+
+onRemoveObjectives()
+{
+	maps\mp\gametypes\_gameobjects::disableObjectsArray( level.domFlags );
 }

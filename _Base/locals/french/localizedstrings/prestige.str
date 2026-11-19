@@ -1,0 +1,74 @@
+VERSION          "1"
+CONFIG           "C:\trees\cod3\cod3\bin\StringEd.cfg"
+FILENOTES        ""
+
+REFERENCE        MODE
+LANG_FRENCH     "Prestige"
+
+REFERENCE        DESC
+LANG_FRENCH     "Reset rank, weapons, perks, and challenges."
+
+REFERENCE        TITLE1
+LANG_FRENCH     "Prestige Mode"
+
+REFERENCE        WARNING1
+LANG_FRENCH     "Entering Prestige Mode resets your rank and all unlocks. Do you want to continue?"
+
+REFERENCE        TITLE2
+LANG_FRENCH     "Are You Sure?"
+
+REFERENCE        WARNING2
+LANG_FRENCH     "You will lose all weapons, attachments, camouflages, perks, challenges, and custom classes."
+
+REFERENCE        TITLE3
+LANG_FRENCH     "Enter Prestige Mode?"
+
+REFERENCE        WARNING3
+LANG_FRENCH     "This cannot be undone. Enter Prestige Mode now?"
+
+REFERENCE        ENTER
+LANG_FRENCH     "Enter Prestige"
+
+REFERENCE        ENTERING
+LANG_FRENCH     "Entering Prestige"
+
+REFERENCE        RESETTING
+LANG_FRENCH     "Resetting weapons, perks, challenges, and classes."
+
+REFERENCE        KILLFEED
+LANG_FRENCH     "^3&&1^7 entered ^3&&2^7."
+
+REFERENCE        NAME1
+LANG_FRENCH     "Prestige Master Gny. Sergeant"
+
+REFERENCE        NAME2
+LANG_FRENCH     "Prestige Command Sergeant Major"
+
+REFERENCE        NAME3
+LANG_FRENCH     "Prestige S.M.O.T.A."
+
+REFERENCE        NAME4
+LANG_FRENCH     "Prestige C.W.O."
+
+REFERENCE        NAME5
+LANG_FRENCH     "Prestige Lieutenant"
+
+REFERENCE        NAME6
+LANG_FRENCH     "Prestige Major"
+
+REFERENCE        NAME7
+LANG_FRENCH     "Prestige Colonel"
+
+REFERENCE        NAME8
+LANG_FRENCH     "Prestige C.S.M."
+
+REFERENCE        NAME9
+LANG_FRENCH     "Prestige G.O.T.A."
+
+REFERENCE        NAME10
+LANG_FRENCH     "Prestige Supreme Commander"
+
+REFERENCE        MAX
+LANG_FRENCH     "You have reached the maximum prestige."
+
+ENDMARKER

@@ -40,17 +40,17 @@ onPlayerSpawned()
 	self.rangeFinder = newClientHudElem(self);
 	self.rangeFinder.alpha = 0;
 	self.rangeFinder.fontScale = 1.4;
-	self.rangeFinder.color = (0,1,0);
+	self.rangeFinder.color = (0.8,0.8,0.8);
 	self.rangeFinder.font = "objective";
 	self.rangeFinder.archived = true;
 	self.rangeFinder.hideWhenInMenu = false;
-	self.rangeFinder.alignX = "right";
-	self.rangeFinder.alignY = "top";
-	self.rangeFinder.horzAlign = "right";
-	self.rangeFinder.vertAlign = "top";
+	self.rangeFinder.alignX = "center";
+	self.rangeFinder.alignY = "bottom";
+	self.rangeFinder.horzAlign = "center";
+	self.rangeFinder.vertAlign = "bottom";
 	self.rangeFinder.sort = 1001;
-	self.rangeFinder.x = -10;
-	self.rangeFinder.y = 27;
+	self.rangeFinder.x = 0;
+	self.rangeFinder.y = -20;
 	
 	// Check which unit we should show
 	if ( level.scr_rangefinder_enable == 1 ) {
@@ -100,11 +100,10 @@ monitorCurrentWeapon()
 			self.rangeFinder.alpha = 0;
 			updateRangeFinder = false;
 		} else {
-			// Check if the player enable/disable ADS
+			// Wait until the scope animation has finished before showing the range
 			if ( self playerADS() > oldAds ) {
 				oldAds = self playerADS();
-				if ( openwarfare\_sniperzoom::isSniperRifle( oldWeapon ) || oldWeapon == "binoculars_mp" ) {
-					// Player is enabling ADS
+				if ( oldAds >= 1 && ( openwarfare\_sniperzoom::isSniperRifle( oldWeapon ) || oldWeapon == "binoculars_mp" ) ) {
 					self.rangeFinder.alpha = 1;
 					updateRangeFinder = true;
 				}

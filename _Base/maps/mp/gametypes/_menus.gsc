@@ -14,15 +14,12 @@
 init()
 {
 	game["menu_team"] = "team_marinesopfor";
-	game["menu_class_allies"] = "class_marines";
-	game["menu_changeclass_allies"] = "changeclass_marines";
-	game["menu_initteam_allies"] = "initteam_marines";
-	game["menu_class_axis"] = "class_opfor";
-	game["menu_changeclass_axis"] = "changeclass_opfor";
-	game["menu_initteam_axis"] = "initteam_opfor";
+	game["menu_class_allies"] = "class";
+	game["menu_changeclass_allies"] = "changeclass";
+	game["menu_class_axis"] = "class";
+	game["menu_changeclass_axis"] = "changeclass";
 	game["menu_class"] = "class";
 	game["menu_changeclass"] = "changeclass";
-	game["menu_changeclass_offline"] = "changeclass_offline";
 	
 	if ( !level.console )
 	{
@@ -75,15 +72,8 @@ init()
 
 	precacheMenu("scoreboard");
 	precacheMenu(game["menu_team"]);
-	precacheMenu(game["menu_class_allies"]);
-	precacheMenu(game["menu_changeclass_allies"]);
-	precacheMenu(game["menu_initteam_allies"]);
-	precacheMenu(game["menu_class_axis"]);
-	precacheMenu(game["menu_changeclass_axis"]);
 	precacheMenu(game["menu_class"]);
 	precacheMenu(game["menu_changeclass"]);
-	precacheMenu(game["menu_initteam_axis"]);
-	precacheMenu(game["menu_changeclass_offline"]);
 	precacheString( &"MP_HOST_ENDED_GAME" );
 	precacheString( &"MP_HOST_ENDGAME_RESPONSE" );
 	
@@ -120,7 +110,7 @@ onMenuResponse()
 
 			if ( level.console )
 			{
-				if( menu == game["menu_changeclass"] || menu == game["menu_changeclass_offline"] || menu == game["menu_team"] || menu == game["menu_controls"] )
+				if( menu == game["menu_changeclass"] || menu == game["menu_team"] || menu == game["menu_controls"] )
 				{
 //					assert(self.pers["team"] == "allies" || self.pers["team"] == "axis");
 
@@ -162,12 +152,6 @@ onMenuResponse()
 			self openMenu( game["menu_changeclass_axis"] );
 			continue;
 		}
-
-		if(response == "changeclass_marines_splitscreen" )
-			self openMenu( "changeclass_marines_splitscreen" );
-
-		if(response == "changeclass_opfor_splitscreen" )
-			self openMenu( "changeclass_opfor_splitscreen" );
 
 		// rank update text options
 		if(response == "xpTextToggle")
@@ -266,7 +250,7 @@ onMenuResponse()
 				break;
 			}
 		}	// the only responses remain are change class events
-		else if( menu == game["menu_changeclass"] || menu == game["menu_changeclass_offline"] )
+		else if( menu == game["menu_changeclass"] )
 		{
 			if ( !isDefined( level.cacIngame ) )
 			{	

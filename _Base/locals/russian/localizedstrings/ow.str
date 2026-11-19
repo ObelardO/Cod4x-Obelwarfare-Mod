@@ -377,6 +377,9 @@ LANG_RUSSIAN "Уничтожайте всех других игроков"
 REFERENCE UAV_ON
 LANG_ENGLISH "UAV Активирован для всех"
 
+REFERENCE COMPASS_ON
+LANG_RUSSIAN "Враги отображаются на компасе"
+
 
 //******************************************************************************
 // maps/mp/gametypes/re.gsc
@@ -495,68 +498,6 @@ REFERENCE REMINDER
 LANG_RUSSIAN "Внимание..."
 
 
-//******************************************************************************
-// mp/rankTable.csv
-//******************************************************************************
-REFERENCE RANK_PRESTIGE1
-LANG_RUSSIAN "Prestige MGS."
-
-REFERENCE RANK_PRESTIGE2
-LANG_RUSSIAN "Prestige CSM."
-
-REFERENCE RANK_PRESTIGE3
-LANG_RUSSIAN "Prestige SMOTA."
-
-REFERENCE RANK_PRESTIGE4
-LANG_RUSSIAN "Prestige CWO."
-
-REFERENCE RANK_PRESTIGE5
-LANG_RUSSIAN "Prestige Lt."
-
-REFERENCE RANK_PRESTIGE6
-LANG_RUSSIAN "Prestige Maj."
-
-REFERENCE RANK_PRESTIGE7
-LANG_RUSSIAN "Prestige Col."
-
-REFERENCE RANK_PRESTIGE8
-LANG_RUSSIAN "Prestige CrSM."
-
-REFERENCE RANK_PRESTIGE9
-LANG_RUSSIAN "Prestige GOTA."
-
-REFERENCE RANK_PRESTIGE10
-LANG_RUSSIAN "Prestige SC."
-
-REFERENCE RANK_PRESTIGE1_FULL
-LANG_RUSSIAN "Prestige Master Gny. Sergeant"
-
-REFERENCE RANK_PRESTIGE2_FULL
-LANG_RUSSIAN "Prestige Command Sergeant Major"
-
-REFERENCE RANK_PRESTIGE3_FULL
-LANG_RUSSIAN "Prestige S.M.O.T.A."
-
-REFERENCE RANK_PRESTIGE4_FULL
-LANG_RUSSIAN "Prestige C.W.O."
-
-REFERENCE RANK_PRESTIGE5_FULL
-LANG_RUSSIAN "Prestige Lieutenant"
-
-REFERENCE RANK_PRESTIGE6_FULL
-LANG_RUSSIAN "Prestige Major"
-
-REFERENCE RANK_PRESTIGE7_FULL
-LANG_RUSSIAN "Prestige Colonel"
-
-REFERENCE RANK_PRESTIGE8_FULL
-LANG_RUSSIAN "Prestige C.S.M."
-
-REFERENCE RANK_PRESTIGE9_FULL
-LANG_RUSSIAN "Prestige G.O.T.A."
-
-REFERENCE RANK_PRESTIGE10_FULL
-LANG_RUSSIAN "Prestige Supreme Commander"
 
 
 //******************************************************************************
@@ -871,7 +812,7 @@ REFERENCE LIVES_LEFT
 LANG_RUSSIAN "Осталось жизней: ^3&&1"
 
 REFERENCE LAST_LIFE
-LANG_RUSSIAN "Последня жизнь!"
+LANG_RUSSIAN "Последняя жизнь!"
 
 
 //******************************************************************************
@@ -916,6 +857,8 @@ LANG_RUSSIAN "Удерживайте ^3[{+melee}]^7 чтобы уничтожить бомбу\nНажмите ^3[{ope
 REFERENCE EXPLOSIVES_IN_SAFEZONE
 LANG_RUSSIAN "Здесь нельзя установить взрывчатку"
 
+REFERENCE EXPLOSIVES_IS_TOO_FAR
+LANG_RUSSIAN "Не удалось активировать взрывчатку"
 
 
 //******************************************************************************
@@ -1067,6 +1010,12 @@ LANG_RUSSIAN "Стратегическая пауза окончена."
 
 REFERENCE STRATEGY_PERIOD_STARTED
 LANG_RUSSIAN "Стратегическая пауза."
+
+REFERENCE STRATEGY_ROUND
+LANG_RUSSIAN "Раунд &&1"
+
+REFERENCE STRATEGY_ROUND_LIMIT
+LANG_RUSSIAN "Раунд &&1 из &&2"
 
 REFERENCE PRESS_TO_BYPASS
 LANG_RUSSIAN "Нажмите^3 [{+activate}] ^7для готовности"
@@ -1286,7 +1235,10 @@ LANG_RUSSIAN "^3Esc.^7 Отмена"
 // maps\mp\gametypes\_finalkillcam.gsc
 //******************************************************************************
 REFERENCE FINALCAM_PLAYER_VS_PLAYER
-LANG_RUSSIAN "&&1 ^1VS. ^7&&2"
+LANG_RUSSIAN "&&1 ^1VS ^7&&2"
+
+REFERENCE FINALCAM_PLAYER_SUICIDE
+LANG_RUSSIAN "Самоликвидация: ^7&&1"
 
 REFERENCE FINALCAM_MATCH_WIN
 LANG_RUSSIAN "ПОБЕДА В МАТЧЕ"
@@ -1517,6 +1469,19 @@ LANG_RUSSIAN "Коментатор"
 //******************************************************************************
 REFERENCE SERVER_INFO
 LANG_RUSSIAN "ИНФОРМАЦИЯ"
+
+
+//******************************************************************************
+// openwarfare/_teamassign.gsc
+//******************************************************************************
+REFERENCE AUTOBALANCE_SKILL_NOW
+LANG_RUSSIAN "Автобаланс команд по навыку"
+
+REFERENCE AUTOBALANCE_SKILL_SECONDS
+LANG_RUSSIAN "Автобаланс команд по навыку через &&1 сек."
+
+REFERENCE AUTOBALANCE_SKILL_NEXT_ROUND
+LANG_RUSSIAN "Команды будут сбалансированы по навыку в следующем раунде"
 
 
 ENDMARKER

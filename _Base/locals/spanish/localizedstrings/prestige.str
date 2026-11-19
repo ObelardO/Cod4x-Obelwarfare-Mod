@@ -1,0 +1,74 @@
+VERSION          "1"
+CONFIG           "C:\trees\cod3\cod3\bin\StringEd.cfg"
+FILENOTES        ""
+
+REFERENCE        MODE
+LANG_SPANISH     "Prestige"
+
+REFERENCE        DESC
+LANG_SPANISH     "Reset rank, weapons, perks, and challenges."
+
+REFERENCE        TITLE1
+LANG_SPANISH     "Prestige Mode"
+
+REFERENCE        WARNING1
+LANG_SPANISH     "Entering Prestige Mode resets your rank and all unlocks. Do you want to continue?"
+
+REFERENCE        TITLE2
+LANG_SPANISH     "Are You Sure?"
+
+REFERENCE        WARNING2
+LANG_SPANISH     "You will lose all weapons, attachments, camouflages, perks, challenges, and custom classes."
+
+REFERENCE        TITLE3
+LANG_SPANISH     "Enter Prestige Mode?"
+
+REFERENCE        WARNING3
+LANG_SPANISH     "This cannot be undone. Enter Prestige Mode now?"
+
+REFERENCE        ENTER
+LANG_SPANISH     "Enter Prestige"
+
+REFERENCE        ENTERING
+LANG_SPANISH     "Entering Prestige"
+
+REFERENCE        RESETTING
+LANG_SPANISH     "Resetting weapons, perks, challenges, and classes."
+
+REFERENCE        KILLFEED
+LANG_SPANISH     "^3&&1^7 entered ^3&&2^7."
+
+REFERENCE        NAME1
+LANG_SPANISH     "Prestige Master Gny. Sergeant"
+
+REFERENCE        NAME2
+LANG_SPANISH     "Prestige Command Sergeant Major"
+
+REFERENCE        NAME3
+LANG_SPANISH     "Prestige S.M.O.T.A."
+
+REFERENCE        NAME4
+LANG_SPANISH     "Prestige C.W.O."
+
+REFERENCE        NAME5
+LANG_SPANISH     "Prestige Lieutenant"
+
+REFERENCE        NAME6
+LANG_SPANISH     "Prestige Major"
+
+REFERENCE        NAME7
+LANG_SPANISH     "Prestige Colonel"
+
+REFERENCE        NAME8
+LANG_SPANISH     "Prestige C.S.M."
+
+REFERENCE        NAME9
+LANG_SPANISH     "Prestige G.O.T.A."
+
+REFERENCE        NAME10
+LANG_SPANISH     "Prestige Supreme Commander"
+
+REFERENCE        MAX
+LANG_SPANISH     "You have reached the maximum prestige."
+
+ENDMARKER

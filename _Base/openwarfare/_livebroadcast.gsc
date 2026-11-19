@@ -46,7 +46,7 @@ onPlayerConnected()
 	if ( level.scr_livebroadcast_enable == 1 && isSubstr( level.scr_livebroadcast_guids, self getGUID() ) ) {
 		self.pers["broadcaster"] = true;
 		self setClientDvars( 
-			"cg_drawSpectatorMessages", "1",
+			"cg_drawSpectatorMessages", level.scr_hud_show_spectator_messages,
 			"ui_broadcaster", "1",
 			"lb_maxhealth", level.maxhealth,
 			"lb_round", game["roundsplayed"]+1,
@@ -65,7 +65,7 @@ onPlayerConnected()
 	} else {
 		self.pers["broadcaster"] = false;
 		self setClientDvars( 
-			"cg_drawSpectatorMessages", "1",
+			"cg_drawSpectatorMessages", level.scr_hud_show_spectator_messages,
 			"ui_broadcaster", "0"
 		);
 	}	

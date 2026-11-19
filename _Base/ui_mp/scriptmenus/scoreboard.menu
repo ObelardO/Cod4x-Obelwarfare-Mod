@@ -86,11 +86,11 @@
 		{
 			execOnDvarStringValue ui_chat_position bottom "set cg_hudChatPosition 16 390; set cg_hudSayPosition 16 370"
 			execOnDvarStringValue ui_chat_position top "set cg_hudChatPosition 16 100; set cg_hudSayPosition 16 80"
-			execOnDvarStringValue ui_chat_position standard "set cg_hudChatPosition 16 200; set cg_hudSayPosition 16 180"
+			execOnDvarStringValue ui_chat_position standard "set cg_hudChatPosition 16 220; set cg_hudSayPosition 16 200"
 		}
 		onOpen
 		{
-			exec "set cg_hudChatPosition 16 100; set cg_hudSayPosition 5 90";    //100
+			exec "set cg_hudChatPosition 16 220; set cg_hudSayPosition 16 200";    //220
 		}
 		
 		itemDef

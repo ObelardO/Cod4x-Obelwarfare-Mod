@@ -355,6 +355,9 @@ LANG_ENGLISH "Eliminate all the other players."
 REFERENCE UAV_ON
 LANG_ENGLISH "UAV Activated Permanently"
 
+REFERENCE COMPASS_ON
+LANG_ENGLISH "Enemies shown on compass"
+
 
 //******************************************************************************
 // maps/mp/gametypes/re.gsc
@@ -466,68 +469,6 @@ REFERENCE REMINDER
 LANG_ITALIAN "Promemoria..."
 
 
-//******************************************************************************
-// mp/rankTable.csv
-//******************************************************************************
-REFERENCE RANK_PRESTIGE1
-LANG_ITALIAN "Prestige MGS."
-
-REFERENCE RANK_PRESTIGE2
-LANG_ITALIAN "Prestige CSM."
-
-REFERENCE RANK_PRESTIGE3
-LANG_ITALIAN "Prestige SMOTA."
-
-REFERENCE RANK_PRESTIGE4
-LANG_ITALIAN "Prestige CWO."
-
-REFERENCE RANK_PRESTIGE5
-LANG_ITALIAN "Prestige Lt."
-
-REFERENCE RANK_PRESTIGE6
-LANG_ITALIAN "Prestige Maj."
-
-REFERENCE RANK_PRESTIGE7
-LANG_ITALIAN "Prestige Col."
-
-REFERENCE RANK_PRESTIGE8
-LANG_ITALIAN "Prestige CrSM."
-
-REFERENCE RANK_PRESTIGE9
-LANG_ITALIAN "Prestige GOTA."
-
-REFERENCE RANK_PRESTIGE10
-LANG_ITALIAN "Prestige SC."
-
-REFERENCE RANK_PRESTIGE1_FULL
-LANG_ITALIAN "Prestige Master Gny. Sergeant"
-
-REFERENCE RANK_PRESTIGE2_FULL
-LANG_ITALIAN "Prestige Command Sergeant Major"
-
-REFERENCE RANK_PRESTIGE3_FULL
-LANG_ITALIAN "Prestige S.M.O.T.A."
-
-REFERENCE RANK_PRESTIGE4_FULL
-LANG_ITALIAN "Prestige C.W.O."
-
-REFERENCE RANK_PRESTIGE5_FULL
-LANG_ITALIAN "Prestige Lieutenant"
-
-REFERENCE RANK_PRESTIGE6_FULL
-LANG_ITALIAN "Prestige Major"
-
-REFERENCE RANK_PRESTIGE7_FULL
-LANG_ITALIAN "Prestige Colonel"
-
-REFERENCE RANK_PRESTIGE8_FULL
-LANG_ITALIAN "Prestige C.S.M."
-
-REFERENCE RANK_PRESTIGE9_FULL
-LANG_ITALIAN "Prestige G.O.T.A."
-
-REFERENCE RANK_PRESTIGE10_FULL
-LANG_ITALIAN "Prestige Supreme Commander"
 
 
 //******************************************************************************
@@ -1005,6 +946,12 @@ LANG_ITALIAN "Periodo per la strategia terminato"
 REFERENCE STRATEGY_PERIOD_STARTED
 LANG_ITALIAN "Tempo per la strategia:"
 
+REFERENCE STRATEGY_ROUND
+LANG_ITALIAN "Round &&1"
+
+REFERENCE STRATEGY_ROUND_LIMIT
+LANG_ITALIAN "Round &&1 di &&2"
+
 REFERENCE PRESS_TO_BYPASS
 LANG_ITALIAN "Premere^3 [{+activate}] ^7per saltare"
 
@@ -1167,6 +1114,22 @@ LANG_ITALIAN "Tutti gli oggetti salvati su ^1games_mp.log^7"
 
 REFERENCE MOVER_HELP
 LANG_ITALIAN "Premere ^1[[{+activate}]] ^7per scorrere tra i comandi.\nPremere ^1[[{+melee}]] ^7per eseguire il comando.\nPremere ^1[[{+attack}]] ^7per piazzare l'oggetto selezionato."
+
+
+//******************************************************************************
+// maps\mp\gametypes\_finalkillcam.gsc
+//******************************************************************************
+REFERENCE FINALCAM_PLAYER_VS_PLAYER
+LANG_ITALIAN "&&1 ^1VS ^7&&2"
+
+REFERENCE FINALCAM_PLAYER_SUICIDE
+LANG_ITALIAN "SUICIDIO: ^7&&1"
+
+REFERENCE FINALCAM_MATCH_WIN
+LANG_ITALIAN "KILL VITTORIA PARTITA"
+
+REFERENCE FINALCAM_ROUND_WIN
+LANG_ITALIAN "KILL VITTORIA ROUND"
 
 
 //******************************************************************************
@@ -1386,6 +1349,19 @@ LANG_ENGLISH "Broadcaster"
 //******************************************************************************
 REFERENCE SERVER_INFO
 LANG_ITALIAN "INFORMAZIONE"
+
+
+//******************************************************************************
+// openwarfare/_teamassign.gsc
+//******************************************************************************
+REFERENCE AUTOBALANCE_SKILL_NOW
+LANG_ITALIAN "Bilanciamento squadre per abilita'"
+
+REFERENCE AUTOBALANCE_SKILL_SECONDS
+LANG_ITALIAN "Bilanciamento squadre per abilita' tra &&1 secondi"
+
+REFERENCE AUTOBALANCE_SKILL_NEXT_ROUND
+LANG_ITALIAN "Le squadre saranno bilanciate per abilita' nel prossimo turno"
 
 
 ENDMARKER

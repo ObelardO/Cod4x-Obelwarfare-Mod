@@ -142,7 +142,7 @@ onGameEnded()
 	{
 		player = level.players[index];	
 		
-		if (isDefined( player ) && isPlayer ( player ) && isBot( player ))
+		if ( level.scr_realtime_stats_skipbots && isBot( player ) )
 			continue;
 
 		guid = player getGUID();
@@ -193,7 +193,7 @@ onGameEnded()
 	{
 		player = level.players[index];	
 
-		if (isDefined( player ) && isPlayer ( player ) && isBot( player ))
+		if ( level.scr_realtime_stats_skipbots && isBot( player ) )
 			continue;
 
 		if ( isDefined( player ) ) {
@@ -438,7 +438,7 @@ onPlayerKilled()
 	for (;;) {
 		self waittill( "player_killed", eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, fDistance );
 
-		if (isPlayer( self ) && isBot( self ))
+		if ( level.scr_realtime_stats_skipbots && isBot( self ) )
 			continue;
 
 		// Make sure the player is not switching teams or being team balanced (our suicides count only when the player kills himself)
@@ -450,7 +450,7 @@ onPlayerKilled()
 			self.pers["stats"]["deaths"]["suicides"] += 1;
 		}
 
-		if ( isPlayer( attacker ) && isBot( attacker ) )
+		if ( level.scr_realtime_stats_skipbots && isBot( attacker ) )
 			continue;
 
 		// Handle the stats for the victim 
@@ -617,13 +617,6 @@ onHardpointCalled()
 }
 
 
-isBot( player )
-{
-	return level.scr_realtime_stats_skipbots == 1 && isPlayer ( player ) && ( player getGUID() ) == "0";
-	//TODO: try isDefined( self.pers["isBot"] flag for checking 
-}
-
-
 logResults()
 {
 	s = ";";
@@ -644,7 +637,7 @@ logResults()
 	{
 		player = level.players[index];	
 		
-		if (isDefined( player ) && isPlayer ( player ) && isBot( player ))
+		if ( level.scr_realtime_stats_skipbots && isBot( player ) )
 			continue;
 
 		if ( isDefined( player ) && isDefined( player.pers["stats"] ) ) {	
@@ -782,7 +775,7 @@ getHighestScoringPlayer()
 
 	for( i = 0; i < players.size; i++ )
 	{
-		if ( isBot( players[i] ) )
+		if ( level.scr_realtime_stats_skipbots && isBot( players[i] ) )
 			continue;
 
 		if ( !isDefined( players[i].score ) )

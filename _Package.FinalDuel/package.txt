@@ -1,0 +1,4 @@
+name=Final Duel
+iwd=finalduel
+gsc=_finalduel
+cfg=finalduel

@@ -1,5 +1,14 @@
 init()
 {
+	// Same asset names as the map props, so mod.ff supplies the scarecrow mesh.
+	// me_phonebooth is the booth (~1.8 m). The handset model is shrunk away.
+	// Small grey oaks are the same mesh scaled to 2.5 m.
+	precacheModel( "fox_scarecrow" );
+	precacheModel( "me_phonebooth" );
+	precacheModel( "me_phonebooth_phone" );
+	precacheModel( "foliage_tree_grey_oak_sm_a" );
+	precacheModel( "foliage_tree_grey_oak_sm_ts" );
+
 	// Override the daytime vision for autumn server event
 	if ( isDefined ( game["_dcs_data"] ) )
 	{

@@ -182,14 +182,25 @@ onMenuResponse( menu, response )
 getVotingResult()
 {
 	resultOptionIndex = 1;
+	leadersCount = 1;
 
 	for( i = 2; i <= level.fmvMod.voteOptions.size; i++ )
 	{
-		voteOption = level.fmvMod.voteOptions[i];
+		voteOptionA = level.fmvMod.voteOptions[i];
+		voteOptionB = level.fmvMod.voteOptions[resultOptionIndex];
 
-		if( voteOption.votes > level.fmvMod.voteOptions[resultOptionIndex].votes )
+		if( voteOptionA.votes > voteOptionB.votes )
 		{
+			leadersCount = 1;
+
 			resultOptionIndex = i;
+		}
+
+		if( voteOptionA.votes == voteOptionB.votes )
+		{
+			leadersCount++;
+
+			if ( randomint( leadersCount ) == 0 ) resultOptionIndex = i;
 		}
 	}
 

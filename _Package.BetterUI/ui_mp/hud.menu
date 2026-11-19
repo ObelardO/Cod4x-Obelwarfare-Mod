@@ -12,7 +12,7 @@
 #include "ui/menudef.h"
 #include "ui_mp/hud_inventory.h"
 
-#define ONLINEGAME 					( dvarInt( "onlinegame" ) && !dvarInt( "xblive_privatematch" ) )
+#define ONLINEGAME 					( dvarInt( "onlinegame" ) )
 #define ONLINEGAME_OFFSET 			13
 #define ONLINEGAME_OFFSET_EXP 		( ONLINEGAME * ONLINEGAME_OFFSET )
 
@@ -30,7 +30,12 @@
 
 #define HUD_MINUS_ONE				( 0 - 1 )
 
-#define HUD_IS_VISIBLE           	( !inkillcam() && !flashbanged() && !isIntermission() && !ui_active() && !scoped() && dvarInt( ui_show_timeout ) == 0 )
+#define HUD_IS_VISIBLE           	( !inkillcam() && !flashbanged() && !isIntermission() && !ui_active() && dvarInt( ui_show_timeout ) == 0 )
+#define HUD_IS_SCOPED				( scoped() )
+#define HUD_IS_NOT_SCOPED			( !scoped() )
+
+
+#define HUD_ORIGIN_BOTTOM_LEFT_Y	0
 
 #define HUD_DEBUG_DOT( xPos, yPos, align ) \
     itemDef \
@@ -125,8 +130,6 @@
 
 	#include "ui_mp/hud_broadcast.inc"
 
-	#include "ui_mp/hud_overlay.inc"
-
 	#include "ui_mp/hud_killcam.inc"
 
 	#include "ui_mp/hud_messages.inc"
@@ -134,6 +137,8 @@
 	#include "ui_mp/hud_voicechat.inc"
 
 	#include "ui_mp/hud_compass.inc"
+
+	#include "ui_mp/hud_overlay.inc"
 
 	// Safe area
 	/*

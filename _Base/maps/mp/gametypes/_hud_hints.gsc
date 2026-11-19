@@ -13,22 +13,43 @@
 
 init()
 {
-    level thread levelPlayerConnectionWatcher();
+    level thread levelPlayerConnectedWatcher();
     level thread levelGameEndWatcher();
 
     level.showHintAction = ::showHintAction;
 }
 
 
-levelPlayerConnectionWatcher()
+levelPlayerConnectedWatcher()
 {
 	for(;;)
 	{
-		level waittill( "connecting", player );
+		level waittill( "connected", player );
 
+		player thread initPlayerHudHints();
 		player thread playerSpawnWatcher();
 		player thread playerDeathWatcher();
 	}
+}
+
+
+initPlayerHudHints()
+{
+	self endon( "disconnect" );
+
+	if ( isDefined( self.hudHints ) )
+		return;
+
+	self.hudHints = spawnStruct();
+
+	self.hudHints.hudText = createFontString( "default", 1.4 );
+	self.hudHints.hudText setPoint( "CENTER", "CENTER", 0, 130 );
+	self.hudHints.hudText.alpha = 1;
+	self.hudHints.hudText.width = 300;
+	self.hudHints.hudText.archived = false;
+	self.hudHints.hudText.foreground = true;
+	self.hudHints.hudText.hideWhenInMenu = true;
+	self.hudHints.hintsStack = [];
 }
 
 
@@ -41,20 +62,7 @@ playerSpawnWatcher()
 	{
 		self waittill( "spawned" );
 
-        if( !isDefined( self.hudHints ) )
-        {
-            self.hudHints = spawnStruct();
-
-            self.hudHints.hudText = createFontString( "default", 1.4 );
-            self.hudHints.hudText setPoint( "CENTER", "CENTER", 0, 130 );
-            self.hudHints.hudText.alpha = 1;
-            self.hudHints.hudText.width = 300;
-            self.hudHints.hudText.archived = false;
-            self.hudHints.hudText.foreground = true;
-            self.hudHints.hudText.hideWhenInMenu = true;
-        }
-
-        if ( !isDefined( self.hudHints.overridingKey ) )
+        if ( isDefined( self.hudHints ) && !isDefined( self.hudHints.overridingKey ) )
         {
             clearHintsStack();
         }
@@ -71,7 +79,7 @@ playerDeathWatcher()
 	{
 		self waittill( "death" );
 
-        if ( isDefined( self.hudHints ) )
+        if ( isDefined( self.hudHints ) && !isDefined( self.hudHints.overridingKey ) )
         {
             clearHintsStack();
         }
@@ -96,9 +104,11 @@ levelGameEndWatcher()
 
 showHint( hintText, ownerKey, entityRef, overrideAll )
 {
+    //self iprintln( "Try show hint for: " + ownerKey );
+
     if( !isDefined( self.hudHints ) )
     {
-        //self iprintlnBold( "^1Can't show hint case not defined" );
+        //self iprintln( "^1Can't show hint case not defined" );
 
         return;
     }

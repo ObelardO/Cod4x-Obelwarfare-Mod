@@ -9,5 +9,7 @@ init()
 	thread scripts\_iw4anticheat::init();
 	thread scripts\_better_ui::init();
 	thread scripts\_finalmapvoting::init();
-	thread scripts\_winterevent::init();
+	thread scripts\_finalduel::init();
+	thread scripts\_meleeweapons::init();
+	thread scripts\_autumnevent::init();
 }

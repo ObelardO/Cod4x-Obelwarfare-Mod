@@ -110,6 +110,7 @@ main()
 	level.onSpawnPlayer = ::onSpawnPlayer;
 	level.onPlayerKilled = ::onPlayerKilled;
 	level.onRoundSwitch = ::onRoundSwitch;
+	level.onRemoveObjectives = ::onRemoveObjectives;
 
 	game["dialog"]["gametype"] = gameTypeDialog( "team_greed" );
 	game["dialog"]["offense_obj"] = "boost";
@@ -642,4 +643,14 @@ spawnPickupFX( groundpoint, fx )
 	triggerFx( effect );
 	
 	return effect;
+}
+
+
+onRemoveObjectives()
+{
+	if ( !isDefined( level.dropZones ) )
+		return;
+
+	level.dropZones["allies"] maps\mp\gametypes\_gameobjects::disableObject();
+	level.dropZones["axis"] maps\mp\gametypes\_gameobjects::disableObject();
 }

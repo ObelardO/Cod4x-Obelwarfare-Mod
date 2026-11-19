@@ -10,6 +10,7 @@
 //**************************************************************//
 
 #include maps\mp\_utility;
+#include common_scripts\utility;
 
 #include openwarfare\_eventmanager;
 #include openwarfare\_utils;
@@ -73,7 +74,9 @@ init()
     forceClientDvar( "cg_drawhealth", 1 );
     forceClientDvar( "cg_hudDamageIconHeight", 64 );
     forceClientDvar( "cg_hudDamageIconWidth", 128 );
-    forceClientDvar( "cg_hudProneY", -52 ); // or +10 for hide this hint
+    forceClientDvar( "cg_hudProneY", -56 ); // or +10 for hide this hint
+    forceClientDvar( "cg_hudMantleY", -56 ); // or +10 for hide this hint
+    forceClientDvar( "cg_drawSpectatorMessages", 0 );
     forceClientDvar( "cg_crossHair", ( 1 - level.hardcoreMode ) );
 
     // Apply other player dvars
@@ -81,6 +84,10 @@ init()
 
     // Team status
     scr_hud_show_teams_status = getdvarx( "scr_hud_show_teams_status", "int", 1, 0, 2 );
+    scr_hud_show_teams_status_scorebars = getdvarx( "scr_hud_show_teams_status_scorebars", "int", 1, 0, 1 );
+
+    setDvar( "ui_hud_show_teams_status_scorebars", scr_hud_show_teams_status_scorebars );
+    makeDvarServerInfo( "ui_hud_show_teams_status_scorebars" );
 
     if( scr_hud_show_teams_status > 0 )
     {
@@ -114,6 +121,7 @@ init()
 
 
     level thread prematchOverWatcher();
+    level thread overtimeLivesWatcher();
     level thread gameOverWatcher();
 
     level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
@@ -124,8 +132,22 @@ init()
     // Move progress bars
     level.primaryProgressBarY = 90; // from center
     level.primaryProgressBarTextY = 76;
-    level.secondaryProgressBarY = 184; // from center
-    level.secondaryProgressBarTextY = 170;
+    level.secondaryProgressBarY = 180; // from center
+    level.secondaryProgressBarTextY = 166;
+
+    level.scr_hud_show_spectator_messages = 0;
+
+    // Set high res icons for teams (used in scripts)
+    if ( !isDefined( level.betterUITeamIconsUpdated ) )
+    {
+        level.betterUITeamIconsUpdated = true;
+
+        if ( isDefined( game["icons"]["axis"] ) ) game["icons"]["axis"] += "_big";
+        if ( isDefined( game["icons"]["allies"] ) ) game["icons"]["allies"] += "_big";
+
+        preCacheShader( game["icons"]["axis"] );
+        preCacheShader( game["icons"]["allies"] );
+    }
 }
 
 
@@ -145,6 +167,11 @@ onPlayerConnected()
     self thread playerAngleWatcher();
     self thread playerSessionWatcher();
     self thread playerSpectatingWatcher();
+    self thread playerCalloutWatcher();
+    self thread hardpointTrackerWatcher();
+    self thread hardpointLockWatcher();
+
+    self updateHardpointTracker();
 }
 
 
@@ -156,6 +183,7 @@ onPlayerSpawned()
     }
 
     self setClientDvar( "ui_hud_lives_count", getPlayerLivesCount( self ) );
+    self updateHardpointTracker();
 }
 
 
@@ -205,50 +233,120 @@ playerSessionWatcher()
     self endon( "disconnect" );
 
     lastSpectatorClient = -1;
+    lastLivesCount = -1;
 
     for( ;; )
     {
         wait ( 0.05 );
 
-        if ( self.sessionstate != "spectator") continue;
+        if ( self.sessionstate != "spectator" )
+        {
+            lastSpectatorClient = -1;
+            lastLivesCount = -1;
+            continue;
+        }
+
+        if ( self.spectatorclient == -1 )
+            continue;
+
+        player = getPlayerByEntityNumber( self.spectatorclient );
+
+        if ( !isDefined( player ) )
+            continue;
+
+        livesCount = getPlayerLivesCount( player );
 
         if ( lastSpectatorClient != self.spectatorclient )
         {
             lastSpectatorClient = self.spectatorclient;
 
-            //Debug info
-            //self iPrintLn( self.name + "spectating changed to: ^2 " + self.spectatorclient );
+            self setClientDvar( "ui_hud_spectating_name", player.name );
 
-            if ( lastSpectatorClient == -1 ) continue;
+            if ( isDefined( player.totalBandages ) )
+                self setClientDvar( "ui_bandages_qty", player.totalBandages );
+        }
 
-            player = getPlayerByEntityNumber( lastSpectatorClient );
+        self updateHardpointTracker( player );
 
-            if ( isDefined( player ) )
-            {
-                self setClientDvar( "ui_hud_lives_count", getPlayerLivesCount ( player ) );
-
-                if ( isDefined( player.totalBandages ) )
-                {
-                    self setClientDvar( "ui_bandages_qty", player.totalBandages );
-                }
-            }
+        if ( lastLivesCount != livesCount )
+        {
+            lastLivesCount = livesCount;
+            self setClientDvar( "ui_hud_lives_count", livesCount );
         }
     }
 }
 
 
-onPlayerDeath() {  }
+playerCalloutWatcher()
+{
+    self endon("disconnect");
 
+    curCalloutText = "";
+    newCalloutText = "";
 
-prematchOverWatcher() { }
-/*{
-    self waittill( "prematch_over" );
+    for (;;)
+    {
+        info = self getCallout();
+        
+        if ( isDefined(info) )
+        {
+            newCalloutText = info["localized"];
+        }
+        else
+        {
+            newCalloutText = "";
+        }
 
-    if( isDefined( level.teamsStatus ) )
-    {   
-        setdvar( "ui_hud_show_teams_status", level.teamsStatus.showHUD );
+        if ( newCalloutText != curCalloutText )
+        {
+            curCalloutText = newCalloutText;
+            self setClientDvar( "ui_callout", curCalloutText );
+        }
+
+        wait 0.05;
     }
-}*/
+}
+
+
+onPlayerDeath()
+{
+    self updateHardpointTracker();
+}
+
+
+prematchOverWatcher()
+{
+    level waittill( "prematch_over" );
+    refreshPlayersLivesCount();
+}
+
+
+overtimeLivesWatcher()
+{
+    level endon( "game_ended" );
+
+    while ( !isDefined( level.inOvertime ) || !level.inOvertime )
+        wait( 0.05 );
+
+    refreshPlayersLivesCount();
+}
+
+
+refreshPlayersLivesCount()
+{
+    for ( i = 0; i < level.players.size; i++ )
+    {
+        player = level.players[i];
+
+        if ( !isDefined( player ) || player.sessionstate == "spectator" )
+            continue;
+
+        if ( !isDefined( player.pers["lives"] ) )
+            continue;
+
+        player setClientDvar( "ui_hud_lives_count", getPlayerLivesCount( player ) );
+    }
+}
 
 
 gameOverWatcher() { }
@@ -368,7 +466,60 @@ getPlayerByEntityNumber( entityNumber )
 
 getPlayerLivesCount( player )
 {
+    if ( isDefined( level.inOvertime ) && level.inOvertime )
+        return 1;
+
     return ( player.pers["lives"] + ( level.numLives != 0 ) );
+}
+
+
+hardpointTrackerWatcher()
+{
+    self endon( "disconnect" );
+
+    for ( ;; )
+    {
+        self waittill_any( "kill_streak", "hardpoint_called" );
+        self updateHardpointTracker();
+    }
+}
+
+
+hardpointLockWatcher()
+{
+    self endon( "disconnect" );
+
+    for ( ;; )
+    {
+        wait 0.5;
+
+        if ( self.sessionstate == "spectator" )
+            continue;
+
+        self updateHardpointTracker();
+    }
+}
+
+
+updateHardpointTracker( sourcePlayer )
+{
+    if ( !isDefined( sourcePlayer ) )
+        sourcePlayer = self;
+
+    info = sourcePlayer maps\mp\gametypes\_hardpoints_utils::getNextHardpointInfo();
+    lockTime = sourcePlayer maps\mp\gametypes\_hardpoints_utils::getHardpointCallLockTime();
+
+    if ( isDefined( self.hudHpNext ) && self.hudHpNext == info.visible && self.hudHpNextKills == info.kills && self.hudHpNextKillsDone == info.killsDone && self.hudHpNextKillsNeed == info.killsNeed && isDefined( self.hudHpNextIcon ) && self.hudHpNextIcon == info.icon && isDefined( self.hudHpLockTime ) && self.hudHpLockTime == lockTime )
+        return;
+
+    self.hudHpNext = info.visible;
+    self.hudHpNextKills = info.kills;
+    self.hudHpNextKillsDone = info.killsDone;
+    self.hudHpNextKillsNeed = info.killsNeed;
+    self.hudHpNextIcon = info.icon;
+    self.hudHpLockTime = lockTime;
+
+    self setClientDvars( "ui_hud_hp_next", info.visible, "ui_hud_hp_next_kills", info.kills, "ui_hud_hp_next_done", info.killsDone, "ui_hud_hp_next_need", info.killsNeed, "ui_hud_hp_next_icon", info.icon, "ui_hud_hp_lock_time", lockTime );
 }
 
 

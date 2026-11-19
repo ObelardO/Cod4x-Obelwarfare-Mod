@@ -7,6 +7,9 @@
 #define PLAYERINFO_STANCE_SIZE		( 42 )
 #define PLAYERINFO_STANCE_SIZE_HALF	( PLAYERINFO_STANCE_SIZE * 0.5 )
 
+#undef HUD_ORIGIN_BOTTOM_LEFT_Y
+#define HUD_ORIGIN_BOTTOM_LEFT_Y	( PLAYERINFO_HEALTH_POS_Y )
+
 #define PLAYERINFO_LIVES_COUNT( visibleExp, textExp, color, alphaExp ) \
 	itemDef \
 	{ \
@@ -32,7 +35,7 @@ menuDef
 	exp				rect Y( 0 - ONLINEGAME_OFFSET_EXP )
 	exp				rect X( ONLINEGAME_OFFSET_EXP )
 	fullScreen		1
-	visible			when( HUD_IS_VISIBLE && PLAYERINFO_IS_VISIBLE && CLIENT_NOT_DEAD && CLIENT_NOT_FREE_SPECTATING && INV_IS_VISIBLE && dvarInt( "ui_hud_has_weapon" ) == 1 );
+	visible			when( HUD_IS_VISIBLE && HUD_IS_NOT_SCOPED && PLAYERINFO_IS_VISIBLE && CLIENT_NOT_DEAD && CLIENT_NOT_FREE_SPECTATING && INV_IS_VISIBLE && dvarInt( "ui_hud_has_weapon" ) == 1 );
 
 	//PLAYER INFO BACK
 	itemDef

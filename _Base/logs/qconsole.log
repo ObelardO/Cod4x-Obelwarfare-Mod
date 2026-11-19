@@ -1,0 +1,343 @@
+
+Logfile opened on Wed Nov 18 19:47:11 2026
+
+
+'3600' is not a valid value for cvar 'sv_timeout'
+  Domain is any integer in range between '0' and '1800'
+'7200' is not a valid value for cvar 'sv_connectTimeout'
+  Domain is any integer in range between '0' and '1800'
+sv_maxclients is write protected.
+sv_cheats is write protected.
+0 lines parsed from banlist_v2.dat, 0 errors occured
+Plugin simplebanlist loaded successfully. Server is currently running 1 plugins.
+Error: Tried adding a command for not loaded plugin! PID: 0.
+Adding a plugin script function for plugin 0, command name: SetFinalKillcamTargetEntity.
+^2[FinalKillcamEntityCamera]^7 loaded. Body proxy uses client slot ^3(maxclients - 1)^7.
+^2[FinalKillcamEntityCamera]^7 GSC: ^3SetFinalKillcamTargetEntity( victim getEntityNumber() )^7
+^2[FinalKillcamEntityCamera]^7 Snapshot hooks chain with other plugins; load FK after other snapshot patchers if possible.
+Plugin FinalKillcamEntityCamera loaded successfully. Server is currently running 2 plugins.
+Error: Tried adding a command for not loaded plugin! PID: 0.
+Adding a plugin script function for plugin 0, command name: getCallout.
+Error: Tried adding a command for not loaded plugin! PID: 0.
+Adding a plugin script method for plugin 0, command name: getCallout.
+callouts: loaded
+Plugin callouts loaded successfully. Server is currently running 3 plugins.
+g_gametype will be changed upon restarting.
+execing mod.cfg
+execing configs\openwarfare.cfg
+execing configs/server/advancedacp.cfg
+execing configs/server/advancedmvs.cfg
+execing configs/server/gamebalance.cfg
+execing configs/server/idlemonitor.cfg
+execing configs/server/mapcontrol.cfg
+g_gametype will be changed upon restarting.
+execing configs/server/match.cfg
+execing configs/server/messages.cfg
+execing configs/server/others.cfg
+Bad command or cvar: scr_endofgame_stats_log_external
+execing configs/server/overtime.cfg
+execing configs/server/rank.cfg
+execing configs/server/reservedslots.cfg
+execing configs/server/scorebot.cfg
+execing configs/server/sponsors.cfg
+execing configs/server/teams.cfg
+execing configs/server/voting.cfg
+execing configs/gameplay/classes.cfg
+execing configs/gameplay/fitnesscs.cfg
+execing configs/gameplay/hardpoints.cfg
+execing configs/gameplay/healthsystem.cfg
+execing configs/gameplay/hud.cfg
+Bad command or cvar: level.scr_hud_show_spectator_messages
+execing configs/gameplay/others.cfg
+execing configs/gameplay/perks.cfg
+execing configs/gameplay/scores.cfg
+execing configs/gameplay/sounds.cfg
+execing configs/gameplay/spectate.cfg
+execing configs/gameplay/visuals.cfg
+execing configs/gameplay/wdm.cfg
+execing configs/gameplay/weapons.cfg
+execing configs/gameplay/wlm.cfg
+execing configs/gameplay/wrm.cfg
+execing configs/gameplay/wwm.cfg
+execing configs/gametypes/assassination.cfg
+execing configs/gametypes/behindenemylines.cfg
+execing configs/gametypes/captureandhold.cfg
+execing configs/gametypes/capturetheflag.cfg
+execing configs/gametypes/domination.cfg
+Bad command or cvar: z
+execing configs/gametypes/freeforall.cfg
+Loaded fastfile 'common_mp' in 200ms (0ms waiting)
+execing configs/gametypes/freezetag.cfg
+Loading fastfile 'mod'
+execing configs/gametypes/greed.cfg
+used 6.32 MB memory in DB alloc
+execing configs/gametypes/gungame.cfg
+execing configs/gametypes/headquarters.cfg
+execing configs/gametypes/hideandseek.cfg
+execing configs/gametypes/lastmanstanding.cfg
+execing configs/gametypes/lastteamstanding.cfg
+execing configs/gametypes/oneinthechamber.cfg
+execing configs/gametypes/retrieval.cfg
+execing configs/gametypes/sabotage.cfg
+execing configs/gametypes/searchanddestroy.cfg
+execing configs/gametypes/sharpshooter.cfg
+Loaded fastfile 'mod' in 32ms (0ms waiting)
+execing configs/gametypes/teamdeathmatch.cfg
+execing configs/gametypes/teamgreed.cfg
+execing configs/gametypes/visualguide.cfg
+execing configs/mover/mover.cfg
+execing configs/mover/assassination.cfg
+execing configs/mover/behindenemylines.cfg
+execing configs/mover/captureandhold.cfg
+execing configs/mover/capturetheflag.cfg
+execing configs/mover/domination.cfg
+execing configs/mover/freeforall.cfg
+execing configs/mover/freezetag.cfg
+execing configs/mover/gungame.cfg
+execing configs/mover/headquarters.cfg
+execing configs/mover/hideandseek.cfg
+execing configs/mover/lastmanstanding.cfg
+execing configs/mover/lastteamstanding.cfg
+execing configs/mover/oneinthechamber.cfg
+execing configs/mover/retrieval.cfg
+execing configs/mover/sabotage.cfg
+execing configs/mover/searchanddestroy.cfg
+execing configs/mover/sharpshooter.cfg
+execing configs/mover/teamdeathmatch.cfg
+execing configs\ingameclasseditor.cfg
+execing configs\botwarfare.cfg
+execing configs\nightvisionenhanced.cfg
+execing configs\playercard.cfg
+execing configs\splashicons.cfg
+execing configs\better_ui.cfg
+execing configs\finalmapvoting.cfg
+execing configs\finalduel.cfg
+execing configs\meleeweapons.cfg
+map_rotate...
+"sv_mapRotation" is: "map mp_convoy map mp_backlot map mp_bloc map mp_bog map mp_broadcast map mp_carentan map mp_countdown map mp_crash map mp_creek map mp_crossfire map mp_citystreets map mp_farm map mp_killhouse map mp_overgrown map mp_pipeline map mp_shipment map mp_showdown map mp_strike map mp_cargoship map mp_crash_snow map mp_vacant"
+
+"sv_mapRotationCurrent" is: ""
+
+------ Server Initialization ------
+Server: mp_convoy
+SV_SpawnServer checksum feed: 0x4b2508bc
+Current language: english
+Current fs_basepath: c:/local/cod4/cod4xgame
+Current fs_homepath: c:/local/cod4/cod4xgame
+Current search path:
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_zevent_autumn.iwd (53 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_trash.iwd (1 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_splashes.iwd (25 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_sounds.iwd (49 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_nightvis.iwd (2 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_melee.iwd (1 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_marker.iwd (2 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_mapvote.iwd (88 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_main.iwd (205 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_finalduel.iwd (1 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_card.iwd (36 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_better_ui.iwd (82 files)
+c:/local/cod4/cod4xgame/mods/owtest
+c:/local/cod4/cod4xgame/usermaps/mp_convoy
+c:\local\cod4\cod4xgame\main\xbase_00.iwd (115 files)
+c:\local\cod4\cod4xgame\main\jcod4x_00.iwd (67 files)
+c:\local\cod4\cod4xgame\main\iw_13.iwd (265 files)
+c:\local\cod4\cod4xgame\main\iw_12.iwd (33 files)
+c:\local\cod4\cod4xgame\main\iw_11.iwd (448 files)
+c:\local\cod4\cod4xgame\main\iw_10.iwd (230 files)
+c:\local\cod4\cod4xgame\main\iw_09.iwd (447 files)
+c:\local\cod4\cod4xgame\main\iw_08.iwd (66 files)
+c:\local\cod4\cod4xgame\main\iw_07.iwd (34 files)
+c:\local\cod4\cod4xgame\main\iw_06.iwd (416 files)
+c:\local\cod4\cod4xgame\main\iw_05.iwd (716 files)
+c:\local\cod4\cod4xgame\main\iw_04.iwd (765 files)
+c:\local\cod4\cod4xgame\main\iw_03.iwd (670 files)
+c:\local\cod4\cod4xgame\main\iw_02.iwd (1296 files)
+c:\local\cod4\cod4xgame\main\iw_01.iwd (1456 files)
+c:\local\cod4\cod4xgame\main\iw_00.iwd (1054 files)
+c:/local/cod4/cod4xgame/main
+c:/local/cod4/cod4xgame/main_shared
+c:/local/cod4/cod4xgame/players
+
+File Handles:
+handle 1: qconsole.log
+----------------------
+8623 files in iwd files
+Adding fastfile 'mp_convoy' to queue
+Loading fastfile 'mp_convoy'
+used 51.65 MB memory in DB alloc
+Waited 289 msec for asset 'maps/mp/mp_convoy.d3dbsp' of type 'col_map_mp'.
+------- Game Initialization -------
+gamename: Call of Duty 4
+gamedate: Feb 12 2009
+fs_ignoreLocalized is cheat protected.
+fs_ignoreLocalized is cheat protected.
+Loaded fastfile 'mp_convoy' in 432ms (2ms waiting)
+^1Error: Waited 126 msec for missing asset "codescripts/delete.gsx".
+-----------------------------------
+'0' is not a valid value for cvar 'bg_shock_lookControl_fadeTime'
+Domain is any float in range between '0.001' and '1000'
+throwing script exception: Too many menus precached. Max allowed menus is 32
+
+^1******* script runtime error *******
+Too many menus precached. Max allowed menus is 32: (file 'scripts/_finalduel.gsc', line 59)
+        precacheMenu( level.finalDuel.menu );
+        *
+^1called from:
+(file 'openwarfare/_packagesinit.gsc', line 12)
+ thread scripts\_finalduel::init();
+        *
+^1called from:
+(file 'openwarfare/_globalinit.gsc', line 97)
+ openwarfare\_packagesinit::init();
+ *
+^1called from:
+(file 'maps/mp/gametypes/_globallogic.gsc', line 4225)
+ openwarfare\_globalinit::init();
+ *
+^1called from:
+(file 'maps/mp/gametypes/_callbacksetup.gsx', line 16)
+  [[level.callbackStartGameType]]();
+          *
+^1started from:
+(file 'maps/mp/gametypes/_callbacksetup.gsx', line 11)
+CodeCallback_StartGameType()
+*
+^1************************************
+By using this software you agree to the usage conditions you can find at https://github.com/callofduty4x/CoD4x_Server#usage-conditions-for-server-hosters
+-----------------------------------
+^4Calculate referenced files checksums...
+^4CRC32 for mods/owtest/z_ow_better_ui.iwd is 79d7092 Len 954113
+^4CRC32 for mods/owtest/z_ow_card.iwd is 30cff03e Len 432936
+^4CRC32 for mods/owtest/z_ow_finalduel.iwd is 6ca63984 Len 52647
+^4CRC32 for mods/owtest/z_ow_main.iwd is 5cafb892 Len 7335251
+^4CRC32 for mods/owtest/z_ow_mapvote.iwd is d825cba Len 7261813
+^4CRC32 for mods/owtest/z_ow_marker.iwd is 677b32a Len 4592
+^4CRC32 for mods/owtest/z_ow_melee.iwd is 519ca61f Len 2401
+^4CRC32 for mods/owtest/z_ow_nightvis.iwd is 46e00c82 Len 854313
+^4CRC32 for mods/owtest/z_ow_sounds.iwd is 4104b242 Len 9601856
+^4CRC32 for mods/owtest/z_ow_splashes.iwd is a952f315 Len 235208
+^4CRC32 for mods/owtest/z_ow_trash.iwd is b28ea6b6 Len 186
+^4CRC32 for mods/owtest/z_ow_zevent_autumn.iwd is 64a363ac Len 31350394
+^4CRC32 for main/iw_11.iwd is e9cf411f Len 151420446
+^4CRC32 for zone/english/code_post_gfx_mp.ff is b144581c Len 89196
+^4CRC32 for zone/english/common_mp.ff is 4ef7a074 Len 13517381
+^4CRC32 for mods/owtest/mod.ff is 2a81d4c4 Len 727382
+^4CRC32 for zone/english/mp_convoy.ff is b22c7a8f Len 39166328
+callouts: no scriptdata/callouts/mp_convoy.callout
+map_rotate...
+"sv_mapRotation" is: "map mp_convoy map mp_backlot map mp_bloc map mp_bog map mp_broadcast map mp_carentan map mp_countdown map mp_crash map mp_creek map mp_crossfire map mp_citystreets map mp_farm map mp_killhouse map mp_overgrown map mp_pipeline map mp_shipment map mp_showdown map mp_strike map mp_cargoship map mp_crash_snow map mp_vacant"
+
+"sv_mapRotationCurrent" is: "gametype sab map mp_bog gametype bel map mp_ngbc_shipment gametype gg map mp_shipment gametype sd map mp_carentan gametype sd map mp_broadcast gametype sab map mp_crossfire gametype sab map mp_showdown gametype sd map mp_vacant gametype gr map mp_killhouse gametype sd map mp_crash gametype sd map mp_backlot gametype sd map mp_selo gametype sab map mp_inv gametype sab map mp_mission gametype ss map mp_struggle gametype gg map mp_mw2_rust gametype sd map mp_oukhta gametype gg map mp_angrydogs_pound gametype gr map mp_getaway gametype sab map mp_mw2_boneyard gametype sab map mp_crash"
+
+==== ShutdownGame (1) ====
+------ Server Initialization ------
+Server: mp_bog
+SV_SpawnServer checksum feed: 0x65d8575e
+Current language: english
+Current fs_basepath: c:/local/cod4/cod4xgame
+Current fs_homepath: c:/local/cod4/cod4xgame
+Current search path:
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_zevent_autumn.iwd (53 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_trash.iwd (1 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_splashes.iwd (25 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_sounds.iwd (49 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_nightvis.iwd (2 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_melee.iwd (1 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_marker.iwd (2 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_mapvote.iwd (88 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_main.iwd (205 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_finalduel.iwd (1 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_card.iwd (36 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_better_ui.iwd (82 files)
+c:/local/cod4/cod4xgame/mods/owtest
+c:/local/cod4/cod4xgame/usermaps/mp_bog
+c:\local\cod4\cod4xgame\main\xbase_00.iwd (115 files)
+c:\local\cod4\cod4xgame\main\jcod4x_00.iwd (67 files)
+c:\local\cod4\cod4xgame\main\iw_13.iwd (265 files)
+c:\local\cod4\cod4xgame\main\iw_12.iwd (33 files)
+c:\local\cod4\cod4xgame\main\iw_11.iwd (448 files)
+c:\local\cod4\cod4xgame\main\iw_10.iwd (230 files)
+c:\local\cod4\cod4xgame\main\iw_09.iwd (447 files)
+c:\local\cod4\cod4xgame\main\iw_08.iwd (66 files)
+c:\local\cod4\cod4xgame\main\iw_07.iwd (34 files)
+c:\local\cod4\cod4xgame\main\iw_06.iwd (416 files)
+c:\local\cod4\cod4xgame\main\iw_05.iwd (716 files)
+c:\local\cod4\cod4xgame\main\iw_04.iwd (765 files)
+c:\local\cod4\cod4xgame\main\iw_03.iwd (670 files)
+c:\local\cod4\cod4xgame\main\iw_02.iwd (1296 files)
+c:\local\cod4\cod4xgame\main\iw_01.iwd (1456 files)
+c:\local\cod4\cod4xgame\main\iw_00.iwd (1054 files)
+c:/local/cod4/cod4xgame/main
+c:/local/cod4/cod4xgame/main_shared
+c:/local/cod4/cod4xgame/players
+
+File Handles:
+handle 1: qconsole.log
+----------------------
+8623 files in iwd files
+Unloading assets from fastfile 'mp_convoy' and creating default assets stubs
+Unloaded fastfile 'mp_convoy'
+PMem_Free( mp_convoy, Low )
+PMem_Free( mp_convoy, High )
+Adding fastfile 'mp_bog' to queue
+Loading fastfile 'mp_bog'
+used 33.53 MB memory in DB alloc
+Waited 189 msec for asset 'maps/mp/mp_bog.d3dbsp' of type 'col_map_mp'.
+------- Game Initialization -------
+gamename: Call of Duty 4
+gamedate: Feb 12 2009
+fs_ignoreLocalized is cheat protected.
+fs_ignoreLocalized is cheat protected.
+Loaded fastfile 'mp_bog' in 326ms (2ms waiting)
+^1Error: Waited 121 msec for missing asset "codescripts/delete.gsx".
+-----------------------------------
+'0' is not a valid value for cvar 'bg_shock_lookControl_fadeTime'
+Domain is any float in range between '0.001' and '1000'
+throwing script exception: Too many menus precached. Max allowed menus is 32
+
+^1******* script runtime error *******
+Too many menus precached. Max allowed menus is 32: (file 'scripts/_finalduel.gsc', line 59)
+        precacheMenu( level.finalDuel.menu );
+        *
+^1called from:
+(file 'openwarfare/_packagesinit.gsc', line 12)
+ thread scripts\_finalduel::init();
+        *
+^1called from:
+(file 'openwarfare/_globalinit.gsc', line 97)
+ openwarfare\_packagesinit::init();
+ *
+^1called from:
+(file 'maps/mp/gametypes/_globallogic.gsc', line 4225)
+ openwarfare\_globalinit::init();
+ *
+^1called from:
+(file 'maps/mp/gametypes/_callbacksetup.gsx', line 16)
+  [[level.callbackStartGameType]]();
+          *
+^1started from:
+(file 'maps/mp/gametypes/_callbacksetup.gsx', line 11)
+CodeCallback_StartGameType()
+*
+^1************************************
+By using this software you agree to the usage conditions you can find at https://github.com/callofduty4x/CoD4x_Server#usage-conditions-for-server-hosters
+-----------------------------------
+^4Calculate referenced files checksums...
+^4CRC32 for mods/owtest/z_ow_better_ui.iwd is 79d7092 Len 954113
+^4CRC32 for mods/owtest/z_ow_card.iwd is 30cff03e Len 432936
+^4CRC32 for mods/owtest/z_ow_finalduel.iwd is 6ca63984 Len 52647
+^4CRC32 for mods/owtest/z_ow_main.iwd is 5cafb892 Len 7335251
+^4CRC32 for mods/owtest/z_ow_mapvote.iwd is d825cba Len 7261813
+^4CRC32 for mods/owtest/z_ow_marker.iwd is 677b32a Len 4592
+^4CRC32 for mods/owtest/z_ow_melee.iwd is 519ca61f Len 2401
+^4CRC32 for mods/owtest/z_ow_nightvis.iwd is 46e00c82 Len 854313
+^4CRC32 for mods/owtest/z_ow_sounds.iwd is 4104b242 Len 9601856
+^4CRC32 for mods/owtest/z_ow_splashes.iwd is a952f315 Len 235208
+^4CRC32 for mods/owtest/z_ow_trash.iwd is b28ea6b6 Len 186
+^4CRC32 for mods/owtest/z_ow_zevent_autumn.iwd is 64a363ac Len 31350394
+^4CRC32 for main/iw_11.iwd is e9cf411f Len 151420446
+^4CRC32 for zone/english/code_post_gfx_mp.ff is b144581c Len 89196
+^4CRC32 for zone/english/common_mp.ff is 4ef7a074 Len 13517381
+^4CRC32 for mods/owtest/mod.ff is 2a81d4c4 Len 727382
+^4CRC32 

@@ -23,22 +23,24 @@ menuDef
 menuDef
 {
     name			"gamemessages"
-    rect			0 0 10 10 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP
-    exp				rect Y( ONLINEGAME_OFFSET_EXP )
-	exp				rect X( ONLINEGAME_OFFSET_EXP * HUD_MINUS_ONE )
+    //rect			0 0 10 10 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP
+    rect			0 0 10 10 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+    exp				rect Y( ONLINEGAME_OFFSET_EXP * HUD_MINUS_ONE + HUD_ORIGIN_BOTTOM_LEFT_Y )
+	exp				rect X( ONLINEGAME_OFFSET_EXP )
     fullScreen		0
     visible			when( HUD_IS_VISIBLE && dvarint( "ui_hud_obituaries" ) == 1 && dvarstring( "g_gametype" ) != "vg" );
 
     itemDef
     {
-        origin				0 0
+        origin				3 0
         type				ITEM_TYPE_GAME_MESSAGE_WINDOW
         gamemsgwindowindex	0
-        gamemsgwindowmode	MODE_TOPDOWN_ALIGN_TOP
-        //gamemsgwindowmode	MODE_TOPDOWN_ALIGN_BOTTOM
+        //gamemsgwindowmode	MODE_TOPDOWN_ALIGN_TOP
+        gamemsgwindowmode	MODE_BOTTOMUP_ALIGN_BOTTOM
         textfont			UI_FONT_DEFAULT
         textstyle			ITEM_TEXTSTYLE_SHADOWED
-        textalign			ITEM_ALIGN_TOP_RIGHT
+        //textalign			ITEM_ALIGN_TOP_RIGHT
+        textalign			ITEM_ALIGN_BOTTOM_LEFT
         textscale			( TEXTSIZE_SMALL * 0.6 )
         visible				when( 1 );
     }
@@ -62,7 +64,7 @@ menuDef
         textstyle			ITEM_TEXTSTYLE_SHADOWED
         textalign			ITEM_ALIGN_CENTER
         textscale			( TEXTSIZE_SMALL * 0.9 )
-        visible				when( 1 );
+        visible				when( CLIENT_NOT_DEAD && !isIntermission() );
     }
 }
 

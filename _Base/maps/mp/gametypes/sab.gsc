@@ -47,10 +47,11 @@ main()
 	// Syntax is getdvarx( dvarname, dvartype, dvardefault, minValue, maxValue )
 	level.scr_sab_show_bomb_carrier = getdvarx( "scr_sab_show_bomb_carrier", "int", 0, 0, 2  );
 	level.scr_sab_scoreboard_bomb_carrier = getdvarx( "scr_sab_scoreboard_bomb_carrier", "int", 1, 0, 1 );
-	level.scr_sab_suddendeath_show_enemies = getdvarx( "scr_sab_suddendeath_show_enemies", "int", 1, 0, 1 );
+	level.scr_sab_suddendeath_show_enemies = getdvarx( "scr_sab_suddendeath_show_enemies", "int", 1, 0, 2 );
 	level.scr_sab_suddendeath_timelimit = getdvarx( "scr_sab_suddendeath_timelimit", "int", 90, 0, 600 );
 	level.scr_sab_show_briefcase = getdvarx( "scr_sab_show_briefcase", "int", 1, 0, 1 );
 	level.scr_sab_planting_sound = getdvarx( "scr_sab_planting_sound", "int", 1, 0, 1 );
+	level.scr_sab_defusing_sound = getdvarx( "scr_sab_defusing_sound", "int", 1, 0, 1 );
 	level.scr_sab_show_bomb_carrier_time = getdvarx( "scr_sab_show_bomb_carrier_time", "int", 5, 5, 600 );
 	level.scr_sab_show_bomb_carrier_distance = getdvarx( "scr_sab_show_bomb_carrier_distance", "int", 0, 0, 1000 );
 	
@@ -60,6 +61,8 @@ main()
 	maps\mp\gametypes\_globallogic::registerScoreLimitDvar( level.gameType, 3, 0, 5000 );
 	maps\mp\gametypes\_globallogic::registerTimeLimitDvar( level.gameType, 15, 0, 1440 );
 
+	game["tiebreaker"] = isDefined( game["_overtime"] ) && game["_overtime"];
+
 	if ( !game["tiebreaker"] )
 	{
 		level.onPrecacheGameType = ::onPrecacheGameType;
@@ -68,6 +71,7 @@ main()
 		level.onTimeLimit = ::onTimeLimit;
 		level.onDeadEvent = ::onDeadEvent;
 		level.onRoundSwitch = ::onRoundSwitch;
+		level.onRemoveObjectives = ::onRemoveObjectives;
 
 		level.endGameOnScoreLimit = false;
 
@@ -80,6 +84,9 @@ main()
 		level.onStartGameType = ::onStartGameType;
 		level.onSpawnPlayer = ::onSpawnPlayer;
 		level.onEndGame = ::onEndGame;
+		level.onTimeLimit = ::onTimeLimit; //?
+		level.onRemoveObjectives = ::onRemoveObjectives;
+
 
 		level.endGameOnScoreLimit = false;
 
@@ -145,11 +152,14 @@ onRoundSwitch()
 	if ( !isdefined( game["switchedsides"] ) )
 		game["switchedsides"] = false;
 
-	if ( game["teamScores"]["allies"] == level.scorelimit - 1 && game["teamScores"]["axis"] == level.scorelimit - 1 )
+	//iprintln( "SAB ROUND SWITCH:  score = " + game["teamScores"]["allies"] + ":" + game["teamScores"]["axis"] + "; roundsplayed = " + game["roundsplayed"] + "; roundslimit = " + level.roundLimit );
+
+	//if ( game["teamScores"]["allies"] == game["teamScores"]["axis"] && game["roundsplayed"] == level.roundLimit - 1 )
+	if ( isDefined( game["_overtime"] ) && game["_overtime"] )
 	{
-		level.halftimeType = "overtime";
+		level.halftimeType = "overtime";		
 		level.halftimeSubCaption = &"MP_TIE_BREAKER";
-		game["tiebreaker"] = true;
+		//game["tiebreaker"] = true;
 	}
 	else
 	{
@@ -261,15 +271,16 @@ onOvertime()
 		level.players[index] notify("force_spawn");
 		level.players[index] thread maps\mp\gametypes\_hud_message::oldNotifyMessage( &"MP_SUDDEN_DEATH", &"MP_NO_RESPAWN", undefined, (1, 0, 0), "mp_last_stand" );
 
-		if ( level.scr_sab_suddendeath_show_enemies == 1 ) {
+		if ( level.scr_sab_suddendeath_show_enemies != 0 ) {
 			level.players[index] setClientDvars("cg_deadChatWithDead", 1,
 								"cg_deadChatWithTeam", 0,
 								"cg_deadHearTeamLiving", 0,
 								"cg_deadHearAllLiving", 0,
-								"cg_everyoneHearsEveryone", 0,
-								"g_compassShowEnemies", 1 );
+								"cg_everyoneHearsEveryone", 0 );
 		}
 	}
+
+	enableEnemyRadarDisplay( level.scr_sab_suddendeath_show_enemies );
 
 	if ( level.scr_sab_suddendeath_timelimit > 0 ) {
 		waitTime = 0;
@@ -286,6 +297,18 @@ onOvertime()
 	}
 }
 
+resetPlantedBombState()
+{
+	level.bombPlanted = false;
+	level.timeLimitOverride = false;
+	setDvar( "ui_bomb_timer", 0 );
+}
+
+handlePlantedBombElimination( winningTeam, endReason )
+{
+	[[level._setTeamScore]]( winningTeam, [[level._getTeamScore]]( winningTeam ) + 1 );
+	thread maps\mp\gametypes\_globallogic::endGame( winningTeam, endReason );
+}
 
 onDeadEvent( team )
 {
@@ -296,8 +319,9 @@ onDeadEvent( team )
 	{
 		if ( level.bombPlanted )
 		{
-			[[level._setTeamScore]]( level.bombPlantedBy, [[level._getTeamScore]]( level.bombPlantedBy ) + 1 );
-			thread maps\mp\gametypes\_globallogic::endGame( level.bombPlantedBy, game["strings"][level.bombPlantedBy+"_mission_accomplished"] );
+			resetPlantedBombState();
+
+			handlePlantedBombElimination( level.bombPlantedBy, game["strings"][level.bombPlantedBy+"_mission_accomplished"] );
 		}
 		else
 		{
@@ -312,8 +336,9 @@ onDeadEvent( team )
 			return;
 		}
 
-		[[level._setTeamScore]]( level.bombPlantedBy, [[level._getTeamScore]]( level.bombPlantedBy ) + 1 );
-		thread maps\mp\gametypes\_globallogic::endGame( level.bombPlantedBy, game["strings"][level.otherTeam[level.bombPlantedBy]+"_eliminated"] );
+		resetPlantedBombState();
+
+		handlePlantedBombElimination( level.bombPlantedBy, game["strings"][level.otherTeam[level.bombPlantedBy]+"_eliminated"] );
 	}
 	else
 	{
@@ -356,13 +381,13 @@ onSpawnPlayer()
 		if ( isDefined( hintMessage ) )
 			self thread maps\mp\gametypes\_hud_message::hintMessage( hintMessage );
 
-		if ( level.scr_sab_suddendeath_show_enemies == 1 ) {
+		if ( level.scr_sab_suddendeath_show_enemies != 0 ) {
 			self setClientDvars("cg_deadChatWithDead", 1,
 								"cg_deadChatWithTeam", 0,
 								"cg_deadHearTeamLiving", 0,
 								"cg_deadHearAllLiving", 0,
-								"cg_everyoneHearsEveryone", 0,
-								"g_compassShowEnemies", 1 );
+								"cg_everyoneHearsEveryone", 0 );
+			self enablePlayerEnemyRadarDisplay( level.scr_sab_suddendeath_show_enemies );
 		}
 	}
 
@@ -385,6 +410,7 @@ sabotage()
 {
 	level.bombPlanted = false;
 	level.bombExploded = false;
+	level.bombFuseAborted = 0;
 
 	trigger = getEnt( "sab_bomb_pickup_trig", "targetname" );
 	if ( !isDefined( trigger ) )
@@ -476,6 +502,9 @@ onBeginUse( player )
 
 		player.isPlanting = true;
 	} else {
+		if( level.scr_sab_defusing_sound == 1 )
+			player playSound( "mp_bomb_defuse" );
+
 		player.isDefusing = true;
 	}
 }
@@ -685,9 +714,9 @@ onUse( player )
 
 		level thread bombDefused( self );
 
-		if ( level.inOverTime && isDefined( level.plantingTeamDead ) )
+		if ( isDefined( level.plantingTeamDead ) )
 		{
-			thread maps\mp\gametypes\_globallogic::endGame( player.pers["team"], game["strings"][level.bombPlantedBy+"_eliminated"] );
+			handlePlantedBombElimination( player.pers["team"], game["strings"][level.bombPlantedBy+"_eliminated"] );
 			return;
 		}
 
@@ -717,14 +746,31 @@ bombPlanted( destroyedObj, team )
 	setGameEndTime( int( getTime() + (level.bombTimer * 1000) ) );
 
 	destroyedObj.visuals[0] thread maps\mp\gametypes\_globallogic::playTickingSound();
+	level.tickingObject = destroyedObj.visuals[0];
 
 	starttime = gettime();
-	bombTimerWait();
+	endTime = gettime() + ( level.bombTimer * 1000 );
+	while ( 1 )
+	{
+		if ( level.bombFuseAborted == 1 )
+			break;
+
+		if ( level.bombPlanted == 0 )
+			break;
+
+		if ( level.gameEnded == 1 )
+			break;
+
+		if ( gettime() >= endTime )
+			break;
+
+		wait 0.05;
+	}
 
 	setDvar( "ui_bomb_timer", 0 );
 	destroyedObj.visuals[0] maps\mp\gametypes\_globallogic::stopTickingSound();
 
-	if ( !level.bombPlanted )
+	if ( level.bombPlanted == 0 || level.bombFuseAborted == 1 || level.gameEnded == 1 )
 	{
 		if ( level.hotPotato )
 		{
@@ -781,13 +827,6 @@ playSoundinSpace( alias, origin )
 }
 
 
-bombTimerWait()
-{
-	level endon("bomb_defused");
-	wait level.bombTimer;
-}
-
-
 resetBombsite()
 {
 	self maps\mp\gametypes\_gameobjects::allowUse( "enemy" );
@@ -827,7 +866,48 @@ bombDefused( object )
 	if ( !level.inOvertime )
 		level.timeLimitOverride = false;
 
+	if ( isDefined( level.tickingObject ) )
+		level.tickingObject maps\mp\gametypes\_globallogic::stopTickingSound();
+
 	level notify("bomb_defused");
+}
+
+
+onRemoveObjectives()
+{
+	abortPlantedBomb();
+
+	if ( !level.inOvertime )
+		level.timeLimitOverride = false;
+
+	level.sabBomb maps\mp\gametypes\_gameobjects::disableObject();
+
+	if ( isDefined( level.bombZones ) )
+	{
+		level.bombZones["allies"] maps\mp\gametypes\_gameobjects::disableObject();
+		level.bombZones["axis"] maps\mp\gametypes\_gameobjects::disableObject();
+	}
+}
+
+
+abortPlantedBomb()
+{
+	if ( !isDefined( level.bombPlanted ) )
+		return;
+
+	if ( level.bombPlanted == 0 )
+		return;
+
+	// Do not notify bomb_defused: in CoD4 that can complete the fuse wait
+	// as if the timer expired instead of killing bombPlanted().
+	level.bombFuseAborted = 1;
+	level.bombPlanted = 0;
+
+	if ( isDefined( level.tickingObject ) )
+		level.tickingObject maps\mp\gametypes\_globallogic::stopTickingSound();
+
+	setDvar( "ui_bomb_timer", 0 );
+	maps\mp\gametypes\_globallogic::resumeTimer();
 }
 
 

@@ -355,6 +355,9 @@ LANG_ENGLISH "Eliminate all the other players."
 REFERENCE UAV_ON
 LANG_ENGLISH "UAV Activated Permanently"
 
+REFERENCE COMPASS_ON
+LANG_ENGLISH "Enemies shown on compass"
+
 
 //******************************************************************************
 // maps/mp/gametypes/re.gsc
@@ -466,68 +469,6 @@ REFERENCE REMINDER
 LANG_SPANISH "Recordatorio..."
 
 
-//******************************************************************************
-// mp/rankTable.csv
-//******************************************************************************
-REFERENCE RANK_PRESTIGE1
-LANG_SPANISH "Prestige MGS."
-
-REFERENCE RANK_PRESTIGE2
-LANG_SPANISH "Prestige CSM."
-
-REFERENCE RANK_PRESTIGE3
-LANG_SPANISH "Prestige SMOTA."
-
-REFERENCE RANK_PRESTIGE4
-LANG_SPANISH "Prestige CWO."
-
-REFERENCE RANK_PRESTIGE5
-LANG_SPANISH "Prestige Lt."
-
-REFERENCE RANK_PRESTIGE6
-LANG_SPANISH "Prestige Maj."
-
-REFERENCE RANK_PRESTIGE7
-LANG_SPANISH "Prestige Col."
-
-REFERENCE RANK_PRESTIGE8
-LANG_SPANISH "Prestige CrSM."
-
-REFERENCE RANK_PRESTIGE9
-LANG_SPANISH "Prestige GOTA."
-
-REFERENCE RANK_PRESTIGE10
-LANG_SPANISH "Prestige SC."
-
-REFERENCE RANK_PRESTIGE1_FULL
-LANG_SPANISH "Prestige Master Gny. Sergeant"
-
-REFERENCE RANK_PRESTIGE2_FULL
-LANG_SPANISH "Prestige Command Sergeant Major"
-
-REFERENCE RANK_PRESTIGE3_FULL
-LANG_SPANISH "Prestige S.M.O.T.A."
-
-REFERENCE RANK_PRESTIGE4_FULL
-LANG_SPANISH "Prestige C.W.O."
-
-REFERENCE RANK_PRESTIGE5_FULL
-LANG_SPANISH "Prestige Lieutenant"
-
-REFERENCE RANK_PRESTIGE6_FULL
-LANG_SPANISH "Prestige Major"
-
-REFERENCE RANK_PRESTIGE7_FULL
-LANG_SPANISH "Prestige Colonel"
-
-REFERENCE RANK_PRESTIGE8_FULL
-LANG_SPANISH "Prestige C.S.M."
-
-REFERENCE RANK_PRESTIGE9_FULL
-LANG_SPANISH "Prestige G.O.T.A."
-
-REFERENCE RANK_PRESTIGE10_FULL
-LANG_SPANISH "Prestige Supreme Commander"
 
 
 //******************************************************************************
@@ -1005,6 +946,12 @@ LANG_SPANISH "El tiempo estrategico se ha acabado"
 REFERENCE STRATEGY_PERIOD_STARTED
 LANG_SPANISH "Tiempo estrategico de ronda:"
 
+REFERENCE STRATEGY_ROUND
+LANG_SPANISH "Ronda &&1"
+
+REFERENCE STRATEGY_ROUND_LIMIT
+LANG_SPANISH "Ronda &&1 de &&2"
+
 REFERENCE PRESS_TO_BYPASS
 LANG_SPANISH "Pulsa^3 [{+activate}] ^7para evitar"
 
@@ -1167,6 +1114,22 @@ LANG_SPANISH "Todos los items han sido escritos a ^1games_mp.log^7"
 
 REFERENCE MOVER_HELP
 LANG_SPANISH "Presiona ^1[[{+activate}]] ^7para navegar entre comandos.\nPresiona ^1[[{+melee}]] ^7para ejecutar un comando.\nPresiona ^1[[{+attack}]] ^7para posicionar el item seleccionado."
+
+
+//******************************************************************************
+// maps\mp\gametypes\_finalkillcam.gsc
+//******************************************************************************
+REFERENCE FINALCAM_PLAYER_VS_PLAYER
+LANG_SPANISH "&&1 ^1VS ^7&&2"
+
+REFERENCE FINALCAM_PLAYER_SUICIDE
+LANG_SPANISH "SUICIDIO: ^7&&1"
+
+REFERENCE FINALCAM_MATCH_WIN
+LANG_SPANISH "KILL DE VICTORIA DE PARTIDA"
+
+REFERENCE FINALCAM_ROUND_WIN
+LANG_SPANISH "KILL DE VICTORIA DE RONDA"
 
 
 //******************************************************************************
@@ -1386,6 +1349,19 @@ LANG_ENGLISH "Broadcaster"
 //******************************************************************************
 REFERENCE SERVER_INFO
 LANG_SPANISH "INFORMACION"
+
+
+//******************************************************************************
+// openwarfare/_teamassign.gsc
+//******************************************************************************
+REFERENCE AUTOBALANCE_SKILL_NOW
+LANG_SPANISH "Equilibrando equipos por habilidad"
+
+REFERENCE AUTOBALANCE_SKILL_SECONDS
+LANG_SPANISH "Equilibrando equipos por habilidad en &&1 segundos"
+
+REFERENCE AUTOBALANCE_SKILL_NEXT_ROUND
+LANG_SPANISH "Los equipos se equilibrarán por habilidad en la siguiente ronda"
 
 
 ENDMARKER

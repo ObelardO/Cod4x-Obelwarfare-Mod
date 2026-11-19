@@ -160,9 +160,6 @@ LANG_RUSSIAN "Село"
 REFERENCE mp_steamlab
 LANG_RUSSIAN "Лаборатория"
 
-REFERENCE mp_stream
-LANG_RUSSIAN "Сток"
-
 REFERENCE mp_strike_2
 LANG_RUSSIAN "Удар Ремейк"
 
@@ -181,6 +178,20 @@ LANG_RUSSIAN "Синай"
 REFERENCE mp_getaway
 LANG_RUSSIAN "Вилла"
 
+REFERENCE mp_angrydogs_pound
+LANG_RUSSIAN "Аванпост"
+
+REFERENCE mp_decay
+LANG_RUSSIAN "Распад"
+
+REFERENCE mp_mw2_boneyard
+LANG_RUSSIAN "Кладбище самолетов"
+
+REFERENCE mp_mw2_underpass
+LANG_RUSSIAN "Путепровод"
+
+REFERENCE mp_mw3_hardhat
+LANG_RUSSIAN "Стройка"
 
 //******************************************************************************
 // CUSTOM XMAS MAPS
@@ -230,5 +241,60 @@ LANG_RUSSIAN "Снежный храм"
 
 REFERENCE mp_farm_xmas
 LANG_RUSSIAN "Снежная ферма"
+
+REFERENCE mp_killhouse_xmas
+LANG_RUSSIAN "Снежная мясорубка"
+
+REFERENCE mp_nuked_xmas
+LANG_RUSSIAN "Снежный городок"
+
+//******************************************************************************
+// CUSTOM WW2 MAPS
+//******************************************************************************
+
+REFERENCE mp_asylum
+LANG_RUSSIAN "Госпиталь"
+
+REFERENCE mp_breakout
+LANG_RUSSIAN "Прорыв"
+
+REFERENCE mp_burgundy
+LANG_RUSSIAN "Бургундия"
+
+REFERENCE mp_carantan
+LANG_RUSSIAN "Карантан"
+
+REFERENCE mp_courtyard
+LANG_RUSSIAN "Сад камней"
+
+REFERENCE mp_dawnville
+LANG_RUSSIAN "Предместье"
+
+REFERENCE mp_downtown
+LANG_RUSSIAN "Ратуша"
+
+REFERENCE mp_farmhouse
+LANG_RUSSIAN "Опорник"
+
+REFERENCE mp_firestation
+LANG_RUSSIAN "Пожарная часть"
+
+REFERENCE mp_trainstation
+LANG_RUSSIAN "Полустанок"
+
+REFERENCE mp_waw_castle
+LANG_RUSSIAN "Ямадзиро"
+
+REFERENCE mp_waw_decoy
+LANG_RUSSIAN "Траншеи"
+
+REFERENCE mp_waw_matmata
+LANG_RUSSIAN "Матмата"
+
+REFERENCE mp_waw_toujane
+LANG_RUSSIAN "Тужан"
+
+REFERENCE mp_stream
+LANG_RUSSIAN "Сток"
 
 ENDMARKER

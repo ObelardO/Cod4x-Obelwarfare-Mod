@@ -1,6 +1,7 @@
 name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage,center percentage,platform,envelop_min,envelop_max,envelop percentage
 
 # Miscellaneous sounds,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+sniper_zoom_step,,misc/sniper_zoom_step.mp3,0.87,0.95,na,,,,,auto,streamed,,,master,all_mp,,,,,,,,,,,,,,mp3
 scramble,1,misc/foley_scramble01.mp3,1,,music,,,,,auto2d,streamed,,,master,all_mp,,,,,,music,nowetlevel fulldrylevel,,,,,,,mp3
 scramble,2,misc/foley_scramble02.mp3,1,,music,,,,,auto2d,streamed,,,master,all_mp,,,,,,music,nowetlevel fulldrylevel,,,,,,,mp3
 scramble,3,misc/foley_scramble03.mp3,1,,music,,,,,auto2d,streamed,,,master,all_mp,,,,,,music,nowetlevel fulldrylevel,,,,,,,mp3
@@ -26,6 +27,6 @@ CDFinalPos,,misc/OWB_countdown_pos.mp3,1,1,max,,,,,announcer,streamed,,,master,a
 CDFinalOT,,misc/OWB_countdown_ot.mp3,1,1,max,,,,,announcer,streamed,,,master,all_mp,,,,,,radio,nowetlevel fulldrylevel,,,,,,,mp3
 
 # Player connections/disconnections,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-player_connected,,misc/player_connected.mp3,1,1,max,,,,,announcer,streamed,,,master,all_mp,,,,,,radio,nowetlevel fulldrylevel,,,,,,,mp3
-player_disconnected,,misc/player_disconnected.mp3,1,1,max,,,,,announcer,streamed,,,master,all_mp,,,,,,radio,nowetlevel fulldrylevel,,,,,,,mp3
+player_connected,,misc/player_connected.mp3,1,1,max,,,,,auto2d,streamed,,,master,all_mp,,,,,,radio,nowetlevel fulldrylevel,,,,,,,mp3
+player_disconnected,,misc/player_disconnected.mp3,1,1,max,,,,,auto2d,streamed,,,master,all_mp,,,,,,radio,nowetlevel fulldrylevel,,,,,,,mp3
 welcome,3,misc/welcome.mp3,1,,music,,,,,auto2d,streamed,,,master,all_mp,,,,,,music,nowetlevel fulldrylevel,,,,,,,mp3

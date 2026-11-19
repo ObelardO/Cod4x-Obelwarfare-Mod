@@ -11,6 +11,7 @@
 //            Website: http://openwarfaremod.com/
 //******************************************************************************
 
+#include common_scripts\utility;
 #include maps\mp\gametypes\_hud_util;
 #include openwarfare\_eventmanager;
 #include openwarfare\_utils;
@@ -37,6 +38,7 @@ onPlayerConnected()
 onPlayerSpawned()
 {
 	self endon("disconnect");
+	self endon("death");
 	self endon("joined_team");
 	self endon("joined_spectators");
 		
@@ -77,11 +79,33 @@ onPlayerSpawned()
 		numLives setText( &"OW_LAST_LIFE" );
 	}
 
+	self thread cleanupNumLivesHudElementsOnInterrupt( numLives );
+
 	// Do the pulse effect and destroy the element	
 	numLives thread maps\mp\gametypes\_hud::fontPulse( level );
 	wait (2.5);
 
+	self notify( "numlives_display_done" );
+
+	cleanupNumLivesHudElements( numLives );
+}
+
+
+cleanupNumLivesHudElementsOnInterrupt( numLives )
+{
+	self endon( "disconnect" );
+	self endon( "numlives_display_done" );
+
+	self waittill_any( "death", "joined_team", "joined_spectators" );
+
+	cleanupNumLivesHudElements( numLives );
+}
+
+
+cleanupNumLivesHudElements( numLives )
+{
 	self maps\mp\gametypes\_hud_hints::hideHint( "lives_count" );
 
-	numLives destroyElem();
+	if ( isDefined( numLives ) )
+		numLives destroyElem();
 }

@@ -22,7 +22,8 @@ init()
 	// We'll stay in this module no matter what to set back the default zoom level
 	if ( level.scr_sniperzoom_enable == 1 ) {
 		level.scr_sniperzoom_lower_levels = getdvarx( "scr_sniperzoom_lower_levels", "int", 8, 0, 8 );
-		level.scr_sniperzoom_upper_levels = getdvarx( "scr_sniperzoom_upper_levels", "int", 9, 0, 9 );		
+		level.scr_sniperzoom_upper_levels = getdvarx( "scr_sniperzoom_upper_levels", "int", 9, 0, 9 );
+		level.scr_sniperzoom_focus_enable = getdvarx( "scr_sniperzoom_focus_enable", "int", 1, 0, 1 );
 		
 	  // Initialize some variables we'll be using to handle the different zoom levels
 	  level.sniperZooms = []; level.sniperZoomsText = [];
@@ -86,16 +87,25 @@ onPlayerSpawned()
 	self.zoomLevelText.y = 10;	
 	
 	// Set the default zoom level and start monitoring the player
-	self setZoomLevel( level.sniperZoomDefault );	
+	self setZoomLevel( level.sniperZoomDefault );
+	self.scopeBlur = 0;
+	self.scopeBlurSent = 0;
+	self.scopeBlurStable = true;
 	self thread monitorCurrentWeapon();
 	self thread monitorUseMeleeKeys();
+
+	if ( level.scr_sniperzoom_focus_enable == 1 ) {
+		self thread monitorScopeFocus();
+		self thread clearScopeBlurOnGameEnd();
+	}
 }
 
 
 onPlayerDeath()
 {
 	// Reset the zoom level
-	self setClientDvar( "cg_fovmin", level.sniperZooms[ level.sniperZoomDefault ] );	
+	self setClientDvar( "cg_fovmin", level.sniperZooms[ level.sniperZoomDefault ] );
+	self clearScopeBlur();
 	
 	// Destroy the HUD element
 	if ( isDefined( self.zoomLevelText ) )
@@ -134,14 +144,15 @@ monitorCurrentWeapon()
 			oldWeapon = self getCurrentWeapon();
 			if ( zoomLevelSet ) {
 				self setClientDvar( "cg_fovmin", level.sniperZooms[ level.sniperZoomDefault ] );
+				self clearScopeBlur();
 				zoomLevelSet = false;
 			}
 		} else {
-			// Check if the player enable/disable ADS
+			// Check if the player enable/disable ADS.
+			// playerADS() climbs from 0 to 1 during the raise, so wait until the scope is fully up.
 			if ( self playerADS() > oldAds ) {
 				oldAds = self playerADS();
-				// Player is enabling ADS
-				if ( !zoomLevelSet && isSniperRifle( oldWeapon ) ) {
+				if ( !zoomLevelSet && oldAds >= 1 && isSniperRifle( oldWeapon ) ) {
 					self setClientDvar( "cg_fovmin", level.sniperZooms[ self.sniperZoomLevel ] );
 					self thread updateZoomLevel();	
 					zoomLevelSet = true;				
@@ -151,6 +162,7 @@ monitorCurrentWeapon()
 				// Player is disabling ADS
 				if ( zoomLevelSet ) {
 					self setClientDvar( "cg_fovmin", level.sniperZooms[ level.sniperZoomDefault ] );
+					self clearScopeBlur();
 					zoomLevelSet = false;
 				}
 			}
@@ -176,11 +188,13 @@ zoomIn()
 		return;
 	
 	// Make sure the player is using a sniper rifle and ADS are active
-	if ( self playerAds() && isSniperRifle( self getCurrentWeapon() ) ) {
+	if ( self isFullyScoped() && isSniperRifle( self getCurrentWeapon() ) ) {
 		if ( self.sniperZoomLevel > 0 ) {
 			self.sniperZoomLevel--;
 			self thread setZoomLevel( self.sniperZoomLevel );
 			self thread updateZoomLevel();
+			self kickScopeFocus();
+			self playZoomStepSound();
 		}
 	}	
 }
@@ -193,13 +207,21 @@ zoomOut()
 		return;
 	
 	// Make sure the player is using a sniper rifle and ADS are active
-	if ( self playerAds() && isSniperRifle( self getCurrentWeapon() ) ) {
+	if ( self isFullyScoped() && isSniperRifle( self getCurrentWeapon() ) ) {
 		if ( self.sniperZoomLevel < level.sniperZooms.size - 1 ) {
 			self.sniperZoomLevel++;
 			self thread setZoomLevel( self.sniperZoomLevel );
 			self thread updateZoomLevel();
+			self kickScopeFocus();
+			self playZoomStepSound();
 		}
 	}	
+}
+
+
+isFullyScoped()
+{
+	return self playerADS() >= 1;
 }
 
 
@@ -235,4 +257,99 @@ monitorUseMeleeKeys()
 			self thread zoomOut();
 		}	
 	}
+}
+
+
+// Scope goes soft on a zoom step, then sharpens once the zoom stops.
+// Same curve as the Zakhaev Barrett in sniperescape_exchange::exchange_scale_dof_while_on_turret:
+// one stable frame, then blur *= 0.9 every 0.05s. setblur() is singleplayer-only, so this
+// drives the same renderer control per player through r_blur.
+playZoomStepSound()
+{
+	self playLocalSound( "sniper_zoom_step" );
+}
+
+
+kickScopeFocus()
+{
+	if ( !isDefined( level.scr_sniperzoom_focus_enable ) || level.scr_sniperzoom_focus_enable == 0 )
+		return;
+
+	if ( !isDefined( self.scopeBlur ) || self.scopeBlur < 5 )
+		self.scopeBlur = 5;
+	else
+		self.scopeBlur += 0.5;
+
+	if ( self.scopeBlur > 8 )
+		self.scopeBlur = 8;
+
+	self.scopeBlurStable = false;
+	self applyScopeBlur();
+}
+
+
+monitorScopeFocus()
+{
+	self endon("disconnect");
+	self endon("death");
+	level endon( "game_ended" );
+
+	for (;;)
+	{
+		wait (0.05);
+
+		if ( !isDefined( self.scopeBlur ) || self.scopeBlur <= 0 )
+			continue;
+
+		if ( !self playerAds() || !isSniperRifle( self getCurrentWeapon() ) ) {
+			self clearScopeBlur();
+			continue;
+		}
+
+		// First frame after the zoom stops does not decay
+		if ( !isDefined( self.scopeBlurStable ) || !self.scopeBlurStable ) {
+			self.scopeBlurStable = true;
+			continue;
+		}
+
+		self.scopeBlur = self.scopeBlur * 0.9;
+		if ( self.scopeBlur < 0.15 )
+			self.scopeBlur = 0;
+
+		self applyScopeBlur();
+	}
+}
+
+
+applyScopeBlur()
+{
+	tenths = int( self.scopeBlur * 10 );
+	if ( isDefined( self.scopeBlurSent ) && self.scopeBlurSent == tenths )
+		return;
+
+	self.scopeBlurSent = tenths;
+	self setClientDvar( "r_blur", tenths * 0.1 );
+}
+
+
+clearScopeBlur()
+{
+	self.scopeBlur = 0;
+	self.scopeBlurStable = true;
+
+	if ( !isDefined( self.scopeBlurSent ) || self.scopeBlurSent == 0 )
+		return;
+
+	self.scopeBlurSent = 0;
+	self setClientDvar( "r_blur", 0 );
+}
+
+
+clearScopeBlurOnGameEnd()
+{
+	self endon("disconnect");
+	self endon("death");
+
+	level waittill( "game_ended" );
+	self clearScopeBlur();
 }

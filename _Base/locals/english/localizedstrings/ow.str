@@ -355,6 +355,9 @@ LANG_ENGLISH "Eliminate all the other players."
 REFERENCE UAV_ON
 LANG_ENGLISH "UAV Activated Permanently"
 
+REFERENCE COMPASS_ON
+LANG_ENGLISH "Enemies shown on compass"
+
 
 //******************************************************************************
 // maps/mp/gametypes/re.gsc
@@ -488,68 +491,6 @@ REFERENCE REMINDER
 LANG_ENGLISH "Reminder..."
 
 
-//******************************************************************************
-// mp/rankTable.csv
-//******************************************************************************
-REFERENCE RANK_PRESTIGE1
-LANG_ENGLISH "Prestige MGS."
-
-REFERENCE RANK_PRESTIGE2
-LANG_ENGLISH "Prestige CSM."
-
-REFERENCE RANK_PRESTIGE3
-LANG_ENGLISH "Prestige SMOTA."
-
-REFERENCE RANK_PRESTIGE4
-LANG_ENGLISH "Prestige CWO."
-
-REFERENCE RANK_PRESTIGE5
-LANG_ENGLISH "Prestige Lt."
-
-REFERENCE RANK_PRESTIGE6
-LANG_ENGLISH "Prestige Maj."
-
-REFERENCE RANK_PRESTIGE7
-LANG_ENGLISH "Prestige Col."
-
-REFERENCE RANK_PRESTIGE8
-LANG_ENGLISH "Prestige CrSM."
-
-REFERENCE RANK_PRESTIGE9
-LANG_ENGLISH "Prestige GOTA."
-
-REFERENCE RANK_PRESTIGE10
-LANG_ENGLISH "Prestige SC."
-
-REFERENCE RANK_PRESTIGE1_FULL
-LANG_ENGLISH "Prestige Master Gny. Sergeant"
-
-REFERENCE RANK_PRESTIGE2_FULL
-LANG_ENGLISH "Prestige Command Sergeant Major"
-
-REFERENCE RANK_PRESTIGE3_FULL
-LANG_ENGLISH "Prestige S.M.O.T.A."
-
-REFERENCE RANK_PRESTIGE4_FULL
-LANG_ENGLISH "Prestige C.W.O."
-
-REFERENCE RANK_PRESTIGE5_FULL
-LANG_ENGLISH "Prestige Lieutenant"
-
-REFERENCE RANK_PRESTIGE6_FULL
-LANG_ENGLISH "Prestige Major"
-
-REFERENCE RANK_PRESTIGE7_FULL
-LANG_ENGLISH "Prestige Colonel"
-
-REFERENCE RANK_PRESTIGE8_FULL
-LANG_ENGLISH "Prestige C.S.M."
-
-REFERENCE RANK_PRESTIGE9_FULL
-LANG_ENGLISH "Prestige G.O.T.A."
-
-REFERENCE RANK_PRESTIGE10_FULL
-LANG_ENGLISH "Prestige Supreme Commander"
 
 
 //******************************************************************************
@@ -1052,6 +993,12 @@ LANG_ENGLISH "Strategy time is over"
 REFERENCE STRATEGY_PERIOD_STARTED
 LANG_ENGLISH "Round strategy time:"
 
+REFERENCE STRATEGY_ROUND
+LANG_ENGLISH "Round &&1"
+
+REFERENCE STRATEGY_ROUND_LIMIT
+LANG_ENGLISH "Round &&1 of &&2"
+
 REFERENCE PRESS_TO_BYPASS
 LANG_ENGLISH "Press^3 [{+activate}] ^7to bypass"
 
@@ -1271,6 +1218,9 @@ LANG_ENGLISH "^3Esc.^7 Cancel"
 //******************************************************************************
 REFERENCE FINALCAM_PLAYER_VS_PLAYER
 LANG_ENGLISH "&&1 VS. &&2"
+
+REFERENCE FINALCAM_PLAYER_SUICIDE
+LANG_ENGLISH "SUICIDE: &&1"
 
 REFERENCE FINALCAM_MATCH_WIN
 LANG_ENGLISH "MATCH WINNER KILL"
@@ -1499,6 +1449,19 @@ LANG_ENGLISH "Broadcaster"
 //******************************************************************************
 REFERENCE SERVER_INFO
 LANG_ENGLISH "INFORMATION"
+
+
+//******************************************************************************
+// openwarfare/_teamassign.gsc
+//******************************************************************************
+REFERENCE AUTOBALANCE_SKILL_NOW
+LANG_ENGLISH "Balancing teams by skill"
+
+REFERENCE AUTOBALANCE_SKILL_SECONDS
+LANG_ENGLISH "Balancing teams by skill in &&1 seconds"
+
+REFERENCE AUTOBALANCE_SKILL_NEXT_ROUND
+LANG_ENGLISH "Teams will be balanced by skill next round"
 
 
 ENDMARKER

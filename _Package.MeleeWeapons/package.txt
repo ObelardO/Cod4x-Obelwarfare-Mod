@@ -1,0 +1,4 @@
+name=Melee Weapons
+iwd=melee
+gsc=_meleeweapons
+cfg=meleeweapons

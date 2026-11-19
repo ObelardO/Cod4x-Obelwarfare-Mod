@@ -1,3 +1,7 @@
+//******************************************************************************
+// STOCK MAPS
+//******************************************************************************
+
 {
 	map			"mp_convoy"
 	longname	"mpui_maps_mp_convoy"
@@ -124,6 +128,10 @@
 	longname	"mpui_maps_mp_crash_snow"
 	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr hns vg"
 }
+
+//******************************************************************************
+// CUSTOM MAPS
+//******************************************************************************
 
 {
 	map			"mp_apesgorod"
@@ -276,12 +284,6 @@
 }
 
 {
-	map			"mp_stream"
-	longname	"mpui_maps_mp_stream"
-	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
-}
-
-{
 	map			"mp_strike_2"
 	longname	"mpui_maps_mp_strike_2"
 	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
@@ -316,6 +318,34 @@
 	longname	"mpui_maps_mp_firingrange"
 	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
 }
+
+{
+	map			"mp_angrydogs_pound"
+	longname	"mpui_maps_mp_angrydogs_pound"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_mw2_boneyard"
+	longname	"mpui_maps_mp_mw2_boneyard"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_mw2_underpass"
+	longname	"mpui_maps_mp_mw2_underpass"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_mw3_hardhat"
+	longname	"mpui_maps_mp_mw3_hardhat"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+//******************************************************************************
+// CUSTOM XMAS MAPS
+//******************************************************************************
 
 {
 	map			"mp_winter_rasalem"
@@ -404,5 +434,111 @@
 {
 	map			"mp_waw_castle_snow"
 	longname	"mpui_maps_mp_waw_castle_snow"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_killhouse_xmas"
+	longname	"mpui_maps_mp_killhouse_xmas"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc ss war tgr vg"
+}
+
+{
+	map			"mp_nuked_xmas"
+	longname	"mpui_maps_mp_nuked_xmas"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+//******************************************************************************
+// CUSTOM WW2 MAPS
+//******************************************************************************
+
+{
+	map			"mp_asylum"
+	longname	"mpui_maps_mp_asylum"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_breakout"
+	longname	"mpui_maps_mp_breakout"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_burgundy"
+	longname	"mpui_maps_mp_burgundy"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_carantan"
+	longname	"mpui_maps_mp_carantan"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_courtyard"
+	longname	"mpui_maps_mp_courtyard"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_dawnville"
+	longname	"mpui_maps_mp_dawnville"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_downtown"
+	longname	"mpui_maps_mp_downtown"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_farmhouse"
+	longname	"mpui_maps_mp_farmhouse"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_firestation"
+	longname	"mpui_maps_mp_firestation"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_stream"
+	longname	"mpui_maps_mp_stream"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_trainstation"
+	longname	"mpui_maps_mp_trainstation"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_waw_castle"
+	longname	"mpui_maps_mp_waw_castle"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_waw_decoy"
+	longname	"mpui_maps_mp_waw_decoy"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_waw_matmata"
+	longname	"mpui_maps_mp_waw_matmata"
+	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
+}
+
+{
+	map			"mp_waw_toujane"
+	longname	"mpui_maps_mp_waw_toujane"
 	gametype	"ass bel ch ctf dm dom ftag gr gg koth lms lts oitc re sab sd ss war tgr vg"
 }

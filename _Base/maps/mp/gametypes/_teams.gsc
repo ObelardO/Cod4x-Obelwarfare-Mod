@@ -38,9 +38,11 @@ init()
 	precacheShader("mpflag_spectator");
 
 	game["strings"]["autobalance"] = &"MP_AUTOBALANCE_NOW";
-	precacheString( &"MP_AUTOBALANCE_NOW" );
-	precacheString( &"MP_AUTOBALANCE_NEXT_ROUND" );
-	precacheString( &"MP_AUTOBALANCE_SECONDS" );
+	game["strings"]["autobalance_seconds"] = &"MP_AUTOBALANCE_SECONDS";
+	game["strings"]["autobalance_next_round"] = &"MP_AUTOBALANCE_NEXT_ROUND";
+	precacheString( game["strings"]["autobalance"] );
+	precacheString( game["strings"]["autobalance_seconds"] );
+	precacheString( game["strings"]["autobalance_next_round"] );
 
 	level.maxClients = getDvarInt( "sv_maxclients" );
 
@@ -236,9 +238,9 @@ updateTeamBalanceWarning()
 	
 	for(;;)
 	{
-		if( !getTeamBalance() )
+		if( ![[level.getTeamBalance]]() )
 		{
-			iPrintLnBold( &"MP_AUTOBALANCE_NEXT_ROUND" );
+			iPrintLnBold( game["strings"]["autobalance_next_round"] );
 			break; 
 		}
 		wait level.scr_teambalance_check_interval; 
@@ -258,7 +260,7 @@ updateTeamBalance()
 		level thread updateTeamBalanceWarning();
 		level waittill( "roundSwitching" );
 
-		if( !getTeamBalance() )
+		if( ![[level.getTeamBalance]]() )
 		{
 			level balanceTeams();
 		}
@@ -270,19 +272,19 @@ updateTeamBalance()
 		{
 			if( level.teamBalance )
 			{
-				if( !getTeamBalance() )
+				if( ![[level.getTeamBalance]]() )
 				{
 					// Check if we should show the message about auto balancing
 					if ( level.scr_teambalance_show_message == 1 ) {
 						// Make sure the that the delay is not zero
 						if ( level.scr_teambalance_delay > 0 ) {
-							iPrintLnBold( &"MP_AUTOBALANCE_SECONDS", level.scr_teambalance_delay );
+							iPrintLnBold( game["strings"]["autobalance_seconds"], level.scr_teambalance_delay );
 						}
 					}
 					// Use the new variable instead of a fixed value
 				    wait ( level.scr_teambalance_delay );
 
-					if( !getTeamBalance() )
+					if( ![[level.getTeamBalance]]() )
 						level balanceTeams();
 				}
 
@@ -516,8 +518,8 @@ balanceTeams()
 	
 	//if( level.teamBalanceDeadFirst )
 		//balanceDeadPlayers();
-	//if( !getTeamBalance() )
-		balanceMostRecent();
+	//if( ![[level.getTeamBalance]]() )
+		[[level.balanceTeams]]();
 }
 
 changeTeam( team )

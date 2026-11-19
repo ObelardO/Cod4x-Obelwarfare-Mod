@@ -15,7 +15,6 @@
 #include maps\mp\_utility;
 #include openwarfare\_utils;
 
-
 init()
 {
 	// assigns weapons with stat numbers from 0-149
@@ -169,6 +168,10 @@ init()
 	level thread onPlayerConnect();
 
 	level.c4explodethisframe = false;
+
+	preCacheString( &"OW_EXPLOSIVES_IS_TOO_FAR" );
+
+	level explosiveRegisterPlacementChecker( "claymore_mp", "distance", ::explosivePlacementCheckDistance );
 }
 
 onPlayerConnect()
@@ -196,7 +199,7 @@ onPlayerSpawned()
 		self.concussionEndTime = 0;
 		self.hasDoneCombat = false;
 		self thread watchWeaponUsage();
-		self thread watchGrenadeUsage();
+		self thread watchExplosivesUsageThread();
 		self thread watchWeaponChange();
 
 		self.droppedDeathWeapon = undefined;
@@ -733,8 +736,10 @@ friendlyFireCheck( owner, attacker, forcedFriendlyFireRule )
 	return false; // disallow it
 }
 
-watchGrenadeUsage()
+watchExplosivesUsageThread()
 {
+	//self is player
+
 	self endon( "death" );
 	self endon( "disconnect" );
 
@@ -753,11 +758,13 @@ watchGrenadeUsage()
 			self.claymorearray = [];
 	}
 
-	thread watchC4();
-	thread watchC4Detonation();
-	thread watchC4AltDetonation();
-	thread watchClaymores();
-	thread deleteC4AndClaymoresOnDisconnect();
+	self thread watchC4();
+	self thread watchC4Detonation();
+	self thread watchC4AltDetonation();
+
+	self thread watchClaymores();
+	
+	self thread deleteExplosivesOnDisconnect();
 
 	self thread watchForThrowbacks();
 
@@ -815,9 +822,42 @@ beginGrenadeTracking()
 	{
 		grenade thread maps\mp\gametypes\_shellshock::grenade_earthQuake();
 		grenade.originalOwner = self;
+
+		grenade.killCamEnt = spawn( "script_model", grenade.origin );
+		grenade.killCamEnt setModel( "tag_origin" );
+		grenade.killCamEnt.angles = self GetPlayerAngles();
+		grenade.killCamEnt.isKillcamEnt = true;
+		grenade.killCamEnt thread fragGrenadeKillcamTrackingThread( grenade );
+		grenade.killCamEnt thread deleteAfterTime( 5.0 );
 	}
 
 	self.throwingGrenade = false;
+}
+
+
+fragGrenadeKillcamTrackingThread( grenade )
+{
+	if ( !level.killcam )
+		return;
+
+	lastOrigin = self.origin;
+	trackingTime = 0.3;
+
+	while ( isDefined( grenade ) && isDefined( self ) )
+	{
+		newOrigin = grenade.origin;
+		moveVec = newOrigin - self.origin;
+		
+		if ( abs( moveVec[0] ) + abs( moveVec[1] ) + abs( moveVec[2] ) > 0.1 )
+		{
+			trackingAngles = vectorToAngles( moveVec );
+			trackingAngles = ( 0, trackingAngles[1], 0 );
+			self rotateTo( trackingAngles, trackingTime, 0.01, 0.01 );
+			self moveTo( newOrigin, trackingTime, 0.01, 0.01 );
+		}
+
+		wait trackingTime;
+	}
 }
 
 
@@ -866,25 +906,47 @@ watchC4()
 		self waittill( "grenade_fire", c4, weapname );
 		if ( weapname == "c4" || weapname == "c4_mp" )
 		{
-			if ( !self.c4array.size )
-				self thread watchC4AltDetonate();
-
-			self.c4array[self.c4array.size] = c4;
-			c4.owner = self;
-			if ( level.teamBased )
-				c4.targetname = "c4_mp_" + self.pers["team"];
-			c4.activated = false;
-
-			c4 thread maps\mp\gametypes\_shellshock::c4_earthQuake();
-			c4 thread c4Activate();
-			c4 thread c4Damage();
-
-			if ( level.scr_show_c4_blink_effect == 1 )
-			c4 thread playC4Effects();
-
-			c4 thread c4DetectionTrigger( self.pers["team"] );
+			c4 thread c4SpawnThread( self );
 		}
 	}
+}
+
+c4SpawnThread( owner )
+{
+	//self is c4
+
+	self.owner = owner;
+
+	if ( !owner.c4array.size )
+		owner thread watchC4AltDetonate();
+
+	owner.c4array[owner.c4array.size] = self;
+	if ( level.teamBased )
+		self.targetname = "c4_mp_" + owner.pers["team"];
+	self.activated = false;
+
+	self thread maps\mp\gametypes\_shellshock::c4_earthQuake();
+	self thread explosiveDemageThread();
+
+	self waitTillNotMoving();
+
+	if ( !isDefined( self ) || !isDefined( owner ) )
+	{
+		return;
+	}
+
+	if ( ! self isExplosivePlacementValid( "c4_mp" ) )
+	{
+		self returnExplosiveToOwner( "c4_mp" );
+		return;
+	}
+
+	self thread c4PlayEffects();
+	self thread c4Activate();
+	self thread c4DetectionTrigger( owner.pers["team"] );
+	
+	entitiesSpawnOrigin = self.origin + vector_scale( anglesToUp( self.angles ), 40 );
+	self thread explosiveKillcamThread( entitiesSpawnOrigin );
 }
 
 
@@ -899,25 +961,7 @@ watchClaymores()
 		self waittill( "grenade_fire", claymore, weapname );
 		if ( weapname == "claymore" || weapname == "claymore_mp" )
 		{
-			self.claymorearray[self.claymorearray.size] = claymore;
-			claymore.owner = self;
-			claymore.planttime = openwarfare\_timer::getTimePassed();
-
-			if ( level.teamBased && level.gametype != "bel" )
-			{
-				claymore.targetname = "claymore_mp_" + self.pers["team"];
-			}
-				
-			claymore thread c4Damage();
-			claymore thread claymoreDetonation();
-
-			if ( level.scr_claymore_show_laser_beams != 0 )
-				claymore thread playClaymoreEffects();
-
-			claymore thread claymoreDetectionTrigger_wait( self.pers["team"] );
-
-			if ( level.scr_claymore_show_headicon == 1 )
-				claymore maps\mp\_entityheadicons::setEntityHeadIcon(self.pers["team"], (0,0,20));
+			claymore thread claymoreSpawnThread( self );
 
 			/#
 			if ( getdvarint("scr_claymoredebug") )
@@ -927,6 +971,45 @@ watchClaymores()
 			#/
 		}
 	}
+}
+
+claymoreSpawnThread( owner )
+{
+	//self is claymore
+
+	self waitTillNotMoving();
+
+	if ( !isDefined ( owner ) )
+		return;
+
+	self.owner = owner;
+
+	if ( ! self isExplosivePlacementValid( "claymore_mp" ) )
+	{
+		self returnExplosiveToOwner( "claymore_mp" );
+		return;
+	}
+
+	ownerTeam = owner.pers["team"];
+
+	self.owner.claymorearray[owner.claymorearray.size] = self;
+	self.planttime = openwarfare\_timer::getTimePassed();
+
+	if ( level.teamBased && level.gametype != "bel" )
+	{
+		self.targetname = "claymore_mp_" + ownerTeam;
+	}
+		
+	self thread explosiveDemageThread();
+	self thread explosiveKillcamThread( self.origin );
+
+	self thread claymoreDetonationThread();
+	self thread claymoreDetectionThread( ownerTeam );
+
+	self thread claymorePlayEffects();
+
+	if ( level.scr_claymore_show_headicon == 1 )
+		self maps\mp\_entityheadicons::setEntityHeadIcon( ownerTeam, (0,0,20) );
 }
 
 /#
@@ -986,30 +1069,11 @@ waitTillNotMoving()
 	}
 }
 
-claymoreDetonation()
+claymoreDetonationThread()
 {
+	//self is claymore
+
 	self endon("death");
-
-	self waitTillNotMoving();
-
-	// Should we check the planting distance?
-	if ( level.scr_claymore_check_plant_distance == 1 ) {
-		// Check if this is an invalid plant
-		if ( distance( self.origin, self.owner.origin ) > 35 ) {
-			// Remove the claymore and give it back to the player
-			currentAmmo = self.owner getAmmoCount( "claymore_mp" );
-			if ( currentAmmo == 0 ) {
-				self.owner giveWeapon( "claymore_mp" );
-			}
-			currentAmmo++;
-
-			self.owner setWeaponAmmoStock( "claymore_mp", currentAmmo );
-			self.owner switchToWeapon( "claymore_mp" );
-			self delete();
-
-			return;
-		}
-	}
 
 	damagearea = spawn("trigger_radius", self.origin + (0,0,0-level.claymoreDetonateRadius), 0, level.claymoreDetonateRadius, level.claymoreDetonateRadius*2);
 	self thread deleteOnDeath( damagearea );
@@ -1021,20 +1085,18 @@ claymoreDetonation()
 		if ( !isPlaying( player ) )
 			continue;
 
-		if ( openwarfare\_timer::getTimePassed() - self.planttime < level.scr_claymore_arm_time )
-			continue;
-
-		if ( getdvarint("scr_claymoredebug") != 1 )
-		{
-			if ( isdefined( self.owner ) && player == self.owner && level.scr_claymore_friendly_fire != 2 )
-				continue;
-			if ( !friendlyFireCheck( self.owner, player, level.scr_claymore_friendly_fire ) )
-				continue;
-		}
 		if ( lengthsquared( player getVelocity() ) < 10 )
 			continue;
 
-		if ( !player shouldAffectClaymore( self ) )
+		if ( openwarfare\_timer::getTimePassed() - self.planttime < level.scr_claymore_arm_time )
+			continue;
+		//if ( getdvarint("scr_claymoredebug") != 1 )
+		//{
+		if ( !player isPlayerEnemyForExplosive( self ) )
+			continue;
+		//}
+
+		if ( !player isPlayerVisibleForClaymore( self ) )
 			continue;
 
 		if ( player damageConeTrace( self.origin, self ) > 0 )
@@ -1043,15 +1105,37 @@ claymoreDetonation()
 
 	self playsound ("claymore_activated");
 
+	self notify( "detonating", player );
+
 	wait level.claymoreDetectionGracePeriod;
 
 	self maps\mp\_entityheadicons::setEntityHeadIcon("none");
 
 	self.owner thread rebuildExplosiveArray();
+
 	self detonate();
 }
 
-shouldAffectClaymore( claymore )
+
+isPlayerEnemyForExplosive( explosive )
+{
+	//self is player
+
+	if ( !isDefined( self ) || !isPlaying( self ) || !isDefined( explosive.owner ) )
+		return false;
+
+	isTeamBased = level.teamBased && level.gametype != "bel";
+	isFriendlyFireAllowed = level.scr_claymore_friendly_fire != 0;
+	isSelfDamageAllowed = level.scr_claymore_friendly_fire == 2;
+
+	if ( explosive.owner == self )
+		return isSelfDamageAllowed;
+	else
+		return !isTeamBased || ( self.pers["team"] != explosive.owner.pers["team"] || isFriendlyFireAllowed );
+}
+
+
+isPlayerVisibleForClaymore( claymore )
 {
 	pos = self.origin + (0,0,32);
 
@@ -1068,6 +1152,157 @@ shouldAffectClaymore( claymore )
 	return ( dot > level.claymoreDetectionDot );
 }
 
+
+explosiveKillcamThread( entitiesSpawnOrigin ) 
+{
+	if ( !level.killcam )
+		return;
+	
+	self thread explosiveKillcamTriggerThread( entitiesSpawnOrigin );
+
+	waittillframeend; //Fixed: resolve race condition in next frame (array and trigger)
+
+	self thread explosiveKillcamTrackingEntitiesThread();
+
+	self waittill( "detonating", player );
+
+	self.killCamTrackingForcedPlayer = player;
+
+	trackingEntities = self.killCamTrackingEntities;
+	trackingTime = level.claymoreDetectionGracePeriod / 2;
+
+	self explosiveKillcamTrackingEntitiesUpdate( trackingTime, isDefined( player ) );
+
+	wait trackingTime;
+
+	wait 1.0;
+
+	if ( isDefined( trackingEntities ) )
+	{
+		for ( i = 0; i < trackingEntities.size; i++ )
+		{
+			if ( isDefined( trackingEntities[i] ) )
+				trackingEntities[i] delete();
+		}
+	}
+}
+
+
+explosiveKillcamTriggerThread( spawnOrigin )
+{
+	//self is explosive
+
+	self endon ( "death" );
+	self endon ( "detonating" );
+	level endon ( "game_ended" );
+
+	killcamDetectionTrigger = spawn( "trigger_radius", self.origin-(0,0,128), 0, 512, 256 );
+	killcamDetectionTrigger.detectId = "trigger" + getTime() + randomInt( 1000000 );
+
+	self.killcamDetectionTrigger = killcamDetectionTrigger;
+	self.killcamTrackingEntities = [];
+
+	self thread deleteOnDeath( killcamDetectionTrigger );
+
+	while(1)
+	{
+		killcamDetectionTrigger waittill( "trigger", player );
+	
+		if ( player isPlayerEnemyForExplosive( self ) ) //<-- may be track all players? for any possible kills
+		{
+			playerId = player getEntityNumber();
+
+			if ( !isDefined( self.killcamTrackingEntities[playerId] ) )
+			{
+				killcamTrackingEntity = spawn( "script_model", spawnOrigin );
+				killcamTrackingEntity setModel( "tag_origin" );
+				killcamTrackingEntity.angles = (0, self.angles[1], 0);
+
+				self.killcamTrackingEntities[playerId] = killcamTrackingEntity;
+
+				//Disabled: removing after killcam ends
+				//self thread deleteOnDeath( killcamTrackingEntity );
+
+				//player iPrintln( "[CKC] Player " + player.name + " ^2entered ^7claymore detection trigger" );
+			}
+		}
+	}
+}
+
+
+explosiveKillcamTrackingEntitiesThread()
+{
+	//self is explosive
+
+	self endon( "death" );
+	self endon( "detonating" );
+	level endon( "game_ended" );
+
+	trackingTime = 0.5;
+
+	while(1)
+	{
+		self explosiveKillcamTrackingEntitiesUpdate( trackingTime );
+
+		wait trackingTime;
+	}
+}
+
+
+explosiveKillcamTrackingEntitiesUpdate( trackingTime, trackingToSelf )
+{
+	trackedPlayersIds = getArrayKeys( self.killCamTrackingEntities );
+
+	for ( i = 0; i < trackedPlayersIds.size; i++ )
+	{
+		playerId = trackedPlayersIds[i];
+		trackedPlayer = getEntByNum( playerId );
+		trackingEntity = self.killCamTrackingEntities[playerId];
+
+		if ( isDefined( trackedPlayer ) && isPlaying( trackedPlayer ) && trackedPlayer isTouching( self.killcamDetectionTrigger ) )
+		{
+			if ( isDefined( trackingToSelf ) )
+				trackingAngles = self.angles;
+			else
+				trackingAngles = vectorToAngles( trackedPlayer.origin - trackingEntity.origin );
+
+			trackingEntity rotateTo ( (0, trackingAngles[1], 0) , trackingTime, 0.1, 0.1 );
+
+			//trackedPlayer iPrintLn ( "[CKC] Updating killcam target angles to " + trackedPlayer.name );
+		}
+	}
+}
+
+
+returnExplosiveToOwner( weaponName, reasonLocString )
+{
+	//self is explosive
+
+	currentAmmo = self.owner getAmmoCount( weaponName );
+	if ( currentAmmo == 0 ) {
+		self.owner giveWeapon( weaponName );
+	}
+	currentAmmo++;
+
+	self.owner setWeaponAmmoStock( weaponName, currentAmmo );
+	self.owner switchToWeapon( weaponName );
+
+	if ( isDefined( reasonLocString ) )
+        self.owner iprintlnbold( reasonLocString );
+
+	self delete();
+}
+
+
+deleteAfterTime( time )
+{
+	self endon ( "death" );
+	wait ( time );
+
+	self delete();
+}
+
+
 deleteOnDeath(ent)
 {
 	self waittill("death");
@@ -1079,8 +1314,6 @@ deleteOnDeath(ent)
 c4Activate()
 {
 	self endon("death");
-
-	self waittillNotMoving();
 
 	wait 0.05;
 
@@ -1190,16 +1423,23 @@ watchC4AltDetonation()
 }
 
 
-waitAndDetonate( delay )
+waitAndDetonate( delay, attacker )
 {
 	self endon("death");
+
+	self notify( "detonating" );
+	
 	wait delay;
 
 	self.owner thread rebuildExplosiveArray();
-	self detonate();
+
+	if ( isDefined( attacker ) )
+		self detonate( attacker );
+	else
+		self detonate();
 }
 
-deleteC4AndClaymoresOnDisconnect()
+deleteExplosivesOnDisconnect()
 {
 	self endon("death");
 	self waittill("disconnect");
@@ -1221,8 +1461,10 @@ deleteC4AndClaymoresOnDisconnect()
 	}
 }
 
-c4Damage()
+explosiveDemageThread()
 {
+	//self if explosive
+
 	self endon( "death" );
 
 	self setcandamage(true);
@@ -1276,8 +1518,7 @@ c4Damage()
 			attacker notify("destroyed_explosive");
 	}
 
-	self.owner thread rebuildExplosiveArray();
-	self detonate( attacker );
+	self waitAndDetonate( 0.1, attacker );
 	// won't get here; got death notify.
 }
 
@@ -1326,8 +1567,11 @@ saydamaged(orig, amount)
 	}
 }
 
-playC4Effects()
+c4PlayEffects()
 {
+	if ( level.scr_show_c4_blink_effect == 0 )
+		return;
+
 	self endon("death");
 	self waittill("activated");
 
@@ -1380,19 +1624,11 @@ c4DetectionTrigger( ownerTeam )
 }
 
 
-claymoreDetectionTrigger_wait( ownerTeam )
+claymoreDetectionThread( ownerTeam )
 {
-	self endon ( "death" );
-	waitTillNotMoving();
-
 	if ( level.oldschool )
 		return;
 
-	self thread claymoreDetectionTrigger( ownerTeam );
-}
-
-claymoreDetectionTrigger( ownerTeam )
-{
 	detectRadius = level.scr_claymore_detect_perk_distance;
 
 	trigger = spawn( "trigger_radius", self.origin-(0,0,128), 0, detectRadius, 256 );
@@ -1406,6 +1642,7 @@ claymoreDetectionTrigger( ownerTeam )
 	if ( isDefined( trigger.bombSquadIcon ) )
 		trigger.bombSquadIcon destroy();
 
+	self.killCamTrackingEntitiesTrigger = undefined;
 	trigger delete();
 }
 
@@ -1525,34 +1762,33 @@ showHeadIcon( trigger )
 }
 
 
-playClaymoreEffects()
+claymorePlayEffects()
 {
+	if ( level.scr_claymore_show_laser_beams == 0 )
+		return;
+
+	fxName = level.claymoreFXidRed;
+
+	if ( ( level.teamBased && level.gametype != "bel" ) && level.scr_claymore_show_laser_beams == 2 )
+	{
+		switch ( ToLower( game[self.owner.pers["team"]] ) )
+		{
+			case "opfor":
+			case "arab":	fxName = level.claymoreFXidYellow; break;
+			case "sas":		fxName = level.claymoreFXidGreen; break;
+			case "marines":	fxName = level.claymoreFXidBlue; break;
+			case "russian":	fxName = level.claymoreFXidRed; break;
+		}
+
+		// iPrintLn ("color: " + dbname + "^7 of team " + game[self.owner.pers["team"]] + " - " + game["allies"] + " vs " + game["axis"]);
+	}
+
 	self endon("death");
 
 	while(1)
 	{
-		self waittillNotMoving();
-
 		org = self getTagOrigin( "tag_fx" );
 		ang = self getTagAngles( "tag_fx" );
-
-		fxName = level.claymoreFXidRed;
-		dbname = "red";
-
-		if ( ( level.teamBased && level.gametype != "bel" ) && level.scr_claymore_show_laser_beams == 2 )
-		{
-			switch ( ToLower( game[self.owner.pers["team"]] ) )
-			{
-				case "sas":		fxName = level.claymoreFXidGreen; dbname = "^2green"; break;
-				case "marines":	fxName = level.claymoreFXidBlue; dbname = "^4blue"; break;
-
-				case "russian":	fxName = level.claymoreFXidRed; dbname = "^1red"; break;
-				case "opfor":
-				case "arab":	fxName = level.claymoreFXidYellow; dbname = "^3yellow"; break;
-			}
-
-			// iPrintLn ("color: " + dbname + "^7 of team " + game[self.owner.pers["team"]] + " - " + game["allies"] + " vs " + game["axis"]);
-		}
 
 		fx = spawnFx( fxName, org, anglesToForward( ang ), anglesToUp( ang ) );
 		triggerfx( fx );
@@ -1569,14 +1805,78 @@ playClaymoreEffects()
 		}
 
 		fx delete();
+		self waittillNotMoving();
 	}
 }
+
 
 clearFXOnDeath( fx )
 {
 	fx endon("death");
 	self waittill("death");
 	fx delete();
+}
+
+
+explosiveRegisterPlacementChecker( explosiveName, checkId, checkFunc )
+{
+	if ( ! isDefined( level.explosivePlacamentCheckers ) )
+	{
+		level.explosivePlacamentCheckers = [];
+	}
+
+	if ( ! isDefined( level.explosivePlacamentCheckers[explosiveName] ) )
+	{
+		level.explosivePlacamentCheckers[explosiveName] = [];
+	}
+
+	if ( ! isDefined( level.explosivePlacamentCheckers[explosiveName][checkId] ) )
+	{
+		level.explosivePlacamentCheckers[explosiveName][checkId] = checkFunc;
+	}
+}
+
+
+explosivePlacementCheckDistance()
+{
+	//self is explosive
+
+	if ( level.scr_claymore_check_plant_distance == 0 )
+		return true;
+
+	if ( distanceSquared( self.origin, self.owner.origin ) > 50 * 50 )
+	{
+		self.owner iprintlnbold( &"OW_EXPLOSIVES_IS_TOO_FAR" );
+		
+		return false;
+	}
+
+	return true;
+}
+
+
+isExplosivePlacementValid( explosiveName )
+{
+	if( !isDefined( level.explosivePlacamentCheckers[explosiveName] ) )
+	{
+		return true;
+	}
+
+	checkers = level.explosivePlacamentCheckers[explosiveName];
+	checkIds = getArrayKeys( checkers );
+
+	for( i = 0; i < checkIds.size; i++ )
+	{
+		checkId = checkIds[i];
+		checker = checkers[checkId];
+
+		if ( ! self [[checker]]() )
+		{
+			return false;
+		}
+	}
+
+	return true;
 }
 
 

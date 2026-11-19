@@ -42,6 +42,8 @@ init()
 	thread openwarfare\_extendedobituaries::init();
 	//thread openwarfare\_firingmode::init();	
 	thread openwarfare\_fitnesscs::init();	
+	thread openwarfare\_gamebalance::init();
+	thread openwarfare\_teamassign::init();
 	thread openwarfare\_globalchat::init();
 	thread openwarfare\_guidcs::init();
 	thread openwarfare\_healthsystem::init();
@@ -60,6 +62,7 @@ init()
 	thread openwarfare\_playerdvars::init();
 	thread openwarfare\_players::init();		
 	thread openwarfare\_powerrank::init();
+	thread openwarfare\_prestige::init();
 	thread openwarfare\_quickactions::init();
 	thread openwarfare\_rangefinder::init();
 	thread openwarfare\_realtimestats::init();

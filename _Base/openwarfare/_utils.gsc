@@ -532,6 +532,12 @@ trim( stringToTrim )
 }
 
 
+isStrStart( string1, subStr )
+{
+	return ( getSubStr( string1, 0, subStr.size ) == subStr );
+}
+
+
 // As we cannot reference native engine functions we have to use a wrapper to do this.
 // This way we can easily attach it to an event, which is useful for debugging.
 iPrintLnWrapper( message )
@@ -1159,6 +1165,12 @@ isSpectating()
 }
 
 
+isBot( player )
+{
+	return isDefined( player ) && isPlayer( player ) && player getGUID() == "0";
+}
+
+
 rulesetDvar( varName, varValue )
 {
 	// Store the variable for in-game monitoring
@@ -1180,6 +1192,15 @@ forceClientDvar( varName, varValue )
 	// Store the variable for in-game monitoring
 	if ( !isDefined( level.forcedDvars ) )
 		level.forcedDvars = [];
+
+	for ( i = 0; i < level.forcedDvars.size; i++ )
+	{
+		if ( level.forcedDvars[i]["name"] == varName )
+		{
+			level.forcedDvars[i]["value"] = varValue;
+			return;
+		}
+	}
 
 	// Store the new variable in the array
 	newElement = level.forcedDvars.size;
@@ -1420,7 +1441,7 @@ showHUD()
 {
 	self setClientDvars(
 		"ui_hud_hardcore", level.hardcoreMode,
-		"cg_drawSpectatorMessages", 1,
+		"cg_drawSpectatorMessages", level.scr_hud_show_spectator_messages,
 		"ui_hud_hardcore_show_minimap", level.scr_hud_hardcore_show_minimap,
 		"ui_hud_hardcore_show_compass", level.scr_hud_hardcore_show_compass,
 		"ui_hud_show_inventory", level.scr_hud_show_inventory
@@ -1446,4 +1467,93 @@ getLastAlivePlayer()
 	}
 
 	return winner;
+}
+
+fadeHudElem( hudElem, fadeTime )
+{
+	if ( !isDefined( hudElem ) )
+		return;
+	hudElem fadeOverTime( fadeTime );
+	hudElem.alpha = 0;
+}
+
+enableEnemyRadarDisplay( mode )
+{
+	if ( mode == 0 )
+		return;
+
+	level.enemyRadarDisplayMode = mode;
+	if ( mode == 1 )
+		level.blockHardpointUav = true;
+
+	level notify( "radar_timer_kill_allies" );
+	level notify( "radar_timer_kill_axis" );
+
+	players = level.players;
+	for ( i = 0; i < players.size; i++ )
+	{
+		if ( isDefined( players[i] ) )
+			players[i] notify( "radar_timer_kill" );
+	}
+
+	if ( mode == 1 && level.teamBased )
+	{
+		setTeamRadar( "allies", true );
+		setTeamRadar( "axis", true );
+		setDvar( "ui_uav_allies", 1 );
+		setDvar( "ui_uav_axis", 1 );
+	}
+
+	players = level.players;
+	for ( i = 0; i < players.size; i++ )
+	{
+		if ( isDefined( players[i] ) )
+			players[i] enablePlayerEnemyRadarDisplay( mode );
+	}
+}
+
+enablePlayerEnemyRadarDisplay( mode )
+{
+	if ( mode == 0 )
+		return;
+
+	if ( mode == 1 )
+	{
+		if ( self hasPerk( "specialty_gpsjammer" ) )
+			self unsetPerk( "specialty_gpsjammer" );
+
+		self.hasRadar = true;
+		self setClientDvar( "ui_uav_client", 1 );
+		return;
+	}
+
+	self setClientDvar( "g_compassShowEnemies", 1 );
+}
+
+disableEnemyRadarDisplay()
+{
+	level.enemyRadarDisplayMode = 0;
+	level.blockHardpointUav = false;
+
+	if ( level.teamBased )
+	{
+		setTeamRadar( "allies", false );
+		setTeamRadar( "axis", false );
+		setDvar( "ui_uav_allies", 0 );
+		setDvar( "ui_uav_axis", 0 );
+	}
+
+	players = level.players;
+	for ( i = 0; i < players.size; i++ )
+	{
+		if ( isDefined( players[i] ) )
+			players[i] disablePlayerEnemyRadarDisplay();
+	}
+}
+
+disablePlayerEnemyRadarDisplay()
+{
+	self.hasRadar = false;
+	self setClientDvar( "ui_uav_client", 0 );
+	self setClientDvar( "g_compassShowEnemies", 0 );
 }

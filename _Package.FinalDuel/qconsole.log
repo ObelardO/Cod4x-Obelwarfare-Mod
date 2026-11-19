@@ -1,0 +1,705 @@
+
+Logfile opened on Wed Sep 02 01:54:05 2026
+
+
+sv_maxclients is write protected.
+'50000' is not a valid value for cvar 'sv_connectTimeout'
+  Domain is any integer in range between '0' and '1800'
+Loaded fastfile 'localized_code_post_gfx_mp' in 21ms (2ms waiting)
+0 lines parsed from banlist_v2.dat, 0 errors occured
+Loading fastfile 'common_mp'
+Plugin simplebanlist loaded successfully. Server is currently running 1 plugins.
+used 39.00 MB memory in DB alloc
+Error: Tried adding a command for not loaded plugin! PID: 0.
+Adding a plugin script function for plugin 0, command name: SetFinalKillcamTargetEntity.
+^2[FinalKillcamEntityCamera]^7 loaded. Body proxy uses client slot ^3(maxclients - 1)^7.
+^2[FinalKillcamEntityCamera]^7 GSC: ^3SetFinalKillcamTargetEntity( victim getEntityNumber() )^7
+^2[FinalKillcamEntityCamera]^7 Snapshot hooks chain with other plugins; load FK after other snapshot patchers if possible.
+Plugin FinalKillcamEntityCamera loaded successfully. Server is currently running 2 plugins.
+g_gametype will be changed upon restarting.
+execing mod.cfg
+execing configs\openwarfare.cfg
+execing configs/server/advancedacp.cfg
+execing configs/server/advancedmvs.cfg
+execing configs/server/gamebalance.cfg
+execing configs/server/idlemonitor.cfg
+execing configs/server/mapcontrol.cfg
+g_gametype will be changed upon restarting.
+execing configs/server/match.cfg
+execing configs/server/messages.cfg
+Bad command or cvar: ..set
+execing configs/server/others.cfg
+Bad command or cvar: scr_endofgame_stats_log_external
+execing configs/server/overtime.cfg
+execing configs/server/rank.cfg
+execing configs/server/reservedslots.cfg
+execing configs/server/scorebot.cfg
+execing configs/server/sponsors.cfg
+execing configs/server/teams.cfg
+execing configs/server/voting.cfg
+execing configs/gameplay/classes.cfg
+execing configs/gameplay/fitnesscs.cfg
+execing configs/gameplay/hardpoints.cfg
+execing configs/gameplay/healthsystem.cfg
+execing configs/gameplay/hud.cfg
+Bad command or cvar: level.scr_hud_show_spectator_messages
+execing configs/gameplay/others.cfg
+execing configs/gameplay/perks.cfg
+execing configs/gameplay/scores.cfg
+execing configs/gameplay/sounds.cfg
+execing configs/gameplay/spectate.cfg
+execing configs/gameplay/visuals.cfg
+execing configs/gameplay/wdm.cfg
+execing configs/gameplay/weapons.cfg
+execing configs/gameplay/wlm.cfg
+execing configs/gameplay/wrm.cfg
+execing configs/gameplay/wwm.cfg
+execing configs/gametypes/assassination.cfg
+execing configs/gametypes/behindenemylines.cfg
+execing configs/gametypes/captureandhold.cfg
+execing configs/gametypes/capturetheflag.cfg
+execing configs/gametypes/domination.cfg
+Bad command or cvar: z
+execing configs/gametypes/freeforall.cfg
+execing configs/gametypes/freezetag.cfg
+execing configs/gametypes/greed.cfg
+execing configs/gametypes/gungame.cfg
+execing configs/gametypes/headquarters.cfg
+execing configs/gametypes/hideandseek.cfg
+execing configs/gametypes/lastmanstanding.cfg
+execing configs/gametypes/lastteamstanding.cfg
+execing configs/gametypes/oneinthechamber.cfg
+execing configs/gametypes/retrieval.cfg
+execing configs/gametypes/sabotage.cfg
+execing configs/gametypes/searchanddestroy.cfg
+execing configs/gametypes/sharpshooter.cfg
+execing configs/gametypes/teamdeathmatch.cfg
+execing configs/gametypes/teamgreed.cfg
+execing configs/gametypes/visualguide.cfg
+execing configs/mover/mover.cfg
+execing configs/mover/assassination.cfg
+execing configs/mover/behindenemylines.cfg
+execing configs/mover/captureandhold.cfg
+execing configs/mover/capturetheflag.cfg
+execing configs/mover/domination.cfg
+execing configs/mover/freeforall.cfg
+execing configs/mover/freezetag.cfg
+execing configs/mover/gungame.cfg
+execing configs/mover/headquarters.cfg
+execing configs/mover/hideandseek.cfg
+execing configs/mover/lastmanstanding.cfg
+execing configs/mover/lastteamstanding.cfg
+execing configs/mover/oneinthechamber.cfg
+execing configs/mover/retrieval.cfg
+execing configs/mover/sabotage.cfg
+execing configs/mover/searchanddestroy.cfg
+execing configs/mover/sharpshooter.cfg
+execing configs/mover/teamdeathmatch.cfg
+execing configs\ingameclasseditor.cfg
+execing configs\botwarfare.cfg
+execing configs\nightvisionenhanced.cfg
+execing configs\playercard.cfg
+execing configs\splashicons.cfg
+execing configs\better_ui.cfg
+execing configs\finalmapvoting.cfg
+execing configs\finalduel.cfg
+map_rotate...
+"sv_mapRotation" is: "map mp_convoy map mp_backlot map mp_bloc map mp_bog map mp_broadcast map mp_carentan map mp_countdown map mp_crash map mp_creek map mp_crossfire map mp_citystreets map mp_farm map mp_killhouse map mp_overgrown map mp_pipeline map mp_shipment map mp_showdown map mp_strike map mp_cargoship map mp_crash_snow map mp_vacant"
+
+"sv_mapRotationCurrent" is: ""
+
+Loaded fastfile 'common_mp' in 207ms (1ms waiting)
+Loading fastfile 'mod'
+used 5.55 MB memory in DB alloc
+Loaded fastfile 'mod' in 21ms (1ms waiting)
+------ Server Initialization ------
+Server: mp_convoy
+SV_SpawnServer checksum feed: 0x7e283bcd
+Current language: english
+Current fs_basepath: c:/local/cod4/cod4xgame
+Current fs_homepath: c:/local/cod4/cod4xgame
+Current search path:
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_splashes.iwd (25 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_sounds.iwd (48 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_nightvis.iwd (2 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_marker.iwd (2 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_mapvote.iwd (88 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_main.iwd (205 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_card.iwd (36 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_better_ui.iwd (83 files)
+c:/local/cod4/cod4xgame/mods/owtest
+c:/local/cod4/cod4xgame/usermaps/mp_convoy
+c:\local\cod4\cod4xgame\main\xbase_00.iwd (115 files)
+c:\local\cod4\cod4xgame\main\jcod4x_00.iwd (67 files)
+c:\local\cod4\cod4xgame\main\iw_13.iwd (265 files)
+c:\local\cod4\cod4xgame\main\iw_12.iwd (33 files)
+c:\local\cod4\cod4xgame\main\iw_11.iwd (448 files)
+c:\local\cod4\cod4xgame\main\iw_10.iwd (230 files)
+c:\local\cod4\cod4xgame\main\iw_06.iwd (416 files)
+c:\local\cod4\cod4xgame\main\iw_05.iwd (716 files)
+c:\local\cod4\cod4xgame\main\iw_04.iwd (765 files)
+c:\local\cod4\cod4xgame\main\iw_03.iwd (670 files)
+c:\local\cod4\cod4xgame\main\iw_02.iwd (1296 files)
+c:\local\cod4\cod4xgame\main\iw_01.iwd (1456 files)
+c:\local\cod4\cod4xgame\main\iw_00.iwd (1054 files)
+c:/local/cod4/cod4xgame/main
+c:/local/cod4/cod4xgame/main_shared
+c:/local/cod4/cod4xgame/players
+
+File Handles:
+handle 1: qconsole.log
+----------------------
+8020 files in iwd files
+Adding fastfile 'mp_convoy' to queue
+Loading fastfile 'mp_convoy'
+used 51.65 MB memory in DB alloc
+Waited 261 msec for asset 'maps/mp/mp_convoy.d3dbsp' of type 'col_map_mp'.
+------- Game Initialization -------
+gamename: Call of Duty 4
+gamedate: Feb 12 2009
+fs_ignoreLocalized is cheat protected.
+fs_ignoreLocalized is cheat protected.
+Loaded fastfile 'mp_convoy' in 393ms (2ms waiting)
+^1Error: Waited 117 msec for missing asset "codescripts/delete.gsx".
+-----------------------------------
+'0' is not a valid value for cvar 'bg_shock_lookControl_fadeTime'
+Domain is any float in range between '0.001' and '1000'
+By using this software you agree to the usage conditions you can find at https://github.com/callofduty4x/CoD4x_Server#usage-conditions-for-server-hosters
+-----------------------------------
+^4Calculate referenced files checksums...
+^4CRC32 for mods/owtest/z_ow_better_ui.iwd is 62b2b297 Len 1609858
+^4CRC32 for mods/owtest/z_ow_card.iwd is 595f130f Len 432936
+^4CRC32 for mods/owtest/z_ow_main.iwd is e95f5129 Len 7144579
+^4CRC32 for mods/owtest/z_ow_mapvote.iwd is f1de323c Len 7261813
+^4CRC32 for mods/owtest/z_ow_marker.iwd is 677b32a Len 4592
+^4CRC32 for mods/owtest/z_ow_nightvis.iwd is cb54882c Len 854313
+^4CRC32 for mods/owtest/z_ow_sounds.iwd is 9081c602 Len 9594951
+^4CRC32 for mods/owtest/z_ow_splashes.iwd is a952f315 Len 235208
+^4CRC32 for main/iw_11.iwd is e9cf411f Len 151420446
+^4CRC32 for zone/english/code_post_gfx_mp.ff is b144581c Len 89196
+^4CRC32 for zone/english/common_mp.ff is 4ef7a074 Len 13517381
+^4CRC32 for mods/owtest/mod.ff is 5f635630 Len 622865
+^4CRC32 for zone/english/mp_convoy.ff is b22c7a8f Len 39166328
+map_rotate...
+"sv_mapRotation" is: "map mp_convoy map mp_backlot map mp_bloc map mp_bog map mp_broadcast map mp_carentan map mp_countdown map mp_crash map mp_creek map mp_crossfire map mp_citystreets map mp_farm map mp_killhouse map mp_overgrown map mp_pipeline map mp_shipment map mp_showdown map mp_strike map mp_cargoship map mp_crash_snow map mp_vacant"
+
+"sv_mapRotationCurrent" is: "gametype bel map mp_ngbc_shipment gametype sd map mp_selo gametype sd map mp_backlot gametype gg map mp_angrydogs_pound gametype gr map mp_killhouse gametype ss map mp_struggle gametype sd map mp_carentan gametype gr map mp_getaway gametype sab map mp_crossfire gametype sab map mp_crash gametype sd map mp_crash gametype sd map mp_vacant gametype sab map mp_mission gametype sab map mp_showdown gametype sab map mp_mw2_boneyard gametype gg map mp_shipment gametype sd map mp_oukhta gametype sd map mp_broadcast gametype gg map mp_mw2_rust gametype hns map mp_bog gametype sab map mp_inv"
+
+==== ShutdownGame (1) ====
+------ Server Initialization ------
+Server: mp_ngbc_shipment
+SV_SpawnServer checksum feed: 0x1579059c
+Current language: english
+Current fs_basepath: c:/local/cod4/cod4xgame
+Current fs_homepath: c:/local/cod4/cod4xgame
+Current search path:
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_splashes.iwd (25 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_sounds.iwd (48 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_nightvis.iwd (2 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_marker.iwd (2 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_mapvote.iwd (88 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_main.iwd (205 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_card.iwd (36 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_better_ui.iwd (83 files)
+c:/local/cod4/cod4xgame/mods/owtest
+c:\local\cod4\cod4xgame\usermaps\mp_ngbc_shipment\mp_ngbc_shipment.iwd (12 files)
+c:/local/cod4/cod4xgame/usermaps/mp_ngbc_shipment
+c:\local\cod4\cod4xgame\main\xbase_00.iwd (115 files)
+c:\local\cod4\cod4xgame\main\jcod4x_00.iwd (67 files)
+c:\local\cod4\cod4xgame\main\iw_13.iwd (265 files)
+c:\local\cod4\cod4xgame\main\iw_12.iwd (33 files)
+c:\local\cod4\cod4xgame\main\iw_11.iwd (448 files)
+c:\local\cod4\cod4xgame\main\iw_10.iwd (230 files)
+c:\local\cod4\cod4xgame\main\iw_06.iwd (416 files)
+c:\local\cod4\cod4xgame\main\iw_05.iwd (716 files)
+c:\local\cod4\cod4xgame\main\iw_04.iwd (765 files)
+c:\local\cod4\cod4xgame\main\iw_03.iwd (670 files)
+c:\local\cod4\cod4xgame\main\iw_02.iwd (1296 files)
+c:\local\cod4\cod4xgame\main\iw_01.iwd (1456 files)
+c:\local\cod4\cod4xgame\main\iw_00.iwd (1054 files)
+c:/local/cod4/cod4xgame/main
+c:/local/cod4/cod4xgame/main_shared
+c:/local/cod4/cod4xgame/players
+
+File Handles:
+handle 1: qconsole.log
+----------------------
+8032 files in iwd files
+Unloading assets from fastfile 'mp_convoy' and creating default assets stubs
+Unloaded fastfile 'mp_convoy'
+PMem_Free( mp_convoy, Low )
+PMem_Free( mp_convoy, High )
+Adding fastfile 'mp_ngbc_shipment' to queue
+Loading fastfile 'mp_ngbc_shipment'
+used 25.33 MB memory in DB alloc
+Waited 76 msec for asset 'maps/mp/mp_ngbc_shipment.d3dbsp' of type 'col_map_mp'.
+------- Game Initialization -------
+gamename: Call of Duty 4
+gamedate: Feb 12 2009
+fs_ignoreLocalized is cheat protected.
+fs_ignoreLocalized is cheat protected.
+Loaded fastfile 'mp_ngbc_shipment' in 254ms (3ms waiting)
+^1Error: Waited 167 msec for missing asset "codescripts/delete.gsx".
+-----------------------------------
+'0' is not a valid value for cvar 'bg_shock_lookControl_fadeTime'
+Domain is any float in range between '0.001' and '1000'
+By using this software you agree to the usage conditions you can find at https://github.com/callofduty4x/CoD4x_Server#usage-conditions-for-server-hosters
+-----------------------------------
+^4Calculate referenced files checksums...
+^4CRC32 for usermaps/mp_ngbc_shipment/mp_ngbc_shipment.iwd is d2cb5fb1 Len 2991006
+^4CRC32 for mods/owtest/z_ow_better_ui.iwd is 62b2b297 Len 1609858
+^4CRC32 for mods/owtest/z_ow_card.iwd is 595f130f Len 432936
+^4CRC32 for mods/owtest/z_ow_main.iwd is e95f5129 Len 7144579
+^4CRC32 for mods/owtest/z_ow_mapvote.iwd is f1de323c Len 7261813
+^4CRC32 for mods/owtest/z_ow_marker.iwd is 677b32a Len 4592
+^4CRC32 for mods/owtest/z_ow_nightvis.iwd is cb54882c Len 854313
+^4CRC32 for mods/owtest/z_ow_sounds.iwd is 9081c602 Len 9594951
+^4CRC32 for mods/owtest/z_ow_splashes.iwd is a952f315 Len 235208
+^4CRC32 for main/iw_11.iwd is e9cf411f Len 151420446
+^4CRC32 for zone/english/code_post_gfx_mp.ff is b144581c Len 89196
+^4CRC32 for zone/english/common_mp.ff is 4ef7a074 Len 13517381
+^4CRC32 for mods/owtest/mod.ff is 5f635630 Len 622865
+^4CRC32 for usermaps/mp_ngbc_shipment/mp_ngbc_shipment.ff is fd07d05e Len 27883119
+^4CRC32 for usermaps/mp_ngbc_shipment/mp_ngbc_shipment_load.ff is df07690a Len 325
+^5Hitch warning: 3372 msec frame time
+Steam: Server connected successfully
+Resolving cod4master.activision.com 
+cod4master.activision.com resolved to 185.34.107.159:20810
+Masterserver needs token to complete registration
+Masterserver needs token to complete registration
+Resolving cod4master.activision.com
+cod4master.activision.com resolved to 185.34.107.159:20800
+GameServer is not VAC Secure!
+GameServer SteamID: [A:1:1591868425]
+Going from CS_FREE to CS_CONNECTED for blooddick num 1 from: 94.188.9.63:58791<=>87.247.157.159:28961
+0 lines parsed from banlist_v2.dat, 0 errors occured
+Check for file mods/owtest/mod.ff
+clientDownload: 1 : begining "mods/owtest/mod.ff"
+Writing mods/owtest/mod.ff len 622865
+Redirecting client 'blooddick' to http://cod4.obelardo.ru/files//mods/owtest/mod.ff
+Going from CS_FREE to CS_CONNECTED for Атомули Ядалато num 2
+0 lines parsed from banlist_v2.dat, 0 errors occured
+Going from CS_FREE to CS_CONNECTED for Накосика Сукасена num 3
+Going from CS_FREE to CS_CONNECTED for Toga num 4 from: 94.188.9.63:28960<=>87.247.157.159:28961
+==== ShutdownGame (0) ====
+------- Game Initialization -------
+gamename: Call of Duty 4
+gamedate: Feb 12 2009
+-----------------------------------
+0 lines parsed from banlist_v2.dat, 0 errors occured
+Check for file mods/owtest/mod.ff
+clientDownload: 4 : begining "mods/owtest/mod.ff"
+Writing mods/owtest/mod.ff len 622865
+Redirecting client 'Toga' to http://cod4.obelardo.ru/files//mods/owtest/mod.ff
+0 lines parsed from banlist_v2.dat, 0 errors occured
+Going from CS_FREE to CS_CONNECTED for Ятасука Накомоде num 5
+throwing script exception: font scale 1.200000 is below the expected minimum 1.400000
+
+^1******* script runtime error *******
+font scale 1.200000 is below the expected minimum 1.400000: (file 'scripts/_finalduel.gsc', line 367)
+    hud.fontScale = fontScale;
+                  *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 343)
+    hud.yes = createVoteHudElem( -120, 26, 1.2 );
+              *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 212)
+    createVoteHud();
+    *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 186)
+    level thread runVote( self, voters );
+                 *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 117)
+        self thread tryStartVote();
+                    *
+^1called from:
+(file 'openwarfare/_eventmanager.gsc', line 165)
+   self thread [[level.eventManager["onMenuResponse"][entityNumber][event]]]( menu, response );
+                                                                   *
+^1started from:
+(file 'openwarfare/_eventmanager.gsc', line 161)
+  self waittill( "menuresponse", menu, response);
+       *
+^1************************************
+throwing script exception: font scale 1.200000 is below the expected minimum 1.400000
+
+^1******* script runtime error *******
+font scale 1.200000 is below the expected minimum 1.400000: (file 'scripts/_finalduel.gsc', line 367)
+    hud.fontScale = fontScale;
+                  *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 346)
+    hud.no = createVoteHudElem( -40, 26, 1.2 );
+             *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 212)
+    createVoteHud();
+    *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 186)
+    level thread runVote( self, voters );
+                 *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 117)
+        self thread tryStartVote();
+                    *
+^1called from:
+(file 'openwarfare/_eventmanager.gsc', line 165)
+   self thread [[level.eventManager["onMenuResponse"][entityNumber][event]]]( menu, response );
+                                                                   *
+^1started from:
+(file 'openwarfare/_eventmanager.gsc', line 161)
+  self waittill( "menuresponse", menu, response);
+       *
+^1************************************
+throwing script exception: font scale 1.200000 is below the expected minimum 1.400000
+
+^1******* script runtime error *******
+font scale 1.200000 is below the expected minimum 1.400000: (file 'scripts/_finalduel.gsc', line 367)
+    hud.fontScale = fontScale;
+                  *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 349)
+    hud.need = createVoteHudElem( 40, 26, 1.2 );
+               *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 212)
+    createVoteHud();
+    *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 186)
+    level thread runVote( self, voters );
+                 *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 117)
+        self thread tryStartVote();
+                    *
+^1called from:
+(file 'openwarfare/_eventmanager.gsc', line 165)
+   self thread [[level.eventManager["onMenuResponse"][entityNumber][event]]]( menu, response );
+                                                                   *
+^1started from:
+(file 'openwarfare/_eventmanager.gsc', line 161)
+  self waittill( "menuresponse", menu, response);
+       *
+^1************************************
+throwing script exception: font scale 1.200000 is below the expected minimum 1.400000
+
+^1******* script runtime error *******
+font scale 1.200000 is below the expected minimum 1.400000: (file 'scripts/_finalduel.gsc', line 367)
+    hud.fontScale = fontScale;
+                  *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 352)
+    hud.time = createVoteHudElem( 120, 26, 1.2 );
+               *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 212)
+    createVoteHud();
+    *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 186)
+    level thread runVote( self, voters );
+                 *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 117)
+        self thread tryStartVote();
+                    *
+^1called from:
+(file 'openwarfare/_eventmanager.gsc', line 165)
+   self thread [[level.eventManager["onMenuResponse"][entityNumber][event]]]( menu, response );
+                                                                   *
+^1started from:
+(file 'openwarfare/_eventmanager.gsc', line 161)
+  self waittill( "menuresponse", menu, response);
+       *
+^1************************************
+^5Hitch warning: 1155 msec frame time
+map_rotate...
+"sv_mapRotation" is: "map mp_convoy map mp_backlot map mp_bloc map mp_bog map mp_broadcast map mp_carentan map mp_countdown map mp_crash map mp_creek map mp_crossfire map mp_citystreets map mp_farm map mp_killhouse map mp_overgrown map mp_pipeline map mp_shipment map mp_showdown map mp_strike map mp_cargoship map mp_crash_snow map mp_vacant"
+
+"sv_mapRotationCurrent" is: "gametype sd map mp_shipment gametype sd map mp_selo gametype sd map mp_backlot gametype gg map mp_angrydogs_pound gametype gr map mp_killhouse gametype ss map mp_struggle gametype sd map mp_carentan gametype gr map mp_getaway gametype sab map mp_crossfire gametype sab map mp_crash gametype sd map mp_crash gametype sd map mp_vacant gametype sab map mp_mission gametype sab map mp_showdown gametype sab map mp_mw2_boneyard gametype gg map mp_shipment gametype sd map mp_oukhta gametype sd map mp_broadcast gametype gg map mp_mw2_rust gametype hns map mp_bog gametype sab map mp_inv"
+
+Player Атомули Ядалато^7, 2 dropped: Unknown reason for dropping
+Player Накосика Сукасена^7, 3 dropped: Unknown reason for dropping
+Player Ятасука Накомоде^7, 5 dropped: Unknown reason for dropping
+==== ShutdownGame (1) ====
+------ Server Initialization ------
+Server: mp_shipment
+SV_SpawnServer checksum feed: 0x407055e2
+Current language: english
+Current fs_basepath: c:/local/cod4/cod4xgame
+Current fs_homepath: c:/local/cod4/cod4xgame
+Current search path:
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_splashes.iwd (25 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_sounds.iwd (48 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_nightvis.iwd (2 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_marker.iwd (2 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_mapvote.iwd (88 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_main.iwd (205 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_card.iwd (36 files)
+c:\local\cod4\cod4xgame\mods\owtest\z_ow_better_ui.iwd (83 files)
+c:/local/cod4/cod4xgame/mods/owtest
+c:/local/cod4/cod4xgame/usermaps/mp_shipment
+c:\local\cod4\cod4xgame\main\xbase_00.iwd (115 files)
+c:\local\cod4\cod4xgame\main\jcod4x_00.iwd (67 files)
+c:\local\cod4\cod4xgame\main\iw_13.iwd (265 files)
+c:\local\cod4\cod4xgame\main\iw_12.iwd (33 files)
+c:\local\cod4\cod4xgame\main\iw_11.iwd (448 files)
+c:\local\cod4\cod4xgame\main\iw_10.iwd (230 files)
+c:\local\cod4\cod4xgame\main\iw_06.iwd (416 files)
+c:\local\cod4\cod4xgame\main\iw_05.iwd (716 files)
+c:\local\cod4\cod4xgame\main\iw_04.iwd (765 files)
+c:\local\cod4\cod4xgame\main\iw_03.iwd (670 files)
+c:\local\cod4\cod4xgame\main\iw_02.iwd (1296 files)
+c:\local\cod4\cod4xgame\main\iw_01.iwd (1456 files)
+c:\local\cod4\cod4xgame\main\iw_00.iwd (1054 files)
+c:/local/cod4/cod4xgame/main
+c:/local/cod4/cod4xgame/main_shared
+c:/local/cod4/cod4xgame/players
+
+File Handles:
+handle 1: qconsole.log
+handle 3: enterleave.log
+----------------------
+8020 files in iwd files
+Unloading assets from fastfile 'mp_ngbc_shipment' and creating default assets stubs
+Unloaded fastfile 'mp_ngbc_shipment'
+PMem_Free( mp_ngbc_shipment, Low )
+PMem_Free( mp_ngbc_shipment, High )
+Adding fastfile 'mp_shipment' to queue
+Loading fastfile 'mp_shipment'
+used 27.49 MB memory in DB alloc
+Waited 103 msec for asset 'maps/mp/mp_shipment.d3dbsp' of type 'col_map_mp'.
+------- Game Initialization -------
+gamename: Call of Duty 4
+gamedate: Feb 12 2009
+fs_ignoreLocalized is cheat protected.
+fs_ignoreLocalized is cheat protected.
+Loaded fastfile 'mp_shipment' in 247ms (2ms waiting)
+^1Error: Waited 128 msec for missing asset "codescripts/delete.gsx".
+-----------------------------------
+'0' is not a valid value for cvar 'bg_shock_lookControl_fadeTime'
+Domain is any float in range between '0.001' and '1000'
+By using this software you agree to the usage conditions you can find at https://github.com/callofduty4x/CoD4x_Server#usage-conditions-for-server-hosters
+-----------------------------------
+^4Calculate referenced files checksums...
+^4CRC32 for mods/owtest/z_ow_better_ui.iwd is 62b2b297 Len 1609858
+^4CRC32 for mods/owtest/z_ow_card.iwd is 595f130f Len 432936
+^4CRC32 for mods/owtest/z_ow_main.iwd is e95f5129 Len 7144579
+^4CRC32 for mods/owtest/z_ow_mapvote.iwd is f1de323c Len 7261813
+^4CRC32 for mods/owtest/z_ow_marker.iwd is 677b32a Len 4592
+^4CRC32 for mods/owtest/z_ow_nightvis.iwd is cb54882c Len 854313
+^4CRC32 for mods/owtest/z_ow_sounds.iwd is 9081c602 Len 9594951
+^4CRC32 for mods/owtest/z_ow_splashes.iwd is a952f315 Len 235208
+^4CRC32 for main/iw_11.iwd is e9cf411f Len 151420446
+^4CRC32 for zone/english/code_post_gfx_mp.ff is b144581c Len 89196
+^4CRC32 for zone/english/common_mp.ff is 4ef7a074 Len 13517381
+^4CRC32 for mods/owtest/mod.ff is 5f635630 Len 622865
+^4CRC32 for zone/english/mp_shipment.ff is 75761e65 Len 29040480
+^5Hitch warning: 1469 msec frame time
+Can not register server on the masterserver. Server needs to provide a valid token in cvar sv_authtoken.
+Can not register server on the masterserver. Server needs to provide a valid token in cvar sv_authtoken.
+0 lines parsed from banlist_v2.dat, 0 errors occured
+0 lines parsed from banlist_v2.dat, 0 errors occured
+Going from CS_FREE to CS_CONNECTED for Мояхата Сыровата num 2
+Going from CS_FREE to CS_CONNECTED for Комухари Комусиси num 3
+Going from CS_FREE to CS_CONNECTED for Комуто Херовато num 5
+Player Комухари Комусиси^7, 3 dropped: Player kicked by scriptadmin
+
+Going from CS_FREE to CS_CONNECTED for Томимо Токосо num 3
+Going from CS_FREE to CS_CONNECTED for Толисику Толикаку num 6
+==== ShutdownGame (0) ====
+------- Game Initialization -------
+gamename: Call of Duty 4
+gamedate: Feb 12 2009
+-----------------------------------
+Going from CS_FREE to CS_CONNECTED for Херанука Пороялю num 7
+Going from CS_FREE to CS_CONNECTED for Тояма Токанава num 8
+Player Тояма Токанава^7, 8 dropped: Player kicked by scriptadmin
+
+Player Херанука Пороялю^7, 7 dropped: Player kicked by scriptadmin
+
+Player Мояхата Сыровата^7, 2 dropped: Player kicked by scriptadmin
+
+Player Томимо Токосо^7, 3 dropped: Player kicked by scriptadmin
+
+Player Комуто Херовато^7, 5 dropped: Player kicked by scriptadmin
+
+==== ShutdownGame (0) ====
+------- Game Initialization -------
+gamename: Call of Duty 4
+gamedate: Feb 12 2009
+fs_ignoreLocalized is cheat protected.
+-----------------------------------
+'0' is not a valid value for cvar 'bg_shock_lookControl_fadeTime'
+Domain is any float in range between '0.001' and '1000'
+Player Толисику Толикаку^7, 6 dropped: Player kicked by scriptadmin
+
+==== ShutdownGame (0) ====
+------- Game Initialization -------
+gamename: Call of Duty 4
+gamedate: Feb 12 2009
+-----------------------------------
+throwing script exception: font scale 1.200000 is below the expected minimum 1.400000
+
+^1******* script runtime error *******
+font scale 1.200000 is below the expected minimum 1.400000: (file 'scripts/_finalduel.gsc', line 367)
+    hud.fontScale = fontScale;
+                  *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 343)
+    hud.yes = createVoteHudElem( -120, 26, 1.2 );
+              *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 212)
+    createVoteHud();
+    *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 186)
+    level thread runVote( self, voters );
+                 *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 117)
+        self thread tryStartVote();
+                    *
+^1called from:
+(file 'openwarfare/_eventmanager.gsc', line 165)
+   self thread [[level.eventManager["onMenuResponse"][entityNumber][event]]]( menu, response );
+                                                                   *
+^1started from:
+(file 'openwarfare/_eventmanager.gsc', line 161)
+  self waittill( "menuresponse", menu, response);
+       *
+^1************************************
+throwing script exception: font scale 1.200000 is below the expected minimum 1.400000
+
+^1******* script runtime error *******
+font scale 1.200000 is below the expected minimum 1.400000: (file 'scripts/_finalduel.gsc', line 367)
+    hud.fontScale = fontScale;
+                  *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 346)
+    hud.no = createVoteHudElem( -40, 26, 1.2 );
+             *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 212)
+    createVoteHud();
+    *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 186)
+    level thread runVote( self, voters );
+                 *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 117)
+        self thread tryStartVote();
+                    *
+^1called from:
+(file 'openwarfare/_eventmanager.gsc', line 165)
+   self thread [[level.eventManager["onMenuResponse"][entityNumber][event]]]( menu, response );
+                                                                   *
+^1started from:
+(file 'openwarfare/_eventmanager.gsc', line 161)
+  self waittill( "menuresponse", menu, response);
+       *
+^1************************************
+throwing script exception: font scale 1.200000 is below the expected minimum 1.400000
+
+^1******* script runtime error *******
+font scale 1.200000 is below the expected minimum 1.400000: (file 'scripts/_finalduel.gsc', line 367)
+    hud.fontScale = fontScale;
+                  *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 349)
+    hud.need = createVoteHudElem( 40, 26, 1.2 );
+               *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 212)
+    createVoteHud();
+    *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 186)
+    level thread runVote( self, voters );
+                 *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 117)
+        self thread tryStartVote();
+                    *
+^1called from:
+(file 'openwarfare/_eventmanager.gsc', line 165)
+   self thread [[level.eventManager["onMenuResponse"][entityNumber][event]]]( menu, response );
+                                                                   *
+^1started from:
+(file 'openwarfare/_eventmanager.gsc', line 161)
+  self waittill( "menuresponse", menu, response);
+       *
+^1************************************
+throwing script exception: font scale 1.200000 is below the expected minimum 1.400000
+
+^1******* script runtime error *******
+font scale 1.200000 is below the expected minimum 1.400000: (file 'scripts/_finalduel.gsc', line 367)
+    hud.fontScale = fontScale;
+                  *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 352)
+    hud.time = createVoteHudElem( 120, 26, 1.2 );
+               *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 212)
+    createVoteHud();
+    *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 186)
+    level thread runVote( self, voters );
+                 *
+^1called from:
+(file 'scripts/_finalduel.gsc', line 117)
+        self thread tryStartVote();
+                    *
+^1called from:
+(file 'openwarfare/_eventmanager.gsc', line 165)
+   self thread [[level.eventManager["onMenuResponse"][entityNumber][event]]]( menu, response );
+                                                                   *
+^1started from:
+(file 'openwarfare/_eventmanager.gsc', line 161)
+  self waittill( "menuresponse", menu, response);
+       *
+^1************************************
+^5Hitch warning: 1082 msec frame time
+==== ShutdownGame (0) ====
+------- Game Initialization -------
+gamename: Call of Duty 4
+gamedate: Feb 12 2009
+-----------------------------------
+quitting...
+All plugins have terminated
+----- Server Shutdown -----
+
+With the reason: EXE_SERVERQUIT
+==== ShutdownGame (1) ====
+Player blooddick^7, 1 dropped: EXE_DISCONNECTED
+Player Toga^7, 4 dropped: EXE_DISCONNECTED
+---------------------------
+Unloading assets from fastfile 'mp_shipment' and deleting all assets
+Unloading assets from fastfile 'mod' and deleting all assets
+Unloading assets from fastfile 'common_mp' and deleting all assets
+Unloading assets from fastfile 'localized_code_post_gfx_mp' and deleting all assets
+Unloading assets from fastfile 'code_post_gfx_mp' and deleting all assets
+Unloaded fastfile 'mp_shipment'
+PMem_Free( mp_shipment, Low )
+PMem_Free( mp_shipment, High )
+Unloaded fastfile 'mod'
+PMem_Free( mod, Low )
+PMem_Free( mod, High )
+Unloaded fastfile 'common_mp'
+PMem_Free( common_mp, Low )
+PMem_Free( common_mp, High )
+Unloaded fastfile 'localized_code_post_gfx_mp'
+PMem_Free( localized_code_post_gfx_mp, Low )
+PMem_Free( localized_code_post_gfx_mp, High )
+Unloaded fastfile 'code_post_gfx_mp'
+PMem_Free( code_post_gfx_mp, Low )
+PMem_Free( code_post_gfx_mp, High )

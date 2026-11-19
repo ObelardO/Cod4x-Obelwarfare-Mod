@@ -14,6 +14,12 @@
 #undef INV_SLOT_R3_IS_VISIBLE
 #define INV_SLOT_R3_IS_VISIBLE      ( WEAPINFO_ITIMS_IS_VISIBLE && ActionSlotUsable( 3 ) )
 
+#define INV_SLOT_R3_ALPHA           ( INV_DPAD_ALPHA * ( 1 - dvarInt( ui_explosive_locked ) * 0.5 ) )
+#define INV_SLOT_R3_LOCKED          ( INV_SLOT_R3_IS_VISIBLE && dvarInt( ui_explosive_locked ) == 1 )
+
+#undef INV_SLOT_R3_AMMO_IS_VISIBLE
+#define INV_SLOT_R3_AMMO_IS_VISIBLE  ( INV_SLOT_R3_IS_VISIBLE && dvarInt( ui_explosive_locked ) == 0 )
+
 menuDef
 {
     name			"weaponinfo"
@@ -21,7 +27,7 @@ menuDef
 	exp				rect Y( 0 - ONLINEGAME_OFFSET_EXP )
 	exp				rect X( 0 - ONLINEGAME_OFFSET_EXP )
     fullScreen		1
-    visible			when( HUD_IS_VISIBLE && CLIENT_NOT_DEAD && CLIENT_NOT_FREE_SPECTATING && INV_IS_VISIBLE && dvarInt( ui_hud_has_weapon ) == 1 )
+    visible			when( HUD_IS_VISIBLE && HUD_IS_NOT_SCOPED && CLIENT_NOT_DEAD && CLIENT_NOT_FREE_SPECTATING && INV_IS_VISIBLE && dvarInt( ui_hud_has_weapon ) == 1 )
 
     //WEAPON BACK
     itemDef
@@ -89,6 +95,7 @@ menuDef
 	INV_SLOT_AMMO_R2 ( ownerdraw CG_OFFHAND_WEAPON_AMMO_SMOKEFLASH, INV_CLR_WHITE, INV_DPAD_ALPHA, INV_AMMO_POS_FIX_NONE )	
 
     //EXPLOSIVES (MOVED FROM DPAD)
-	INV_SLOT_ICON_R3 ( ownerdraw CG_PLAYER_ACTIONSLOT_3, INV_ICON_NONE, "+actionslot 3", INV_DPAD_ALPHA )
+	INV_SLOT_ICON_R3 ( ownerdraw CG_PLAYER_ACTIONSLOT_3, INV_ICON_NONE, "+actionslot 3", INV_SLOT_R3_ALPHA )
 	INV_SLOT_AMMO_R3 ( ownerdraw CG_PLAYER_ACTIONSLOT_3, INV_CLR_WHITE, INV_DPAD_ALPHA, INV_AMMO_POS_FIX_DPAD )	
+	INV_SLOT_LOCK_RIGHT ( INV_ALIGN_R, INV_SLOT_R3_POS_X, INV_SLOT_R3_LOCKED, INV_DPAD_ALPHA )
 }

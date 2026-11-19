@@ -15,7 +15,7 @@
 #include "ui_mp/common_macro.inc"
 
 #include "ui_mp/menustyle.inc"
-#include "ui_mp/choices_setup_teams.menu"
+#include "ui/choices_setup_common.menu"
 
 #undef CHOICE_X_START
 #undef CHOICE_Y_START
