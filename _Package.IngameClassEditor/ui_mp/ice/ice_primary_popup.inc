@@ -20,7 +20,7 @@
     /* weapon desc unlocked*/\
     PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/statstable.csv",4,dvarString( highlight_dvar ),7), TEXTSIZE_INFO_DESC, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, CHOICE_TEXTCOLOR visible when( LOCAL_WEAPON_HL_ALLOWED( wClass ) && LOCAL_WEAPON_HL_RANKED( wClass ) && !dvarBool( "ui_primary_equipped_overkill" ) ); )\
     PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@OW_ICE_LOCK_SERVER", TEXTSIZE_INFO_DESC, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( LOCAL_WEAPON_HL_ALLOWED( wClass ) == 0 && !dvarBool( "ui_primary_equipped_overkill" ) ); )\
-    PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@OW_ICE_LOCK_RANK", TEXTSIZE_INFO_DESC, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( LOCAL_WEAPON_HL_ALLOWED( wClass ) && LOCAL_WEAPON_HL_RANKED( wClass ) == 0 && !dvarBool( "ui_primary_equipped_overkill" ) ); )\
+    PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/statstable.csv",4,dvarString( highlight_dvar ),10), TEXTSIZE_INFO_DESC, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( LOCAL_WEAPON_HL_ALLOWED( wClass ) && LOCAL_WEAPON_HL_RANKED( wClass ) == 0 && !dvarBool( "ui_primary_equipped_overkill" ) ); )\
     PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@OW_ICE_LOCK_EQUIPPED", TEXTSIZE_INFO_DESC, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( dvarBool( "ui_primary_equipped_overkill" ) ); )\
     PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+6) 0 (CHOICE_SIZE_Y*2) CHOICE_SIZE_Y CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "specialty_locked", 1 1 1 1, 0, 2, CHOICE_POPUP_BORDER_COLOR visible when( LOCAL_WEAPON_HL_ALLOWED( wClass ) == 0 || LOCAL_WEAPON_HL_RANKED( wClass ) == 0 || dvarBool( "ui_primary_equipped_overkill" ) ); ) \
     PREPROC_SHADER_DRAW_ALIGNED( 0 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "white", 0.15 0.15 0.17 1, 0, 2, CHOICE_POPUP_BORDER_COLOR )\
@@ -103,10 +103,12 @@
     dvarString( "ui_primary_selected" ) == "secondary" && dvarString( "loadout_primary" ) != wRef && LOCAL_OVERKILL_CLASS_ALLOWED( overkillBit )
 
 #define LOCAL_WEAPON_DISABLED_OVERKILL( wClass, wRef, statOffset ) \
-    LOCAL_WEAPON_IS_ALLOWED ( wClass, wRef, statOffset ) && dvarString( "loadout_perk2" ) == "specialty_twoprimaries" && \
     ( \
-        ( dvarString( "ui_primary_selected" ) == "primary" && dvarString ( "loadout_secondary" ) == wRef ) || \
-        ( dvarString( "ui_primary_selected" ) == "secondary" && dvarString ( "loadout_primary" ) == wRef ) \
+        LOCAL_WEAPON_IS_ALLOWED( wClass, wRef, statOffset ) && dvarString( "loadout_perk2" ) == "specialty_twoprimaries" && \
+        ( \
+            ( dvarString( "ui_primary_selected" ) == "primary" && dvarString( "loadout_secondary" ) == wRef ) || \
+            ( dvarString( "ui_primary_selected" ) == "secondary" && dvarString( "loadout_primary" ) == wRef ) \
+        ) \
     )
 
 #define LOCAL_OVERKILL_CLASS_ALLOWED( overkillBit ) \

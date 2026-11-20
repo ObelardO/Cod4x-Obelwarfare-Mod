@@ -294,7 +294,7 @@ menuDef
     int( tablelookup( "mp/statsTable.csv", 4, ref, 0 ) ) - statOffset
 
 #define ICE_GET_MASK_VALUE( mask, bit ) \
-    ( dvarInt( mask ) & ( 1<<int( bit ) ) )
+    ( dvarInt( mask ) & ( 1 << ( int( bit ) ) ) )
 
 #define ICE_CURRENT_LABEL( itemIndex, textArg, visArg ) \
     itemDef \
