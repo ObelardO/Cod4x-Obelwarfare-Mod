@@ -284,14 +284,14 @@ menuDef
 #define ICE_STAT_SPECOPS		10
 #define ICE_STAT_ASSAULT		20
 /* mp44 is stats row 57. 57 - 50 = bit 7, the first free assault bit. */
-#define ICE_STAT_ASSAULT_EXTRA		50
+#define ICE_STAT_ASSAULT_EXTRA	50
 #define ICE_STAT_SNIPER			60
-#define ICE_STAT_DEMOLITIONS		70
-#define ICE_STAT_HEAVYGUNNER		80
+#define ICE_STAT_DEMOLITIONS	70
+#define ICE_STAT_HEAVYGUNNER	80
 #define ICE_STAT_GRENADE		101
 
 #define ICE_GET_STATS_INDEX( ref, statOffset ) \
-    ( int( tablelookup( "mp/statsTable.csv", 4, ref, 0 ) ) - statOffset )
+    int( tablelookup( "mp/statsTable.csv", 4, ref, 0 ) ) - statOffset
 
 #define ICE_GET_MASK_VALUE( mask, bit ) \
     ( dvarInt( mask ) & ( 1<<int( bit ) ) )

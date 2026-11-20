@@ -32,12 +32,6 @@ init()
         //Base module struct
         level.cacIngame = spawnStruct();
 
-        //References to stock tables
-        perksTableRef = "perks_table";
-        weaponsTableRef = "weapons_table";
-        attachmentTableRef = "attachment_table";
-        camoTableRef = "camo_table";
-
         //Initialize custom class info with corresponding stat offsets and stock response for each custom class
         //Used to determine which custom class is being edited based on menu response and to save the loadout data to correct stat offsets when selecting a custom class
         level.cacIngame.classInfo = [];
@@ -49,15 +43,15 @@ init()
 
         //Initialize item info with corresponding stat offsets and data types for each item in the loadout (primary, secondary, attachments, perks, etc)
         level.cacIngame.itemInfo = [];
-        initItemInfo( 1, "primary", weaponsTableRef );
-        initItemInfo( 2, "primary_attachment", attachmentTableRef );
-        initItemInfo( 3, "secondary", weaponsTableRef );
-        initItemInfo( 4, "secondary_attachment", attachmentTableRef );
-        initItemInfo( 5, "perk1", perksTableRef ); // equipment
-        initItemInfo( 6, "perk2", perksTableRef ); // weapon
-        initItemInfo( 7, "perk3", perksTableRef ); // ability
-        initItemInfo( 8, "grenade", weaponsTableRef );
-        initItemInfo( 9, "camo", camoTableRef );
+        initItemInfo( 1, "primary", "lut_weap" );
+        initItemInfo( 2, "primary_attachment", "lut_atch" );
+        initItemInfo( 3, "secondary", "lut_weap" );
+        initItemInfo( 4, "secondary_attachment", "lut_atch" );
+        initItemInfo( 5, "perk1", "lut_perk" ); // equipment
+        initItemInfo( 6, "perk2", "lut_perk" ); // weapon
+        initItemInfo( 7, "perk3", "lut_perk" ); // ability
+        initItemInfo( 8, "grenade", "lut_weap" );
+        initItemInfo( 9, "camo", "lut_camo" );
 
         //Initialize allowed items list that will be used for validating loadout selections and updating allowed items in UI based on selected weapons and perks
         initAllowedItems();
@@ -101,9 +95,6 @@ onPlayerConnected()
     self.cacIngame.loadoutDataRef = [];
     self.cacIngame.classInfoIndex = 0;
     self.cacIngame.stockResponse = "";
-
-    //Open all classes for player so they can be edited and selected without having to exit game and edit them in create a class menu
-    self openAllClasses();
 
     //Start listening to menu responses
     self thread addNewEvent( "onMenuResponse", ::onMenuResponse );
@@ -239,16 +230,18 @@ getRefByStatValue( tableSource, statValue )
 {
     switch( tableSource )
     {
-        case "perks_table":
+        //Profile stat id in column 1. Perks use the same id, so perks_table is this alias.
+        case "lut_stat":
+        case "lut_perk":
             return tableLookup( "mp/statsTable.csv", 1, statValue, 4 );
 
-        case "weapons_table":
+        case "lut_weap":
             return tableLookup( "mp/statsTable.csv", 1, statValue + 3000, 4 );
 
-        case "attachment_table":
+        case "lut_atch":
             return tableLookup( "mp/attachmentTable.csv", 9, statValue, 4 );
 
-        case "camo_table":
+        case "lut_camo":
             return tableLookup( "mp/attachmentTable.csv", 11, statValue, 4 );
     }
 }
@@ -258,16 +251,18 @@ getStatValueByRef( tableSource, valueRef )
 {
     switch( tableSource )
     {
-        case "perks_table":
+        //Profile stat id in column 1, with no 3000 slot adjustment. Perks use the same id.
+        case "lut_stat":
+        case "lut_perk":
             return int( tableLookup( "mp/statsTable.csv", 4, valueRef, 1 ) );
 
-        case "weapons_table":
+        case "lut_weap":
             return int( tableLookup( "mp/statsTable.csv", 4, valueRef, 1 ) ) - 3000;
 
-        case "attachment_table":
+        case "lut_atch":
             return int( tableLookup( "mp/attachmentTable.csv", 4, valueRef, 9 ) );
 
-        case "camo_table":
+        case "lut_camo":
             return int( tableLookup( "mp/attachmentTable.csv", 4, valueRef, 11 ) );
     }
 
@@ -353,20 +348,6 @@ saveLoadoutData()
     }
 }
 
-//Unlock all custom classes if not unlocked to allow players to edit and select them without
-openAllClasses()
-{
-	//If the first custom class is unlocked then in order
-	//to display all of the classes in the class selection
-	//menu without having to exit game and edit them
-	//then we need to unlock them on initialization of the menu
-	//so players can edit and then select from any custom class.
-	if( self getStat( 210 ) < 1 ) self setStat( 210, 1 );
-	if( self getStat( 220 ) < 1 ) self setStat( 220, 1 );
-	if( self getStat( 230 ) < 1 ) self setStat( 230, 1 );	
-	if( self getStat( 240 ) < 1 ) self setStat( 240, 1 );		
-}
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                             CLASS VALIDATION                                            //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -378,22 +359,45 @@ initAllowedItems()
     level.cacIngame.allowedItemsIndexesLookup = [];    //Helper index arrays: [className][itemType] = [indexes]
     level.cacIngame.weaponClassByWeaponRef = [];         //Helper direct lookup for weapons only: [weaponName] = className
 
+    initPrimaryClasses();
+
     //Initialize allowed weapons (primary weapons and attachments for each weapon class and pistols and grenades))
-    initAllowedWeapons( 20,  "assault",     "" );
-    initAllowedWeapons( 10,  "specops",     "" );
-    initAllowedWeapons( 80,  "heavygunner", "" );
-    initAllowedWeapons( 70,  "demolitions", "" );
-    initAllowedWeapons( 60,  "sniper",      "" );
+    for ( i = 0; i < level.cacIngame.primaryClasses.size; i++ )
+    {
+        initAllowedWeapons( level.cacIngame.primaryClasses[i].statOffset, level.cacIngame.primaryClasses[i].name, "" );
+    }
+
     initAllowedWeapons( 0,   "",    "pistol" );
     initAllowedWeapons( 101, "",    "grenade" );
 
     //Initialize allowed perks for each weapon class (and master option for all classes)
     initAllowedPerks( "" );
-    initAllowedPerks( "assault" );
-    initAllowedPerks( "specops" );
-    initAllowedPerks( "heavygunner" );
-    initAllowedPerks( "demolitions" );
-    initAllowedPerks( "sniper" );
+
+    for ( i = 0; i < level.cacIngame.primaryClasses.size; i++ )
+    {
+        initAllowedPerks( level.cacIngame.primaryClasses[i].name );
+    }
+
+    initAllowedCamos();
+}
+
+//Class order is the overkill bit order. statOffset is the statsTable row where that class starts.
+initPrimaryClasses()
+{
+    level.cacIngame.primaryClasses = [];
+    addPrimaryClass( "assault", 20 );
+    addPrimaryClass( "specops", 10 );
+    addPrimaryClass( "heavygunner", 80 );
+    addPrimaryClass( "demolitions", 70 );
+    addPrimaryClass( "sniper", 60 );
+}
+
+addPrimaryClass( className, statOffset )
+{
+    index = level.cacIngame.primaryClasses.size;
+    level.cacIngame.primaryClasses[index] = spawnStruct();
+    level.cacIngame.primaryClasses[index].name = className;
+    level.cacIngame.primaryClasses[index].statOffset = statOffset;
 }
 
 //Initialize allowed weapons in weapon class
@@ -518,6 +522,25 @@ initAllowedPerks( className )
     }
 }
 
+//Camo rows live in attachmentTable. Column 11 is the popup bit, in the same order as the menu.
+initAllowedCamos()
+{
+    camoIndex = 0;
+    camoRef = "";
+
+    for ( camoIndex = 0; camoIndex < 15; camoIndex++ )
+    {
+        if ( tableLookup( "mp/attachmentTable.csv", 11, camoIndex, 2 ) != "camo" )
+            break;
+
+        camoRef = getRefByStatValue( "lut_camo", camoIndex );
+        if ( !isDefined( camoRef ) || camoRef == "" )
+            break;
+
+        addAllowedItem( "", camoRef, "camo_allow_" + camoRef, "camo", "ui_ice_rank_camo", camoIndex );
+    }
+}
+
 //Add item to the global allowed items list
 addAllowedItem( className, itemName, dvarName, itemType, maskDvar, maskBit )
 {
@@ -588,11 +611,27 @@ updateAllowedItemsInMenu( className, itemType )
         {
             self pushPerkClassMask( className, itemType );
         }
+
+        //Perk rank is one mask per group. No weapon, the perk stat is enough.
+        pushUnlockedMask( "*all*", itemType, "ui_ice_rank_" + itemType );
     }
-    //Update allowed weapons or attachments in UI based on weapon class
-    else 
+    else if ( itemType == "camo" )
     {
+        //Camo rank uses the current primary weapon.
+        pushCamosUnlockedMask();
+    }
+    else if ( itemType == "atch" )
+    {
+        //One popup, so send the server mask once and a rank mask for each weapon slot.
         self pushAllowMask( className, itemType );
+        pushUnlockedMask( className, itemType, "ui_ice_rank_primary_atch", getLoadoutDataRef( "primary" ) );
+        pushUnlockedMask( className, itemType, "ui_ice_rank_secondary_atch", getLoadoutDataRef( "secondary" ) );
+    }
+    else
+    {
+        //Weapons and grenades. Grenade rank is opened inside pushUnlockedMask.
+        self pushAllowMask( className, itemType );
+        pushUnlockedMask( className, itemType, "ui_ice_rank_" + className );
     }
 }
 
@@ -610,7 +649,7 @@ maskBitValue( bit )
 //attachmentTable column 9. none is 0, matching NUM_NONE in the menu.
 attachmentMaskBit( attachmentName )
 {
-    return int( tableLookup( "mp/attachmentTable.csv", 4, attachmentName, 9 ) );
+    return getStatValueByRef( "lut_atch", attachmentName );
 }
 
 //Find one allowed item by class, type and reference
@@ -701,21 +740,14 @@ pushPerkClassMask( primaryClass, perkGroup )
         self setClientDvar( maskDvar, mask );
 }
 
-//One bit per weapon class, in class-popup order: assault, specops, heavygunner, demolitions, sniper.
+//One bit per weapon class, in primaryClasses order.
 pushOverkillMask()
 {
-    classNames = [];
-    classNames[0] = "assault";
-    classNames[1] = "specops";
-    classNames[2] = "heavygunner";
-    classNames[3] = "demolitions";
-    classNames[4] = "sniper";
-
     mask = 0;
 
-    for ( i = 0; i < classNames.size; i++ )
+    for ( i = 0; i < level.cacIngame.primaryClasses.size; i++ )
     {
-        allowedItem = getAllowedItemByName( classNames[i], "perk2", "specialty_twoprimaries" );
+        allowedItem = getAllowedItemByName( level.cacIngame.primaryClasses[i].name, "perk2", "specialty_twoprimaries" );
 
         if ( isDefined( allowedItem ) && allowedItem.dvarValue > 0 )
             mask = mask + maskBitValue( i );
@@ -734,7 +766,7 @@ validateLoadoutData()
 
     validateLoadoutItem( "grenade", "grenade", "weap" );
 
-    validateLoadoutPerk1SpecialCases( "primary_attachment" );
+    validateLoadoutPerk1SpecialCases();
 }
 
 //Validate primary weapon and attachments based on weapon class 
@@ -746,6 +778,7 @@ validateLoadoutPrimaryWeapon()
 
     validateLoadoutItem( className, "primary", "weap" );
     validateLoadoutItem( className, "primary_attachment", "atch" );
+    validateLoadoutItem( className, "camo", "camo" );
 
     validateLoadoutClassPerks( className );
 }
@@ -838,6 +871,7 @@ validateLoadoutItem( className, dataType, itemType )
     itemValueRefValidated = validateAllowedItem( itemValueRefValidated, itemType, className );
     //Second iteration: validate based on master option for all classes to override class specific options
     itemValueRefValidated = validateAllowedItem( itemValueRefValidated, itemType, "*all*" );
+    itemValueRefValidated = validateUnlockedItem( itemValueRefValidated, itemType, className, dataType );
 
     self.cacIngame.loadoutDataRef[dvarName] = itemValueRefValidated;
 
@@ -846,23 +880,23 @@ validateLoadoutItem( className, dataType, itemType )
     {
         self setClientDvar( dvarName, itemValueRefValidated );
 
-        debugLog = "[CAC Ingame] Validated: ^2" + dataType + "^7 ref ^2" + itemValueRefValidated + "^7 (from ^1" + itemValueRef + "^7) in class ^2" + className + "^7 with itemType ^2" + itemType;
+        //debugLog = "[CAC Ingame] Validated: ^2" + dataType + "^7 ref ^2" + itemValueRefValidated + "^7 (from ^1" + itemValueRef + "^7) in class ^2" + className + "^7 with itemType ^2" + itemType;
     }
     else
     {
-        debugLog = "[CAC Ingame] Validated: ^2" + dataType + "^7 ref ^2" + itemValueRefValidated + "^7 (from ^2" + itemValueRef + "^7) in class ^2" + className + "^7 with itemType ^2" + itemType;
+        //debugLog = "[CAC Ingame] Validated: ^2" + dataType + "^7 ref ^2" + itemValueRefValidated + "^7 (from ^2" + itemValueRef + "^7) in class ^2" + className + "^7 with itemType ^2" + itemType;
     }
 
     //self iprintLn( debugLog );
 }
 
-//Get validted item reference based on allowed items list, weapon class and item type (perk, weapon or attachment)
-//If item is not allowed then it will be replaced with first allowed item in weapon class
+//Server allow check. A blocked item is replaced by the first allowed item in this list.
 validateAllowedItem( itemName, itemType, className )
 {
+    //No type to look up. Keep the name.
     if( !isDefined( itemType ) || itemType == "" ) return itemName;
 
-    //Use helper index array - O(m) where m is items in class+itemType, not O(n)
+    //No list for this class and type. Keep the name.
     allowedItemsIndexes = getAllowedItemsIndexes( className, itemType );
     if( !isDefined( allowedItemsIndexes ) ) return itemName;
 
@@ -873,13 +907,16 @@ validateAllowedItem( itemName, itemType, className )
         allowedItemIndex = allowedItemsIndexes[i];
         allowedItem = level.cacIngame.allowedItems[allowedItemIndex];
 
+        //dvarValue > 0 is allowed by the server, including 2.
         if( allowedItem.dvarValue > 0 )
         {
+            //Remember the first allowed item as the replacement.
             if( !isDefined( firstAllowedItem ) )
             {
                 firstAllowedItem = allowedItem;
             }
 
+            //Current name is allowed. Keep it.
             if( allowedItem.itemName == itemName )
             {
                 //self iPrintLn( "[CAC Ingame] Allowed item: ref ^2" + itemName + "^7 dvar ^2" + allowedItem.dvarName + "^7 in class ^2" + className + "^7 with itemType " + itemType );
@@ -888,24 +925,193 @@ validateAllowedItem( itemName, itemType, className )
         }
     }
 
+    //Current name is blocked. Use the first allowed item.
     if( isDefined( firstAllowedItem ) ) 
     {
         //self iPrintLn( "[CAC Ingame]^1 Not allowed:^7 ref ^2" + itemName + "^7 in class ^2" + className + "^7 with itemType ^2" + itemType + "^7 changed to ^2" + firstAllowedItem.itemName );
         return firstAllowedItem.itemName;
     }
 
+    //Every item in the list is blocked. Keep the name.
     //self iPrintLn( "[CAC Ingame] Not stored: ^2" + itemName + "^7 in class ^2" + className + "^7 with itemType ^2" + itemType );
     return itemName;
 }
 
-//Validate special cases for weapons with grip and grenade launcher attachments (perk1 have to be disabled)
-validateLoadoutPerk1SpecialCases( dataType )
+//Grip or a grenade launcher on either weapon takes the perk 1 slot
+validateLoadoutPerk1SpecialCases()
 {
-    dvarName = "loadout_" + dataType;
+    primaryAttachment = getLoadoutDataRef( "primary_attachment" );
+    secondaryAttachment = getLoadoutDataRef( "secondary_attachment" );
 
-    switch ( self.cacIngame.loadoutDataRef[dvarName] )
+    if ( primaryAttachment != "gl" && primaryAttachment != "grip" && secondaryAttachment != "gl" && secondaryAttachment != "grip" )
+        return;
+
+    if ( getLoadoutDataRef( "perk1" ) == "specialty_null" )
+        return;
+
+    self.cacIngame.loadoutDataRef["loadout_perk1"] = "specialty_null";
+    self setClientDvar( "loadout_perk1", "specialty_null" );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                            RANK LOCKS                                                   //
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Bits 0-14 set. Sent when rank does not apply, so the menu does not treat every row as locked.
+getUnlockedMask()
+{
+    return 32767;
+}
+
+//True when bitValue is set. Script has no bitwise operator, and bitValue is a power of two.
+getMaskBitSet( statValue, bitValue )
+{
+    if ( !isDefined( bitValue ) || bitValue < 1 )
+        return false;
+
+    return ( int( statValue / bitValue ) % 2 ) != 0;
+}
+
+//Weapon bit 0, perk stat above 0, or the attachment bit on weaponRef.
+isItemUnlocked( itemName, itemType, weaponRef )
+{
+    if ( isSubStr( itemType, "perk" ) )
+        return self getStat( getStatValueByRef( "lut_stat", itemName ) ) > 0;
+
+    if ( itemType == "atch" || itemType == "camo" )
+        return isAttachmentUnlocked( itemName, weaponRef );
+
+    return getMaskBitSet( self getStat( getStatValueByRef( "lut_stat", itemName ) ), 1 );
+}
+
+//attachmentTable column 10 tested against the weapon stat in statsTable column 1.
+isAttachmentUnlocked( attachmentRef, weaponRef )
+{
+    weaponStat = 0;
+    bitValue = 0;
+
+    if ( !isDefined( weaponRef ) || weaponRef == "" )
+        return false;
+
+    weaponStat = getStatValueByRef( "lut_stat", weaponRef );
+    bitValue = int( tableLookup( "mp/attachmentTable.csv", 4, attachmentRef, 10 ) );
+
+    return getMaskBitSet( self getStat( weaponStat ), bitValue );
+}
+
+//Build the rank mask for one list and send it. weaponRef is set for attachments and camos only.
+pushUnlockedMask( className, itemType, rankDvar, weaponRef )
+{
+    allowedItemsIndexes = undefined;
+    mask = 0;
+    i = 0;
+    allowedItem = undefined;
+
+    //Rank does not apply. Send bits 0-14 so the menu leaves every row open.
+    if ( !level.rankedMatch || className == "grenade" )
     {
-        case "gl": case "grip":
-            self.cacIngame.loadoutDataRef["loadout_perk1"] = "specialty_null"; break;
+        self setClientDvar( rankDvar, getUnlockedMask() );
+        return;
     }
+
+    //No list for this class and type. Same open mask.
+    allowedItemsIndexes = getAllowedItemsIndexes( className, itemType );
+    if ( !isDefined( allowedItemsIndexes ) )
+    {
+        self setClientDvar( rankDvar, getUnlockedMask() );
+        return;
+    }
+
+    for ( i = 0; i < allowedItemsIndexes.size; i++ )
+    {
+        allowedItem = level.cacIngame.allowedItems[ allowedItemsIndexes[i] ];
+
+        //Skip rows that have no menu bit.
+        if ( !isDefined( allowedItem.maskBit ) || allowedItem.maskBit < 0 )
+            continue;
+
+        //Bit set means this player has the item unlocked.
+        if ( isItemUnlocked( allowedItem.itemName, allowedItem.itemType, weaponRef ) )
+            mask = mask + maskBitValue( allowedItem.maskBit );
+    }
+
+    self setClientDvar( rankDvar, mask );
+}
+
+//Camo rank bits come from the camo items. The test uses the current primary weapon.
+pushCamosUnlockedMask()
+{
+    pushUnlockedMask( "*all*", "camo", "ui_ice_rank_camo", getLoadoutDataRef( "primary" ) );
+}
+
+//Rank check. itemName already passed the server allow check.
+validateUnlockedItem( itemName, itemType, className, dataType )
+{
+    weaponRef = undefined;
+    item = undefined;
+    unlockedItem = undefined;
+
+    //Rank does not apply. Keep the allowed name.
+    if ( !level.rankedMatch || className == "grenade" )
+        return itemName;
+
+    //Attachments and camos are unlocked on a weapon. Perks and weapons carry their own stat.
+    if ( itemType == "camo" || dataType == "primary_attachment" )
+        weaponRef = getLoadoutDataRef( "primary" );
+    else if ( dataType == "secondary_attachment" )
+        weaponRef = getLoadoutDataRef( "secondary" );
+
+    //Allowed name is unlocked. Keep it.
+    if ( isItemUnlocked( itemName, itemType, weaponRef ) )
+        return itemName;
+
+    //Locked perk has no other fallback.
+    if ( isSubStr( itemType, "perk" ) )
+        return "specialty_null";
+
+    //Locked attachment prefers no attachment when the server still allows it.
+    if ( itemType == "atch" )
+    {
+        item = getAllowedItemByName( className, itemType, "none" );
+
+        if ( isDefined( item ) && item.dvarValue > 0 && isItemUnlocked( item.itemName, item.itemType, weaponRef ) )
+            return "none";
+    }
+
+    //Camos are stored on the *all* list, not on the weapon class.
+    if ( itemType == "camo" )
+        className = "*all*";
+
+    //First row that the server allows and this player has unlocked.
+    unlockedItem = getFirstUnlockedItem( className, itemType, weaponRef );
+
+    if ( isDefined( unlockedItem ) )
+        return unlockedItem;
+
+    if ( itemType == "camo" )
+        return "camo_none";
+
+    //Nothing unlocked to replace it. Keep the allowed name.
+    return itemName;
+}
+
+//First server-allowed item in this list that the player has unlocked.
+getFirstUnlockedItem( className, itemType, weaponRef )
+{
+    allowedItemsIndexes = getAllowedItemsIndexes( className, itemType );
+    i = 0;
+    allowedItem = undefined;
+
+    if ( !isDefined( allowedItemsIndexes ) )
+        return undefined;
+
+    for ( i = 0; i < allowedItemsIndexes.size; i++ )
+    {
+        allowedItem = level.cacIngame.allowedItems[ allowedItemsIndexes[i] ];
+
+        if ( allowedItem.dvarValue > 0 && isItemUnlocked( allowedItem.itemName, allowedItem.itemType, weaponRef ) )
+            return allowedItem.itemName;
+    }
+
+    return undefined;
 }

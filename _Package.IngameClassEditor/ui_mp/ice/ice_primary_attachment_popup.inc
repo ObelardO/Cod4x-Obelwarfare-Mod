@@ -5,8 +5,20 @@
 #define LOCAL_ATTACHMENT_HL_ALLOWED( wClass ) \
     ( ICE_GET_MASK_VALUE( "ui_ice_allow_"wClass"_atch", tablelookup("mp/attachmentTable.csv",4,dvarString( "ui_attachment_highlighted" ),9) ) != 0 )
 
+#define LOCAL_ATTACHMENT_HL_RANKED( wClass ) \
+    ( \
+        ( ( wClass == "pistol" || dvarString( "ui_primary_selected" ) == "secondary" ) && ICE_GET_MASK_VALUE( "ui_ice_rank_secondary_atch", tablelookup("mp/attachmentTable.csv",4,dvarString( "ui_attachment_highlighted" ),9) ) != 0 ) \
+        || ( wClass != "pistol" && dvarString( "ui_primary_selected" ) != "secondary" && ICE_GET_MASK_VALUE( "ui_ice_rank_primary_atch", tablelookup("mp/attachmentTable.csv",4,dvarString( "ui_attachment_highlighted" ),9) ) != 0 ) \
+    )
+
 #define LOCAL_ATTACHMENT_ALLOWED( wClass, bit ) \
     ( ICE_GET_MASK_VALUE( "ui_ice_allow_"wClass"_atch", bit ) != 0 )
+
+#define LOCAL_ATTACHMENT_RANKED( wClass, bit ) \
+    ( \
+        ( ( wClass == "pistol" || dvarString( "ui_primary_selected" ) == "secondary" ) && ICE_GET_MASK_VALUE( "ui_ice_rank_secondary_atch", bit ) != 0 ) \
+        || ( wClass != "pistol" && dvarString( "ui_primary_selected" ) != "secondary" && ICE_GET_MASK_VALUE( "ui_ice_rank_primary_atch", bit ) != 0 ) \
+    )
 
 #define LOCAL_ATTACHMENT_INFO_WINDOW( wClass )\
     /* attachment information side frame*/ \
@@ -18,9 +30,10 @@
     /* attachment title*/\
     PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 58 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/attachmentTable.csv",4,dvarString( "ui_attachment_highlighted" ),3), TEXTSIZE_DEFAULT, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( dvarString( "ui_inside_popup" ) != "camo" ); ) \
     /* attachment desc unlocked*/\
-    PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/attachmentTable.csv",4,dvarString( "ui_attachment_highlighted" ),7), TEXTSIZE_INFO_DESC, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, CHOICE_TEXTCOLOR visible when( LOCAL_ATTACHMENT_HL_ALLOWED( wClass ) ); )\
+    PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/attachmentTable.csv",4,dvarString( "ui_attachment_highlighted" ),7), TEXTSIZE_INFO_DESC, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, CHOICE_TEXTCOLOR visible when( LOCAL_ATTACHMENT_HL_ALLOWED( wClass ) && LOCAL_ATTACHMENT_HL_RANKED( wClass ) ); )\
     PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@OW_ICE_LOCK_SERVER", TEXTSIZE_INFO_DESC, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( LOCAL_ATTACHMENT_HL_ALLOWED( wClass ) == 0 ); )\
-    PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+6) 0 (CHOICE_SIZE_Y*2) CHOICE_SIZE_Y CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "specialty_locked", 1 1 1 1, 0, 2, CHOICE_POPUP_BORDER_COLOR visible when( LOCAL_ATTACHMENT_HL_ALLOWED( wClass ) == 0 && dvarString( "ui_inside_popup" ) != "camo" ); ) \
+    PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@OW_ICE_LOCK_RANK", TEXTSIZE_INFO_DESC, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( LOCAL_ATTACHMENT_HL_ALLOWED( wClass ) && LOCAL_ATTACHMENT_HL_RANKED( wClass ) == 0 ); )\
+    PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+6) 0 (CHOICE_SIZE_Y*2) CHOICE_SIZE_Y CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "specialty_locked", 1 1 1 1, 0, 2, CHOICE_POPUP_BORDER_COLOR visible when( ( LOCAL_ATTACHMENT_HL_ALLOWED( wClass ) == 0 || LOCAL_ATTACHMENT_HL_RANKED( wClass ) == 0 ) && dvarString( "ui_inside_popup" ) != "camo" ); ) \
     PREPROC_SHADER_DRAW_ALIGNED( 0 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "white", 0.15 0.15 0.17 1, 0, 2, CHOICE_POPUP_BORDER_COLOR visible when( dvarBool( ui_inside_popup_nested ) ); )\
     PREPROC_TEXT_DRAW_ALIGNED_EXP( 8 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, -32 0, "@"+tablelookup("mp/statstable.csv",4,dvarString( dvarString( "ui_attachment_weap_slot" ) ),3), TEXTSIZE_INFO_DESC, 0, 0, ITEM_ALIGN_MIDDLE_RIGHT, CHOICE_TEXTCOLOR visible when( dvarBool( "ui_inside_popup_nested" ) ); )\
     /* pointer icon */ \
@@ -52,22 +65,22 @@
 #define LOCAL_ATTACHMENT_ITEM( itemNum, wClass ,p_numref, wRef )\
     /*Primary attachment*/\
     CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,wRef,3), LOCAL_ATTACHMENT_ACTION( wRef, wClass );, \
-        LOCAL_ATTACHMENT_ONFOCUS( wClass, wRef ), ;, when( dvarString( "ui_primary_selected" ) == "primary" && LOCAL_ATTACHMENT_ALLOWED( wClass, p_numref ) ), dvarString( "ui_primary_selected" ) == "primary" && LOCAL_ATTACHMENT_ALLOWED( wClass, p_numref ) ) \
+        LOCAL_ATTACHMENT_ONFOCUS( wClass, wRef ), ;, when( dvarString( "ui_primary_selected" ) == "primary" && LOCAL_ATTACHMENT_ALLOWED( wClass, p_numref ) && LOCAL_ATTACHMENT_RANKED( wClass, p_numref ) ), dvarString( "ui_primary_selected" ) == "primary" && LOCAL_ATTACHMENT_ALLOWED( wClass, p_numref ) && LOCAL_ATTACHMENT_RANKED( wClass, p_numref ) ) \
     /*Secondary attachment (overkill perk)*/\
     CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,wRef,3), LOCAL_ATTACHMENT_ACTION_OVERKILL( wRef, wClass );, \
-        LOCAL_ATTACHMENT_ONFOCUS( wClass, wRef ), ;, when( dvarString( "ui_primary_selected" ) == "secondary" && LOCAL_ATTACHMENT_ALLOWED( wClass, p_numref ) ), dvarString( "ui_primary_selected" ) == "secondary" && LOCAL_ATTACHMENT_ALLOWED( wClass, p_numref ) ) \
+        LOCAL_ATTACHMENT_ONFOCUS( wClass, wRef ), ;, when( dvarString( "ui_primary_selected" ) == "secondary" && LOCAL_ATTACHMENT_ALLOWED( wClass, p_numref ) && LOCAL_ATTACHMENT_RANKED( wClass, p_numref ) ), dvarString( "ui_primary_selected" ) == "secondary" && LOCAL_ATTACHMENT_ALLOWED( wClass, p_numref ) && LOCAL_ATTACHMENT_RANKED( wClass, p_numref ) ) \
     /*Disabled*/\
-    CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, LOCAL_ATTACHMENT_ONFOCUS(wClass,wRef), ;, when( LOCAL_ATTACHMENT_ALLOWED( wClass, p_numref ) == 0 ); ) \
-    CHOICE_DBUTTON_VIS( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,wRef,3), when( LOCAL_ATTACHMENT_ALLOWED( wClass, p_numref ) == 0 ); ) \
+    CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, LOCAL_ATTACHMENT_ONFOCUS(wClass,wRef), ;, when( LOCAL_ATTACHMENT_ALLOWED( wClass, p_numref ) == 0 || LOCAL_ATTACHMENT_RANKED( wClass, p_numref ) == 0 ); ) \
+    CHOICE_DBUTTON_VIS( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,wRef,3), when( LOCAL_ATTACHMENT_ALLOWED( wClass, p_numref ) == 0 || LOCAL_ATTACHMENT_RANKED( wClass, p_numref ) == 0 ); ) \
     ICE_CURRENT_LABEL( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,wRef,3), when( ( dvarString( "ui_primary_selected" ) == "primary" && dvarString( "loadout_primary_attachment" ) == wRef ) || ( dvarString( "ui_primary_selected" ) == "secondary" && dvarString( "loadout_secondary_attachment" ) == wRef ) ); ) \
     
 #define LOCAL_PISTOL_ATTACHMENT_ITEM( itemNum, wClass ,p_numref, wRef )\
     /*Pistol attachment*/\
     CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,wRef,3), LOCAL_PISTOL_ATTACHMENT_ACTION( wRef, wClass ), \
-        LOCAL_ATTACHMENT_ONFOCUS(wClass,wRef), ;, when( LOCAL_ATTACHMENT_ALLOWED( wClass, p_numref ) ), LOCAL_ATTACHMENT_ALLOWED( wClass, p_numref ) ) \
+        LOCAL_ATTACHMENT_ONFOCUS(wClass,wRef), ;, when( LOCAL_ATTACHMENT_ALLOWED( wClass, p_numref ) && LOCAL_ATTACHMENT_RANKED( wClass, p_numref ) ), LOCAL_ATTACHMENT_ALLOWED( wClass, p_numref ) && LOCAL_ATTACHMENT_RANKED( wClass, p_numref ) ) \
     /*Disabled*/\
-    CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, LOCAL_ATTACHMENT_ONFOCUS(wClass,wRef), ;, when( LOCAL_ATTACHMENT_ALLOWED( wClass, p_numref ) == 0 ); ) \
-    CHOICE_DBUTTON_VIS( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,wRef,3), when( LOCAL_ATTACHMENT_ALLOWED( wClass, p_numref ) == 0 ); ) \
+    CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, LOCAL_ATTACHMENT_ONFOCUS(wClass,wRef), ;, when( LOCAL_ATTACHMENT_ALLOWED( wClass, p_numref ) == 0 || LOCAL_ATTACHMENT_RANKED( wClass, p_numref ) == 0 ); ) \
+    CHOICE_DBUTTON_VIS( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,wRef,3), when( LOCAL_ATTACHMENT_ALLOWED( wClass, p_numref ) == 0 || LOCAL_ATTACHMENT_RANKED( wClass, p_numref ) == 0 ); ) \
     ICE_CURRENT_LABEL( itemNum, "@"+tablelookup("mp/attachmentTable.csv",4,wRef,3), when( dvarString( "loadout_secondary_attachment" ) == wRef ); ) \
     
 #define LOCAL_ATTACHMENT_POPUP_ONOPEN( wClass )\

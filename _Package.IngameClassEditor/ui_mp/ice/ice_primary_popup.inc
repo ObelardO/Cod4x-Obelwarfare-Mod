@@ -5,6 +5,9 @@
 #define LOCAL_WEAPON_HL_ALLOWED( wClass ) \
     ( ICE_GET_MASK_VALUE( "ui_ice_allow_"wClass, ICE_GET_STATS_INDEX( dvarString( "ui_primary_highlighted" ), dvarInt( "ui_ice_stat_offset" ) ) ) != 0 )
 
+#define LOCAL_WEAPON_HL_RANKED( wClass ) \
+    ( ICE_GET_MASK_VALUE( "ui_ice_rank_"wClass, ICE_GET_STATS_INDEX( dvarString( "ui_primary_highlighted" ), dvarInt( "ui_ice_stat_offset" ) ) ) != 0 )
+
 #define LOCAL_WEAPON_INFO_WINDOW( highlight_dvar, wClass ) \
     /* weapon information side frame*/ \
     PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH-6) -4 280 CHOICE_POPUP_HEIGHT( 7 ) CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "white", CHOICE_POPUP_BORDER_COLOR, 1, 2, CHOICE_POPUP_BORDER_COLOR visible when( dvarString( "ui_inside_popup" ) != "attachment" && dvarString( "ui_inside_popup" ) != "camo" ); ) \
@@ -15,10 +18,11 @@
     /* weapon title*/\
     PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 58 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/statstable.csv",4,dvarString( highlight_dvar ),3), TEXTSIZE_DEFAULT, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( dvarString( "ui_inside_popup" ) != "attachment" && dvarString( "ui_inside_popup" ) != "camo" ); ) \
     /* weapon desc unlocked*/\
-    PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/statstable.csv",4,dvarString( highlight_dvar ),7), TEXTSIZE_INFO_DESC, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, CHOICE_TEXTCOLOR visible when( LOCAL_WEAPON_HL_ALLOWED( wClass ) && !dvarBool( "ui_primary_equipped_overkill" ) ); )\
+    PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/statstable.csv",4,dvarString( highlight_dvar ),7), TEXTSIZE_INFO_DESC, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, CHOICE_TEXTCOLOR visible when( LOCAL_WEAPON_HL_ALLOWED( wClass ) && LOCAL_WEAPON_HL_RANKED( wClass ) && !dvarBool( "ui_primary_equipped_overkill" ) ); )\
     PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@OW_ICE_LOCK_SERVER", TEXTSIZE_INFO_DESC, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( LOCAL_WEAPON_HL_ALLOWED( wClass ) == 0 && !dvarBool( "ui_primary_equipped_overkill" ) ); )\
+    PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@OW_ICE_LOCK_RANK", TEXTSIZE_INFO_DESC, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( LOCAL_WEAPON_HL_ALLOWED( wClass ) && LOCAL_WEAPON_HL_RANKED( wClass ) == 0 && !dvarBool( "ui_primary_equipped_overkill" ) ); )\
     PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@OW_ICE_LOCK_EQUIPPED", TEXTSIZE_INFO_DESC, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( dvarBool( "ui_primary_equipped_overkill" ) ); )\
-    PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+6) 0 (CHOICE_SIZE_Y*2) CHOICE_SIZE_Y CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "specialty_locked", 1 1 1 1, 0, 2, CHOICE_POPUP_BORDER_COLOR visible when( LOCAL_WEAPON_HL_ALLOWED( wClass ) == 0 || dvarBool( "ui_primary_equipped_overkill" ) ); ) \
+    PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+6) 0 (CHOICE_SIZE_Y*2) CHOICE_SIZE_Y CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "specialty_locked", 1 1 1 1, 0, 2, CHOICE_POPUP_BORDER_COLOR visible when( LOCAL_WEAPON_HL_ALLOWED( wClass ) == 0 || LOCAL_WEAPON_HL_RANKED( wClass ) == 0 || dvarBool( "ui_primary_equipped_overkill" ) ); ) \
     PREPROC_SHADER_DRAW_ALIGNED( 0 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "white", 0.15 0.15 0.17 1, 0, 2, CHOICE_POPUP_BORDER_COLOR )\
     PREPROC_TEXT_DRAW_ALIGNED_EXP( 8 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, -32 0, dvarString( "ui_weapon_class_selected" ), TEXTSIZE_INFO_DESC, 0, 0, ITEM_ALIGN_MIDDLE_RIGHT, CHOICE_TEXTCOLOR ) \
     /* pointer icon */ \
@@ -84,10 +88,10 @@
     /*execKey itemIndex { actionArg }*/
 
 #define LOCAL_PRIMARY_WEAPON_VISIBLE( wClass, wRef, statOffset ) \
-    LOCAL_WEAPON_IS_ALLOWED ( wClass, wRef, statOffset ) && LOCAL_PRIMARY_WEAPON_ALLOWED_OVERKILL ( wRef )
+    LOCAL_WEAPON_IS_ALLOWED ( wClass, wRef, statOffset ) && LOCAL_WEAPON_IS_RANKED( wClass, wRef, statOffset ) && LOCAL_PRIMARY_WEAPON_ALLOWED_OVERKILL ( wRef )
 
 #define LOCAL_SECONDARY_WEAPON_VISIBLE( wClass, wRef, statOffset, overkillBit ) \
-    LOCAL_WEAPON_IS_ALLOWED ( wClass, wRef, statOffset ) && LOCAL_SECONDARY_WEAPON_ALLOWED_OVERKILL ( wRef, overkillBit )
+    LOCAL_WEAPON_IS_ALLOWED ( wClass, wRef, statOffset ) && LOCAL_WEAPON_IS_RANKED( wClass, wRef, statOffset ) && LOCAL_SECONDARY_WEAPON_ALLOWED_OVERKILL ( wRef, overkillBit )
 
 #define LOCAL_WEAPON_IS_CURRENT( wRef ) \
     ( dvarString( "ui_primary_selected" ) == "primary" && dvarString( "loadout_primary" ) == wRef ) || ( dvarString( "ui_primary_selected" ) == "secondary" && dvarString( "loadout_secondary" ) == wRef )
@@ -111,6 +115,9 @@
 #define LOCAL_WEAPON_IS_ALLOWED( wClass, wRef, statOffset ) \
     ( ICE_GET_MASK_VALUE( "ui_ice_allow_"wClass, ICE_GET_STATS_INDEX( wRef, statOffset ) ) != 0 )
 
+#define LOCAL_WEAPON_IS_RANKED( wClass, wRef, statOffset ) \
+    ( ICE_GET_MASK_VALUE( "ui_ice_rank_"wClass, ICE_GET_STATS_INDEX( wRef, statOffset ) ) != 0 )
+
 #define LOCAL_WEAPON_ITEM( itemNum, wName, wClass, wRef, statOffset, overkillBit ) \
     LOCAL_WEAPON_ITEM_EX( itemNum, wName, wClass, wRef, statOffset, overkillBit, LOCAL_PRIMARY_WEAPON_ACTION, LOCAL_PRIMARY_WEAPON_ACTION_OVERKILL )
 
@@ -119,8 +126,8 @@
 
 // hacked to hide the second primary if same weapon is selected in first primary, change weapon description to "Already selected"
 #define LOCAL_WEAPON_ITEM_EX( itemNum, wName, wClass, wRef, statOffset, overkillBit, primaryAction, overkillAction )\
-    CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, LOCAL_PRIMARY_ONFOCUS( wClass, wRef, statOffset ), ;, when( LOCAL_WEAPON_IS_ALLOWED( wClass, wRef, statOffset ) == 0 ); )\
-    CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, LOCAL_PRIMARY_ONFOCUS_OVERKILL( wClass, wRef, statOffset ), ;, when( LOCAL_WEAPON_DISABLED_OVERKILL( wClass, wRef, statOffset ) ); )\
+    CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, LOCAL_PRIMARY_ONFOCUS( wClass, wRef, statOffset ), ;, when( ( LOCAL_WEAPON_IS_ALLOWED( wClass, wRef, statOffset ) == 0 || LOCAL_WEAPON_IS_RANKED( wClass, wRef, statOffset ) == 0 ) && LOCAL_WEAPON_DISABLED_OVERKILL( wClass, wRef, statOffset ) == 0 ); )\
+    CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, LOCAL_PRIMARY_ONFOCUS_OVERKILL( wClass, wRef, statOffset ), ;, when( LOCAL_WEAPON_DISABLED_OVERKILL( wClass, wRef, statOffset ) && LOCAL_WEAPON_IS_RANKED( wClass, wRef, statOffset ) ); )\
     CHOICE_DBUTTON_VIS( itemNum, wName, when( 1 ); ) \
     /*Primary*/\
     CHOICE_BUTTON_FOCUS_VIS_ADV_HK( itemNum, wName, primaryAction( wClass, wRef ), \

@@ -14,9 +14,14 @@
 #define LOCAL_PERK_INFO_ALLOWED_CLASS\
     ( ICE_GET_MASK_VALUE( "ui_ice_class_" + dvarString( "ui_inside_popup" ), dvarInt( "ui_ice_bit" ) ) != 0 )
 
+#define LOCAL_PERK_INFO_RANKED\
+    ( ICE_GET_MASK_VALUE( "ui_ice_rank_" + dvarString( "ui_inside_popup" ), dvarInt( "ui_ice_bit" ) ) != 0 )
+
 #define LOCAL_PERK_INFO_VISIBLE( perkSlot )\
     /* PERK ALLOWED */\
     LOCAL_PERK_INFO_ALLOWED &&\
+    /* PERK UNLOCKED */\
+    LOCAL_PERK_INFO_RANKED &&\
     /* PERK ALLOWED FOR CLASS */\
     LOCAL_PERK_INFO_ALLOWED_CLASS &&\
     /* PERK ALLOWED BY GRENADE*/\
@@ -39,10 +44,13 @@
         visible when( LOCAL_PERK_INFO_ALLOWED == 0 ); )\
     /* perk desc locked - class*/\
     PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0,  "@OW_ICE_LOCK_CLASS", TEXTSIZE_INFO_DESC, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE \
-        visible when( LOCAL_PERK_INFO_ALLOWED && LOCAL_PERK_INFO_ALLOWED_CLASS == 0 ); )\
+        visible when( LOCAL_PERK_INFO_ALLOWED && LOCAL_PERK_INFO_RANKED && LOCAL_PERK_INFO_ALLOWED_CLASS == 0 ); )\
+    /* perk desc locked - rank*/\
+    PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0,  "@OW_ICE_LOCK_RANK", TEXTSIZE_INFO_DESC, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE \
+        visible when( LOCAL_PERK_INFO_ALLOWED && LOCAL_PERK_INFO_RANKED == 0 ); )\
     /* perk desc locked - greanade*/\
     PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0,  "@OW_ICE_LOCK_FRAG", TEXTSIZE_INFO_DESC, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE \
-        visible when( LOCAL_PERK_INFO_NOT_ALLOWED_GRENADE ); )\
+        visible when( LOCAL_PERK_INFO_ALLOWED && LOCAL_PERK_INFO_RANKED && LOCAL_PERK_INFO_ALLOWED_CLASS && LOCAL_PERK_INFO_NOT_ALLOWED_GRENADE ); )\
     /* perk desc locked image*/\
     PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+6) 0 (CHOICE_SIZE_Y*2) CHOICE_SIZE_Y CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "specialty_locked", 1 1 1 1, 0, 2, CHOICE_POPUP_BORDER_COLOR \
         visible when( dvarBool( "ui_perk_hl_locked" ) ); )
@@ -72,6 +80,9 @@
 #define LOCAL_PERK_ALLOWED_CLASS( perkSlot, bit )\
     ( ICE_GET_MASK_VALUE( "ui_ice_class_"perkSlot, bit ) != 0 )
 
+#define LOCAL_PERK_RANKED( perkSlot, bit )\
+    ( ICE_GET_MASK_VALUE( "ui_ice_rank_"perkSlot, bit ) != 0 )
+
 #define LOCAL_PERK_ALLOWED_GRENADE( perkRef )\
     ( perkRef != REF_SPECIALGRENADE_X3 || dvarString( "loadout_grenade" ) != REF_SMOKE_X1 )
 
@@ -81,6 +92,7 @@
 #define LOCAL_PERK_CHOICE_IS_BLOCKED( perkSlot, perkRef, bit )\
     ( \
         LOCAL_PERK_ALLOWED( perkSlot, bit ) == 0 ||\
+        LOCAL_PERK_RANKED( perkSlot, bit ) == 0 ||\
         LOCAL_PERK_ALLOWED_CLASS( perkSlot, bit ) == 0 ||\
         ( perkRef == REF_SPECIALGRENADE_X3 && dvarString( "loadout_grenade" ) == REF_SMOKE_X1 ) \
     )
