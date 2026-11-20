@@ -23,8 +23,6 @@ init()
 	// Get the main module's dvar
 	level.scr_power_rank_mode = getdvarx( "scr_power_rank_mode", "int", 0, 0, 2 );
 	level.scr_power_rank_prestige = getdvarx( "scr_power_rank_prestige", "int", 1, 0, 1 );
-	// 0 keeps the stop at the start of Commander. A higher value is the rank XP to reach.
-	level.scr_power_rank_xp = getdvarx( "scr_power_rank_xp", "int", 0, 0, 1000000 );
 
 	// Check if we need to run this process
 	if ( level.scr_power_rank_mode == 0 || !level.rankedMatch )
@@ -33,7 +31,7 @@ init()
 	level.scr_power_rank_delay = getdvarx( "scr_power_rank_delay", "float", 0.5, 0.5, 2.0 );
 	
 	// Let's load the minimum experience here to make everything faster
-	level.maxPower = int(tableLookup( "mp/rankTable.csv", 0, "maxpower", 1 ));
+	level.maxPower = int(tableLookup( "mp/rankTable.csv", 0, "maxrank", 1 ));
 	level.powerRankInfoMinXp = [];
 	for ( rankId = 1; rankId <= level.maxPower; rankId++ ) {
 		level.powerRankInfoMinXp[ rankId ] = maps\mp\gametypes\_rank::getRankInfoMinXp( rankId );
@@ -68,16 +66,8 @@ givePowerRankXP()
 	if ( level.scr_power_rank_prestige && isDefined( self.pers["prestige"] ) && self.pers["prestige"] > 0 )
 		return;
 	
-	// 0 stops at the start of Commander. Otherwise stop at this rank XP, and
-	// never past the Commander cap that prestige confirm checks.
+	// Stop at the start of the max rank in the table.
 	targetXp = level.powerRankInfoMinXp[ level.maxPower ];
-	if ( level.scr_power_rank_xp > 0 )
-	{
-		targetXp = level.scr_power_rank_xp;
-		capXp = maps\mp\gametypes\_rank::getRankInfoMaxXp( level.maxRank );
-		if ( targetXp > capXp )
-			targetXp = capXp;
-	}
 
 	if ( self.pers["rankxp"] < targetXp ) {
 		
