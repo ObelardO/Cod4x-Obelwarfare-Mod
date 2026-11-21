@@ -68,6 +68,36 @@ LANG_SPANISH     "Prestige G.O.T.A."
 REFERENCE        NAME10
 LANG_SPANISH     "Prestige Supreme Commander"
 
+REFERENCE        NEXT1
+LANG_SPANISH     "Prestige I"
+
+REFERENCE        NEXT2
+LANG_SPANISH     "Prestige II"
+
+REFERENCE        NEXT3
+LANG_SPANISH     "Prestige III"
+
+REFERENCE        NEXT4
+LANG_SPANISH     "Prestige IV"
+
+REFERENCE        NEXT5
+LANG_SPANISH     "Prestige V"
+
+REFERENCE        NEXT6
+LANG_SPANISH     "Prestige VI"
+
+REFERENCE        NEXT7
+LANG_SPANISH     "Prestige VII"
+
+REFERENCE        NEXT8
+LANG_SPANISH     "Prestige VIII"
+
+REFERENCE        NEXT9
+LANG_SPANISH     "Prestige IX"
+
+REFERENCE        NEXT10
+LANG_SPANISH     "Prestige X"
+
 REFERENCE        MAX
 LANG_SPANISH     "You have reached the maximum prestige."
 

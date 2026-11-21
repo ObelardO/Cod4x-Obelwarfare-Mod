@@ -12,7 +12,9 @@
 	/* camo title*/\
 	PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 58 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/attachmenttable.csv",4,dvarString( highlight_dvar ),3), TEXTSIZE_DEFAULT, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE ) \
 	/* camo desc unlocked*/\
-	PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/attachmenttable.csv",4,dvarString( highlight_dvar ),7), TEXTSIZE_INFO_DESC, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, CHOICE_TEXTCOLOR visible when( 1 ); )\
+	PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/attachmenttable.csv",4,dvarString( highlight_dvar ),7), TEXTSIZE_INFO_DESC, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, CHOICE_TEXTCOLOR visible when( ICE_GET_MASK_VALUE( "ui_ice_rank_camo", dvarInt( "ui_ice_bit" ) ) != 0 ); )\
+	PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 80 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/attachmenttable.csv",4,dvarString( highlight_dvar ),8), TEXTSIZE_INFO_DESC, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE visible when( ICE_GET_MASK_VALUE( "ui_ice_rank_camo", dvarInt( "ui_ice_bit" ) ) == 0 ); )\
+	PREPROC_SHADER_DRAW_ALIGNED( (CHOICE_POPUP_WIDTH+6) 0 (CHOICE_SIZE_Y*2) CHOICE_SIZE_Y CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "specialty_locked", 1 1 1 1, 0, 2, CHOICE_POPUP_BORDER_COLOR visible when( ICE_GET_MASK_VALUE( "ui_ice_rank_camo", dvarInt( "ui_ice_bit" ) ) == 0 ); )\
 	PREPROC_SHADER_DRAW_ALIGNED( 0 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "white", 0.15 0.15 0.17 1, 0, 2, CHOICE_POPUP_BORDER_COLOR )\
 	PREPROC_TEXT_DRAW_ALIGNED_EXP( 8 -24 (CHOICE_POPUP_WIDTH-4) 22 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, -32 0, "@"+tablelookup("mp/attachmenttable.csv",4,dvarString( "loadout_primary_attachment" ),3), TEXTSIZE_INFO_DESC, 0, 0, ITEM_ALIGN_MIDDLE_RIGHT, CHOICE_TEXTCOLOR )\
 	/* pointer icon */ \
@@ -24,11 +26,19 @@
 		scriptMenuResponse "ice_set:camo:"camoRef;\
 		ICE_CLOSE_ALL_POPUPS_ACTION
 
+#define LOCAL_CAMO_ONFOCUS( camoRef, rankBit ) \
+	execnow "set ui_camo_highlighted "camoRef;\
+	exec "set ui_ice_bit "rankBit;
+
 #define LOCAL_CAMO_ITEM( itemNum, camoName, pnum, camoRef, highlight_dvar, bitMask, visArg )\
-	CHOICE_BUTTON_FOCUS( itemNum, camoName, LOCAL_CAMO_ACTION( camoRef );, execnow "set "highlight_dvar" "camoRef;, ; );
+	CHOICE_BUTTON_FOCUS_VIS( itemNum, camoName, LOCAL_CAMO_ACTION( camoRef );, LOCAL_CAMO_ONFOCUS( camoRef, bitMask ), ;, when( ICE_GET_MASK_VALUE( "ui_ice_rank_camo", bitMask ) != 0 ); ) \
+	CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, LOCAL_CAMO_ONFOCUS( camoRef, bitMask ), ;, when( ICE_GET_MASK_VALUE( "ui_ice_rank_camo", bitMask ) == 0 ); ) \
+	CHOICE_DBUTTON_VIS( itemNum, camoName, when( ICE_GET_MASK_VALUE( "ui_ice_rank_camo", bitMask ) == 0 ); ) \
+	ICE_CURRENT_LABEL( itemNum, camoName, when( dvarString( "loadout_camo" ) == camoRef ); )
 
 #define LOCAL_CAMO_POPUP_ONOPEN\
-    execnow "set "UI_FOCUSFIRST" "REF_CAMO_NONE"; set ui_inside_popup camo";
+    execnow "set "UI_FOCUSFIRST" "REF_CAMO_NONE"; set ui_inside_popup camo; set ui_ice_bit 0";\
+    scriptMenuResponse "ice_allow:primary:camo";
 
 // hackaround to work for PC's floating mouse unfocusing
 #undef  UI_FOCUSFIRST
@@ -41,12 +51,12 @@ menuDef	\
 	IMPROVED_POPUP_SETUP_ONOPEN( "ice_camo_popup"prefix, 8, ICE_POPUP_X_START, (CHOICE_Y( 1 )+68), ;, LOCAL_CAMO_POPUP_ONOPEN, 0 )\
 	onClose{onLeave;} \
 	LOCAL_CAMO_INFO_WINDOW( "ui_camo_highlighted" )\
-	LOCAL_CAMO_ITEM( 1, "@MPUI_NONE", CAMO_NONE, REF_CAMO_NONE, "ui_camo_highlighted", 0, 1 )\
-	LOCAL_CAMO_ITEM( 2, "@MPUI_DESERT", CAMO_BROCKHUARD, REF_BROCKHUARD, "ui_camo_highlighted", DESERT_NEW_BITMASK, 1 )\
-	LOCAL_CAMO_ITEM( 3, "@MPUI_WOODLAND", CAMO_BUSHDWELLER, REF_BUSHDWELLER, "ui_camo_highlighted", WOODLAND_NEW_BITMASK, 1 )\
-	LOCAL_CAMO_ITEM( 4, "@MPUI_DIGITAL", CAMO_BLACKWHITEMARPAT, REF_BLACKWHITEMARPAT, "ui_camo_highlighted", DIGITAL_NEW_BITMASK, 1 )\
-	LOCAL_CAMO_ITEM( 5, "@MPUI_RED_TIGER", CAMO_TIGERRED, REF_TIGERRED, "ui_camo_highlighted", REDTIGER_NEW_BITMASK, 1 )\
-	LOCAL_CAMO_ITEM( 6, "@MPUI_BLUE_TIGER", CAMO_STAGGER, REF_STAGGER, "ui_camo_highlighted", BLUETIGER_NEW_BITMASK, 1 )\
+	LOCAL_CAMO_ITEM( 1, "@MPUI_NONE", CAMO_NONE, REF_CAMO_NONE, "ui_camo_highlighted", "0", 1 )\
+	LOCAL_CAMO_ITEM( 2, "@MPUI_DESERT", CAMO_BROCKHUARD, REF_BROCKHUARD, "ui_camo_highlighted", "1", 1 )\
+	LOCAL_CAMO_ITEM( 3, "@MPUI_WOODLAND", CAMO_BUSHDWELLER, REF_BUSHDWELLER, "ui_camo_highlighted", "2", 1 )\
+	LOCAL_CAMO_ITEM( 4, "@MPUI_DIGITAL", CAMO_BLACKWHITEMARPAT, REF_BLACKWHITEMARPAT, "ui_camo_highlighted", "3", 1 )\
+	LOCAL_CAMO_ITEM( 5, "@MPUI_RED_TIGER", CAMO_TIGERRED, REF_TIGERRED, "ui_camo_highlighted", "4", 1 )\
+	LOCAL_CAMO_ITEM( 6, "@MPUI_BLUE_TIGER", CAMO_STAGGER, REF_STAGGER, "ui_camo_highlighted", "5", 1 )\
 }
 
 // camo skin selection for primary weapon popup menu

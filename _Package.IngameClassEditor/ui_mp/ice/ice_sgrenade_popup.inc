@@ -14,9 +14,11 @@
     PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 34 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/statstable.csv",4,dvarString( highlight_dvar ),3), TEXTSIZE_DEFAULT, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE ) \
     /* special grenade desc unlocked*/\
     PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 56 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/statstable.csv",4,dvarString( highlight_dvar ),7), TEXTSIZE_INFO_DESC, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, CHOICE_TEXTCOLOR \
-    visible when( ( ( dvarString( "ui_sgrenade_highlighted" )=="smoke_grenade") && (dvarString( "loadout_perk1" )=="specialty_specialgrenade") ) == 0 ); )\
+    visible when( LOCAL_SGRENADE_RANKED( dvarString( "ui_sgrenade_highlighted" ) ) && ( ( dvarString( "ui_sgrenade_highlighted" )=="smoke_grenade") && (dvarString( "loadout_perk1" )=="specialty_specialgrenade") ) == 0 ); )\
+    PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 56 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@"+tablelookup("mp/statstable.csv",4,dvarString( highlight_dvar ),10), TEXTSIZE_INFO_DESC, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE \
+    visible when( LOCAL_SGRENADE_RANKED( dvarString( "ui_sgrenade_highlighted" ) ) == 0 ); )\
     PREPROC_TEXT_DRAW_ALIGNED_EXP( (CHOICE_POPUP_WIDTH+10) 56 256 20 CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN, 0 0, "@OW_ICE_LOCK_PERK", TEXTSIZE_INFO_DESC, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE \
-    visible when( (dvarString( "ui_sgrenade_highlighted" )=="smoke_grenade") && (dvarString( "loadout_perk1" )=="specialty_specialgrenade") ); )
+    visible when( LOCAL_SGRENADE_RANKED( dvarString( "ui_sgrenade_highlighted" ) ) && (dvarString( "ui_sgrenade_highlighted" )=="smoke_grenade") && (dvarString( "loadout_perk1" )=="specialty_specialgrenade") ); )
 
 #define LOCAL_SGRENADE_ACTION( wRef ) \
     play "mouse_click"; \
@@ -24,12 +26,19 @@
     scriptMenuResponse "ice_set:grenade:"wRef;\
     close "ice_weapon_popup_extra"
     
+#define LOCAL_SGRENADE_ALLOWED( wRef ) \
+    ( ICE_GET_MASK_VALUE( "ui_ice_allow_grenade", ICE_GET_STATS_INDEX( wRef, ICE_STAT_GRENADE ) ) != 0 )
+
+#define LOCAL_SGRENADE_RANKED( wRef ) \
+    ( ICE_GET_MASK_VALUE( "ui_ice_rank_grenade", ICE_GET_STATS_INDEX( wRef, ICE_STAT_GRENADE ) ) != 0 )
+
 #define LOCAL_SGRENADE_ITEM( itemNum, wName, wRef, highlight_dvar )\
     CHOICE_BUTTON_FOCUS_VIS_ADV( itemNum, wName, LOCAL_SGRENADE_ACTION( wRef ), execnow "set "highlight_dvar" "wRef, ;, \
-    when( ( wRef == REF_SMOKE_X1 && ( dvarString( "loadout_perk1" )=="specialty_specialgrenade") ) == 0 && dvarBool( "weap_allow_"wRef ) );, \
-            ( wRef == REF_SMOKE_X1 && ( dvarString( "loadout_perk1" )=="specialty_specialgrenade") ) == 0 && dvarBool( "weap_allow_"wRef ) ) \
-    CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, execnow "set "highlight_dvar" "wRef, ;, when( wRef == REF_SMOKE_X1 && (dvarString( "loadout_perk1" )=="specialty_specialgrenade") && dvarBool("weap_allow_"wRef)); ) \
-    CHOICE_DBUTTON_VIS( itemNum, wName, when( ( wRef == REF_SMOKE_X1 && ( dvarString( "loadout_perk1" )=="specialty_specialgrenade" ) ) || !dvarBool( "weap_allow_"wRef ) ); )
+    when( ( wRef == REF_SMOKE_X1 && ( dvarString( "loadout_perk1" )=="specialty_specialgrenade") ) == 0 && LOCAL_SGRENADE_ALLOWED( wRef ) && LOCAL_SGRENADE_RANKED( wRef ) );, \
+            ( wRef == REF_SMOKE_X1 && ( dvarString( "loadout_perk1" )=="specialty_specialgrenade") ) == 0 && LOCAL_SGRENADE_ALLOWED( wRef ) && LOCAL_SGRENADE_RANKED( wRef ) ) \
+    CHOICE_BUTTON_FOCUS_VIS_NOHI( itemNum, "", ;, execnow "set "highlight_dvar" "wRef, ;, when( ( wRef == REF_SMOKE_X1 && (dvarString( "loadout_perk1" )=="specialty_specialgrenade") && LOCAL_SGRENADE_ALLOWED( wRef ) ) || LOCAL_SGRENADE_ALLOWED( wRef ) == 0 || LOCAL_SGRENADE_RANKED( wRef ) == 0 ); ) \
+    CHOICE_DBUTTON_VIS( itemNum, wName, when( ( wRef == REF_SMOKE_X1 && ( dvarString( "loadout_perk1" )=="specialty_specialgrenade" ) ) || LOCAL_SGRENADE_ALLOWED( wRef ) == 0 || LOCAL_SGRENADE_RANKED( wRef ) == 0 ); ) \
+    ICE_CURRENT_LABEL( itemNum, wName, when( dvarString( "loadout_grenade" ) == wRef ); )
 
 #define LOCAL_SGRENADE_POPUP_ONOPEN\
     execnow "set "UI_FOCUSFIRST" "REF_FLASH_X1"; set ui_inside_popup sgrenade";\
