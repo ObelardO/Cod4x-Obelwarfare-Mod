@@ -209,7 +209,7 @@ prestigeReset()
 	if ( !isDefined( self.pers["prestige"] ) || self.pers["prestige"] >= level.maxPrestige )
 		return false;
 
-	if ( self maps\mp\gametypes\_rank::getRankXP() < maps\mp\gametypes\_rank::getRankInfoMaxXp( level.maxRank ) )
+	if ( !isDefined( self.pers["rank"] ) || self.pers["rank"] != level.maxRank )
 		return false;
 
 	self.prestigeResetting = true;
