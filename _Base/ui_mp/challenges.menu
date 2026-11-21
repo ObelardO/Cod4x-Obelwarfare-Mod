@@ -271,8 +271,7 @@
 		#include "ui_mp/challenges_rows.inc"
 
 		#ifdef PC_INGAME
-			#define PRESTIGE_AT_CAP ( stat( 2326 ) < MAX_PRESTIGE && stat( 252 ) == MAX_RANK && stat( 2301 ) >= int( tableLookup( "mp/rankTable.csv", 0, stat( 252 ), 7 ) ) )
-			#define PRESTIGE_SHORT ( stat( 252 ) == MAX_RANK && stat( 2301 ) < int( tableLookup( "mp/rankTable.csv", 0, stat( 252 ), 7 ) ) )
+			#define PRESTIGE_AT_CAP ( stat( 2326 ) < MAX_PRESTIGE && stat( 252 ) == MAX_RANK )
 			#define PRESTIGE_DONE ( stat( 2326 ) >= MAX_PRESTIGE )
 
 			// Same gap the tier separator uses. Index 11 sits one row under tier 10, plus one separator.
@@ -287,9 +286,7 @@
 			CHOICE_BUTTON_FOCUS_VIS( 11, "@PRESTIGE_MODE", exec "statset 267 1"; open popup_prestige; hide "desc_prestige"; hide "desc_prestige_max";, show "desc_prestige"; hide "desc_prestige_max";, hide "desc_prestige"; hide "desc_prestige_max";, when( dvarInt( ui_prestige_show ) == 1 && PRESTIGE_AT_CAP ); )
 			CHOICE_NEWICON_VIS( 11, "specialty_new", when( dvarInt( ui_prestige_show ) == 1 && PRESTIGE_AT_CAP && stat( 267 ) == 0 ) )
 			CHOICE_DBUTTON_VIS( 11, "@PRESTIGE_MODE", when( dvarInt( ui_prestige_show ) == 1 && stat( 252 ) != MAX_RANK && stat( 2326 ) < MAX_PRESTIGE ) )
-			CHOICE_DBUTTON_VIS( 11, "@PRESTIGE_MODE", when( dvarInt( ui_prestige_show ) == 1 && PRESTIGE_SHORT && stat( 2326 ) < MAX_PRESTIGE ) )
 			CHOICE_NEWICON_VIS( 11, "specialty_locked", when( dvarInt( ui_prestige_show ) == 1 && stat( 252 ) != MAX_RANK && stat( 2326 ) < MAX_PRESTIGE ) )
-			CHOICE_NEWICON_VIS( 11, "specialty_locked", when( dvarInt( ui_prestige_show ) == 1 && PRESTIGE_SHORT && stat( 2326 ) < MAX_PRESTIGE ) )
 			CHOICE_BUTTON_BG( 11, when( dvarInt( ui_prestige_show ) == 1 && PRESTIGE_DONE ); )
 			CHOICE_BUTTON_FOCUS_VIS_NOHI( 11, "@PRESTIGE_MODE", ;, show "desc_prestige_max"; hide "desc_prestige";, hide "desc_prestige_max";, when( dvarInt( ui_prestige_show ) == 1 && PRESTIGE_DONE ); forecolor LOCAL_UNLOCK_COLOR )
 			CHOICE_NEWICON_VIS( 11, "specialty_locked", when( dvarInt( ui_prestige_show ) == 1 && PRESTIGE_DONE ) )

@@ -215,6 +215,7 @@ onPlayerConnect()
 			player setStat( 251, player.cur_rankNum );
 			player setStat( 252, player.cur_rankNum );
 			player setStat( 2326, prestigeId );
+			player openCustomClassSlots();
 				
 			// resetting unlockable vars
 			if ( !isDefined( player.pers["unlocks"] ) )
@@ -966,6 +967,9 @@ unlockFeature( refString )
 		self setStat( 200, 1 );
 
 	self setStat( stat, 2 ); // 2 is binary mask for newly unlocked
+
+	if ( refString == "feature_cac" )
+		self openCustomClassSlots();
 	
 	if ( refString == "feature_challenges" )
 	{
@@ -978,6 +982,23 @@ unlockFeature( refString )
 	self setClientDvar( "player_unlockfeatures", self.pers["unlocks"]["feature"] );
 	
 	self unlockPage( 2 );
+}
+
+
+// Pause menu shows slots 2-5 only after these stats are set. Stock writes them on the class click.
+openCustomClassSlots()
+{
+	if ( self getStat( 260 ) < 1 )
+		return;
+
+	if ( self getStat( 210 ) < 1 )
+		self setStat( 210, 1 );
+	if ( self getStat( 220 ) < 1 )
+		self setStat( 220, 1 );
+	if ( self getStat( 230 ) < 1 )
+		self setStat( 230, 1 );
+	if ( self getStat( 240 ) < 1 )
+		self setStat( 240, 1 );
 }
 
 

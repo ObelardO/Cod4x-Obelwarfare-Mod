@@ -31,6 +31,9 @@ LANG_RUSSIAN "Несовместимо с выбранным перком: Особые гранаты х 3"
 REFERENCE LOCK_SERVER
 LANG_RUSSIAN "Недоступно на данном сервере."
 
+REFERENCE LOCK_RANK
+LANG_RUSSIAN "Недоступно на вашем звании."
+
 REFERENCE TITLE
 LANG_RUSSIAN "ИЗМЕНИТЬ КЛАСС"
 

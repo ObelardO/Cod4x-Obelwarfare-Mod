@@ -31,4 +31,7 @@ LANG_ENGLISH "Incompatible with the selected perk: Special grenade x 3"
 REFERENCE LOCK_SERVER
 LANG_ENGLISH "Not available on this server."
 
+REFERENCE LOCK_RANK
+LANG_ENGLISH "Not allowed on your rank."
+
 ENDMARKER
