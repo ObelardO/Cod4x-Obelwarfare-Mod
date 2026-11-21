@@ -193,6 +193,7 @@ prestigeReset()
 	statId = 0;
 	slot = 0;
 	base = 0;
+	initFlag = 0;
 	i = 0;
 	clanTag = 0;
 	newPrestige = 0;
@@ -217,9 +218,10 @@ prestigeReset()
 	self.prestigeDone = 0;
 	self.prestigePct = 0;
 	// One prestigeSetStat call is one step: 200 + clan tag + 150 weapons +
-	// 10 rank/feature + 10 tiers + 7 bookmarks + 50 class slots + 11 class
-	// bases + 8 starter weapons + 13 perks + plevel + rank icons.
-	self.prestigeTotal = 463;
+	// 10 rank/feature + 10 tiers + 7 bookmarks + 198 challenge states +
+	// 198 challenge progress + 50 class slots + 11 class bases + 8 starter
+	// weapons + 13 perks + plevel + rank icons.
+	self.prestigeTotal = 859;
 	self setClientDvar( "ui_prestige_pct", "0" );
 	newPrestige = self.pers["prestige"] + 1;
 	clanTag = self getStat( 261 );
@@ -243,6 +245,11 @@ prestigeReset()
 	self prestigeSetStat( 263, 0 );
 	for ( statId = 270; statId <= 279; statId++ )
 		self prestigeSetStat( statId, 0 );
+	// Challenge state and progress. Rank unlock only opens a group while the state is 0.
+	for ( statId = 501; statId <= 698; statId++ )
+		self prestigeSetStat( statId, 0 );
+	for ( statId = 2501; statId <= 2698; statId++ )
+		self prestigeSetStat( statId, 0 );
 
 	self prestigeSetStat( 2301, 0 );
 	self prestigeSetStat( 2350, 0 );
@@ -260,7 +267,11 @@ prestigeReset()
 	for ( i = 0; i < classBases.size; i++ )
 	{
 		base = classBases[i];
-		self prestigeSetStat( base, 1 );
+		// 200 keeps class 1 initialized. 210-240 lock slots 2-5 until Create-a-Class unlocks.
+		initFlag = 0;
+		if ( base == 200 )
+			initFlag = 1;
+		self prestigeSetStat( base, initFlag );
 		for ( slot = 1; slot <= 9; slot++ )
 			self prestigeSetStat( base + slot, defaultClassStat( slot ) );
 	}
