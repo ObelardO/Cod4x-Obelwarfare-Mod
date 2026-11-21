@@ -96,8 +96,6 @@ givePowerRankXP()
 		self maps\mp\gametypes\_rank::updateRankAnnounceHUD( true );
 	}
 
-	self openCustomClasses();
-	
 	// Check if we need to unlock the special attachments and camos for the player
 	if ( level.scr_power_rank_mode == 2 ) {
 		self unlockSpecialAttachments();
@@ -105,20 +103,6 @@ givePowerRankXP()
 	}
 
 	return;
-}
-
-
-openCustomClasses()
-{
-	// Class selection shows slots 2-5 only after these stats are set.
-	if ( self getStat( 210 ) < 1 )
-		self setStat( 210, 1 );
-	if ( self getStat( 220 ) < 1 )
-		self setStat( 220, 1 );
-	if ( self getStat( 230 ) < 1 )
-		self setStat( 230, 1 );
-	if ( self getStat( 240 ) < 1 )
-		self setStat( 240, 1 );
 }
 
 

@@ -963,13 +963,14 @@ getUnlockedMask()
     return 32767;
 }
 
-//True when bitValue is set. Script has no bitwise operator, and bitValue is a power of two.
+//True when bitValue is set. bitValue is a power of two.
+//Bitwise test matches _rank.gsc. 65537 is unlocked plus the NEW flag, and bit 0 must still count.
 getMaskBitSet( statValue, bitValue )
 {
     if ( !isDefined( bitValue ) || bitValue < 1 )
         return false;
 
-    return ( int( statValue / bitValue ) % 2 ) != 0;
+    return ( int( statValue ) & int( bitValue ) ) != 0;
 }
 
 //Weapon bit 0, perk stat above 0, or the attachment bit on weaponRef.
