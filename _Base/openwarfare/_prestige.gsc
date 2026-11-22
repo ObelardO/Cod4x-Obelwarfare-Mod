@@ -29,7 +29,7 @@ initPrestigeLevelData()
 	for ( ;; )
 	{
 		prestigeTitle = tableLookupIString( "mp/prestigeNameTable.csv", 0, prestigeId, 1 );
-		if ( !isDefined( prestigeTitle ) || prestigeTitle == "" )
+		if ( !isDefined( prestigeTitle ) || prestigeTitle == &"" )
 			break;
 
 		precacheString( prestigeTitle );
