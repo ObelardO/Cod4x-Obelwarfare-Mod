@@ -23,9 +23,6 @@ init()
 
 onPlayerConnected()
 {
-	if ( level.rankedMatch || level.scr_server_rank_type == 2 )
-		self repairWipedClasses();
-
 	self thread prestigeResponseHandler();
 }
 
@@ -134,48 +131,91 @@ prestigePublish()
 	self prestigePace();
 }
 
-defaultClassStat( slot )
+defaultClassStat( classIndex, slot )
 {
-	// statsTable row ids. Slot 0 is the M9, not an empty perk.
+	// statsTable row ids. Same loadouts as the stock default classes. 0 is the M9.
+	if ( classIndex == 0 )
+	{
+		if ( slot == 1 )
+			return 25;
+		if ( slot == 2 )
+			return 5;
+		if ( slot == 5 )
+			return 191;
+		if ( slot == 6 )
+			return 160;
+		if ( slot == 7 )
+			return 154;
+		if ( slot == 8 )
+			return 103;
+		return 0;
+	}
+
+	if ( classIndex == 1 )
+	{
+		if ( slot == 1 )
+			return 10;
+		if ( slot == 3 )
+			return 2;
+		if ( slot == 4 )
+			return 3;
+		if ( slot == 5 )
+			return 184;
+		if ( slot == 6 )
+			return 156;
+		if ( slot == 7 )
+			return 162;
+		if ( slot == 8 )
+			return 101;
+		return 0;
+	}
+
+	if ( classIndex == 2 )
+	{
+		if ( slot == 1 )
+			return 81;
+		if ( slot == 3 )
+			return 2;
+		if ( slot == 5 )
+			return 176;
+		if ( slot == 6 )
+			return 167;
+		if ( slot == 7 )
+			return 161;
+		if ( slot == 8 )
+			return 103;
+		return 0;
+	}
+
+	if ( classIndex == 3 )
+	{
+		if ( slot == 1 )
+			return 71;
+		if ( slot == 5 )
+			return 186;
+		if ( slot == 6 )
+			return 156;
+		if ( slot == 7 )
+			return 154;
+		if ( slot == 8 )
+			return 102;
+		return 0;
+	}
+
 	if ( slot == 1 )
-		return 25;
-	if ( slot == 5 || slot == 6 || slot == 7 )
-		return 190;
+		return 61;
+	if ( slot == 4 )
+		return 3;
+	if ( slot == 5 )
+		return 176;
+	if ( slot == 6 )
+		return 160;
+	if ( slot == 7 )
+		return 161;
 	if ( slot == 8 )
 		return 101;
 
 	return 0;
-}
-
-repairWipedClasses()
-{
-	base = 0;
-	slot = 0;
-	classBases = [];
-
-	classBases[0] = 200;
-	classBases[1] = 210;
-	classBases[2] = 220;
-	classBases[3] = 230;
-	classBases[4] = 240;
-
-	for ( base = 0; base < classBases.size; base++ )
-	{
-		slot = classBases[base];
-		if ( self getStat( slot + 1 ) != 0 || self getStat( slot + 5 ) != 0 || self getStat( slot + 6 ) != 0 || self getStat( slot + 7 ) != 0 )
-			continue;
-
-		self setStat( slot, 1 );
-		self setStat( slot + 1, defaultClassStat( 1 ) );
-		self setStat( slot + 2, defaultClassStat( 2 ) );
-		self setStat( slot + 3, defaultClassStat( 3 ) );
-		self setStat( slot + 4, defaultClassStat( 4 ) );
-		self setStat( slot + 5, defaultClassStat( 5 ) );
-		self setStat( slot + 6, defaultClassStat( 6 ) );
-		self setStat( slot + 7, defaultClassStat( 7 ) );
-		self setStat( slot + 8, defaultClassStat( 8 ) );
-		self setStat( slot + 9, defaultClassStat( 9 ) );
-	}
 }
 
 prestigeSetStat( statId, value )
@@ -273,7 +313,7 @@ prestigeReset()
 			initFlag = 1;
 		self prestigeSetStat( base, initFlag );
 		for ( slot = 1; slot <= 9; slot++ )
-			self prestigeSetStat( base + slot, defaultClassStat( slot ) );
+			self prestigeSetStat( base + slot, defaultClassStat( i, slot ) );
 	}
 
 	clearBases[0] = 300;
