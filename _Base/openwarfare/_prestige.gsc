@@ -202,9 +202,8 @@ unlockPrestige()
 	
 	prestigeId = self.pers["prestige"] + 1;
 
-	self processPrestigeResetData( true );
+	// Identity first. A drop during the later wipe keeps the new prestige and level 1.
 	self setPrestigeResetData( 2326, prestigeId );
-	
 	self maps\mp\gametypes\_persistence::statSet( "minxp", maps\mp\gametypes\_rank::getRankInfoMinXp( 0 ) );
 	self maps\mp\gametypes\_persistence::statSet( "maxxp", maps\mp\gametypes\_rank::getRankInfoMaxXp( 0 ) );
 
@@ -215,6 +214,8 @@ unlockPrestige()
 
 	if ( level.gametype != "gg" )
 		self setRank( 0, prestigeId );
+
+	self processPrestigeResetData( true );
 
 	self notifyPrestigeUnlockedToPlayers( prestigeId );
 

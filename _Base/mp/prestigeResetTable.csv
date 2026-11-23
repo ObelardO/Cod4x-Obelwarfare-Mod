@@ -1,137 +1,137 @@
 # number start end value description
-# Perk and item bytes under 200 set to locked. The starter perks below are left out of these ranges.
-0,0,153,0,locked bytes
-1,155,,0,locked byte
-2,157,159,0,locked bytes
-3,163,166,0,locked bytes
-4,170,183,0,locked bytes
-5,185,,0,locked byte
-6,189,,0,locked byte
-7,191,199,0,locked bytes
-
-# Starter perks stay unlocked. 1 is the unlocked value.
-8,154,,1,extreme conditioning
-9,156,,1,sonic boom
-10,160,,1,stopping power
-11,161,,1,deep impact
-12,162,,1,steady aim
-13,167,,1,juggernaut
-14,168,,1,tactical mask
-15,169,,1,objective
-16,184,,1,c4
-17,186,,1,rpg
-18,187,,1,china lake
-19,188,,1,crossbow
-20,190,,1,no perk
-
-# Menu rank stats 251-258. Create-a-Class (260) and Challenges (263). 0 locks both features until they are earned again.
-21,251,258,0,menu rank stats
-22,260,,0,create-a-class locked
-23,263,,0,challenges locked
-
-# Challenge group buttons 270-279. 0 locks all ten groups. Rank-up opens them again when the challenge state below is 0.
-24,270,279,0,challenge buttons locked
-
-# Other class blocks outside custom classes 200-249. Cleared so an old loadout is not kept.
-25,300,,0,extra class
-26,310,,0,extra class
-27,320,,0,extra class
-28,330,,0,extra class
-29,340,,0,extra class
-30,350,,0,extra class
-31,1300,,0,extra class
-32,1310,,0,extra class
-33,1320,,0,extra class
-34,1330,,0,extra class
-35,1340,,0,extra class
-
-# Challenge state 501-698. Must be 0 or the rank unlock skips the group and the button stays locked.
-36,501,698,0,challenge state
-
-# Challenge progress 2501-2698. Old counts are cleared so a challenge cannot finish on the first action after it unlocks.
-37,2501,2698,0,challenge progress
-
-# Weapon unlock stats except the default weapons in the next block.
-38,3001,,0,locked weapon
-39,3003,3009,0,locked weapons
-40,3011,3024,0,locked weapons
-41,3026,3060,0,locked weapons
-42,3062,3070,0,locked weapons
-43,3072,3080,0,locked weapons
-44,3082,3099,0,locked weapons
-45,3101,3149,0,locked weapons
+# Rank stats for a new level 1. Written first so a drop during the later wipe keeps level 1. Minimum and maximum XP stay in script because they come from the rank table.
+0,2301,,0,rank xp
+1,2350,,0,rank
+2,2353,,0,last xp
 
 # Default weapons left unlocked: M9 USP MP5 M16 M40A3 W1200 SAW and frag grenade.
-46,3000,,9,m9
-47,3002,,9,usp
-48,3010,,1,mp5
-49,3025,,1,m16
-50,3061,,1,m40a3
-51,3071,,1,w1200
-52,3081,,1,saw
-53,3100,,1,frag grenade
+3,3000,,9,m9
+4,3002,,9,usp
+5,3010,,1,mp5
+6,3025,,1,m16
+7,3061,,1,m40a3
+8,3071,,1,w1200
+9,3081,,1,saw
+10,3100,,1,frag grenade
+
+# Starter perks stay unlocked. 1 is the unlocked value.
+11,154,,1,extreme conditioning
+12,156,,1,sonic boom
+13,160,,1,stopping power
+14,161,,1,deep impact
+15,162,,1,steady aim
+16,167,,1,juggernaut
+17,168,,1,tactical mask
+18,169,,1,objective
+19,184,,1,c4
+20,186,,1,rpg
+21,187,,1,china lake
+22,188,,1,crossbow
+23,190,,1,no perk
 
 # Custom classes. Each block is flag / primary / primary attachment / secondary / secondary attachment / perk 1 / perk 2 / perk 3 / special grenade / camo.
 # Class 1 assault. Flag 200 stays 1. M16 with grenade launcher. M9. Stopping Power. Extreme Conditioning. Stun.
-54,200,,1,class 1 flag
-55,201,,25,class 1 m16
-56,202,,5,class 1 grenade launcher
-57,203,,0,class 1 m9
-58,204,,0,class 1 pistol attachment
-59,205,,191,class 1 grenade launcher perk
-60,206,,160,class 1 stopping power
-61,207,,154,class 1 extreme conditioning
-62,208,,103,class 1 stun
-63,209,,0,class 1 camo
+24,200,,1,class 1 flag
+25,201,,25,class 1 m16
+26,202,,5,class 1 grenade launcher
+27,203,,0,class 1 m9
+28,204,,0,class 1 pistol attachment
+29,205,,191,class 1 grenade launcher perk
+30,206,,160,class 1 stopping power
+31,207,,154,class 1 extreme conditioning
+32,208,,103,class 1 stun
+33,209,,0,class 1 camo
 # Class 2 spec ops. Flag 210 stays 0 until Create-a-Class unlocks. MP5. Silenced USP. C4. Sonic Boom. Steady Aim. Flash.
-64,210,,0,class 2 flag
-65,211,,10,class 2 mp5
-66,212,,0,class 2 primary attachment
-67,213,,2,class 2 usp
-68,214,,3,class 2 silencer
-69,215,,184,class 2 c4
-70,216,,156,class 2 sonic boom
-71,217,,162,class 2 steady aim
-72,218,,101,class 2 flash
-73,219,,0,class 2 camo
+34,210,,0,class 2 flag
+35,211,,10,class 2 mp5
+36,212,,0,class 2 primary attachment
+37,213,,2,class 2 usp
+38,214,,3,class 2 silencer
+39,215,,184,class 2 c4
+40,216,,156,class 2 sonic boom
+41,217,,162,class 2 steady aim
+42,218,,101,class 2 flash
+43,219,,0,class 2 camo
 # Class 3 heavy gunner. Flag 220 stays 0. SAW. USP. Three special grenades. Juggernaut. Deep Impact. Stun.
-74,220,,0,class 3 flag
-75,221,,81,class 3 saw
-76,222,,0,class 3 primary attachment
-77,223,,2,class 3 usp
-78,224,,0,class 3 pistol attachment
-79,225,,176,class 3 special grenades x3
-80,226,,167,class 3 juggernaut
-81,227,,161,class 3 deep impact
-82,228,,103,class 3 stun
-83,229,,0,class 3 camo
+44,220,,0,class 3 flag
+45,221,,81,class 3 saw
+46,222,,0,class 3 primary attachment
+47,223,,2,class 3 usp
+48,224,,0,class 3 pistol attachment
+49,225,,176,class 3 special grenades x3
+50,226,,167,class 3 juggernaut
+51,227,,161,class 3 deep impact
+52,228,,103,class 3 stun
+53,229,,0,class 3 camo
 # Class 4 demolitions. Flag 230 stays 0. W1200. M9. RPG. Sonic Boom. Extreme Conditioning. Smoke.
-84,230,,0,class 4 flag
-85,231,,71,class 4 w1200
-86,232,,0,class 4 primary attachment
-87,233,,0,class 4 m9
-88,234,,0,class 4 pistol attachment
-89,235,,186,class 4 rpg
-90,236,,156,class 4 sonic boom
-91,237,,154,class 4 extreme conditioning
-92,238,,102,class 4 smoke
-93,239,,0,class 4 camo
+54,230,,0,class 4 flag
+55,231,,71,class 4 w1200
+56,232,,0,class 4 primary attachment
+57,233,,0,class 4 m9
+58,234,,0,class 4 pistol attachment
+59,235,,186,class 4 rpg
+60,236,,156,class 4 sonic boom
+61,237,,154,class 4 extreme conditioning
+62,238,,102,class 4 smoke
+63,239,,0,class 4 camo
 # Class 5 sniper. Flag 240 stays 0. M40A3. Silenced M9. Three special grenades. Stopping Power. Deep Impact. Flash.
-94,240,,0,class 5 flag
-95,241,,61,class 5 m40a3
-96,242,,0,class 5 primary attachment
-97,243,,0,class 5 m9
-98,244,,3,class 5 silencer
-99,245,,176,class 5 special grenades x3
-100,246,,160,class 5 stopping power
-101,247,,161,class 5 deep impact
-102,248,,101,class 5 flash
-103,249,,0,class 5 camo
+64,240,,0,class 5 flag
+65,241,,61,class 5 m40a3
+66,242,,0,class 5 primary attachment
+67,243,,0,class 5 m9
+68,244,,3,class 5 silencer
+69,245,,176,class 5 special grenades x3
+70,246,,160,class 5 stopping power
+71,247,,161,class 5 deep impact
+72,248,,101,class 5 flash
+73,249,,0,class 5 camo
+
+# Menu rank stats 251-258. Create-a-Class (260) and Challenges (263). 0 locks both features until they are earned again.
+74,251,258,0,menu rank stats
+75,260,,0,create-a-class locked
+76,263,,0,challenges locked
+
+# Challenge group buttons 270-279. 0 locks all ten groups. Rank-up opens them again when the challenge state below is 0.
+77,270,279,0,challenge buttons locked
+
+# Perk and item bytes under 200 set to locked. The starter perks above are left out of these ranges.
+78,0,153,0,locked bytes
+79,155,,0,locked byte
+80,157,159,0,locked bytes
+81,163,166,0,locked bytes
+82,170,183,0,locked bytes
+83,185,,0,locked byte
+84,189,,0,locked byte
+85,191,199,0,locked bytes
+
+# Other class blocks outside custom classes 200-249. Cleared so an old loadout is not kept.
+86,300,,0,extra class
+87,310,,0,extra class
+88,320,,0,extra class
+89,330,,0,extra class
+90,340,,0,extra class
+91,350,,0,extra class
+92,1300,,0,extra class
+93,1310,,0,extra class
+94,1320,,0,extra class
+95,1330,,0,extra class
+96,1340,,0,extra class
+
+# Challenge state 501-698. Must be 0 or the rank unlock skips the group and the button stays locked.
+97,501,698,0,challenge state
+
+# Challenge progress 2501-2698. Old counts are cleared so a challenge cannot finish on the first action after it unlocks.
+98,2501,2698,0,challenge progress
+
+# Weapon unlock stats except the default weapons above.
+99,3001,,0,locked weapon
+100,3003,3009,0,locked weapons
+101,3011,3024,0,locked weapons
+102,3026,3060,0,locked weapons
+103,3062,3070,0,locked weapons
+104,3072,3080,0,locked weapons
+105,3082,3099,0,locked weapons
+106,3101,3149,0,locked weapons
 
 # Power-rank attachment and camo list counts. Cleared so the next unlock pass starts from the beginning.
-104,3150,3151,0,attachment and camo counts
-
-# Rank stats for a new level 1. Minimum and maximum XP stay in script because they come from the rank table.
-105,2301,,0,rank xp
-106,2350,,0,rank
-107,2353,,0,last xp
+107,3150,3151,0,attachment and camo counts
