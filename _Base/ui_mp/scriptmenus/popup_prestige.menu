@@ -159,7 +159,7 @@
 		{
 			type			ITEM_TYPE_TEXT
 			rect			22 164 284 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
-			exp				text( dvarString( ui_prestige_pct ) + "%" )
+			exp				text( dvarInt( ui_prestige_pct ) + "%" )
 			textfont		UI_FONT_NORMAL
 			textscale		0.33
 			textalign		ITEM_ALIGN_MIDDLE_CENTER

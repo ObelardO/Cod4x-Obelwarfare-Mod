@@ -268,6 +268,8 @@ material,animbg_blur_back
 
 rawfile,mp/CoD2maps.arena
 stringtable,mp/propsTable.csv
+stringtable,mp/prestigeNameTable.csv
+stringtable,mp/prestigeResetTable.csv
 stringtable,mp/rankIconTable.csv
 stringtable,mp/rankTable.csv
 

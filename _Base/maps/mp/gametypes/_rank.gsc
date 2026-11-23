@@ -181,8 +181,6 @@ onPlayerConnect()
 			if ( prestigeId > level.maxPrestige )
 				prestigeId = level.maxPrestige;
 
-			player openwarfare\_prestige::repairWipedClasses();
-
 			// Old ranks 55-64 stored XP past Commander. Sit those players on the level-55 cap
 			// so the prestige button, which compares XP to that exact value, can appear.
 			maxRankXp = getRankInfoMaxXp( level.maxRank );
