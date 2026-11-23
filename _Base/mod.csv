@@ -379,6 +379,10 @@ menufile,ui_mp/challenges_ingame.menu
 menufile,ui_mp/scriptmenus/popup_prestige.menu
 menufile,ui_mp/scriptmenus/clientcmd.menu
 menufile,ui_mp/scriptmenus/eog_statistics.menu
+menufile,ui_mp/scriptmenus/popup_unlock.menu
+menufile,ui_mp/scriptmenus/popup_unlock_page1.menu
+menufile,ui_mp/scriptmenus/popup_unlock_page2.menu
+menufile,ui_mp/scriptmenus/popup_summary.menu
 menufile,ui_mp/scriptmenus/ow_cac_editor.menu
 menufile,ui_mp/scriptmenus/popup_addfavorite.menu
 menufile,ui_mp/scriptmenus/scoreboard.menu

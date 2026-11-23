@@ -1696,28 +1696,81 @@ endGame( winner, endReasonText )
 		return;
 	}
 
-	if ( ( level.rankedMatch || level.scr_server_rank_type == 2 ) || level.scr_endofgame_stats_enable == 1 ) {
-		if ( level.scr_endofgame_stats_enable == 1 ) {
-			wait (1.0);
-		}
-		
-		// popup for game summary
+	// Ranked servers are scr_server_rank_type 0 (level.rankedMatch) and type 2.
+	isRankedServer = ( level.rankedMatch || level.scr_server_rank_type == 2 );
+	showStats = ( level.scr_endofgame_stats_enable == 1 && isDefined( game["menu_eog_stats"] ) );
+	showUnlocks = ( level.scr_endofgame_unlocks_enable == 1 && isRankedServer && isDefined( game["menu_eog_unlock"] ) );
+
+	// One fixed intermission. Map voting starts its own clock afterwards.
+	mapVoteWillRun = isDefined( level.onEndGameMapVote ) && ( !isDefined( game["skip_final_map_voting"] ) || !game["skip_final_map_voting"] );
+	thread timeLimitClock_Intermission( level.scr_intermission_time, !mapVoteWillRun );
+
+	players = level.players;
+	for ( index = 0; index < players.size; index++ )
+	{
+		player = players[index];
+		hasUnlocks = showUnlocks && isDefined( player.pers["unlocks"] ) && isDefined( player.pers["unlocks"]["page"] ) && player.pers["unlocks"]["page"] != 0;
+
+		player setClientDvar( "ui_eog_chain", "1" );
+
+		if ( hasUnlocks )
+			player setClientDvar( "ui_eog_unlocks_enable", "1" );
+		else
+			player setClientDvar( "ui_eog_unlocks_enable", "0" );
+	}
+
+	if ( showStats && level.scr_intermission_time > 0 ) {
+		menuDelay = 1.0;
+		if ( menuDelay > level.scr_intermission_time )
+			menuDelay = level.scr_intermission_time;
+
+		if ( menuDelay > 0 )
+			wait( menuDelay );
+
+		players = level.players;
+		for ( index = 0; index < players.size; index++ )
+			players[index] openMenu( game["menu_eog_stats"] );
+
+		if ( level.scr_intermission_time - menuDelay > 0 )
+			wait( level.scr_intermission_time - menuDelay );
+	} else if ( showUnlocks && level.scr_intermission_time > 0 ) {
 		players = level.players;
 		for ( index = 0; index < players.size; index++ )
 		{
 			player = players[index];
-			
-			if ( level.scr_endofgame_stats_enable == 1 ) {
-				player openMenu( game["menu_eog_stats"] );
-			} else {
-				player openMenu( game["menu_eog_unlock"] );
-			}
-		}
-	}
-	//END_REGION: MATCH ENDING 
 
-	thread timeLimitClock_Intermission( level.scr_intermission_time, ( level.scr_amvs_enable == 0 || game["skip_final_map_voting"] ) );
-	wait (level.scr_intermission_time);
+			if ( isDefined( player.pers["unlocks"] ) && isDefined( player.pers["unlocks"]["page"] ) && player.pers["unlocks"]["page"] != 0 )
+				player openMenu( game["menu_eog_unlock"] );
+		}
+
+		wait( level.scr_intermission_time );
+	} else if ( level.scr_intermission_time > 0 ) {
+		wait( level.scr_intermission_time );
+	}
+
+	// Drop the page chain before closing, so a close does not open the next unlock page or the summary.
+	players = level.players;
+	for ( index = 0; index < players.size; index++ )
+	{
+		players[index] setClientDvar( "ui_eog_chain", "0" );
+		players[index] setClientDvar( "player_unlock_page", "0" );
+		players[index] setClientDvar( "ui_eog_unlocks_enable", "0" );
+	}
+
+	wait( 0.05 );
+
+	for ( closePass = 0; closePass < 3; closePass++ )
+	{
+		players = level.players;
+		for ( index = 0; index < players.size; index++ )
+		{
+			players[index] closeMenu();
+			players[index] closeInGameMenu();
+		}
+
+		wait( 0.05 );
+	}
+	//END_REGION: MATCH ENDING
 
 	//Keep playing on this map while fast restarts limit not reached
 	if ( level.scr_eog_fastrestart != 0 ) {	
