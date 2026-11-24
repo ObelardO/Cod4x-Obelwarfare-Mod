@@ -682,8 +682,8 @@ unlockPage( in_page )
 			self.pers["unlocks"]["page"] = 2;
 		}
 		if( self.pers["unlocks"]["page"] == 1 )
-			self setClientDvar( "player_unlock_page", "3" );	
-	}		
+			self setClientDvar( "player_unlock_page", "3" );
+	}
 }
 
 // unlocks weapon

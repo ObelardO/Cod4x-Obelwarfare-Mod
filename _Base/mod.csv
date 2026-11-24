@@ -382,15 +382,17 @@ menufile,ui_mp/scriptmenus/popup_prestige.menu
 menufile,ui_mp/scriptmenus/clientcmd.menu
 menufile,ui_mp/scriptmenus/eog_statistics.menu
 menufile,ui_mp/scriptmenus/popup_unlock.menu
-menufile,ui_mp/scriptmenus/popup_unlock_page1.menu
-menufile,ui_mp/scriptmenus/popup_unlock_page2.menu
-menufile,ui_mp/scriptmenus/popup_summary.menu
 menufile,ui_mp/scriptmenus/ow_cac_editor.menu
 menufile,ui_mp/scriptmenus/popup_addfavorite.menu
 menufile,ui_mp/scriptmenus/scoreboard.menu
 menufile,ui_mp/scriptmenus/serverinfo.menu
 menufile,ui_mp/scriptmenus/team_marinesopfor.menu
 menufile,ui_mp/scriptmenus/dynamic_attachments.menu
+
+rawfile,ui_mp/scriptmenus/popup_eog.menu
+rawfile,ui_mp/scriptmenus/eog_page_weapons.inc
+rawfile,ui_mp/scriptmenus/eog_page_perks.inc
+rawfile,ui_mp/scriptmenus/eog_page_summary.inc
 
 rawfile,ui_mp/cac_loadout_ingame.inc
 rawfile,ui_mp/cac_ingame.inc

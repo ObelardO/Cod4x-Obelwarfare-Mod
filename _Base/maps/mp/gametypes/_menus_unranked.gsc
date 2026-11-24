@@ -26,16 +26,10 @@ init()
 	precacheMenu(game["menu_callvote"]);
 	precacheMenu(game["menu_muteplayer"]);
 	
-	// game summary popups
+	// Summary and both unlock pages are opened from popup_unlock, so they share its precache slot.
 	game["menu_eog_unlock"] = "popup_unlock";
-	game["menu_eog_summary"] = "popup_summary";
-	game["menu_eog_unlock_page1"] = "popup_unlock_page1";
-	game["menu_eog_unlock_page2"] = "popup_unlock_page2";
 
 	precacheMenu(game["menu_eog_unlock"]);
-	precacheMenu(game["menu_eog_summary"]);
-	precacheMenu(game["menu_eog_unlock_page1"]);
-	precacheMenu(game["menu_eog_unlock_page2"]);
 
 	precacheMenu("scoreboard");
 	precacheMenu(game["menu_team"]);

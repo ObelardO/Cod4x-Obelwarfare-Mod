@@ -32,17 +32,11 @@ init()
 		// game summary menu file precache
 		game["menu_eog_main"] = "endofgame";
 
-		// menu names (do not precache since they are in game_summary_ingame which should be precached
+		// Summary and both unlock pages are opened from popup_unlock, so they share its precache slot.
 		game["menu_eog_unlock"] = "popup_unlock";
-		game["menu_eog_summary"] = "popup_summary";
-		game["menu_eog_unlock_page1"] = "popup_unlock_page1";
-		game["menu_eog_unlock_page2"] = "popup_unlock_page2";
 
 		precacheMenu(game["menu_eog_main"]);
 		precacheMenu(game["menu_eog_unlock"]);
-		precacheMenu(game["menu_eog_summary"]);
-		precacheMenu(game["menu_eog_unlock_page1"]);
-		precacheMenu(game["menu_eog_unlock_page2"]);
 
 	}
 	else
