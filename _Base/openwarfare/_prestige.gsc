@@ -13,6 +13,8 @@ init()
 	if ( !level.rankedMatch && level.scr_server_rank_type != 2 )
 		return;
 
+	level.scr_prestige_fast_reset = getdvarx( "scr_prestige_fast_reset", "int", 0, 0, 1 );
+
 	precacheMenu( "menu_challenges" );
 	precacheMenu( "popup_prestige" );
 	precacheString( &"PRESTIGE_KILLFEED" );
@@ -39,7 +41,7 @@ initPrestigeLevelData()
 	assertex( prestigeId > 1, "mp/prestigeNameTable.csv has no rows" );
 
 	level.prestige = spawnStruct();
-	level.prestige.statSetsTotal = processPrestigeResetData( false );
+	level.prestige.statSetsTotal = processPrestigeResetData( false, "mp/prestigeResetTable.csv" );
 }
 
 onPlayerConnected()
@@ -130,7 +132,7 @@ informPrestigeResetProgress()
 	self pacePrestigeResetData();
 }
 
-processPrestigeResetData( writeStats )
+processPrestigeResetData( writeStats, tablePath )
 {
 	row = 0;
 	total = 1;
@@ -145,13 +147,13 @@ processPrestigeResetData( writeStats )
 
 	for ( ;; )
 	{
-		statRangeMinRaw = tableLookup( "mp/prestigeResetTable.csv", 0, row, 1 );
+		statRangeMinRaw = tableLookup( tablePath, 0, row, 1 );
 		if ( !isDefined( statRangeMinRaw ) || statRangeMinRaw == "" )
 			break;
 
-		statRangeMaxRaw = tableLookup( "mp/prestigeResetTable.csv", 0, row, 2 );
+		statRangeMaxRaw = tableLookup( tablePath, 0, row, 2 );
 		statRangeMin = int( statRangeMinRaw );
-		statValue = int( tableLookup( "mp/prestigeResetTable.csv", 0, row, 3 ) );
+		statValue = int( tableLookup( tablePath, 0, row, 3 ) );
 		
 		if ( !isDefined( statRangeMaxRaw ) || statRangeMaxRaw == "" )
 			statRangeMax = statRangeMin;
@@ -168,7 +170,7 @@ processPrestigeResetData( writeStats )
 		row++;
 	}
 
-	assertex( row > 0, "mp/prestigeResetTable.csv has no rows" );
+	assertex( row > 0, tablePath + " has no rows" );
 	return total;
 }
 
@@ -215,7 +217,25 @@ unlockPrestige()
 	if ( level.gametype != "gg" )
 		self setRank( 0, prestigeId );
 
-	self processPrestigeResetData( true );
+	if ( level.scr_prestige_fast_reset )
+	{
+		self processPrestigeResetData( true, "mp/prestigeResetFastTable.csv" );
+		self notifyPrestigeUnlockedToPlayers( prestigeId );
+
+		self.prestige.statSetsPercent = 100;
+		self setClientDvar( "ui_prestige_pct", "100" );
+		self closeMenu();
+		self closeInGameMenu();
+
+		// The cfg uploads on reconnect. These writes must reach the client first.
+		wait 1;
+
+		self ExecClientCommand( "exec mp/prestigeReset.cfg" );
+		self.prestige.isUnlockingInProgress = false;
+		return true;
+	}
+
+	self processPrestigeResetData( true, "mp/prestigeResetTable.csv" );
 
 	self notifyPrestigeUnlockedToPlayers( prestigeId );
 

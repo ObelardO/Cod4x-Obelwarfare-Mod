@@ -1,0 +1,27 @@
+# number start end value description
+# Stats the client cannot set to a non-zero value. The first row repeats its stat in the end column so the table width includes every cell.
+0,3000,3000,9,m9
+1,3002,,9,usp
+2,3010,,769,mp5
+3,3011,,769,skorpion
+4,3020,,801,ak47
+5,3025,,801,m16
+6,3061,,769,m40a3
+7,3071,,769,w1200
+8,3080,,769,rpd
+9,3081,,769,saw
+
+# Stats a fresh profile already has at 1. Flash smoke stun and three special grenades are included.
+10,101,,1,flash
+11,102,,1,smoke
+12,103,,1,stun
+13,154,,1,extreme conditioning
+14,156,,1,sonic boom
+15,160,,1,stopping power
+16,161,,1,deep impact
+17,162,,1,steady aim
+18,167,,1,juggernaut
+19,176,,1,special grenades x3
+20,184,,1,c4
+21,186,,1,rpg
+22,190,,1,no perk
