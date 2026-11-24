@@ -1364,4 +1364,11 @@ REFERENCE AUTOBALANCE_SKILL_NEXT_ROUND
 LANG_FRENCH "Les équipes seront équilibrées par niveau à la prochaine manche"
 
 
+//******************************************************************************
+// ui_mp/challenges.menu, ui_mp/scriptmenus/class.menu
+//******************************************************************************
+REFERENCE ACHIEVEMENTS
+LANG_FRENCH "Achievements"
+
+
 ENDMARKER

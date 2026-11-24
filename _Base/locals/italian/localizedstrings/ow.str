@@ -1364,4 +1364,11 @@ REFERENCE AUTOBALANCE_SKILL_NEXT_ROUND
 LANG_ITALIAN "Le squadre saranno bilanciate per abilita' nel prossimo turno"
 
 
+//******************************************************************************
+// ui_mp/challenges.menu, ui_mp/scriptmenus/class.menu
+//******************************************************************************
+REFERENCE ACHIEVEMENTS
+LANG_ITALIAN "Achievements"
+
+
 ENDMARKER

@@ -1364,4 +1364,11 @@ REFERENCE AUTOBALANCE_SKILL_NEXT_ROUND
 LANG_SPANISH "Los equipos se equilibrarán por habilidad en la siguiente ronda"
 
 
+//******************************************************************************
+// ui_mp/challenges.menu, ui_mp/scriptmenus/class.menu
+//******************************************************************************
+REFERENCE ACHIEVEMENTS
+LANG_SPANISH "Achievements"
+
+
 ENDMARKER

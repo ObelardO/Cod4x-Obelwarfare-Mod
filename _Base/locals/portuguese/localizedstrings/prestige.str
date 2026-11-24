@@ -68,37 +68,10 @@ LANG_PORTUGUESE     "Prestige G.O.T.A."
 REFERENCE        NAME10
 LANG_PORTUGUESE     "Prestige Supreme Commander"
 
-REFERENCE        NEXT1
-LANG_PORTUGUESE     "Prestige I"
-
-REFERENCE        NEXT2
-LANG_PORTUGUESE     "Prestige II"
-
-REFERENCE        NEXT3
-LANG_PORTUGUESE     "Prestige III"
-
-REFERENCE        NEXT4
-LANG_PORTUGUESE     "Prestige IV"
-
-REFERENCE        NEXT5
-LANG_PORTUGUESE     "Prestige V"
-
-REFERENCE        NEXT6
-LANG_PORTUGUESE     "Prestige VI"
-
-REFERENCE        NEXT7
-LANG_PORTUGUESE     "Prestige VII"
-
-REFERENCE        NEXT8
-LANG_PORTUGUESE     "Prestige VIII"
-
-REFERENCE        NEXT9
-LANG_PORTUGUESE     "Prestige IX"
-
-REFERENCE        NEXT10
-LANG_PORTUGUESE     "Prestige X"
-
 REFERENCE        MAX
 LANG_PORTUGUESE     "You have reached the maximum prestige."
+
+REFERENCE        RECONNECT
+LANG_PORTUGUESE     "This cannot be undone. Enter Prestige Mode now? You will be reconnected to the server while unlocking."
 
 ENDMARKER

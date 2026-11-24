@@ -186,7 +186,7 @@
 		CHOICE_SEPARATOR( CHOICE_SEP_2 )
 
 
-		CHOICE_BUTTON( 6, "@MPUI_CHALLENGES", scriptMenuResponse "challenges"; )
+		CHOICE_BUTTON( 6, "@OW_ACHIEVEMENTS", scriptMenuResponse "challenges"; )
 
 		CHOICE_BUTTON( 7, "@MENU_CONTROLS", close self; open main_controls )
 

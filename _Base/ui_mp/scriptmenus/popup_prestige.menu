@@ -47,7 +47,7 @@
 				decoration \
 			}
 
-		#define PRESTIGE_POP_WARNING( step, warning ) \
+		#define PRESTIGE_POP_WARNING( warning, visArg ) \
 			itemDef \
 			{ \
 				type			ITEM_TYPE_TEXT \
@@ -59,16 +59,17 @@
 				textaligny		14 \
 				forecolor		CHOICE_TEXTCOLOR \
 				autowrapped \
-				visible			when( localVarInt( ui_prestige_step ) == step ) \
+				visible			visArg \
 				decoration \
 			}
 
 		PRESTIGE_POP_TITLE( 1, "@PRESTIGE_TITLE1" )
 		PRESTIGE_POP_TITLE( 2, "@PRESTIGE_TITLE2" )
 		PRESTIGE_POP_TITLE( 3, "@PRESTIGE_TITLE3" )
-		PRESTIGE_POP_WARNING( 1, "@PRESTIGE_WARNING1" )
-		PRESTIGE_POP_WARNING( 2, "@PRESTIGE_WARNING2" )
-		PRESTIGE_POP_WARNING( 3, "@PRESTIGE_WARNING3" )
+		PRESTIGE_POP_WARNING( "@PRESTIGE_WARNING1", when( localVarInt( ui_prestige_step ) == 1 ); )
+		PRESTIGE_POP_WARNING( "@PRESTIGE_WARNING2", when( localVarInt( ui_prestige_step ) == 2 ); )
+		PRESTIGE_POP_WARNING( "@PRESTIGE_WARNING3", when( localVarInt( ui_prestige_step ) == 3 && dvarInt( ui_prestige_fast ) == 0 ); )
+		PRESTIGE_POP_WARNING( "@PRESTIGE_RECONNECT", when( localVarInt( ui_prestige_step ) == 3 && dvarInt( ui_prestige_fast ) == 1 ); )
 
 		#undef CHOICE_GROUP
 		#define CHOICE_GROUP "prestige_pop"

@@ -1357,4 +1357,11 @@ REFERENCE AUTOBALANCE_SKILL_NEXT_ROUND
 LANG_PORTUGUESE "Os times serão equilibrados por habilidade na próxima partida"
 
 
+//******************************************************************************
+// ui_mp/challenges.menu, ui_mp/scriptmenus/class.menu
+//******************************************************************************
+REFERENCE ACHIEVEMENTS
+LANG_PORTUGUESE "Achievements"
+
+
 ENDMARKER

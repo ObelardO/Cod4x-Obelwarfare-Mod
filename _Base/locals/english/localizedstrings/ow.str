@@ -1464,4 +1464,11 @@ REFERENCE AUTOBALANCE_SKILL_NEXT_ROUND
 LANG_ENGLISH "Teams will be balanced by skill next round"
 
 
+//******************************************************************************
+// ui_mp/challenges.menu, ui_mp/scriptmenus/class.menu
+//******************************************************************************
+REFERENCE ACHIEVEMENTS
+LANG_ENGLISH "Achievements"
+
+
 ENDMARKER

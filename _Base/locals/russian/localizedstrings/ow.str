@@ -1484,4 +1484,11 @@ REFERENCE AUTOBALANCE_SKILL_NEXT_ROUND
 LANG_RUSSIAN "Команды будут сбалансированы по навыку в следующем раунде"
 
 
+//******************************************************************************
+// ui_mp/challenges.menu, ui_mp/scriptmenus/class.menu
+//******************************************************************************
+REFERENCE ACHIEVEMENTS
+LANG_RUSSIAN "Достижения"
+
+
 ENDMARKER

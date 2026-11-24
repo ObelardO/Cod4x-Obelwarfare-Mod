@@ -39,66 +39,39 @@ REFERENCE        KILLFEED
 LANG_RUSSIAN     "^3&&1^7 получает престижное звание ^3&&2^7."
 
 REFERENCE        NAME1
-LANG_RUSSIAN     "Престиж: мастер-комендор-сержант"
+LANG_RUSSIAN     "Престиж I: Младший лейтенант"
 
 REFERENCE        NAME2
-LANG_RUSSIAN     "Престиж: комендант-сержант"
+LANG_RUSSIAN     "Престиж II: Старший лейтенант"
 
 REFERENCE        NAME3
-LANG_RUSSIAN     "Престиж: главный сержант армии"
+LANG_RUSSIAN     "Престиж III: Капитан"
 
 REFERENCE        NAME4
-LANG_RUSSIAN     "Престиж: старший прапорщик"
+LANG_RUSSIAN     "Престиж IV: Майор"
 
 REFERENCE        NAME5
-LANG_RUSSIAN     "Престиж: лейтенант"
+LANG_RUSSIAN     "Престиж V: Подполковник"
 
 REFERENCE        NAME6
-LANG_RUSSIAN     "Престиж: майор"
+LANG_RUSSIAN     "Престиж VI: Полковник"
 
 REFERENCE        NAME7
-LANG_RUSSIAN     "Престиж: полковник"
+LANG_RUSSIAN     "Престиж VII: Генерал-майор"
 
 REFERENCE        NAME8
-LANG_RUSSIAN     "Престиж: главный сержант"
+LANG_RUSSIAN     "Престиж VIII: Генерал-лейтенант"
 
 REFERENCE        NAME9
-LANG_RUSSIAN     "Престиж: генерал армии"
+LANG_RUSSIAN     "Престиж IX: Генерал"
 
 REFERENCE        NAME10
-LANG_RUSSIAN     "Престиж: верховный главнокомандующий"
-
-REFERENCE        NEXT1
-LANG_RUSSIAN     "Престиж I"
-
-REFERENCE        NEXT2
-LANG_RUSSIAN     "Престиж II"
-
-REFERENCE        NEXT3
-LANG_RUSSIAN     "Престиж III"
-
-REFERENCE        NEXT4
-LANG_RUSSIAN     "Престиж IV"
-
-REFERENCE        NEXT5
-LANG_RUSSIAN     "Престиж V"
-
-REFERENCE        NEXT6
-LANG_RUSSIAN     "Престиж VI"
-
-REFERENCE        NEXT7
-LANG_RUSSIAN     "Престиж VII"
-
-REFERENCE        NEXT8
-LANG_RUSSIAN     "Престиж VIII"
-
-REFERENCE        NEXT9
-LANG_RUSSIAN     "Престиж IX"
-
-REFERENCE        NEXT10
-LANG_RUSSIAN     "Престиж X"
+LANG_RUSSIAN     "Престиж X: Главнокомандующий"
 
 REFERENCE        MAX
-LANG_RUSSIAN     "Вы достигли максимального престижа."
+LANG_RUSSIAN     "Вы достигли максимальный уровень престижа."
+
+REFERENCE        RECONNECT
+LANG_RUSSIAN     "Это нельзя отменить. Получить новое престижное звание? Вы будете переподключены к серверу во время разблокировки."
 
 ENDMARKER

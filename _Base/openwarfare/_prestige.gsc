@@ -18,9 +18,10 @@ init()
 	precacheMenu( "menu_challenges" );
 	precacheMenu( "popup_prestige" );
 	precacheString( &"PRESTIGE_KILLFEED" );
+	precacheString( &"PRESTIGE_RECONNECT" );
 
 	initPrestigeLevelData();
-	
+
 	level thread addNewEvent( "onPlayerConnected", ::onPlayerConnected );
 }
 
@@ -42,13 +43,31 @@ initPrestigeLevelData()
 
 	level.prestige = spawnStruct();
 	level.prestige.statSetsTotal = processPrestigeResetData( false, "mp/prestigeResetTable.csv" );
+	level.prestige.pending = [];
 }
 
 onPlayerConnected()
 {
 	self initPrestigePlayerData();
-	self setClientDvar( "ui_prestige_enable", 1 );
+	self setClientDvars( "ui_prestige_enable", level.scr_prestige_enable, "ui_prestige_fast", level.scr_prestige_fast_reset );
+
 	self thread addNewEvent( "onMenuResponse", ::onPrestigeMenuResponse );
+	self thread addNewEvent( "onPlayerSpawned", ::onPlayerSpawned );
+}
+
+onPlayerSpawned()
+{
+	guid = self getGuid();
+
+	if ( !isDefined( guid ) || guid == "" )
+		return;
+
+	if ( !isDefined( level.prestige.pending[guid] ) )
+		return;
+
+	prestigeId = level.prestige.pending[guid];
+	level.prestige.pending[guid] = undefined;
+	self notifyPrestigeUnlockedToPlayer( prestigeId );
 }
 
 initPrestigePlayerData()
@@ -190,6 +209,9 @@ unlockPrestige()
 	if ( self.prestige.isUnlockingInProgress )
 		return true;
 
+	if ( isDefined( level.intermission ) && level.intermission )
+		return false;
+
 	if ( !isDefined( self.pers["prestige"] ) || self.pers["prestige"] >= level.maxPrestige )
 		return false;
 
@@ -224,6 +246,11 @@ unlockPrestige()
 
 		self.prestige.statSetsPercent = 100;
 		self setClientDvar( "ui_prestige_pct", "100" );
+
+		guid = self getGuid();
+		if ( isDefined( guid ) && guid != "" )
+			level.prestige.pending[guid] = prestigeId;
+
 		self closeMenu();
 		self closeInGameMenu();
 
