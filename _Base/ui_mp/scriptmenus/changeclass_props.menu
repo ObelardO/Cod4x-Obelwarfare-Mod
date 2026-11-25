@@ -89,7 +89,7 @@
 		//=========================================================================
 		//================ MENU SELECTION FOR ONLINE/OFFLINE GAME =================
 		//=========================================================================
-		#include "ui_mp/teamicon.inc"
+		#include "ui_mp/includes/teamicon.inc"
 
 		//#undef CHOICE_HORIZONTAL_ALIGN
 		//#define CHOICE_HORIZONTAL_ALIGN HORIZONTAL_ALIGN_RIGHT

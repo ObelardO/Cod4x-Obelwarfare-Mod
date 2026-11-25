@@ -15,7 +15,7 @@ init()
 
 	level.scr_prestige_fast_reset = getdvarx( "scr_prestige_fast_reset", "int", 0, 0, 1 );
 
-	precacheMenu( "menu_challenges" );
+	precacheMenu( "menu_challenges_ingame" );
 	precacheMenu( "popup_prestige" );
 	precacheString( &"PRESTIGE_KILLFEED" );
 	precacheString( &"PRESTIGE_RECONNECT" );
@@ -87,7 +87,7 @@ openPrestigeMenuForced()
 	self closeMenu();
 	self closeInGameMenu();
 	wait 0.05;
-	self openMenu( "menu_challenges" );
+	self openMenu( "menu_challenges_ingame" );
 }
 
 onPrestigeMenuResponse( menu, response )
@@ -97,7 +97,7 @@ onPrestigeMenuResponse( menu, response )
 		self closeMenu();
 		self closeInGameMenu();
 		self setClientDvar( "ui_prestige_nav", "1" );
-		self openMenu( "menu_challenges" );
+		self openMenu( "menu_challenges_ingame" );
 		return;
 	}
 
@@ -113,7 +113,7 @@ onPrestigeMenuResponse( menu, response )
 		return;
 	}
 
-	if ( menu != "popup_prestige" && menu != "menu_challenges" )
+	if ( menu != "popup_prestige" && menu != "menu_challenges_ingame" )
 		return;
 
 	if ( response != "enter" )

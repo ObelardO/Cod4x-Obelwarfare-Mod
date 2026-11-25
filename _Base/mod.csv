@@ -369,13 +369,13 @@ menufile,ui_mp/main.menu
 menufile,ui_mp/scriptmenus/advancedacp.menu
 menufile,ui_mp/scriptmenus/advancedmvs.menu
 menufile,ui_mp/scriptmenus/callvote.menu
-menufile,ui_mp/scriptmenus/callvote_buttons.inc
 menufile,ui_mp/scriptmenus/changeclass.menu
 menufile,ui_mp/scriptmenus/changeclass_marines_mw.menu
 menufile,ui_mp/scriptmenus/changeclass_mw.menu
 menufile,ui_mp/scriptmenus/changeclass_opfor_mw.menu
 menufile,ui_mp/scriptmenus/changeclass_props.menu
 menufile,ui_mp/scriptmenus/class.menu
+menufile,ui_mp/challenges.menu
 menufile,ui_mp/challenges_ingame.menu
 menufile,ui_mp/scriptmenus/popup_prestige.menu
 menufile,ui_mp/scriptmenus/clientcmd.menu
@@ -387,19 +387,21 @@ menufile,ui_mp/scriptmenus/serverinfo.menu
 menufile,ui_mp/scriptmenus/team_marinesopfor.menu
 menufile,ui_mp/scriptmenus/dynamic_attachments.menu
 
-rawfile,ui_mp/scriptmenus/popup_eog.menu
-rawfile,ui_mp/scriptmenus/eog_page_weapons.inc
-rawfile,ui_mp/scriptmenus/eog_page_perks.inc
-rawfile,ui_mp/scriptmenus/eog_page_summary.inc
+rawfile,ui_mp/includes/eog_page_weapons.inc
+rawfile,ui_mp/includes/eog_page_perks.inc
+rawfile,ui_mp/includes/eog_page_summary.inc
 
-rawfile,ui_mp/cac_loadout_ingame.inc
-rawfile,ui_mp/cac_ingame.inc
+rawfile,ui_mp/includes/cac_loadout_ingame.inc
+rawfile,ui_mp/includes/cac_ingame.inc
 
-rawfile,ui_mp/tactical_map.inc
-rawfile,ui_mp/teamicon.inc
+rawfile,ui_mp/includes/tactical_map.inc
+rawfile,ui_mp/includes/teamicon.inc
 
-rawfile,ui_mp/controls_multi_slot42.inc
-rawfile,ui_mp/team_is.inc
+rawfile,ui_mp/includes/controls_multi_slot42.inc
+rawfile,ui_mp/includes/team_is.inc
+rawfile,ui_mp/includes/bg.inc
+rawfile,ui_mp/includes/challenges_rows.inc
+rawfile,ui_mp/includes/callvote_buttons.inc
 
 
 sound,daycycle,,all_mp

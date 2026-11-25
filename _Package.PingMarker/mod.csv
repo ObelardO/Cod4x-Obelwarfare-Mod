@@ -12,4 +12,4 @@ sound,pingmarker,,all_mp
 rawfile,scripts/_splashicons.gsc
 
 #Ping Marker: menus
-ui_mp/controls_multi_slot42.inc
+rawfile,ui_mp/includes/controls_multi_slot42.inc

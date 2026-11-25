@@ -16,7 +16,7 @@
 
 #include "ui_mp/menustyle.inc"
 #include "ui/choices_setup_common.menu"
-#include "ui_mp/team_is.inc"
+#include "ui_mp/includes/team_is.inc"
 
 #define MENU_FONT_YELLOW	1 1 0 1
 #define MENU_FONT_WHITE		1 1 1 1

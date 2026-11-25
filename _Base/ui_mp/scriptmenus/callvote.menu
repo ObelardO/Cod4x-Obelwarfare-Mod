@@ -32,7 +32,7 @@
 		#define BACK_OPEN exec "wait";
 		#include "ui_mp/navcontrols.inc"
 		CHOICE_MENU_TITLE( "@MPUI_CALLVOTE" )
-		#include "ui_mp/scriptmenus/callvote_buttons.inc"
+		#include "ui_mp/includes/callvote_buttons.inc"
 	}
 
 	menuDef
@@ -49,7 +49,7 @@
 		#define BACK_OPEN exec "wait";
 		#include "ui_mp/navcontrols.inc"
 		CHOICE_MENU_TITLE( "@MPUI_CALLVOTE" )
-		#include "ui_mp/scriptmenus/callvote_buttons.inc"
+		#include "ui_mp/includes/callvote_buttons.inc"
 
 		CHOICE_SECTION_TITLE( 21, "@MPUI_CHANGE_MAP" )
 		#undef CHOICE_X_START
@@ -99,7 +99,7 @@
 		#define BACK_OPEN exec "wait";
 		#include "ui_mp/navcontrols.inc"
 		CHOICE_MENU_TITLE( "@MPUI_CALLVOTE" )
-		#include "ui_mp/scriptmenus/callvote_buttons.inc"
+		#include "ui_mp/includes/callvote_buttons.inc"
 
 		CHOICE_SECTION_TITLE( 21, "@MPUI_CHANGE_GAME_TYPEMAP" )
 		#undef CHOICE_X_START
@@ -172,7 +172,7 @@
 		#define BACK_OPEN exec "wait";
 		#include "ui_mp/navcontrols.inc"
 		CHOICE_MENU_TITLE( "@MPUI_CALLVOTE" )
-		#include "ui_mp/scriptmenus/callvote_buttons.inc"
+		#include "ui_mp/includes/callvote_buttons.inc"
 
 		CHOICE_SECTION_TITLE( 21, "@MPUI_KICK_PLAYER" )
 		#undef CHOICE_X_START

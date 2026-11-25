@@ -83,7 +83,7 @@
 		//=========================================================================
 		//================ MENU SELECTION FOR ONLINE/OFFLINE GAME =================
 		//=========================================================================
-		#include "ui_mp/teamicon.inc"
+		#include "ui_mp/includes/teamicon.inc"
 
 		/* =================================== default classes ================================= */
 		CHOICE_SECTION_TITLE( 1, "@MPUI_DEFAULT_CLASSES" )

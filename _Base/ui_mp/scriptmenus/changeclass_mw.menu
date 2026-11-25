@@ -44,6 +44,6 @@
 #define CAC_CUSTOM_NAME				"customclass1"
 
 {
-	#include "ui_mp/cac_ingame.inc"
+	#include "ui_mp/includes/cac_ingame.inc"
 }
 

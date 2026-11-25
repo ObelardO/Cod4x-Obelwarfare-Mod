@@ -186,7 +186,7 @@
 		#define STAT_CAC_SPECIAL_GRENADE		tableLookup("mp/statstable.csv", 4, dvarString( loadout_grenade ), 0)
 		#define STAT_CAC_CAMO					tableLookup("mp/attachmentTable.csv", 4, dvarString( loadout_camo ), 11)
 		
-		#include "ui_mp/cac_loadout_ingame.inc"
+		#include "ui_mp/includes/cac_loadout_ingame.inc"
 
 		#include "ui/safearea.menu"
 	}

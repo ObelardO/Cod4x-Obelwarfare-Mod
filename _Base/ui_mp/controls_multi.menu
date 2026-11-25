@@ -103,7 +103,7 @@
 		CHOICE_BIND( 40, "@OW_CYCLE_FPSLAG", "openScriptMenu modkeybind cyclefpslag", ; )
 		CHOICE_BIND( 41, "@OW_AACP_MENU", "openScriptMenu modkeybind advancedacp", ; )	
 		//CHOICE_BIND( 42, "@OW_PING", "openScriptMenu modkeybind ping", ; )	
-		#include "ui_mp/controls_multi_slot42.inc"
+		#include "ui_mp/includes/controls_multi_slot42.inc"
 
 		CHOICE_KEYBINDHELP
 	}

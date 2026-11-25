@@ -26,7 +26,7 @@
 
 #include "ui_mp/menustyle.inc"
 #include "ui/choices_setup_common.menu"
-#include "ui_mp/team_is.inc"
+#include "ui_mp/includes/team_is.inc"
 
 {
 	menuDef
@@ -85,7 +85,7 @@
 		CHOICE_MENU_TITLE( "@MPUI_CHOOSE_TEAM" )
 
 		// map display ================================================
-		#include "ui_mp/tactical_map.inc";
+		#include "ui_mp/includes/tactical_map.inc";
 
 		// ------------------ buttons ---------------------
 		#define BACK_OPEN	;
@@ -94,7 +94,7 @@
 		//=========================================================
 		//===================== MENU SELECTION ====================
 		//=========================================================
-		#include "ui_mp/teamicon.inc"
+		#include "ui_mp/includes/teamicon.inc"
 
 		// PC widescreen fix
 		#ifdef PC

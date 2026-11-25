@@ -111,10 +111,14 @@
 
 // ============== end init =============
 
+#ifndef CHALLENGES_MENU
+	#define CHALLENGES_MENU menu_challenges
+#endif
+
 {
 	menuDef
 	{
-		name			menu_challenges
+		name			CHALLENGES_MENU
 		rect			0 0 640 480
 		focuscolor		COLOR_FOCUSED
 		#ifndef PC_INGAME
@@ -147,10 +151,10 @@
 		}
 		onEsc	{
 			#ifdef PC_INGAME
-				execOnDvarIntValue ui_prestige_nav 0 "closemenu menu_challenges";
+				execOnDvarIntValue ui_prestige_nav 0 "closemenu menu_challenges_ingame";
 				scriptMenuRespondOnDvarIntValue ui_prestige_nav 1 "challenges_back";
 			#else
-				close menu_challenges;
+				close CHALLENGES_MENU;
 			#endif
 		}
 		#ifdef PC_INGAME
@@ -257,14 +261,14 @@
 		//===================== MENU SELECTION ====================
 		//=========================================================
 	
-		// Pause-menu column. This menu is compiled once with PC_INGAME, so main menu and in-match share it.
+		// Main menu and in-match compile this file separately. PC_INGAME redefines the prestige check.
 		#undef CHOICE_X_START
 		#define CHOICE_X_START -320
 		#undef CHOICE_HORIZONTAL_ALIGN
 		#define CHOICE_HORIZONTAL_ALIGN HORIZONTAL_ALIGN_CENTER
 		#undef ORIGIN_DESCRIPTION
 		#define ORIGIN_DESCRIPTION (CHOICE_X_START + 15) 372
-		#include "ui_mp/challenges_rows.inc"
+		#include "ui_mp/includes/challenges_rows.inc"
 
 		#ifdef PC_INGAME
 			#define PRESTIGE_AT_CAP ( stat( 2326 ) < MAX_PRESTIGE && stat( 252 ) == MAX_RANK )
@@ -276,19 +280,31 @@
 			#undef CHOICE_SEP_TOTAL_SPACING
 			#define CHOICE_SEP_TOTAL_SPACING( itemIndex ) ((itemIndex <= 10) ? 10 : 20)
 
-			CHOICE_SEPARATOR_VIS( 10, when( dvarInt( ui_prestige_show ) == 1 ); )
+			#define PRESTIGE_ROW_VIS when( dvarInt( ui_prestige_show ) == 1 );
+			#define PRESTIGE_OPEN_VIS when( dvarInt( ui_prestige_show ) == 1 && PRESTIGE_SERVER && PRESTIGE_AT_CAP && !isIntermission() );
+			#define PRESTIGE_NEW_VIS when( dvarInt( ui_prestige_show ) == 1 && PRESTIGE_SERVER && PRESTIGE_AT_CAP && !isIntermission() && stat( 267 ) == 0 );
+			#define PRESTIGE_LOCK_VIS when( dvarInt( ui_prestige_show ) == 1 && PRESTIGE_LOCKED );
+			#define PRESTIGE_DONE_VIS when( dvarInt( ui_prestige_show ) == 1 && PRESTIGE_DONE );
+		#else
+			#define PRESTIGE_ROW_VIS when( 0 );
+			#define PRESTIGE_OPEN_VIS when( 0 );
+			#define PRESTIGE_NEW_VIS when( 0 );
+			#define PRESTIGE_LOCK_VIS when( 0 );
+			#define PRESTIGE_DONE_VIS when( 0 );
+		#endif
+
+		CHOICE_SEPARATOR_VIS( 10, PRESTIGE_ROW_VIS )
 
 			PREPROC_TEXT_DRAW_ALIGNED_EXP( ORIGIN_DESCRIPTION 220 22 CHOICE_HORIZONTAL_ALIGN VERTICAL_ALIGN_TOP, 0 0, "@PRESTIGE_DESC", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, CHOICE_TEXTCOLOR name "desc_prestige" )
 			PREPROC_TEXT_DRAW_ALIGNED_EXP( ORIGIN_DESCRIPTION 220 22 CHOICE_HORIZONTAL_ALIGN VERTICAL_ALIGN_TOP, 0 0, "@PRESTIGE_MAX", TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, CHOICE_TEXTCOLOR name "desc_prestige_max" )
 
-			CHOICE_BUTTON_FOCUS_VIS( 11, "@PRESTIGE_MODE", exec "statset 267 1"; open popup_prestige; hide "desc_prestige"; hide "desc_prestige_max";, show "desc_prestige"; hide "desc_prestige_max";, hide "desc_prestige"; hide "desc_prestige_max";, when( dvarInt( ui_prestige_show ) == 1 && PRESTIGE_SERVER && PRESTIGE_AT_CAP && !isIntermission() ); )
-			CHOICE_NEWICON_VIS( 11, "specialty_new", when( dvarInt( ui_prestige_show ) == 1 && PRESTIGE_SERVER && PRESTIGE_AT_CAP && !isIntermission() && stat( 267 ) == 0 ) )
-			CHOICE_DBUTTON_VIS( 11, "@PRESTIGE_MODE", when( dvarInt( ui_prestige_show ) == 1 && PRESTIGE_LOCKED ) )
-			CHOICE_NEWICON_VIS( 11, "specialty_locked", when( dvarInt( ui_prestige_show ) == 1 && PRESTIGE_LOCKED ) )
-			CHOICE_BUTTON_BG( 11, when( dvarInt( ui_prestige_show ) == 1 && PRESTIGE_DONE ); )
-			CHOICE_BUTTON_FOCUS_VIS_NOHI( 11, "@PRESTIGE_MODE", ;, show "desc_prestige_max"; hide "desc_prestige";, hide "desc_prestige_max";, when( dvarInt( ui_prestige_show ) == 1 && PRESTIGE_DONE ); forecolor LOCAL_UNLOCK_COLOR )
-			CHOICE_NEWICON_VIS( 11, "specialty_locked", when( dvarInt( ui_prestige_show ) == 1 && PRESTIGE_DONE ) )
-		#endif
+			CHOICE_BUTTON_FOCUS_VIS( 11, "@PRESTIGE_MODE", exec "statset 267 1"; open popup_prestige; hide "desc_prestige"; hide "desc_prestige_max";, show "desc_prestige"; hide "desc_prestige_max";, hide "desc_prestige"; hide "desc_prestige_max";, PRESTIGE_OPEN_VIS )
+			CHOICE_NEWICON_VIS( 11, "specialty_new", PRESTIGE_NEW_VIS )
+			CHOICE_DBUTTON_VIS( 11, "@PRESTIGE_MODE", PRESTIGE_LOCK_VIS )
+			CHOICE_NEWICON_VIS( 11, "specialty_locked", PRESTIGE_LOCK_VIS )
+			CHOICE_BUTTON_BG( 11, PRESTIGE_DONE_VIS )
+			CHOICE_BUTTON_FOCUS_VIS_NOHI( 11, "@PRESTIGE_MODE", ;, show "desc_prestige_max"; hide "desc_prestige";, hide "desc_prestige_max";, PRESTIGE_DONE_VIS forecolor LOCAL_UNLOCK_COLOR )
+		CHOICE_NEWICON_VIS( 11, "specialty_locked", PRESTIGE_DONE_VIS )
 
 
 		#include "ui_mp/player_info.inc"

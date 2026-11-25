@@ -108,37 +108,37 @@
 		fadeAmount		0.1					// amount to adjust alpha per cycle
 	}
 
-	//#include "ui_mp/hud_inventory.inc"
+	//#include "ui_mp/includes/hud_inventory.inc"
 
-	#include "ui_mp/hud_hints.inc"
+	#include "ui_mp/includes/hud_hints.inc"
 
-	#include "ui_mp/hud_minimap.inc"
+	#include "ui_mp/includes/hud_minimap.inc"
 
-	//#include "ui_mp/hud_stats.inc"
+	//#include "ui_mp/includes/hud_stats.inc"
 	
-	//#include "ui_mp/hud_scorebar.inc"
+	//#include "ui_mp/includes/hud_scorebar.inc"
 	
-	//#include "ui_mp/hud_locselector.inc"
+	//#include "ui_mp/includes/hud_locselector.inc"
 	
-	#include "ui_mp/hud_weapon_info.inc"
+	#include "ui_mp/includes/hud_weapon_info.inc"
 
-	#include "ui_mp/hud_abilities_info.inc"
+	#include "ui_mp/includes/hud_abilities_info.inc"
 
-	#include "ui_mp/hud_player_info.inc"
+	#include "ui_mp/includes/hud_player_info.inc"
 
-	#include "ui_mp/hud_teams_status.inc"
+	#include "ui_mp/includes/hud_teams_status.inc"
 
-	#include "ui_mp/hud_broadcast.inc"
+	#include "ui_mp/includes/hud_broadcast.inc"
 
-	#include "ui_mp/hud_killcam.inc"
+	#include "ui_mp/includes/hud_killcam.inc"
 
-	#include "ui_mp/hud_messages.inc"
+	#include "ui_mp/includes/hud_messages.inc"
 
-	#include "ui_mp/hud_voicechat.inc"
+	#include "ui_mp/includes/hud_voicechat.inc"
 
-	#include "ui_mp/hud_compass.inc"
+	#include "ui_mp/includes/hud_compass.inc"
 
-	#include "ui_mp/hud_overlay.inc"
+	#include "ui_mp/includes/hud_overlay.inc"
 
 	// Safe area
 	/*

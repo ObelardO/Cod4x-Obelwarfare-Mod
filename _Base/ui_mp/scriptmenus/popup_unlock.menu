@@ -1,2 +1,159 @@
-// Single script menu. Pages are includes inside popup_unlock, not separate menuDefs.
-#include "ui_mp/scriptmenus/popup_eog.menu"
+//======================================
+//    End of Game Summary & Unlocks
+//    One script menu: popup_unlock
+//======================================
+
+#include "ui/menudef.h"
+#include "ui_mp/common_macro.inc"
+#include "ui_mp/menustyle.inc"
+#include "ui/choices_setup_common.menu"
+
+{
+	#define PROGRESS_BAR_SPEED		1000
+
+	#define WIDTH_TOPBAR			460
+	#define HEIGHT_TOPBAR			34
+	#define ORIGIN_TOPBAR_X			0
+	#define ORIGIN_TOPBAR_Y			0
+	#define ORIGIN_TOPBAR			ORIGIN_TOPBAR_X ORIGIN_TOPBAR_Y
+	#define RECT_TOPBAR				ORIGIN_TOPBAR WIDTH_TOPBAR HEIGHT_TOPBAR
+
+	#define WIDTH_MAINFRAME			WIDTH_TOPBAR
+	#define HEIGHT_MAINFRAME		240
+	#define ORIGIN_MAINFRAME_X		ORIGIN_TOPBAR_X
+	#define ORIGIN_MAINFRAME_Y		(ORIGIN_TOPBAR_Y+HEIGHT_TOPBAR+6)
+	#define ORIGIN_MAINFRAME		ORIGIN_MAINFRAME_X ORIGIN_MAINFRAME_Y
+	#define RECT_MAINFRAME			ORIGIN_MAINFRAME WIDTH_MAINFRAME HEIGHT_MAINFRAME
+
+	#define ORIGIN_XP_SLOT1				14 162
+	#define ORIGIN_XP_SLOT2				14 186
+	#define ORIGIN_XP_SLOT3				14 210
+	#define ORIGIN_XP_SLOT4				14 238
+
+	#define EOG_BASE_COLOR			0.25 0.25 0.27 1
+	#define EOG_BG_COLOR			0.1 0.1 0.12 0.85
+	#define EOG_SHINE_COLOR			0.9 0.9 0.9 0.45
+	#define EOG_BORDER_SIZE			1
+	#define EOG_BORDER_COLOR		0.35 0.35 0.37 1
+	#define EOG_BORDER				WINDOW_BORDER_RAISED
+	#define EOG_TEXT_COLOR			0.7 0.7 0.72 1
+	#define EOG_TITLE_COLOR			COLOR_TITLE
+	#define EOG_INNER_COLOR			0 0 0 0.3
+
+	#define TITLE_BG_COLOR_OFF		1 1 1 0.075
+	#define TITLE_BG_COLOR_ON		1 0.8 0.4 0.6
+
+	// ui_eog_step is a dvar so Next / ESC can branch with execOnDvarIntValue.
+	// 1 = weapons, 2 = perks, 3 = summary
+	#define EOG_STEP( n )			dvarInt( ui_eog_step ) == n
+	#define VIS_WEAPON				dvarInt(player_unlockweapons)!=0
+	#define VIS_PERKS				dvarInt(player_unlockperks)!=0
+
+	// These strings run as console commands, so they use set / closemenu.
+	// Stock order: weapons, then perks, then summary. Page 1 skips perks. Chain 0 closes.
+	#define EOG_ADVANCE \
+		play "mouse_click"; \
+		exec "setdvartotime ui_time_marker"; \
+		execNowOnDvarIntValue ui_eog_step 3 "closemenu popup_unlock"; \
+		execNowOnDvarIntValue ui_eog_chain 0 "closemenu popup_unlock"; \
+		execNowOnDvarIntValue ui_eog_step 2 "set ui_eog_step 3"; \
+		execNowOnDvarIntValue ui_eog_step 1 "set ui_eog_step 2"; \
+		execNowOnDvarIntValue player_unlock_page 1 "set ui_eog_step 3"; \
+		setfocus eog_next;
+
+	#define FRAMING_VIS( prect, visArg ) \
+		PREPROC_SHADER_DRAW( prect, 0 0, "white", EOG_BASE_COLOR, EOG_BORDER, EOG_BORDER_SIZE, 0 0 0 0 visible when(visArg) )\
+		PREPROC_SHADER_DRAW( prect, 0 0, "white", EOG_BG_COLOR, EOG_BORDER, EOG_BORDER_SIZE, EOG_BORDER_COLOR visible when(visArg) )\
+		PREPROC_SHADER_DRAW( prect, 0 0, "line_horizontal", EOG_SHINE_COLOR, EOG_BORDER, EOG_BORDER_SIZE, 0 0 0 0 visible when(visArg) )
+
+	#define FRAMING( prect ) \
+		FRAMING_VIS( prect, 1 )
+
+	// One Next bar. A fixed Y: && cannot be multiplied, that expression was the console error.
+	#define EOG_NEXT_Y				(ORIGIN_TOPBAR_Y+HEIGHT_TOPBAR+6+HEIGHT_MAINFRAME)
+	#define EOG_NEXT_BAR \
+		PREPROC_SHADER_DRAW( ORIGIN_TOPBAR_X EOG_NEXT_Y WIDTH_TOPBAR HEIGHT_TOPBAR, 0 0, "white", EOG_BASE_COLOR, EOG_BORDER, EOG_BORDER_SIZE, 0 0 0 0 ) \
+		PREPROC_SHADER_DRAW( ORIGIN_TOPBAR_X EOG_NEXT_Y WIDTH_TOPBAR HEIGHT_TOPBAR, 0 0, "white", EOG_BG_COLOR, EOG_BORDER, EOG_BORDER_SIZE, EOG_BORDER_COLOR ) \
+		PREPROC_SHADER_DRAW( ORIGIN_TOPBAR_X EOG_NEXT_Y WIDTH_TOPBAR HEIGHT_TOPBAR, 0 0, "line_horizontal", EOG_SHINE_COLOR, EOG_BORDER, EOG_BORDER_SIZE, 0 0 0 0 ) \
+		PREPROC_TEXT_DRAW( ORIGIN_TOPBAR_X EOG_NEXT_Y WIDTH_TOPBAR HEIGHT_TOPBAR, 0 0, exp text("@MENU_GOTO_NEXT"), TEXTSIZE_DEFAULT, 0, 1, ITEM_ALIGN_MIDDLE_CENTER, COLOR_TITLE textfont UI_FONT_OBJECTIVE ) \
+		itemDef { \
+			type			ITEM_TYPE_BUTTON \
+			rect			ORIGIN_TOPBAR_X EOG_NEXT_Y WIDTH_TOPBAR HEIGHT_TOPBAR 0 0 \
+			text			"" \
+			textfont		UI_FONT_NORMAL \
+			textAlign		ITEM_ALIGN_MIDDLE_CENTER \
+			visible			1 \
+			name			eog_next \
+			mouseEnter		{ play "mouse_over"; } \
+			action			{ EOG_ADVANCE } \
+		}
+
+	#define ON_STEP( n )			visible when( EOG_STEP( n ) );
+	#define WHEN_STEP( n, cond )	visible when( EOG_STEP( n ) && ( cond ) );
+
+	#define RECT_STRIP				ORIGIN_TOPBAR_X (ORIGIN_TOPBAR_X+HEIGHT_TOPBAR) WIDTH_TOPBAR 6
+	#define COLOR_STRIP( step, tint ) \
+		FRAMING_VIS( RECT_STRIP, EOG_STEP( step ) ) \
+		PREPROC_SHADER_DRAW( RECT_STRIP, 0 0, "white", tint, EOG_BORDER, EOG_BORDER_SIZE, 0 0 0 0 ON_STEP( step ) )
+
+	#define INNER_FRAME( w, h, x, y, vis ) \
+		PREPROC_SHADER_DRAW( ORIGIN_MAINFRAME w h, x y, "white", EOG_INNER_COLOR, WINDOW_BORDER_SUNKEN, 1, EOG_BORDER_COLOR visible when( vis ); )
+
+	#define EOG_LABEL_COLOR			1 1 0.8 0.9
+	#define SECTION_LABEL( y, label, vis ) \
+		PREPROC_TEXT_DRAW_EXP( ORIGIN_MAINFRAME 80 20, 10 y, exp text( label ), TEXTSIZE_SMALL, 0, 0, ITEM_ALIGN_RIGHT, EOG_LABEL_COLOR visible when( vis ); )
+
+	#define SHADE( prect, porigin, pshader, pcolor, vis ) \
+		PREPROC_SHADER_DRAW( ORIGIN_MAINFRAME prect, porigin, pshader, pcolor, 0, 0, 0 0 0 0 visible when( vis ); )
+	#define SHADE_OFF_ON( prect, porigin, pshader, step, cond ) \
+		SHADE( prect, porigin, pshader, TITLE_BG_COLOR_ON, EOG_STEP( step ) && ( cond ) )
+
+	#define STAT_NAME( pref )		"@"+tablelookup("mp/statstable.csv",4,pref,3)
+	#define STAT_IMAGE( pref )		tablelookup("mp/statstable.csv",4,pref,6)
+	#define STAT_DESC( pref )		"@"+tablelookup("mp/statstable.csv",4,pref,7)
+	#define STAT_GROUP( pref )		tablelookup("mp/statstable.csv",4,pref,2)
+	#define ATTACH_NAME( pref )		"@"+tablelookup("mp/attachmentTable.csv",4,pref,3)
+	#define ATTACH_IMAGE( pref )	tablelookup("mp/attachmenttable.csv",4,pref,6)
+
+	menuDef
+	{
+		name			"popup_unlock"
+		rect			(-(WIDTH_TOPBAR/2)) 68 WIDTH_TOPBAR (HEIGHT_TOPBAR+6+HEIGHT_MAINFRAME+HEIGHT_TOPBAR) HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_TOP
+		focusColor		COLOR_FOCUSED
+		style			WINDOW_STYLE_FILLED
+		onOpen
+		{
+			close "eog_statistics";
+			play "mp_ingame_summary";
+			exec "setdvartotime ui_time_marker";
+			execNowOnDvarIntValue player_unlock_page 0 "set ui_eog_step 3";
+			execNowOnDvarIntValue player_unlock_page 1 "set ui_eog_step 1";
+			execNowOnDvarIntValue player_unlock_page 2 "set ui_eog_step 2";
+			execNowOnDvarIntValue player_unlock_page 3 "set ui_eog_step 1";
+			setfocus eog_next;
+		}
+		onESC			{ EOG_ADVANCE }
+		execkeyint BUTTON_A { EOG_ADVANCE }
+		onClose			{ ; }
+
+		PREPROC_SHADER_DRAW( -800 -800 2000 2000, 0 0, "white", 0 0 0 0.6, 0, 0, 0 0 0 0 )
+
+		FRAMING( RECT_TOPBAR )
+		PREPROC_PERFORATION( (ORIGIN_TOPBAR_X+2), (ORIGIN_TOPBAR_Y+2), 64, 16, 0, 0, 0, 0 )
+		PREPROC_PERFORATION( (ORIGIN_TOPBAR_X+2), (ORIGIN_TOPBAR_Y+2), 64, 16, 0, 16, 0, 0 )
+		PREPROC_PERFORATION( (ORIGIN_TOPBAR_X+WIDTH_TOPBAR-64), (ORIGIN_TOPBAR_Y+2), -64, 16, 0, 0, 0, 0 )
+		PREPROC_PERFORATION( (ORIGIN_TOPBAR_X+WIDTH_TOPBAR-64), (ORIGIN_TOPBAR_Y+2), -64, 16, 0, 16, 0, 0 )
+
+		PREPROC_TEXT_DRAW( RECT_TOPBAR, 0 0, exp text("@MPUI_UNLOCKED"), TEXTSIZE_DEFAULT, 0, 1, ITEM_ALIGN_MIDDLE_CENTER, EOG_TITLE_COLOR visible when( EOG_STEP(1) || EOG_STEP(2) ); )
+		PREPROC_TEXT_DRAW( RECT_TOPBAR, 0 0, exp text("@MPUI_GAME_SUMMARY"), TEXTSIZE_DEFAULT, 0, 1, ITEM_ALIGN_MIDDLE_CENTER, EOG_TITLE_COLOR visible when( EOG_STEP(3) && dvarString(ui_lobbypopup_text) != "promotion" ); )
+		PREPROC_TEXT_DRAW( RECT_TOPBAR, 0 0, exp text("@RANK_PROMOTED"), TEXTSIZE_DEFAULT, 0, 1, ITEM_ALIGN_MIDDLE_CENTER, EOG_TITLE_COLOR visible when( EOG_STEP(3) && dvarString(ui_lobbypopup_text) == "promotion" ); )
+
+		#include "ui_mp/includes/eog_page_weapons.inc"
+		#include "ui_mp/includes/eog_page_perks.inc"
+		#include "ui_mp/includes/eog_page_summary.inc"
+
+		#ifdef PC
+			EOG_NEXT_BAR
+		#endif
+	}
+}
