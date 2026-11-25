@@ -1,4 +1,4 @@
-name=Night Vision Enhanced
+name=Enhanced Night Vision 
 iwd=nightvis
 gsc=_nightvisionenhanced
 cfg=nightvisionenhanced

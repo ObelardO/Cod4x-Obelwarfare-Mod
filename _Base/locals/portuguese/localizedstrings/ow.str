@@ -25,19 +25,19 @@ REFERENCE ASSASSINATION_ATTACKER
 LANG_PORTUGUESE "Proteja o V.I.P."
 
 REFERENCE ASSASSINATION_ATTACKER_SCORE
-LANG_PORTUGUESE "Proteja e escolte o V.I.P. até a zona de extração. Primeiro time com &&1 pontos vence."
+LANG_PORTUGUESE "Proteja e escolte o V.I.P. atï¿½ a zona de extraï¿½ï¿½o. Primeiro time com &&1 pontos vence."
 
 REFERENCE ASSASSINATION_DEFENDER
 LANG_PORTUGUESE "Eliminar o V.I.P."
 
 REFERENCE ASSASSINATION_DEFENDER_SCORE
-LANG_PORTUGUESE "Eliminar o V.I.P. ou impedir que chegue a zona de extração. Primeiro time com &&1 pontos vence."
+LANG_PORTUGUESE "Eliminar o V.I.P. ou impedir que chegue a zona de extraï¿½ï¿½o. Primeiro time com &&1 pontos vence."
 
 REFERENCE ASSASSINATION_EXTRACTING_VIP
 LANG_PORTUGUESE "Extraindo..."
 
 REFERENCE ASSASSINATION_VIP_EXTRACTED
-LANG_PORTUGUESE "Extração do V.I.P. bem sucedida"
+LANG_PORTUGUESE "Extraï¿½ï¿½o do V.I.P. bem sucedida"
 
 REFERENCE ASSASSINATION_VIP_ELIMINATED
 LANG_PORTUGUESE "O V.I.P. foi eliminado"
@@ -47,22 +47,22 @@ LANG_PORTUGUESE "O V.I.P. foi eliminado"
 // maps/mp/gametypes/bel.gsc
 //******************************************************************************
 REFERENCE BEHIND_ENEMY_LINES
-LANG_PORTUGUESE "Atrás das Linhas Inimigas"
+LANG_PORTUGUESE "Atrï¿½s das Linhas Inimigas"
 
 REFERENCE OBJECTIVES_ATTACKERS_BEL
-LANG_PORTUGUESE "Ganhe pontos por caçar inimigos corredores."
+LANG_PORTUGUESE "Ganhe pontos por caï¿½ar inimigos corredores."
 
 REFERENCE OBJECTIVES_DEFENDERS_BEL
 LANG_PORTUGUESE "Ganhe pontos por sobreviver e eliminar jogadores inimigos."
 
 REFERENCE OBJECTIVES_ATTACKERS_BEL_SCORE
-LANG_PORTUGUESE "Ganhe pontos por caçar corredores inimigos. Primeiro jogador com &&1 pontos vence."
+LANG_PORTUGUESE "Ganhe pontos por caï¿½ar corredores inimigos. Primeiro jogador com &&1 pontos vence."
 
 REFERENCE OBJECTIVES_DEFENDERS_BEL_SCORE
 LANG_PORTUGUESE "Ganhe pontos por sobreviver e eliminar jogadores inimigos. Primeiro jogador com &&1 pontos vence."
 
 REFERENCE OBJECTIVES_ATTACKERS_BEL_HINT
-LANG_PORTUGUESE "Caçar inimigo corredores."
+LANG_PORTUGUESE "Caï¿½ar inimigo corredores."
 
 REFERENCE OBJECTIVES_DEFENDERS_BEL_HINT
 LANG_PORTUGUESE "Sobreviver e eliminar jogadores inimigos."
@@ -74,16 +74,16 @@ REFERENCE BEL_POINTS_EARNED
 LANG_PORTUGUESE "Pontos Ganhos: &&1"
 
 REFERENCE BEL_WILLSPAWN_ATTACKER
-LANG_PORTUGUESE "Você irá aparecer como um caçador!"
+LANG_PORTUGUESE "Vocï¿½ irï¿½ aparecer como um caï¿½ador!"
 
 REFERENCE BEL_WILLSPAWN_DEFENDER
-LANG_PORTUGUESE "Você irá aparecer como um corredor!"
+LANG_PORTUGUESE "Vocï¿½ irï¿½ aparecer como um corredor!"
 
 REFERENCE BEL_SPAWNED_ATTACKER
-LANG_PORTUGUESE "Você é um caçador!"
+LANG_PORTUGUESE "Vocï¿½ ï¿½ um caï¿½ador!"
 
 REFERENCE BEL_SPAWNED_DEFENDER
-LANG_PORTUGUESE "Você é um corredor!"
+LANG_PORTUGUESE "Vocï¿½ ï¿½ um corredor!"
 
 
 //******************************************************************************
@@ -120,7 +120,7 @@ REFERENCE CH_MODE1
 LANG_PORTUGUESE"Ganhou pontos ao capturar a bandeira e, em seguida, segura-la."
 
 REFERENCE CH_SCORE_MODE0
-LANG_PORTUGUESE "Ganhou pontos ao capturar a bandeira e, em seguida, protege-la até que o tempo chegue a zero. Primeiro time com &&1 pontos! vence!"
+LANG_PORTUGUESE "Ganhou pontos ao capturar a bandeira e, em seguida, protege-la atï¿½ que o tempo chegue a zero. Primeiro time com &&1 pontos! vence!"
 
 REFERENCE CH_SCORE_MODE1
 LANG_PORTUGUESE "Ganhou pontos ao capturar a bandeira e, em seguida, segura-la. Primeiro time com &&1 pontos! Vence!"
@@ -170,13 +170,13 @@ REFERENCE FTAG_AXIS_FROZEN
 LANG_PORTUGUESE "Axis foram congelados"
 
 REFERENCE FTAG_UNFROZEN_STATS
-LANG_PORTUGUESE "Vocês foram descongelados por &&1 depois de ser congelado por ^3&&2^7 segundos."
+LANG_PORTUGUESE "Vocï¿½s foram descongelados por &&1 depois de ser congelado por ^3&&2^7 segundos."
 
 REFERENCE OBJECTIVES_FTAG
-LANG_PORTUGUESE "Ganhou pontos através do congelamento de todos os jogadores inimigos."
+LANG_PORTUGUESE "Ganhou pontos atravï¿½s do congelamento de todos os jogadores inimigos."
 
 REFERENCE OBJECTIVES_FTAG_SCORE
-LANG_PORTUGUESE "Ganhou pontos através do congelamento de todos os jogadores inimigos. Primeira equipe com &&1 pontos! Vence!"
+LANG_PORTUGUESE "Ganhou pontos atravï¿½s do congelamento de todos os jogadores inimigos. Primeira equipe com &&1 pontos! Vence!"
 
 REFERENCE OBJECTIVES_FTAG_HINT
 LANG_PORTUGUESE "Congelar todos os jogadores inimigos."
@@ -189,10 +189,10 @@ REFERENCE GUNGAME
 LANG_PORTUGUESE "Jogo de armas" 
 
 REFERENCE GUNGAME_OBJECTIVES
-LANG_PORTUGUESE "Ganhe níveis eliminando outros jogadores com a arma selecionada."
+LANG_PORTUGUESE "Ganhe nï¿½veis eliminando outros jogadores com a arma selecionada."
 
 REFERENCE GUNGAME_SCORE
-LANG_PORTUGUESE " Ganhe níveis eliminando outros jogadores com a arma selecionada.  Primeiro jogador a matar o ultimo com a ultima arma vence!"
+LANG_PORTUGUESE " Ganhe nï¿½veis eliminando outros jogadores com a arma selecionada.  Primeiro jogador a matar o ultimo com a ultima arma vence!"
 
 REFERENCE GUNGAME_HINT
 LANG_PORTUGUESE "Elimine os outros jogadores."
@@ -363,7 +363,7 @@ LANG_ENGLISH "Enemies shown on compass"
 // maps/mp/gametypes/re.gsc
 //******************************************************************************
 REFERENCE RETRIEVAL
-LANG_PORTUGUESE "Recuperação"
+LANG_PORTUGUESE "Recuperaï¿½ï¿½o"
 
 REFERENCE OBJECTIVES_RE_ATTACKER
 LANG_PORTUGUESE "Recuperar os objetivos do inimigo."
@@ -387,7 +387,7 @@ REFERENCE RE_OBJECTIVE_A
 LANG_PORTUGUESE "Chaves de criptografia"
 
 REFERENCE RE_OBJECTIVE_B
-LANG_PORTUGUESE "Lista espiã"
+LANG_PORTUGUESE "Lista espiï¿½"
 
 REFERENCE RE_TAKEN
 LANG_PORTUGUESE "^3&&1^7 tomou a ^3&&2^7."
@@ -447,17 +447,17 @@ REFERENCE JOINED_TEAM
 LANG_PORTUGUESE "O jogador ^3&&1^7 entrou para o time ^3&&2^7."
 
 REFERENCE LAST_ROUND
-LANG_PORTUGUESE "Esta é a ultima partida!"
+LANG_PORTUGUESE "Esta ï¿½ a ultima partida!"
 
 REFERENCE MATCH_RESUMING_IN
-LANG_PORTUGUESE "Partida começa em:"
+LANG_PORTUGUESE "Partida comeï¿½a em:"
 
 
 //******************************************************************************
 // maps/mp/gametypes/_hardpoints.gsc
 //******************************************************************************
 REFERENCE AIRSTRIKE_AVAILABLEIN
-LANG_PORTUGUESE "Aviões disponiveis em &&1 segundos."
+LANG_PORTUGUESE "Aviï¿½es disponiveis em &&1 segundos."
 
 REFERENCE HELICOPTER_AVAILABLEIN
 LANG_PORTUGUESE "Helicoptero disponivel em &&1 segundos."
@@ -514,7 +514,7 @@ REFERENCE AACP_PLAYER_RETURNSPAWN
 LANG_PORTUGUESE "Retornar jogador para Spawn"
 
 REFERENCE AACP_PLAYER_RETURNED
-LANG_PORTUGUESE "^3Você foi devolvido ao seu Spawn!"
+LANG_PORTUGUESE "^3Vocï¿½ foi devolvido ao seu Spawn!"
 
 REFERENCE AACP_PLAYER_POINTOUT
 LANG_PORTUGUESE "Marcar jogador a matar"
@@ -544,29 +544,29 @@ REFERENCE	AACP_PLAYER_BAN
 LANG_PORTUGUESE "Banir Jogador"
 
 REFERENCE AACP_WARNING
-LANG_PORTUGUESE "^1Atenção &&1 antes de &&2 para ser retirado!"
+LANG_PORTUGUESE "^1Atenï¿½ï¿½o &&1 antes de &&2 para ser retirado!"
 
 REFERENCE	AACP_NOTENABLED
-LANG_PORTUGUESE "Painel ACP não esta ativo neste servidor."
+LANG_PORTUGUESE "Painel ACP nï¿½o esta ativo neste servidor."
 
 REFERENCE	AACP_NOACCESS
-LANG_PORTUGUESE "Você não tem acesso ao PAINEL ACP via GUID ^3&&1^7."
+LANG_PORTUGUESE "Vocï¿½ nï¿½o tem acesso ao PAINEL ACP via GUID ^3&&1^7."
 
 REFERENCE	AACP_NOPLAYER
 LANG_PORTUGUESE "^1<Todos os Jogadores Protegidos>"
 
 REFERENCE	AACP_YOU_TARGETED
-LANG_PORTUGUESE "^1Você foi marcado como alvo de extermínio!"
+LANG_PORTUGUESE "^1Vocï¿½ foi marcado como alvo de extermï¿½nio!"
 
 REFERENCE	AACP_PLAYER_TARGETED
-LANG_PORTUGUESE "^1Jogador ^7&&1^1 é alvo para extermínio!"
+LANG_PORTUGUESE "^1Jogador ^7&&1^1 ï¿½ alvo para extermï¿½nio!"
 
 
 //******************************************************************************
 // openwarfare/_advancedmvs.gsc
 //******************************************************************************
 REFERENCE	AMVS_TITLE
-LANG_PORTUGUESE "votação de mapas"
+LANG_PORTUGUESE "votaï¿½ï¿½o de mapas"
 
 REFERENCE	AMVS_GAMETYPE
 LANG_PORTUGUESE "Votar Tipo de jogo"
@@ -575,10 +575,10 @@ REFERENCE	AMVS_MAP
 LANG_PORTUGUESE "Votar mapa"
 
 REFERENCE	AMVS_GAMETYPE_WINNER
-LANG_PORTUGUESE "próximo tipo de jogo será..."
+LANG_PORTUGUESE "prï¿½ximo tipo de jogo serï¿½..."
 
 REFERENCE	AMVS_MAP_WINNER
-LANG_PORTUGUESE "Próximo Mapa será..."
+LANG_PORTUGUESE "Prï¿½ximo Mapa serï¿½..."
 
 REFERENCE	AMVS_TEMPORARY_RESULTS
 LANG_PORTUGUESE "Resultados temporarios"
@@ -600,20 +600,20 @@ LANG_PORTUGUESE "Voto"
 // openwarfare/_anticamping.gsc
 //******************************************************************************
 REFERENCE MOVE_NEW_POSITION
-LANG_PORTUGUESE "Mova para uma nova posição soldado!"
+LANG_PORTUGUESE "Mova para uma nova posiï¿½ï¿½o soldado!"
 
 
 //******************************************************************************
 // openwarfare/_bigbrotherbot.gsc
 //******************************************************************************
 REFERENCE B3_DEATHDOWN
-LANG_PORTUGUESE "^7O administrador  diminuiu o número de mortes para ^3&&1^7 de ^3&&2^7."
+LANG_PORTUGUESE "^7O administrador  diminuiu o nï¿½mero de mortes para ^3&&1^7 de ^3&&2^7."
 
 REFERENCE B3_DEATHUP
-LANG_PORTUGUESE "^7O administrador aumentou o número de mortes para ^3&&1^7 de ^3&&2^7."
+LANG_PORTUGUESE "^7O administrador aumentou o nï¿½mero de mortes para ^3&&1^7 de ^3&&2^7."
 
 REFERENCE B3_PUNISHED
-LANG_PORTUGUESE "^7Você foi penalizado pelo administrador!"
+LANG_PORTUGUESE "^7Vocï¿½ foi penalizado pelo administrador!"
 
 REFERENCE B3_SCOREDOWN
 LANG_PORTUGUESE "^7O administrador diminuiu os pontos para ^3&&1^7 de ^3&&2^7 pontos."
@@ -622,7 +622,7 @@ REFERENCE B3_SCOREUP
 LANG_PORTUGUESE "^7O administrador aumentou os pontos para ^3&&1^7 de ^3&&2^7 pontos."
 
 REFERENCE B3_TEAMSWITCH
-LANG_PORTUGUESE "^7^7O administrador passou você ao outro time."
+LANG_PORTUGUESE "^7^7O administrador passou vocï¿½ ao outro time."
 
 
 //******************************************************************************
@@ -630,7 +630,7 @@ LANG_PORTUGUESE "^7^7O administrador passou você ao outro time."
 //******************************************************************************
 
 REFERENCE CAP_OPEN 
-LANG_PORTUGUESE "^7Tecle ^3F ^7para abrir a \n^3Personalização do jogador" 
+LANG_PORTUGUESE "^7Tecle ^3F ^7para abrir a \n^3Personalizaï¿½ï¿½o do jogador" 
 
 REFERENCE CAP_CYCLE_AND_CLOSE
 LANG_PORTUGUESE "Tecle ^3F ^7para percorrer os modelos de jogador\nTecle ^3V ^7para confirmar"
@@ -646,7 +646,7 @@ LANG_PORTUGUESE "faltanto segundos CAP"
 // openwarfare/_damageeffect.gsc
 //******************************************************************************
 REFERENCE DE_BROKEN_ANKLE
-LANG_PORTUGUESE "^1Você quebrou o tornozelo!"
+LANG_PORTUGUESE "^1Vocï¿½ quebrou o tornozelo!"
 
 
 //******************************************************************************
@@ -679,23 +679,23 @@ LANG_PORTUGUESE "Recuperando explosivo"
 // openwarfare/_extendedobituaries.gsc
 //******************************************************************************
 REFERENCE EXTENDED_OBITUARY
-LANG_PORTUGUESE "^2&&1^7 Matou ^1&&2^7.localização: &&3. Arma: &&4. Distancia: &&5."
+LANG_PORTUGUESE "^2&&1^7 Matou ^1&&2^7.localizaï¿½ï¿½o: &&3. Arma: &&4. Distancia: &&5."
 
 REFERENCE EXTENDED_OBITUARY_KILLEDBY_WEAPON
 LANG_PORTUGUESE "Morto por: ^3&&1^7. Arma: ^3&&2^7."
 
 REFERENCE EXTENDED_OBITUARY_LOCATION_DISTANCE
-LANG_PORTUGUESE "Localização: ^3&&1^7. Distancia: ^3&&2^7."
+LANG_PORTUGUESE "Localizaï¿½ï¿½o: ^3&&1^7. Distancia: ^3&&2^7."
 
 
 //******************************************************************************
 // openwarfare/_guidcs.gsc
 //******************************************************************************
 REFERENCE GUIDCS_GUID_NOT_ALLOWED
-LANG_PORTUGUESE "Sua GUID não é permitida neste servidor..."
+LANG_PORTUGUESE "Sua GUID nï¿½o ï¿½ permitida neste servidor..."
 
 REFERENCE GUIDCS_INFORMATION
-LANG_PORTUGUESE "Para maiores informações por favor va para:"
+LANG_PORTUGUESE "Para maiores informaï¿½ï¿½es por favor va para:"
 
 REFERENCE GUIDCS_CONTACT
 LANG_PORTUGUESE "&&1"
@@ -705,7 +705,7 @@ LANG_PORTUGUESE "&&1"
 // openwarfare/_healthsystem.gsc
 //******************************************************************************
 REFERENCE BLEEDING_NOBANDAGES
-LANG_PORTUGUESE "Você não tem mais ataduras para curar suas feridas.."
+LANG_PORTUGUESE "Vocï¿½ nï¿½o tem mais ataduras para curar suas feridas.."
 
 REFERENCE MEDIC_BANDAGE_SUCCESS
 LANG_PORTUGUESE "Curativo com sucesso."
@@ -717,25 +717,25 @@ REFERENCE MEDIC_SELF_BANDAGE
 LANG_PORTUGUESE "Curando ^1&&1^7."
 
 REFERENCE MEDIC_TEAMMATE_BANDAGE
-LANG_PORTUGUESE "^1&&1^7 curando você."
+LANG_PORTUGUESE "^1&&1^7 curando vocï¿½."
 
 REFERENCE MEDIC_SELF_HEAL
 LANG_PORTUGUESE "Curando ^1&&1^7."
 
 REFERENCE MEDIC_TEAMMATE_HEAL
-LANG_PORTUGUESE "^1&&1^7 curando você."
+LANG_PORTUGUESE "^1&&1^7 curando vocï¿½."
 
 REFERENCE MEDIC_HEALING_FULL
-LANG_PORTUGUESE "Feito cura. utilização integral dos curativos."
+LANG_PORTUGUESE "Feito cura. utilizaï¿½ï¿½o integral dos curativos."
 
 REFERENCE MEDIC_HEALING_PARTIAL
-LANG_PORTUGUESE "Feito cura. utilização parcial dos curativos."
+LANG_PORTUGUESE "Feito cura. utilizaï¿½ï¿½o parcial dos curativos."
 
 REFERENCE TEAMMATE_BANDAGE
-LANG_PORTUGUESE "Seu companheiro de equipe é medico.Espere até que ele termine."
+LANG_PORTUGUESE "Seu companheiro de equipe ï¿½ medico.Espere atï¿½ que ele termine."
 
 REFERENCE TEAMMATE_HEAL
-LANG_PORTUGUESE "Seu companheiro de equipe é curador. Espere até que ele termine."
+LANG_PORTUGUESE "Seu companheiro de equipe ï¿½ curador. Espere atï¿½ que ele termine."
 
 
 //******************************************************************************
@@ -752,7 +752,7 @@ LANG_PORTUGUESE "Mudado para espectador:"
 // openwarfare/_martyrdom.gsc
 //******************************************************************************
 REFERENCE NOFRAGS_FOR_MARTYRDOM
-LANG_PORTUGUESE "Sem granadas restantes para Martírio."
+LANG_PORTUGUESE "Sem granadas restantes para Martï¿½rio."
 
 
 //******************************************************************************
@@ -800,13 +800,13 @@ LANG_PORTUGUESE "Para destruir o explosivo tecle e segure ^2[{+melee}]^7"
 // openwarfare/_playerdvars.gsc
 //******************************************************************************
 REFERENCE PLAYER_GUID
-LANG_PORTUGUESE "^7Sua GUID é ^3&&1^7."
+LANG_PORTUGUESE "^7Sua GUID ï¿½ ^3&&1^7."
 
 REFERENCE ILLEGAL_USE_CLANTAGS
-LANG_PORTUGUESE "Uso ilegal de tag do clã detectado!"
+LANG_PORTUGUESE "Uso ilegal de tag do clï¿½ detectado!"
 
 REFERENCE REMOVE_ILLEGAL_CLANTAGS
-LANG_PORTUGUESE "Remova a tag do clã e reconecte no servidor..."
+LANG_PORTUGUESE "Remova a tag do clï¿½ e reconecte no servidor..."
 
 
 //******************************************************************************
@@ -819,7 +819,7 @@ REFERENCE POWER_RANK_CAMOS
 LANG_PORTUGUESE "Todas as suas camuflagens foram desbloqueados!"
 
 REFERENCE POWER_RANKED
-LANG_PORTUGUESE "Você foi promovido!"
+LANG_PORTUGUESE "Vocï¿½ foi promovido!"
 
 
 //******************************************************************************
@@ -832,7 +832,7 @@ REFERENCE QUICKACTION_ENDED
 LANG_PORTUGUESE "^1****************"
 
 REFERENCE QUICKACTION_TEXT
-LANG_PORTUGUESE "Ação rapida &&1/&&2: ^3&&3"
+LANG_PORTUGUESE "Aï¿½ï¿½o rapida &&1/&&2: ^3&&3"
 
 REFERENCE QUICKACTION_UNJAM
 LANG_PORTUGUESE "Desbloquear arma"
@@ -852,22 +852,22 @@ LANG_PORTUGUESE "&&1 yd"
 // openwarfare/_readyupperiod.gsc
 //******************************************************************************
 REFERENCE READYUP_ALL_PLAYERS_READY
-LANG_PORTUGUESE "Todos os jogadores estão preparados!"
+LANG_PORTUGUESE "Todos os jogadores estï¿½o preparados!"
 
 REFERENCE READYUP_MOD_CHECKSUMS
 LANG_PORTUGUESE "^3CheckSums^7: &&1."
 
 REFERENCE READYUP_NOPASSWORD
-LANG_PORTUGUESE "Atenção! O servidor não tem senha!"
+LANG_PORTUGUESE "Atenï¿½ï¿½o! O servidor nï¿½o tem senha!"
 
 REFERENCE READYUP_NOT_READY
-LANG_PORTUGUESE "Não preparado"
+LANG_PORTUGUESE "Nï¿½o preparado"
 
 REFERENCE READYUP_PERIOD
-LANG_PORTUGUESE "Periodo de preparação de partida"
+LANG_PORTUGUESE "Periodo de preparaï¿½ï¿½o de partida"
 
 REFERENCE READYUP_PERIOD_ROUND
-LANG_PORTUGUESE "Intervalo de preparação"
+LANG_PORTUGUESE "Intervalo de preparaï¿½ï¿½o"
 
 REFERENCE READYUP_PRESS_TO_TOGGLE
 LANG_PORTUGUESE "Tecle^3 [{+activate}] ^7para alternar seu estado"
@@ -876,26 +876,26 @@ REFERENCE READYUP_READY
 LANG_PORTUGUESE "Preparado"
 
 REFERENCE READYUP_RECORD_REMINDER
-LANG_PORTUGUESE "^3Não se esqueça de salvar o jogo!"
+LANG_PORTUGUESE "^3Nï¿½o se esqueï¿½a de salvar o jogo!"
 
 REFERENCE READYUP_WAITING_FOR_MORE_PLAYERS
-LANG_PORTUGUESE "À espera de mais jogadores..."
+LANG_PORTUGUESE "ï¿½ espera de mais jogadores..."
 
 
 //******************************************************************************
 // openwarfare/_reservedslots.gsc
 //******************************************************************************
 REFERENCE RESERVEDSLOTS_DISCONNECTED
-LANG_PORTUGUESE "Jogador ^3&&1^7 foi desligado para abrir espaço para os membros do clã."
+LANG_PORTUGUESE "Jogador ^3&&1^7 foi desligado para abrir espaï¿½o para os membros do clï¿½."
 
 REFERENCE RESERVEDSLOTS_MAKEROOM_DISCONNECT
-LANG_PORTUGUESE "^3Você está sendo desligado para abrir espaço aos membros do clã."
+LANG_PORTUGUESE "^3Vocï¿½ estï¿½ sendo desligado para abrir espaï¿½o aos membros do clï¿½."
 
 REFERENCE RESERVEDSLOTS_MAKEROOM_REDIRECT
-LANG_PORTUGUESE "^3Está sendo redirecionado para dar espaço aos membros do clã."
+LANG_PORTUGUESE "^3Estï¿½ sendo redirecionado para dar espaï¿½o aos membros do clï¿½."
 
 REFERENCE RESERVEDSLOTS_REDIRECTED
-LANG_PORTUGUESE "Jogador ^3&&1^7 redirecionado para ^2&&2^7 para dar espaço para os membros do clã (tecle ^3[{openScriptMenu modkeybind redirect}]^7 a seguir)."
+LANG_PORTUGUESE "Jogador ^3&&1^7 redirecionado para ^2&&2^7 para dar espaï¿½o para os membros do clï¿½ (tecle ^3[{openScriptMenu modkeybind redirect}]^7 a seguir)."
 
 REFERENCE RESERVEDSLOTS_MANUAL_REDIRECT
 LANG_PORTUGUESE "Jogador ^3&&1^7 manualmente redirecionado ^2&&2^7 (tecle ^3[{openscriptmenu modkeybind redirect}]^7 para seguir)."
@@ -908,7 +908,7 @@ LANG_PORTUGUESE "^3Por favor, tente conectar novamente em alguns minutos..."
 // openwarfare/_rotateifempty.gsc
 //******************************************************************************
 REFERENCE EMPTY_ROTATE
-LANG_PORTUGUESE "Rotação do mapa em &&1 segundos..."
+LANG_PORTUGUESE "Rotaï¿½ï¿½o do mapa em &&1 segundos..."
 
 
 //******************************************************************************
@@ -918,7 +918,7 @@ REFERENCE RULESET_DISABLED
 LANG_PORTUGUESE "Regras desabilitadas. Reiniciando o mapa..."
 
 REFERENCE RULESET_NOT_VALID
-LANG_PORTUGUESE "A regra ^3&&1^7 não é válida ou não suporta o tipo de jogo atual."
+LANG_PORTUGUESE "A regra ^3&&1^7 nï¿½o ï¿½ vï¿½lida ou nï¿½o suporta o tipo de jogo atual."
 
 REFERENCE RULESET_VALID
 LANG_PORTUGUESE "Nova regra ^3&&1^7 carregada. Reiniciando o mapa..."
@@ -944,7 +944,7 @@ REFERENCE STRATEGY_PERIOD_FINISHED
 LANG_PORTUGUESE "Tempo para estrategia acabou"
 
 REFERENCE STRATEGY_PERIOD_STARTED
-LANG_PORTUGUESE "Tempo da Rodada de estratégia:"
+LANG_PORTUGUESE "Tempo da Rodada de estratï¿½gia:"
 
 REFERENCE STRATEGY_ROUND
 LANG_PORTUGUESE "Rodada &&1"
@@ -980,7 +980,7 @@ LANG_PORTUGUESE "Mais cuidado soldado!"
 // openwarfare/_utils.gsc
 //******************************************************************************
 REFERENCE AIRSTRIKE
-LANG_PORTUGUESE "Ataque aéreo"
+LANG_PORTUGUESE "Ataque aï¿½reo"
 
 REFERENCE BLOOD_LOSS
 LANG_PORTUGUESE "Perda de sangue"
@@ -998,13 +998,13 @@ REFERENCE KNIFE
 LANG_PORTUGUESE "Faca"
 
 REFERENCE HEAD
-LANG_PORTUGUESE "Cabeça"
+LANG_PORTUGUESE "Cabeï¿½a"
 
 REFERENCE HELICOPTER
 LANG_PORTUGUESE "Helicoptero"
 
 REFERENCE LEFT_ARM
-LANG_PORTUGUESE "Braço esquerdo"
+LANG_PORTUGUESE "Braï¿½o esquerdo"
 
 REFERENCE LEFT_LEG
 LANG_PORTUGUESE "Perna esquerda"
@@ -1013,13 +1013,13 @@ REFERENCE LOWER_TORSO
 LANG_PORTUGUESE "Tronco inferior"
 
 REFERENCE MASSIVE_INJURIES
-LANG_PORTUGUESE "Lesões massivas"
+LANG_PORTUGUESE "Lesï¿½es massivas"
 
 REFERENCE NECK
-LANG_PORTUGUESE "Pescoço"
+LANG_PORTUGUESE "Pescoï¿½o"
 
 REFERENCE RIGHT_ARM
-LANG_PORTUGUESE "Braço direito"
+LANG_PORTUGUESE "Braï¿½o direito"
 
 REFERENCE RIGHT_LEG
 LANG_PORTUGUESE "Perna direita"
@@ -1136,10 +1136,10 @@ LANG_PORTUGUESE "KILL VIT?RIA DA RONDA"
 // ui_mp/connect.menu
 //******************************************************************************
 REFERENCE BROUGHT2UBY
-LANG_PORTUGUESE "Configurado para você por..."
+LANG_PORTUGUESE "Configurado para vocï¿½ por..."
 
 REFERENCE SERVERPOWEREDBY
-LANG_PORTUGUESE "Server desenvolvido por..."
+LANG_PORTUGUESE "Legacy Mod"
 
 
 //******************************************************************************
@@ -1158,7 +1158,7 @@ REFERENCE BANDAGE
 LANG_PORTUGUESE "Bandagem"
 
 REFERENCE BINOCULARS
-LANG_PORTUGUESE "Binóculos"
+LANG_PORTUGUESE "Binï¿½culos"
 
 REFERENCE CYCLE_FPSLAG
 LANG_PORTUGUESE "Mostrar FPS/Lagometer"
@@ -1201,10 +1201,10 @@ REFERENCE LB_NO_PLAYERS
 LANG_ENGLISH "Waiting for Players"
 
 REFERENCE STATS_ACCURACY
-LANG_PORTUGUESE "Precisão"
+LANG_PORTUGUESE "Precisï¿½o"
 
 REFERENCE STATS_KDRATIO
-LANG_PORTUGUESE " Razão baixas/Mortes"
+LANG_PORTUGUESE " Razï¿½o baixas/Mortes"
 
 REFERENCE STATS_KILLS
 LANG_PORTUGUESE "Total de baixas"
@@ -1253,7 +1253,7 @@ REFERENCE FAVORITE_ADD
 LANG_PORTUGUESE "Adicionar servidor a favoritos"
 
 REFERENCE SERVER_INFORMATION
-LANG_PORTUGUESE "Informações do servidor"
+LANG_PORTUGUESE "Informaï¿½ï¿½es do servidor"
 
 
 //******************************************************************************
@@ -1263,7 +1263,7 @@ REFERENCE EOG_KILLS
 LANG_PORTUGUESE "Mortos"
 
 REFERENCE EOG_ACCURACY
-LANG_PORTUGUESE "Precisão"
+LANG_PORTUGUESE "Precisï¿½o"
 
 REFERENCE EOG_KILLSTREAK
 LANG_PORTUGUESE "Melhor raia de baixas"
@@ -1275,7 +1275,7 @@ REFERENCE EOG_MELEEKILLS
 LANG_PORTUGUESE "baixas por faca"
 
 REFERENCE EOG_HEADSHOTS
-LANG_PORTUGUESE "Tiros na cabeça"
+LANG_PORTUGUESE "Tiros na cabeï¿½a"
 
 REFERENCE EOG_LONGESTHEADSHOT
 LANG_PORTUGUESE "mais Distante"
@@ -1302,7 +1302,7 @@ REFERENCE EOG_WORSTPLAYER
 LANG_PORTUGUESE "Pior(es) Jogador(es)"
 
 REFERENCE EOG_DISTANCE
-LANG_PORTUGUESE "Máxima distância percorrida"
+LANG_PORTUGUESE "Mï¿½xima distï¿½ncia percorrida"
 
 
 //******************************************************************************
@@ -1316,7 +1316,7 @@ LANG_ENGLISH "Broadcaster"
 // ui_mp/scriptmenus/serverinfo.menu
 //******************************************************************************
 REFERENCE SERVER_INFO
-LANG_PORTUGUESE "INFORMAÇÕES"
+LANG_PORTUGUESE "INFORMAï¿½ï¿½ES"
 
 
 //******************************************************************************
@@ -1329,7 +1329,7 @@ REFERENCE AUTOBALANCE_SKILL_SECONDS
 LANG_PORTUGUESE "Equilibrando times por habilidade em &&1 segundos"
 
 REFERENCE AUTOBALANCE_SKILL_NEXT_ROUND
-LANG_PORTUGUESE "Os times serão equilibrados por habilidade na próxima partida"
+LANG_PORTUGUESE "Os times serï¿½o equilibrados por habilidade na prï¿½xima partida"
 
 
 //******************************************************************************

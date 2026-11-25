@@ -1,4 +1,0 @@
-name=Better UI
-iwd=better_ui
-gsc=_better_ui
-cfg=better_ui

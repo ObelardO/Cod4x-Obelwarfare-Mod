@@ -1,4 +1,4 @@
-name=Autumn
+name=Event Autumn
 iwd=zevent_autumn
 gsc=_autumnevent
 cfg=

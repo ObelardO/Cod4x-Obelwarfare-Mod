@@ -74,8 +74,8 @@ init()
 	setDvar( "g_antilag", getdvarx( "scr_antilag", "int", 0, 0, 1 ) );
 	
 	// Set mod name and version
-	setDvar( "_Mod", "ObelWarfare Mod", true );
-	setDvar( "_ModVer", "v6.1015 (RU)", true );
+	setDvar( "_Mod", "Legacy Mod", true );
+	setDvar( "_ModVer", "v4.11 (RU)", true );
 
 	// Make a health check of the server
 	//level thread openwarfare\_servercheck::init();

@@ -17,7 +17,7 @@ rawfile,ui_mp/hud_messages.inc
 rawfile,ui_mp/hud_compass.inc
 
 #Better UI: Scripts
-rawfile,scripts/_better_ui.gsc
+rawfile,scripts/_enhancedhud.gsc
 
 #Better UI: Materials
 material,hud_match_cup

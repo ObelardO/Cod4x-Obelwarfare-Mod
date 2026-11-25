@@ -53,7 +53,7 @@ REFERENCE OBJECTIVES_ATTACKERS_BEL
 LANG_SPANISH "Gana puntos por cazar a los corredores enemigos."
 
 REFERENCE OBJECTIVES_DEFENDERS_BEL
-LANG_SPANISH "Gana puntos por sobrevivir y la eliminación de los jugadores enemigos."
+LANG_SPANISH "Gana puntos por sobrevivir y la eliminaciï¿½n de los jugadores enemigos."
 
 REFERENCE OBJECTIVES_ATTACKERS_BEL_SCORE
 LANG_SPANISH "Gana puntos por cazar a los corredores enemigos. El primer jugador que consiga &&1 puntos gana."
@@ -133,13 +133,13 @@ LANG_SPANISH "Esperando perder la bandera o..."
 // maps/mp/gametypes/ctf.gsc
 //******************************************************************************
 REFERENCE ENEMY_FLAG_DROPPED
-LANG_SPANISH "¡La bandera enemiga ha sido soltada!"
+LANG_SPANISH "ï¿½La bandera enemiga ha sido soltada!"
 
 REFERENCE ENEMY_FLAG_RETURNED_BY
-LANG_SPANISH "¡La bandera enemiga ha sido devuelta por &&1!"
+LANG_SPANISH "ï¿½La bandera enemiga ha sido devuelta por &&1!"
 
 REFERENCE FLAG_DROPPED
-LANG_SPANISH "¡Tu bandera ha sido soltada!"
+LANG_SPANISH "ï¿½Tu bandera ha sido soltada!"
 
 REFERENCE FLAG_DROPPED_BY
 LANG_SPANISH "&&1 solto tu bandera!"
@@ -399,7 +399,7 @@ REFERENCE RE_DROPPED_BY
 LANG_SPANISH "^3&&1^7 ha soltado la ^3&&2^7."
 
 REFERENCE RE_RETURNED
-LANG_SPANISH "La ^3&&1^7 ha sido sido devuelto a su ubicación original."
+LANG_SPANISH "La ^3&&1^7 ha sido sido devuelto a su ubicaciï¿½n original."
 
 REFERENCE RE_RETRIEVED
 LANG_SPANISH "^3&&1^7 ha logrado recuperar la ^3&&2^7."
@@ -517,7 +517,7 @@ REFERENCE AACP_PLAYER_RETURNED
 LANG_SPANISH "^3Has sido retornado a tu ultimo Spawn!"
 
 REFERENCE AACP_PLAYER_POINTOUT
-LANG_SPANISH "Señalar jugador a matar"
+LANG_SPANISH "Seï¿½alar jugador a matar"
 
 REFERENCE   AACP_PLAYER_SHOCK
 LANG_SPANISH "Shock Jugador"
@@ -692,10 +692,10 @@ LANG_SPANISH "Ubicacion: ^3&&1^7. Distancia: ^3&&2^7."
 // openwarfare/_guidcs.gsc
 //******************************************************************************
 REFERENCE GUIDCS_GUID_NOT_ALLOWED
-LANG_SPANISH "Su GUID no está permitida en este servidor..."
+LANG_SPANISH "Su GUID no estï¿½ permitida en este servidor..."
 
 REFERENCE GUIDCS_INFORMATION
-LANG_SPANISH "Para obtener más información, por favor vaya a:"
+LANG_SPANISH "Para obtener mï¿½s informaciï¿½n, por favor vaya a:"
 
 REFERENCE GUIDCS_CONTACT
 LANG_SPANISH "&&1"
@@ -732,10 +732,10 @@ REFERENCE MEDIC_HEALING_PARTIAL
 LANG_SPANISH "Cura terminada. Algunas vendas fueron usadas."
 
 REFERENCE TEAMMATE_BANDAGE
-LANG_SPANISH "Tu compañero esta vendandote. Espera hasta que termine."
+LANG_SPANISH "Tu compaï¿½ero esta vendandote. Espera hasta que termine."
 
 REFERENCE TEAMMATE_HEAL
-LANG_SPANISH "Tu compañero esta curandote. Espera hasta que termine."
+LANG_SPANISH "Tu compaï¿½ero esta curandote. Espera hasta que termine."
 
 
 //******************************************************************************
@@ -813,13 +813,13 @@ LANG_SPANISH "Quita el tag del Clan y reconectate al server..."
 // openwarfare/_powerrank.gsc
 //******************************************************************************
 REFERENCE POWER_RANK_ATTACHMENTS
-LANG_SPANISH "¡Todos sus accesorios han sido desbloqueados!"
+LANG_SPANISH "ï¿½Todos sus accesorios han sido desbloqueados!"
 
 REFERENCE POWER_RANK_CAMOS
-LANG_SPANISH "¡Todos sus camuflajes han sido desbloqueados!"
+LANG_SPANISH "ï¿½Todos sus camuflajes han sido desbloqueados!"
 
 REFERENCE POWER_RANKED
-LANG_SPANISH "¡Has subido de nivel!"
+LANG_SPANISH "ï¿½Has subido de nivel!"
 
 
 //******************************************************************************
@@ -852,13 +852,13 @@ LANG_SPANISH "&&1 yd"
 // openwarfare/_readyupperiod.gsc
 //******************************************************************************
 REFERENCE READYUP_ALL_PLAYERS_READY
-LANG_SPANISH "¡Todos los jugadores estan preparados!"
+LANG_SPANISH "ï¿½Todos los jugadores estan preparados!"
 
 REFERENCE READYUP_MOD_CHECKSUMS
 LANG_SPANISH "^3CheckSums^7: &&1."
 
 REFERENCE READYUP_NOPASSWORD
-LANG_SPANISH "¡Advertencia! ¡El servidor no tiene contraseña!"
+LANG_SPANISH "ï¿½Advertencia! ï¿½El servidor no tiene contraseï¿½a!"
 
 REFERENCE READYUP_NOT_READY
 LANG_SPANISH "No preparado"
@@ -938,7 +938,7 @@ REFERENCE STRATEGY_BYPASSED
 LANG_SPANISH "Evitado"
 
 REFERENCE STRATEGY_GET_READY
-LANG_SPANISH "¡Preparate!"
+LANG_SPANISH "ï¿½Preparate!"
 
 REFERENCE STRATEGY_PERIOD_FINISHED
 LANG_SPANISH "El tiempo estrategico se ha acabado"
@@ -960,7 +960,7 @@ LANG_SPANISH "Pulsa^3 [{+activate}] ^7para evitar"
 // openwarfare/_timeout.gsc
 //******************************************************************************
 REFERENCE TIMEOUT_CALLED
-LANG_SPANISH "¡Tiempo muerto solicitado!"
+LANG_SPANISH "ï¿½Tiempo muerto solicitado!"
 
 REFERENCE TIMEOUTS_LEFT
 LANG_SPANISH "^3&&1^7 solicito un tiempo muerto. A tu equipo le restan ^3&&2^7 tiempos fuera."
@@ -973,7 +973,7 @@ LANG_SPANISH "^3&&1^7 intento solicitar un tiempo muerto, pero a nuestro equipo 
 // openwarfare/_tkmonitor.gsc
 //******************************************************************************
 REFERENCE TK_WATCHFIRE
-LANG_SPANISH "¡Mas cuidado soldado!"
+LANG_SPANISH "ï¿½Mas cuidado soldado!"
 
 
 //******************************************************************************
@@ -1139,7 +1139,7 @@ REFERENCE BROUGHT2UBY
 LANG_SPANISH "Brought to you by..."
 
 REFERENCE SERVERPOWEREDBY
-LANG_SPANISH "Server powered by..."
+LANG_SPANISH "Legacy Mod"
 
 
 //******************************************************************************
@@ -1257,7 +1257,7 @@ LANG_SPANISH "Field of View"
 // ui_mp/scriptmenus/class.menu
 //******************************************************************************
 REFERENCE FAVORITE_ADD
-LANG_SPANISH "Añadir servidor a favoritos"
+LANG_SPANISH "Aï¿½adir servidor a favoritos"
 
 REFERENCE SERVER_INFORMATION
 LANG_SPANISH "Informacion del Server"
@@ -1300,7 +1300,7 @@ REFERENCE EOG_DEATHSTREAK
 LANG_SPANISH "Mejor racha de muertes"
 
 REFERENCE EOG_TEAMKILLS
-LANG_SPANISH "Asesinato de compañeros"
+LANG_SPANISH "Asesinato de compaï¿½eros"
 
 REFERENCE EOG_BESTPLAYER
 LANG_SPANISH "Mejor Jugador"
@@ -1336,7 +1336,7 @@ REFERENCE AUTOBALANCE_SKILL_SECONDS
 LANG_SPANISH "Equilibrando equipos por habilidad en &&1 segundos"
 
 REFERENCE AUTOBALANCE_SKILL_NEXT_ROUND
-LANG_SPANISH "Los equipos se equilibrarán por habilidad en la siguiente ronda"
+LANG_SPANISH "Los equipos se equilibrarï¿½n por habilidad en la siguiente ronda"
 
 
 //******************************************************************************

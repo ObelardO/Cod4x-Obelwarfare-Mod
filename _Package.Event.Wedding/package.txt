@@ -1,3 +1,3 @@
-name=Wedding
+name=Event Wedding
 iwd=zevent_wed
-gsc=_wedding
+gsc=_weddingevent.gsc

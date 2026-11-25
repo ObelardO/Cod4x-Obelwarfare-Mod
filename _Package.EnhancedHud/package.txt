@@ -1,0 +1,4 @@
+name=Enhanced HUD
+iwd=hud
+gsc=_enhancedhud
+cfg=enhancedhud

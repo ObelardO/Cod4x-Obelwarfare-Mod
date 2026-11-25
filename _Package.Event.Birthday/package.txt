@@ -1,0 +1,3 @@
+name=Event Birthday
+iwd=zevent_birth
+gsc=_birthdayevent

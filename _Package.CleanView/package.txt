@@ -1,0 +1,4 @@
+name=Clean View
+iwd=cleaner
+gsc=
+cfg=
