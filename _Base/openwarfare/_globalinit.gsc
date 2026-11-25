@@ -30,7 +30,6 @@ init()
 	thread openwarfare\_blackscreen::init();
 	thread openwarfare\_bloodsplatters::init();
 	thread openwarfare\_bodyremoval::init();
-	thread openwarfare\_caceditor::init();	
 	thread openwarfare\_capeditor::init();
 	thread openwarfare\_clanvsall::init();
 	thread openwarfare\_damageeffect::init();

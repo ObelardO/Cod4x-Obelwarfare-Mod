@@ -1313,31 +1313,6 @@ LANG_SPANISH "Maxima Distancia Recorrida"
 
 
 //******************************************************************************
-// ui_mp/scriptmenus/ow_cac_editor.menu
-//******************************************************************************
-REFERENCE CAC_CAMO
-LANG_SPANISH "Camouflage primario"
-
-REFERENCE CAC_CLASS
-LANG_SPANISH "Clases personalizadas"
-
-REFERENCE CAC_PRIMARY_ATTACHMENT
-LANG_SPANISH "Accesorio"
-
-REFERENCE CAC_SECONDARY_ATTACHMENT
-LANG_SPANISH "Ventaja 2"
-
-REFERENCE CAC_SIDE_ARM_ATTACHMENT
-LANG_SPANISH "Accesorio arma corta"
-
-REFERENCE CAC_SUBMIT
-LANG_SPANISH "Enviar cambios"
-
-REFERENCE CAC_TITLE
-LANG_SPANISH "Editor de clases personalizadas"
-
-
-//******************************************************************************
 // ui_mp/scriptmenus/team_marinesopfor.menu
 //******************************************************************************
 REFERENCE BROADCASTER

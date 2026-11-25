@@ -1433,31 +1433,6 @@ LANG_RUSSIAN "Макс.пройдено"
 
 
 //******************************************************************************
-// ui_mp/scriptmenus/ow_cac_editor.menu
-//******************************************************************************
-REFERENCE CAC_CAMO
-LANG_RUSSIAN "Камуфляж"
-
-REFERENCE CAC_CLASS
-LANG_RUSSIAN "Выбрать класс"
-
-REFERENCE CAC_PRIMARY_ATTACHMENT
-LANG_RUSSIAN "Модуль"
-
-REFERENCE CAC_SECONDARY_ATTACHMENT
-LANG_RUSSIAN "Модуль"
-
-REFERENCE CAC_SIDE_ARM_ATTACHMENT
-LANG_RUSSIAN "Для Пистолета"
-
-REFERENCE CAC_SUBMIT
-LANG_RUSSIAN "Подтвердить изменения"
-
-REFERENCE CAC_TITLE
-LANG_RUSSIAN "Редактор Классов"
-
-
-//******************************************************************************
 // ui_mp/scriptmenus/team_marinesopfor.menu
 //******************************************************************************
 REFERENCE BROADCASTER

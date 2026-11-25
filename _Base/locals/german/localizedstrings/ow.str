@@ -1313,31 +1313,6 @@ LANG_GERMAN "Field of View"
 
 
 //******************************************************************************
-// ui_mp/scriptmenus/ow_cac_editor.menu
-//******************************************************************************
-REFERENCE CAC_CAMO
-LANG_GERMAN "Erste Tarnung"
-
-REFERENCE CAC_CLASS
-LANG_GERMAN "Benutzerdefinierte Klasse"
-
-REFERENCE CAC_PRIMARY_ATTACHMENT
-LANG_GERMAN "Erstes Zusatzteil" 
-
-REFERENCE CAC_SECONDARY_ATTACHMENT
-LANG_GERMAN "Zweites Zusatzteil"
-
-REFERENCE CAC_SIDE_ARM_ATTACHMENT
-LANG_GERMAN "Seitenwaffe Zusatzteil"
-
-REFERENCE CAC_SUBMIT
-LANG_GERMAN "Übermittle Änderung"
-
-REFERENCE CAC_TITLE
-LANG_GERMAN "Benutzerdef. Klassen-Editor"
-
-
-//******************************************************************************
 // ui_mp/scriptmenus/team_marinesopfor.menu
 //******************************************************************************
 REFERENCE BROADCASTER

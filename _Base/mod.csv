@@ -284,7 +284,6 @@ rawfile,openwarfare/_binoculars.gsc
 rawfile,openwarfare/_blackscreen.gsc
 rawfile,openwarfare/_bloodsplatters.gsc
 rawfile,openwarfare/_bodyremoval.gsc
-rawfile,openwarfare/_caceditor.gsc
 rawfile,openwarfare/_capeditor.gsc
 rawfile,openwarfare/_clanvsall.gsc
 rawfile,openwarfare/_cyclefpslag.gsc
@@ -382,7 +381,6 @@ menufile,ui_mp/scriptmenus/popup_prestige.menu
 menufile,ui_mp/scriptmenus/clientcmd.menu
 menufile,ui_mp/scriptmenus/eog_statistics.menu
 menufile,ui_mp/scriptmenus/popup_unlock.menu
-menufile,ui_mp/scriptmenus/ow_cac_editor.menu
 menufile,ui_mp/scriptmenus/popup_addfavorite.menu
 menufile,ui_mp/scriptmenus/scoreboard.menu
 menufile,ui_mp/scriptmenus/serverinfo.menu
@@ -397,7 +395,6 @@ rawfile,ui_mp/scriptmenus/eog_page_summary.inc
 rawfile,ui_mp/cac_loadout_ingame.inc
 rawfile,ui_mp/cac_ingame.inc
 
-rawfile,ui_mp/ow_cac_loadout.inc
 rawfile,ui_mp/tactical_map.inc
 rawfile,ui_mp/teamicon.inc
 
