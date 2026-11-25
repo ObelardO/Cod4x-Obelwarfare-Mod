@@ -712,6 +712,10 @@ unlockWeapon( refString )
 // unlocks perk
 unlockPerk( refString )
 {
+	// Rank table uses ";" for an empty perk cell. That is not a perk.
+	if ( refString == ";" )
+		return;
+
 	assert( isDefined( refString ) && refString != "" );
 
 	stat = int( tableLookup( "mp/statstable.csv", 4, refString, 1 ) );
@@ -954,6 +958,9 @@ unlockChallengeGroup( refString )
 
 unlockFeature( refString )
 {
+	if ( refString == ";" )
+		return;
+
 	assert( isDefined( refString ) && refString != "" );
 
 	stat = int( tableLookup( "mp/statstable.csv", 4, refString, 1 ) );

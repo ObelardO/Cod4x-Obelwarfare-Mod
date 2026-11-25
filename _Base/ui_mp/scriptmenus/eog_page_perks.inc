@@ -1,8 +1,7 @@
 // Step 2: features and perks. Included inside popup_unlock.
 
-		// Frame. Tall when a perk unlocked, short for features only.
-		FRAMING_VIS( RECT_MAINFRAME, EOG_STEP(2) && VIS_PERKS )
-		FRAMING_VIS( ORIGIN_MAINFRAME WIDTH_MAINFRAME 73, EOG_STEP(2) && dvarInt(player_unlockperks)==0 )
+		// Frame. Always the full card height.
+		FRAMING_VIS( RECT_MAINFRAME, EOG_STEP(2) )
 		COLOR_STRIP( 2, 0 0 1 0.1 )
 
 		// Inner plates for the feature row and the perk chart.

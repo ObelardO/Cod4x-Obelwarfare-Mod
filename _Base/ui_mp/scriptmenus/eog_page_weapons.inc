@@ -1,8 +1,7 @@
 // Step 1: weapons, camos, attachments. Included inside popup_unlock.
 
-		// Frame. Tall when a weapon unlocked, short when only camos or attachments did.
-		FRAMING_VIS( RECT_MAINFRAME, EOG_STEP(1) && VIS_WEAPON )
-		FRAMING_VIS( ORIGIN_MAINFRAME WIDTH_MAINFRAME 93, EOG_STEP(1) && dvarInt(player_unlockweapons)==0 )
+		// Frame. Always the full card height.
+		FRAMING_VIS( RECT_MAINFRAME, EOG_STEP(1) )
 		COLOR_STRIP( 1, 1 0 0 0.1 )
 
 		// Inner plates for the camo/attachment row and the weapon row.
