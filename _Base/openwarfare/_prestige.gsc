@@ -6,12 +6,13 @@
 init()
 {
 	level.scr_prestige_enable = getdvarx( "scr_prestige_enable", "int", 1, 0, 1 );
-	
-	if ( !level.scr_prestige_enable )
-		return;
 
-	if ( !level.rankedMatch && level.scr_server_rank_type != 2 )
+	// The client dvar survives disconnect. Clear it or a later server with prestige off still shows the button.
+	if ( !level.scr_prestige_enable || ( !level.rankedMatch && level.scr_server_rank_type != 2 ) )
+	{
+		level thread addNewEvent( "onPlayerConnected", ::clearPrestigeClientDvar );
 		return;
+	}
 
 	level.scr_prestige_fast_reset = getdvarx( "scr_prestige_fast_reset", "int", 0, 0, 1 );
 
@@ -41,6 +42,11 @@ initPrestigeLevelData()
 	level.prestige = spawnStruct();
 	level.prestige.statSetsTotal = processPrestigeResetData( false, "mp/prestigeResetTable.csv" );
 	level.prestige.pending = [];
+}
+
+clearPrestigeClientDvar()
+{
+	self setClientDvar( "ui_prestige_enable", 0 );
 }
 
 onPlayerConnected()

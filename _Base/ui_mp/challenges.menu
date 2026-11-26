@@ -249,8 +249,8 @@
 		#define PRESTIGE_ROW_VIS when( dvarBool( cl_ingame ) );
 		#define PRESTIGE_OPEN_VIS when( dvarBool( cl_ingame ) && PRESTIGE_SERVER && PRESTIGE_AT_CAP );
 		#define PRESTIGE_NEW_VIS when( dvarBool( cl_ingame ) && PRESTIGE_SERVER && PRESTIGE_AT_CAP && stat( 267 ) == 0 );
-		#define PRESTIGE_LOCK_VIS when( dvarBool( cl_ingame ) && stat( 2326 ) < MAX_PRESTIGE && ( !PRESTIGE_SERVER || stat( 252 ) != MAX_RANK ) );
-		#define PRESTIGE_DONE_VIS when( dvarBool( cl_ingame ) && PRESTIGE_DONE );
+		#define PRESTIGE_LOCK_VIS when( dvarBool( cl_ingame ) && ( !PRESTIGE_SERVER || ( stat( 2326 ) < MAX_PRESTIGE && stat( 252 ) != MAX_RANK ) ) );
+		#define PRESTIGE_DONE_VIS when( dvarBool( cl_ingame ) && PRESTIGE_SERVER && PRESTIGE_DONE );
 
 		CHOICE_SEPARATOR_VIS( 10, PRESTIGE_ROW_VIS )
 
