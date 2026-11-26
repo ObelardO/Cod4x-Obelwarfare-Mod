@@ -1,12 +1,57 @@
-// Step 1: weapons, camos, attachments. Included inside popup_unlock.
+// Weapons, camos, and attachments. Opened from the end-of-game shell.
 
-		// Frame. Always the full card height.
-		FRAMING_VIS( RECT_MAINFRAME, EOG_STEP(1) )
-		COLOR_STRIP( 1, 1 0 0 0.1 )
+#include "ui/menudef.h"
+#include "ui_mp/common_macro.inc"
+#include "ui_mp/menustyle.inc"
+#include "ui/choices_setup_common.menu"
+
+{
+	#define WIDTH_TOPBAR			460
+	#define HEIGHT_MAINFRAME		240
+	#include "ui_mp/includes/eog_common.inc"
+
+	menuDef
+	{
+		name			"popup_eog_unlocks1"
+		exp				rect X (-(WIDTH_TOPBAR/2))
+		#ifdef PC
+			exp			rect Y (EOG_SLIDE_Y(68))
+		#else
+			exp			rect Y (68)
+		#endif
+		rect			0 0 WIDTH_TOPBAR (HEIGHT_TOPBAR+6+HEIGHT_MAINFRAME+HEIGHT_TOPBAR) HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_TOP
+		focusColor		COLOR_FOCUSED
+		style			WINDOW_STYLE_FILLED
+		onOpen
+		{
+			exec "setdvartotime ui_time_marker";
+			setfocus eog_next;
+		}
+		onESC			{ close self; }
+		execkeyint BUTTON_A { close self; }
+		onClose			{ EOG_GO( ui_eog_next2 ) }
+
+		EOG_HEADER
+		EOG_TITLE( "@MPUI_UNLOCKED", visible 1; )
+
+		// Weapons, camos, and attachments.
+
+		#define STAT_NAME( pref )		"@"+tablelookup("mp/statstable.csv",4,pref,3)
+		#define STAT_IMAGE( pref )		tablelookup("mp/statstable.csv",4,pref,6)
+		#define STAT_DESC( pref )		"@"+tablelookup("mp/statstable.csv",4,pref,7)
+		#define STAT_GROUP( pref )		tablelookup("mp/statstable.csv",4,pref,2)
+		#define ATTACH_NAME( pref )		"@"+tablelookup("mp/attachmentTable.csv",4,pref,3)
+		#define ATTACH_IMAGE( pref )	tablelookup("mp/attachmenttable.csv",4,pref,6)
+
+		#define WHEN_STEP( n, cond )	visible when( cond );
+
+		// Frame.
+		FRAMING( RECT_MAINFRAME )
+		EOG_COLOR_STRIP( 1 0 0 0.1 )
 
 		// Inner plates for the camo/attachment row and the weapon row.
-		INNER_FRAME( (WIDTH_MAINFRAME-12), 81, 6, 6, EOG_STEP(1) )
-		INNER_FRAME( (WIDTH_MAINFRAME-12), 140, 6, 93, EOG_STEP(1) && VIS_WEAPON )
+		INNER_FRAME( (WIDTH_MAINFRAME-12), 81, 6, 6, 1 )
+		INNER_FRAME( (WIDTH_MAINFRAME-12), 140, 6, 93, VIS_WEAPON )
 
 		// Section title shades. Lit when that section has an unlock.
 		#define CAMO_FILLED		dvarString(player_unlockcamo0a) != ""
@@ -20,13 +65,13 @@
 		SHADE_OFF_ON( 7 28, 90 48, "button_highlight_end", 1, ATTACH_FILLED )
 
 		#define WEAPON_FILLED	dvarString(player_unlockweapon0) != "" && VIS_WEAPON
-		SHADE( 80 28, 10 95, "white", TITLE_BG_COLOR_ON, EOG_STEP(1) && WEAPON_FILLED )
-		SHADE( 7 -28, 90 95, "button_highlight_end", TITLE_BG_COLOR_ON, EOG_STEP(1) && WEAPON_FILLED )
+		SHADE( 80 28, 10 95, "white", TITLE_BG_COLOR_ON, WEAPON_FILLED )
+		SHADE( 7 -28, 90 95, "button_highlight_end", TITLE_BG_COLOR_ON, WEAPON_FILLED )
 
 		// Section titles.
-		SECTION_LABEL( 116, "@MPUI_WEAPON_PRE", EOG_STEP(1) && VIS_WEAPON )
-		SECTION_LABEL( 34, "@MPUI_CAMO_PRE", EOG_STEP(1) && CAMO_FILLED )
-		SECTION_LABEL( 74, "@MPUI_ATTACHMENT_PRE", EOG_STEP(1) && ATTACH_FILLED )
+		SECTION_LABEL( 116, "@MPUI_WEAPON_PRE", VIS_WEAPON )
+		SECTION_LABEL( 34, "@MPUI_CAMO_PRE", CAMO_FILLED )
+		SECTION_LABEL( 74, "@MPUI_ATTACHMENT_PRE", ATTACH_FILLED )
 
 		// Up to two unlocked weapons.
 		#define WEAPON_SLOT_WIDTH	216
@@ -86,3 +131,9 @@
 			PREPROC_TEXT_DRAW_EXP( ORIGIN_MAINFRAME 20 30, 434 y, exp text( "..." ), TEXTSIZE_DEFAULT, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, COLOR_TITLE WHEN_STEP( 1, dvarInt(countDvar)>3 ) )
 		MORE_DOTS( 10, player_unlockcamos )
 		MORE_DOTS( 48, player_unlockattachments )
+
+		#ifdef PC
+			EOG_FOOTER
+		#endif
+	}
+}

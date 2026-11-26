@@ -672,7 +672,10 @@ unlockPage( in_page )
 			self.pers["unlocks"]["page"] = 1;
 		}
 		if( self.pers["unlocks"]["page"] == 2 )
+		{
 			self setClientDvar( "player_unlock_page", "3" );
+			self.pers["unlocks"]["page"] = 3;
+		}
 	}
 	else if( in_page == 2 )
 	{
@@ -682,7 +685,10 @@ unlockPage( in_page )
 			self.pers["unlocks"]["page"] = 2;
 		}
 		if( self.pers["unlocks"]["page"] == 1 )
+		{
 			self setClientDvar( "player_unlock_page", "3" );
+			self.pers["unlocks"]["page"] = 3;
+		}
 	}
 }
 

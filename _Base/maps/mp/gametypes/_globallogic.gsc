@@ -1698,8 +1698,8 @@ endGame( winner, endReasonText )
 
 	// Ranked servers are scr_server_rank_type 0 (level.rankedMatch) and type 2.
 	isRankedServer = ( level.rankedMatch || level.scr_server_rank_type == 2 );
-	showStats = ( level.scr_endofgame_stats_enable == 1 && isDefined( game["menu_eog_stats"] ) );
-	showUnlocks = ( level.scr_endofgame_unlocks_enable == 1 && isRankedServer && isDefined( game["menu_eog_unlock"] ) );
+	showStats = ( isDefined( level.scr_endofgame_stats_enable ) && level.scr_endofgame_stats_enable == 1 );
+	showUnlocks = ( isDefined( level.scr_endofgame_unlocks_enable ) && level.scr_endofgame_unlocks_enable == 1 && isRankedServer && isDefined( game["menu_eog_unlock"] ) );
 
 	// One fixed intermission. Map voting starts its own clock afterwards.
 	mapVoteWillRun = isDefined( level.onEndGameMapVote ) && ( !isDefined( game["skip_final_map_voting"] ) || !game["skip_final_map_voting"] );
@@ -1708,15 +1708,7 @@ endGame( winner, endReasonText )
 	players = level.players;
 	for ( index = 0; index < players.size; index++ )
 	{
-		player = players[index];
-		hasUnlocks = showUnlocks && isDefined( player.pers["unlocks"] ) && isDefined( player.pers["unlocks"]["page"] ) && player.pers["unlocks"]["page"] != 0;
-
-		player setClientDvar( "ui_eog_chain", "1" );
-
-		if ( hasUnlocks )
-			player setClientDvar( "ui_eog_unlocks_enable", "1" );
-		else
-			player setClientDvar( "ui_eog_unlocks_enable", "0" );
+		players[index] eogFillPageChain( showStats, showUnlocks );
 	}
 
 	if ( showStats && level.scr_intermission_time > 0 ) {
@@ -1729,7 +1721,7 @@ endGame( winner, endReasonText )
 
 		players = level.players;
 		for ( index = 0; index < players.size; index++ )
-			players[index] openMenu( game["menu_eog_stats"] );
+			players[index] openMenu( game["menu_eog_unlock"] );
 
 		if ( level.scr_intermission_time - menuDelay > 0 )
 			wait( level.scr_intermission_time - menuDelay );
@@ -1752,9 +1744,7 @@ endGame( winner, endReasonText )
 	players = level.players;
 	for ( index = 0; index < players.size; index++ )
 	{
-		players[index] setClientDvar( "ui_eog_chain", "0" );
-		players[index] setClientDvar( "player_unlock_page", "0" );
-		players[index] setClientDvar( "ui_eog_unlocks_enable", "0" );
+		players[index] eogClearPageChain();
 	}
 
 	wait( 0.05 );
@@ -6834,4 +6824,79 @@ default_getNakedVision()
 getNakedVision()
 {
 	return [[level.getNakedVision]]();
+}
+
+eogPageMenu( pageId )
+{
+	if ( pageId == "stats" )
+		return "popup_eog_stats";
+	if ( pageId == "weapons" )
+		return "popup_eog_unlocks1";
+	if ( pageId == "perks" )
+		return "popup_eog_unlocks2";
+
+	return "popup_eog_rank";
+}
+
+eogFillPageChain( showStats, showUnlocks )
+{
+	closeCommand = "none";
+	next0 = closeCommand;
+	next1 = closeCommand;
+	next2 = closeCommand;
+	next3 = closeCommand;
+	next4 = closeCommand;
+
+	order = [];
+	if ( showStats )
+		order[ order.size ] = "stats";
+
+	if ( showUnlocks && isDefined( self.pers["unlocks"] ) && isDefined( self.pers["unlocks"]["page"] ) && self.pers["unlocks"]["page"] != 0 )
+	{
+		page = self.pers["unlocks"]["page"];
+
+		if ( page == 1 || page == 3 )
+			order[ order.size ] = "weapons";
+		if ( page == 2 || page == 3 )
+			order[ order.size ] = "perks";
+
+		order[ order.size ] = "rank";
+	}
+
+	if ( order.size > 0 )
+		next0 = eogPageMenu( order[0] );
+
+	for ( i = 0; i < order.size; i++ )
+	{
+		command = closeCommand;
+		if ( i + 1 < order.size )
+			command = eogPageMenu( order[ i + 1 ] );
+
+		if ( order[i] == "stats" )
+			next1 = command;
+		else if ( order[i] == "weapons" )
+			next2 = command;
+		else if ( order[i] == "perks" )
+			next3 = command;
+		else
+			next4 = command;
+	}
+
+	self setClientDvar( "ui_eog_next0", next0 );
+	self setClientDvar( "ui_eog_next1", next1 );
+	self setClientDvar( "ui_eog_next2", next2 );
+	self setClientDvar( "ui_eog_next3", next3 );
+	self setClientDvar( "ui_eog_next4", next4 );
+}
+
+eogClearPageChain()
+{
+	closeCommand = "none";
+
+	self setClientDvar( "ui_eog_next0", closeCommand );
+	self setClientDvar( "ui_eog_next1", closeCommand );
+	self setClientDvar( "ui_eog_next2", closeCommand );
+	self setClientDvar( "ui_eog_next3", closeCommand );
+	self setClientDvar( "ui_eog_next4", closeCommand );
+	self setClientDvar( "player_unlock_page", "0" );
 }

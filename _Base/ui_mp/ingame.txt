@@ -29,7 +29,11 @@
 	loadMenu { "ui_mp/controls_multi.menu" }
 	loadMenu { "ui_mp/vid_restart.menu" }
 
-	loadMenu { "ui_mp/scriptmenus/popup_unlock.menu" }
+	loadMenu { "ui_mp/scriptmenus/popup_eog.menu" }
+	loadMenu { "ui_mp/scriptmenus/popup_eog_stats.menu" }
+	loadMenu { "ui_mp/scriptmenus/popup_eog_unlocks1.menu" }
+	loadMenu { "ui_mp/scriptmenus/popup_eog_unlocks2.menu" }
+	loadMenu { "ui_mp/scriptmenus/popup_eog_rank.menu" }
 	loadMenu { "ui_mp/scriptmenus/popup_prestige.menu" }
 	loadMenu { "ui_mp/scriptmenus/endofgame.menu" }
 

@@ -1,0 +1,27 @@
+// End-of-game shell. Precached. Opens the first page from ui_eog_next0.
+
+#include "ui/menudef.h"
+#include "ui_mp/common_macro.inc"
+
+{
+	#define WIDTH_TOPBAR			0
+	#define HEIGHT_MAINFRAME		0
+	#include "ui_mp/includes/eog_common.inc"
+
+	menuDef
+	{
+		name			"popup_eog"
+		rect			0 0 640 480
+		focusColor		COLOR_FOCUSED
+		style			WINDOW_STYLE_EMPTY
+		onOpen
+		{
+			play "mp_ingame_summary";
+			EOG_GO( ui_eog_next0 )
+		}
+		onESC			{ ; }
+		onClose			{ ; }
+
+		PREPROC_SHADER_DRAW( -800 -800 2000 2000, 0 0, "white", 0 0 0 0.6, 0, 0, 0 0 0 0 )
+	}
+}

@@ -1,12 +1,50 @@
-// Step 2: features and perks. Included inside popup_unlock.
+// Features and perks. Opened from the end-of-game shell.
 
-		// Frame. Always the full card height.
-		FRAMING_VIS( RECT_MAINFRAME, EOG_STEP(2) )
-		COLOR_STRIP( 2, 0 0 1 0.1 )
+#include "ui/menudef.h"
+#include "ui_mp/common_macro.inc"
+#include "ui_mp/menustyle.inc"
+#include "ui/choices_setup_common.menu"
+
+{
+	#define WIDTH_TOPBAR			460
+	#define HEIGHT_MAINFRAME		240
+	#include "ui_mp/includes/eog_common.inc"
+
+	menuDef
+	{
+		name			"popup_eog_unlocks2"
+		exp				rect X (-(WIDTH_TOPBAR/2))
+		#ifdef PC
+			exp			rect Y (EOG_SLIDE_Y(68))
+		#else
+			exp			rect Y (68)
+		#endif
+		rect			0 0 WIDTH_TOPBAR (HEIGHT_TOPBAR+6+HEIGHT_MAINFRAME+HEIGHT_TOPBAR) HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_TOP
+		focusColor		COLOR_FOCUSED
+		style			WINDOW_STYLE_FILLED
+		onOpen
+		{
+			exec "setdvartotime ui_time_marker";
+			setfocus eog_next;
+		}
+		onESC			{ close self; }
+		execkeyint BUTTON_A { close self; }
+		onClose			{ EOG_GO( ui_eog_next3 ) }
+
+		EOG_HEADER
+		EOG_TITLE( "@MPUI_UNLOCKED", visible 1; )
+
+		// Features and perks.
+
+		#define WHEN_STEP( n, cond )	visible when( cond );
+
+		// Frame.
+		FRAMING( RECT_MAINFRAME )
+		EOG_COLOR_STRIP( 0 0 1 0.1 )
 
 		// Inner plates for the feature row and the perk chart.
-		INNER_FRAME( (WIDTH_MAINFRAME-12), 61, 6, 6, EOG_STEP(2) )
-		INNER_FRAME( (WIDTH_MAINFRAME-12-24), 160, 30, 73, EOG_STEP(2) && VIS_PERKS )
+		INNER_FRAME( (WIDTH_MAINFRAME-12), 61, 6, 6, 1 )
+		INNER_FRAME( (WIDTH_MAINFRAME-12-24), 160, 30, 73, VIS_PERKS )
 		PREPROC_SHADER_DRAW( ORIGIN_MAINFRAME (WIDTH_MAINFRAME-12-28) 88, 34 144, "white", 1 1 1 0.075, 0, 0, EOG_BORDER_COLOR WHEN_STEP( 2, VIS_PERKS ) )
 
 		// Section title shades. Feature lights for a feature or a new challenge. Perk lights only when a perk is visible.
@@ -16,13 +54,13 @@
 		SHADE_OFF_ON( 7 -28, 90 9, "button_highlight_end", 2, LOCAL_FEATURES )
 
 		#define PERK_FILLED		dvarString(player_unlockperk0) != "" && VIS_PERKS
-		SHADE( 63 33, 34 75, "white", TITLE_BG_COLOR_ON, EOG_STEP(2) && PERK_FILLED )
-		SHADE( 56 28, 34 108, "white", TITLE_BG_COLOR_ON, EOG_STEP(2) && PERK_FILLED )
-		SHADE( 7 -28, 90 108, "button_highlight_end", TITLE_BG_COLOR_ON, EOG_STEP(2) && PERK_FILLED )
+		SHADE( 63 33, 34 75, "white", TITLE_BG_COLOR_ON, PERK_FILLED )
+		SHADE( 56 28, 34 108, "white", TITLE_BG_COLOR_ON, PERK_FILLED )
+		SHADE( 7 -28, 90 108, "button_highlight_end", TITLE_BG_COLOR_ON, PERK_FILLED )
 
 		// Section titles.
-		SECTION_LABEL( 30, "@MPUI_FEATURE_PRE", EOG_STEP(2) && LOCAL_FEATURES )
-		SECTION_LABEL( 96, "@MPUI_PERK_PRE", EOG_STEP(2) && VIS_PERKS )
+		SECTION_LABEL( 30, "@MPUI_FEATURE_PRE", LOCAL_FEATURES )
+		SECTION_LABEL( 96, "@MPUI_PERK_PRE", VIS_PERKS )
 
 		// One feature line. Challenges are prefixed, then up to four feature names.
 		#define LOCAL_FEATURE( ptext, visArg ) \
@@ -137,3 +175,9 @@
 
 		PERK_DETAIL( 102 75, 140 91, 140 106, player_unlockperk0 )
 		PERK_DETAIL( 102 108, 140 124, 140 138, player_unlockperk1 )
+
+		#ifdef PC
+			EOG_FOOTER
+		#endif
+	}
+}

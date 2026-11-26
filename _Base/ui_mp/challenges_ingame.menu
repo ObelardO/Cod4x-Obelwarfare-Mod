@@ -1,3 +1,0 @@
-#define PC_INGAME	1
-#define CHALLENGES_MENU menu_challenges_ingame
-#include "ui_mp/challenges.menu"

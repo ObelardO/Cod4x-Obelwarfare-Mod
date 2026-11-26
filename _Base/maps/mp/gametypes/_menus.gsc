@@ -32,8 +32,8 @@ init()
 		// game summary menu file precache
 		game["menu_eog_main"] = "endofgame";
 
-		// Summary and both unlock pages are opened from popup_unlock, so they share its precache slot.
-		game["menu_eog_unlock"] = "popup_unlock";
+		// The page cards are opened from this shell, so they do not take a precache slot.
+		game["menu_eog_unlock"] = "popup_eog";
 
 		precacheMenu(game["menu_eog_main"]);
 		precacheMenu(game["menu_eog_unlock"]);

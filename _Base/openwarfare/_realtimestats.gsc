@@ -39,11 +39,8 @@ init()
 	}
 	
 	// Check if we should show the end of game statistics
-	if ( level.scr_endofgame_stats_enable == 1 ) {
-		game["menu_eog_stats"] = "eog_statistics";
-		precacheMenu( game["menu_eog_stats"] );
+	if ( level.scr_endofgame_stats_enable == 1 )
 		level thread onGameEnded();
-	}
 }
 
 onGameEnded()
