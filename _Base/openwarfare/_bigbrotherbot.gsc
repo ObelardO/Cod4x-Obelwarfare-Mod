@@ -318,13 +318,8 @@ b3_forceteamcid( dVarValue )
 		// update spectator permissions immediately on change of team
 		player maps\mp\gametypes\_spectating::setSpectatePermissions();
 	
-		if ( player.pers["team"] == "allies" ) {
-			player setclientdvar("g_scriptMainMenu", game["menu_class_allies"]);
-			player openMenu( game[ "menu_changeclass_allies" ] );
-		}	else if ( player.pers["team"] == "axis" ) {
-			player setclientdvar("g_scriptMainMenu", game["menu_class_axis"]);
-			player openMenu( game[ "menu_changeclass_axis" ] );
-		}
+		player setclientdvar( "g_scriptMainMenu", game["menu_class"] );
+		player openMenu( player maps\mp\gametypes\_globallogic::getChangeClassMenu() );
 	
 		player notify( "end_respawn" );	
 	} else {
@@ -570,13 +565,8 @@ b3_switchteam( dVarValue )
 			// update spectator permissions immediately on change of team
 			player maps\mp\gametypes\_spectating::setSpectatePermissions();
 		
-			if ( player.pers["team"] == "allies" ) {
-				player setclientdvar("g_scriptMainMenu", game["menu_class_allies"]);
-				player openMenu( game[ "menu_changeclass_allies" ] );
-			}	else if ( player.pers["team"] == "axis" ) {
-				player setclientdvar("g_scriptMainMenu", game["menu_class_axis"]);
-				player openMenu( game[ "menu_changeclass_axis" ] );
-			}
+			player setclientdvar( "g_scriptMainMenu", game["menu_class"] );
+			player openMenu( player maps\mp\gametypes\_globallogic::getChangeClassMenu() );
 		
 			player notify( "end_respawn" );			
 		}		

@@ -2446,7 +2446,7 @@ menuAutoAssign()
 
 	self beginClassChoice();
 
-	self setclientdvar( "g_scriptMainMenu", game[ "menu_class_" + self.pers["team"] ] );
+	self setclientdvar( "g_scriptMainMenu", game["menu_class"] );
 }
 
 
@@ -2481,8 +2481,6 @@ beginClassChoice( forceNewChoice )
 {
 	assert( self.pers["team"] == "axis" || self.pers["team"] == "allies" );
 
-	team = self.pers["team"];
-
 	if ( level.oldschool )
 	{
 		// skip class choice and just spawn.
@@ -2498,21 +2496,22 @@ beginClassChoice( forceNewChoice )
 		return;
 	}
 
-	// menu_changeclass_team is the one where you choose one of the n classes to play as.
-	// menu_class_team is where you can choose to change your team, class, controls, or leave game.
-	self openMenu( game[ "menu_changeclass_" + team ] );
+	self openMenu( self getChangeClassMenu() );
+}
+
+getChangeClassMenu()
+{
+	if ( level.gametype == "hns" && self.pers["team"] == game["defenders"] )
+		return "changeclass_props";
+
+	return game["menu_changeclass"];
 }
 
 showMainMenuForTeam()
 {
 	assert( self.pers["team"] == "axis" || self.pers["team"] == "allies" );
 
-	team = self.pers["team"];
-
-	// menu_changeclass_team is the one where you choose one of the n classes to play as.
-	// menu_class_team is where you can choose to change your team, class, controls, or leave game.
-
-	self openMenu( game[ "menu_class_" + team ] );
+	self openMenu( game["menu_class"] );
 }
 
 menuAllies()
@@ -2561,7 +2560,7 @@ menuAllies()
 		else
 			self.sessionteam = "none";
 
-		self setclientdvar("g_scriptMainMenu", game["menu_class_allies"]);
+		self setclientdvar("g_scriptMainMenu", game["menu_class"]);
 
 		lpselfnum = self getEntityNumber();
 		lpselfname = self.name;
@@ -2625,7 +2624,7 @@ menuAxis()
 		else
 			self.sessionteam = "none";
 
-		self setclientdvar("g_scriptMainMenu", game["menu_class_axis"]);
+		self setclientdvar("g_scriptMainMenu", game["menu_class"]);
 
 		lpselfnum = self getEntityNumber();
 		lpselfname = self.name;

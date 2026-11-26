@@ -1328,7 +1328,7 @@ switchPlayerTeam( newTeam, halfTimeSwitch )
 
 	if ( resetClass ) {
 		self maps\mp\gametypes\_globallogic::beginClassChoice();
-		self setclientdvar( "g_scriptMainMenu", game[ "menu_class_" + self.pers["team"] ] );
+		self setclientdvar( "g_scriptMainMenu", game["menu_class"] );
 	}
 }
 

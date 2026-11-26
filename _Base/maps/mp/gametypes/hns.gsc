@@ -188,9 +188,6 @@ onStartGameType()
 		game["defenders"] = oldAttackers;
 	}
 
-	// Change the "choose a class" menu for the props team
-	game["menu_changeclass_"+game["defenders"]] = "changeclass_props";
-	
 	// Set strings, icons, and team name for props
 	if ( game["defenders"] == "allies" ) {
 		game["strings"]["allies_win"] = &"OW_PROPS_WIN_MATCH";
@@ -366,7 +363,7 @@ monitorMeleeAttackKey()
 		if ( self meleeButtonPressed() ) {
 			// Check if we have reached the maximum number of morphs
 			if ( level.scr_hns_props_max_morphs == 0 || self.morphTimes < level.scr_hns_props_max_morphs ) {
-				self openMenu( game["menu_changeclass_" + self.pers["team"]] );
+				self openMenu( "changeclass_props" );
 			} else {
 				self iprintln( &"OW_MAXIMUM_MORPHS_REACHED", level.scr_hns_props_max_morphs );
 			}

@@ -63,7 +63,7 @@ onMenuResponse()
 					break;
 					
 				case "changeclass":
-					self openMenu( game[ "menu_changeclass_" + self.pers["team"] ] );
+					self openMenu( self maps\mp\gametypes\_globallogic::getChangeClassMenu() );
 					break;
 
 				case "firingmode":

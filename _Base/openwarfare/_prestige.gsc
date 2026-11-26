@@ -89,10 +89,8 @@ onPrestigeMenuResponse( menu, response )
 		self closeMenu();
 		self closeInGameMenu();
 
-		if ( isDefined( self.pers["team"] ) && self.pers["team"] == "allies" )
-			self openMenu( game["menu_class_allies"] );
-		else if ( isDefined( self.pers["team"] ) && self.pers["team"] == "axis" )
-			self openMenu( game["menu_class_axis"] );
+		if ( isDefined( self.pers["team"] ) && ( self.pers["team"] == "allies" || self.pers["team"] == "axis" ) )
+			self openMenu( game["menu_class"] );
 		return;
 	}
 

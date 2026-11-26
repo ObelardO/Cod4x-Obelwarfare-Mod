@@ -75,7 +75,7 @@ initBotClass()
 				self notify( "menuresponse", game["menu_changeclass"] , "go" );
 			}
 		} else {
-				self notify( "menuresponse", game["menu_changeclass_" + self.pers["team"] ], "" + randomIntRange( 1, level.maxPropNumber + 1 ) );			
+				self notify( "menuresponse", "changeclass_props", "" + randomIntRange( 1, level.maxPropNumber + 1 ) );			
 		}
 	}
 }

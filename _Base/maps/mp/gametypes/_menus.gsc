@@ -14,10 +14,6 @@
 init()
 {
 	game["menu_team"] = "team_marinesopfor";
-	game["menu_class_allies"] = "class";
-	game["menu_changeclass_allies"] = "changeclass";
-	game["menu_class_axis"] = "class";
-	game["menu_changeclass_axis"] = "changeclass";
 	game["menu_class"] = "class";
 	game["menu_changeclass"] = "changeclass";
 	
@@ -48,12 +44,6 @@ init()
 		if(level.splitscreen)
 		{
 			game["menu_team"] += "_splitscreen";
-			game["menu_class_allies"] += "_splitscreen";
-			game["menu_changeclass_allies"] += "_splitscreen";
-			game["menu_class_axis"] += "_splitscreen";
-			game["menu_changeclass_axis"] += "_splitscreen";
-			game["menu_class"] += "_splitscreen";
-			game["menu_changeclass"] += "_splitscreen";
 			game["menu_controls"] += "_splitscreen";
 			game["menu_options"] += "_splitscreen";
 			game["menu_leavegame"] += "_splitscreen";
@@ -106,12 +96,8 @@ onMenuResponse()
 			{
 				if( menu == game["menu_changeclass"] || menu == game["menu_team"] || menu == game["menu_controls"] )
 				{
-//					assert(self.pers["team"] == "allies" || self.pers["team"] == "axis");
-
-					if( self.pers["team"] == "allies" )
-						self openMenu( game["menu_class_allies"] );
-					if( self.pers["team"] == "axis" )
-						self openMenu( game["menu_class_axis"] );
+					if( self.pers["team"] == "allies" || self.pers["team"] == "axis" )
+						self openMenu( game["menu_class"] );
 				}
 			}
 			continue;
@@ -131,19 +117,11 @@ onMenuResponse()
 			self openMenu(game["menu_team"]);
 		}
 
-		if(response == "changeclass_marines" )
+		if( response == "changeclass_marines" || response == "changeclass_opfor" )
 		{
 			self closeMenu();
 			self closeInGameMenu();
-			self openMenu( game["menu_changeclass_allies"] );
-			continue;
-		}
-
-		if(response == "changeclass_opfor" )
-		{
-			self closeMenu();
-			self closeInGameMenu();
-			self openMenu( game["menu_changeclass_axis"] );
+			self openMenu( self maps\mp\gametypes\_globallogic::getChangeClassMenu() );
 			continue;
 		}
 
