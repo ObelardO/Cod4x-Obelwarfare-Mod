@@ -15,10 +15,7 @@ init()
 
 	level.scr_prestige_fast_reset = getdvarx( "scr_prestige_fast_reset", "int", 0, 0, 1 );
 
-	precacheMenu( "menu_challenges_ingame" );
-	precacheMenu( "popup_prestige" );
 	precacheString( &"PRESTIGE_KILLFEED" );
-	precacheString( &"PRESTIGE_RECONNECT" );
 
 	initPrestigeLevelData();
 
@@ -79,28 +76,8 @@ initPrestigePlayerData()
 	self.prestige.statSetsPercent = 0;
 }
 
-openPrestigeMenuForced()
-{
-	self endon( "disconnect" );
-	self setClientDvar( "ui_prestige_lock", "0" );
-	self setClientDvar( "ui_prestige_nav", "1" );
-	self closeMenu();
-	self closeInGameMenu();
-	wait 0.05;
-	self openMenu( "menu_challenges_ingame" );
-}
-
 onPrestigeMenuResponse( menu, response )
 {
-	if ( response == "challenges" )
-	{
-		self closeMenu();
-		self closeInGameMenu();
-		self setClientDvar( "ui_prestige_nav", "1" );
-		self openMenu( "menu_challenges_ingame" );
-		return;
-	}
-
 	if ( response == "challenges_back" )
 	{
 		self closeMenu();
@@ -113,14 +90,11 @@ onPrestigeMenuResponse( menu, response )
 		return;
 	}
 
-	if ( menu != "popup_prestige" && menu != "menu_challenges_ingame" )
-		return;
-
-	if ( response != "enter" )
+	if ( response != "prestige_enter" )
 		return;
 
 	if ( !self unlockPrestige() )
-		self thread openPrestigeMenuForced();
+		self setClientDvar( "ui_prestige_lock", "0" );
 }
 
 pacePrestigeResetData()

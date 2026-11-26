@@ -178,7 +178,8 @@
 		CHOICE_SEPARATOR( CHOICE_SEP_2 )
 
 
-		CHOICE_BUTTON( 5, "@OW_ACHIEVEMENTS", scriptMenuResponse "challenges"; )
+		CHOICE_BUTTON_VIS( 5, "@OW_ACHIEVEMENTS", close self; open menu_challenges;, when( !isIntermission() ); )
+		CHOICE_DBUTTON_VIS( 5, "@OW_ACHIEVEMENTS", when( isIntermission() ); )
 
 		CHOICE_BUTTON( 6, "@MENU_CONTROLS", close self; open main_controls )
 

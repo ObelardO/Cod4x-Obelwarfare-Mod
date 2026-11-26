@@ -90,7 +90,7 @@
 		}
 
 		// Menu items -------------------------------------------
-		#include "ui_mp/includes/bg.inc"
+		#include "ui/bg.inc"
 
 		//#include "ui/background_bars.menu"
 

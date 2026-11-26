@@ -63,13 +63,30 @@
 				decoration \
 			}
 
+		#define PRESTIGE_STEP_CONFIRM ( localVarInt( ui_prestige_step ) == 3 || ( localVarInt( ui_prestige_step ) == 4 && dvarInt( ui_prestige_lock ) == 0 ) )
+		#define PRESTIGE_STEP_ENTERING ( localVarInt( ui_prestige_step ) == 4 && dvarInt( ui_prestige_lock ) == 1 )
+
+		#define PRESTIGE_POP_TITLE_VIS( title, visArg ) \
+			itemDef \
+			{ \
+				type			ITEM_TYPE_TEXT \
+				rect			22 8 284 22 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER \
+				text			title \
+				textfont		UI_FONT_NORMAL \
+				textscale		0.35 \
+				textalign		ITEM_ALIGN_MIDDLE_CENTER \
+				forecolor		1 1 1 1 \
+				visible			visArg \
+				decoration \
+			}
+
 		PRESTIGE_POP_TITLE( 1, "@PRESTIGE_TITLE1" )
 		PRESTIGE_POP_TITLE( 2, "@PRESTIGE_TITLE2" )
-		PRESTIGE_POP_TITLE( 3, "@PRESTIGE_TITLE3" )
+		PRESTIGE_POP_TITLE_VIS( "@PRESTIGE_TITLE3", when( PRESTIGE_STEP_CONFIRM ); )
 		PRESTIGE_POP_WARNING( "@PRESTIGE_WARNING1", when( localVarInt( ui_prestige_step ) == 1 ); )
 		PRESTIGE_POP_WARNING( "@PRESTIGE_WARNING2", when( localVarInt( ui_prestige_step ) == 2 ); )
-		PRESTIGE_POP_WARNING( "@PRESTIGE_WARNING3", when( localVarInt( ui_prestige_step ) == 3 && dvarInt( ui_prestige_fast ) == 0 ); )
-		PRESTIGE_POP_WARNING( "@PRESTIGE_RECONNECT", when( localVarInt( ui_prestige_step ) == 3 && dvarInt( ui_prestige_fast ) == 1 ); )
+		PRESTIGE_POP_WARNING( "@PRESTIGE_WARNING3", when( PRESTIGE_STEP_CONFIRM && dvarInt( ui_prestige_fast ) == 0 ); )
+		PRESTIGE_POP_WARNING( "@PRESTIGE_RECONNECT", when( PRESTIGE_STEP_CONFIRM && dvarInt( ui_prestige_fast ) == 1 ); )
 
 		#undef CHOICE_GROUP
 		#define CHOICE_GROUP "prestige_pop"
@@ -101,17 +118,17 @@
 
 		CHOICE_BUTTON_BG( 1, when( localVarInt( ui_prestige_step ) == 1 ); )
 		CHOICE_BUTTON_BG( 1, when( localVarInt( ui_prestige_step ) == 2 ); )
-		CHOICE_BUTTON_BG( 1, when( localVarInt( ui_prestige_step ) == 3 ); )
-		CHOICE_BUTTON_BG( 2, when( localVarInt( ui_prestige_step ) < 4 ); )
+		CHOICE_BUTTON_BG( 1, when( PRESTIGE_STEP_CONFIRM ); )
+		CHOICE_BUTTON_BG( 2, when( localVarInt( ui_prestige_step ) < 4 || PRESTIGE_STEP_CONFIRM ); )
 
 		POP_HI( 1, 0.9 0.95 1 0.35, 0.8 0.95 1 0.4, when( localVarInt( ui_highlight ) == 1 && localVarString( ui_choicegroup ) == "prestige_pop" && localVarInt( ui_prestige_step ) > 0 && localVarInt( ui_prestige_step ) < 3 ); )
 		POP_HI( 2, 0.9 0.95 1 0.35, 0.8 0.95 1 0.4, when( localVarInt( ui_highlight ) == 2 && localVarString( ui_choicegroup ) == "prestige_pop" && localVarInt( ui_prestige_step ) < 4 ); )
-		POP_HI( 1, 0.85 0.15 0.12 0.95, 0.7 0.08 0.08 1, when( localVarInt( ui_highlight ) == 1 && localVarString( ui_choicegroup ) == "prestige_pop" && localVarInt( ui_prestige_step ) == 3 ); )
+		POP_HI( 1, 0.85 0.15 0.12 0.95, 0.7 0.08 0.08 1, when( localVarInt( ui_highlight ) == 1 && localVarString( ui_choicegroup ) == "prestige_pop" && PRESTIGE_STEP_CONFIRM ); )
 
 		CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 1, "@MENU_CONTINUE", play "mouse_click"; setLocalVarInt ui_prestige_step 2; setfocus step2_button;, ;, ;, when( localVarInt( ui_prestige_step ) == 1 );, name "step1_button" )
 		CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 1, "@MENU_CONTINUE", play "mouse_click"; setLocalVarInt ui_prestige_step 3; setfocus enter_button;, ;, ;, when( localVarInt( ui_prestige_step ) == 2 );, name "step2_button" )
-		CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 2, "@MENU_CANCEL", play "mouse_click"; close self;, ;, ;, when( localVarInt( ui_prestige_step ) < 4 );, name "cancel_button" )
-		CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 1, "@PRESTIGE_ENTER", play "enter_prestige"; setdvar ui_prestige_lock 1; setdvar ui_prestige_pct 0; setLocalVarInt ui_prestige_step 4; setLocalVarInt ui_highlight 0; setfocus prestige_lock; scriptMenuResponse "enter";, ;, ;, when( localVarInt( ui_prestige_step ) == 3 );, name "enter_button" forecolor 1 1 1 1 )
+		CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 2, "@MENU_CANCEL", play "mouse_click"; close self;, ;, ;, when( localVarInt( ui_prestige_step ) < 4 || PRESTIGE_STEP_CONFIRM );, name "cancel_button" )
+		CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 1, "@PRESTIGE_ENTER", play "enter_prestige"; setdvar ui_prestige_lock 1; setdvar ui_prestige_pct 0; setLocalVarInt ui_prestige_step 4; setLocalVarInt ui_highlight 0; setfocus prestige_lock; scriptMenuResponse "prestige_enter";, ;, ;, when( PRESTIGE_STEP_CONFIRM );, name "enter_button" forecolor 1 1 1 1 )
 
 		itemDef
 		{
@@ -122,7 +139,7 @@
 			textscale		0.35
 			textalign		ITEM_ALIGN_MIDDLE_CENTER
 			forecolor		1 1 1 1
-			visible			when( localVarInt( ui_prestige_step ) == 4 )
+			visible			when( PRESTIGE_STEP_ENTERING )
 			decoration
 		}
 		itemDef
@@ -136,7 +153,7 @@
 			textaligny		14
 			forecolor		CHOICE_TEXTCOLOR
 			autowrapped
-			visible			when( localVarInt( ui_prestige_step ) == 4 )
+			visible			when( PRESTIGE_STEP_ENTERING )
 			decoration
 		}
 		itemDef
@@ -144,7 +161,7 @@
 			style			WINDOW_STYLE_FILLED
 			rect			22 148 284 12 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
 			backcolor		0.1 0.1 0.12 1
-			visible			when( localVarInt( ui_prestige_step ) == 4 )
+			visible			when( PRESTIGE_STEP_ENTERING )
 			decoration
 		}
 		itemDef
@@ -153,7 +170,7 @@
 			rect			22 148 0 12 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
 			exp				rect W( dvarInt( ui_prestige_pct ) * 2.84 )
 			backcolor		0.95 0.75 0.2 1
-			visible			when( localVarInt( ui_prestige_step ) == 4 )
+			visible			when( PRESTIGE_STEP_ENTERING )
 			decoration
 		}
 		itemDef
@@ -166,7 +183,7 @@
 			textalign		ITEM_ALIGN_MIDDLE_CENTER
 			textaligny		16
 			forecolor		1 1 1 1
-			visible			when( localVarInt( ui_prestige_step ) == 4 )
+			visible			when( PRESTIGE_STEP_ENTERING )
 			decoration
 		}
 		itemDef
@@ -176,7 +193,7 @@
 			style			WINDOW_STYLE_FILLED
 			rect			0 0 640 480 HORIZONTAL_ALIGN_FULLSCREEN VERTICAL_ALIGN_FULLSCREEN
 			backcolor		0 0 0 0
-			visible			when( localVarInt( ui_prestige_step ) == 4 )
+			visible			when( PRESTIGE_STEP_ENTERING )
 			action
 			{
 				setfocus prestige_lock;
