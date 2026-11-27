@@ -74,4 +74,7 @@ LANG_ENGLISH     "You have reached the maximum prestige."
 REFERENCE        RECONNECT
 LANG_ENGLISH     "This cannot be undone. Enter Prestige Mode now? You will be reconnected to the server while unlocking."
 
+REFERENCE        WAIT
+LANG_ENGLISH     "Please wait for the other player."
+
 ENDMARKER

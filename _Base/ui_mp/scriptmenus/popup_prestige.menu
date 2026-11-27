@@ -31,7 +31,7 @@
 		#undef CHOICE_POPUP_HEIGHT
 		#define CHOICE_POPUP_HEIGHT( itemCount ) 224
 
-		CENTER_POPUP_SETUP_ONOPEN( popup_prestige, 4, ;, setdvar ui_prestige_lock 0; setdvar ui_prestige_pct 0; setLocalVarInt ui_prestige_step 1; setfocus step1_button;, 1 )
+		CENTER_POPUP_SETUP_ONOPEN( popup_prestige, 4, ;, setdvar ui_prestige_pct 0; setLocalVarInt ui_prestige_step 1; setfocus step1_button;, 1 )
 
 		#define PRESTIGE_POP_TITLE( step, title ) \
 			itemDef \
@@ -88,6 +88,19 @@
 		PRESTIGE_POP_WARNING( "@PRESTIGE_WARNING3", when( PRESTIGE_STEP_CONFIRM && dvarInt( ui_prestige_fast ) == 0 ); )
 		PRESTIGE_POP_WARNING( "@PRESTIGE_RECONNECT", when( PRESTIGE_STEP_CONFIRM && dvarInt( ui_prestige_fast ) == 1 ); )
 
+		itemDef
+		{
+			type			ITEM_TYPE_TEXT
+			rect			22 150 284 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			text			"@PRESTIGE_WAIT"
+			textfont		UI_FONT_NORMAL
+			textscale		0.28
+			textalign		ITEM_ALIGN_MIDDLE_CENTER
+			forecolor		0.95 0.75 0.2 1
+			visible			when( localVarInt( ui_prestige_step ) == 3 && dvarInt( ui_prestige_lock ) == 1 )
+			decoration
+		}
+
 		#undef CHOICE_GROUP
 		#define CHOICE_GROUP "prestige_pop"
 		// Same insets as popup_leavegame: x = (popup - button) / 2 - 2, height 18, 6px off the bottom.
@@ -118,17 +131,18 @@
 
 		CHOICE_BUTTON_BG( 1, when( localVarInt( ui_prestige_step ) == 1 ); )
 		CHOICE_BUTTON_BG( 1, when( localVarInt( ui_prestige_step ) == 2 ); )
-		CHOICE_BUTTON_BG( 1, when( PRESTIGE_STEP_CONFIRM ); )
+		CHOICE_BUTTON_BG( 1, when( PRESTIGE_STEP_CONFIRM && dvarInt( ui_prestige_lock ) == 0 ); )
 		CHOICE_BUTTON_BG( 2, when( localVarInt( ui_prestige_step ) < 4 || PRESTIGE_STEP_CONFIRM ); )
 
 		POP_HI( 1, 0.9 0.95 1 0.35, 0.8 0.95 1 0.4, when( localVarInt( ui_highlight ) == 1 && localVarString( ui_choicegroup ) == "prestige_pop" && localVarInt( ui_prestige_step ) > 0 && localVarInt( ui_prestige_step ) < 3 ); )
 		POP_HI( 2, 0.9 0.95 1 0.35, 0.8 0.95 1 0.4, when( localVarInt( ui_highlight ) == 2 && localVarString( ui_choicegroup ) == "prestige_pop" && localVarInt( ui_prestige_step ) < 4 ); )
-		POP_HI( 1, 0.85 0.15 0.12 0.95, 0.7 0.08 0.08 1, when( localVarInt( ui_highlight ) == 1 && localVarString( ui_choicegroup ) == "prestige_pop" && PRESTIGE_STEP_CONFIRM ); )
+		POP_HI( 1, 0.85 0.15 0.12 0.95, 0.7 0.08 0.08 1, when( localVarInt( ui_highlight ) == 1 && localVarString( ui_choicegroup ) == "prestige_pop" && PRESTIGE_STEP_CONFIRM && dvarInt( ui_prestige_lock ) == 0 ); )
 
 		CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 1, "@MENU_CONTINUE", play "mouse_click"; setLocalVarInt ui_prestige_step 2; setfocus step2_button;, ;, ;, when( localVarInt( ui_prestige_step ) == 1 );, name "step1_button" )
 		CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 1, "@MENU_CONTINUE", play "mouse_click"; setLocalVarInt ui_prestige_step 3; setfocus enter_button;, ;, ;, when( localVarInt( ui_prestige_step ) == 2 );, name "step2_button" )
 		CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 2, "@MENU_CANCEL", play "mouse_click"; close self;, ;, ;, when( localVarInt( ui_prestige_step ) < 4 || PRESTIGE_STEP_CONFIRM );, name "cancel_button" )
-		CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 1, "@PRESTIGE_ENTER", play "enter_prestige"; setdvar ui_prestige_lock 1; setdvar ui_prestige_pct 0; setLocalVarInt ui_prestige_step 4; setLocalVarInt ui_highlight 0; setfocus prestige_lock; scriptMenuResponse "prestige_enter";, ;, ;, when( PRESTIGE_STEP_CONFIRM );, name "enter_button" forecolor 1 1 1 1 )
+		CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 1, "@PRESTIGE_ENTER", play "enter_prestige"; setdvar ui_prestige_lock 1; setdvar ui_prestige_pct 0; setLocalVarInt ui_prestige_step 4; setLocalVarInt ui_highlight 0; setfocus prestige_lock; scriptMenuResponse "prestige_enter";, ;, ;, when( PRESTIGE_STEP_CONFIRM && dvarInt( ui_prestige_lock ) == 0 );, name "enter_button" forecolor 1 1 1 1 )
+		CHOICE_DBUTTON_VIS( 1, "@PRESTIGE_ENTER", when( localVarInt( ui_prestige_step ) == 3 && dvarInt( ui_prestige_lock ) == 1 ); )
 
 		itemDef
 		{

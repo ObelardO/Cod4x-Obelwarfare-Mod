@@ -3,6 +3,7 @@ init()
 {
 	thread scripts\_enhancedhud::init();
 	thread scripts\_nightvisionenhanced::init();
+	thread scripts\_winterevent::init();
 	thread scripts\_finalduel::init();
 	thread scripts\_finalmapvoting::init();
 	thread scripts\_ingameclass::init();
